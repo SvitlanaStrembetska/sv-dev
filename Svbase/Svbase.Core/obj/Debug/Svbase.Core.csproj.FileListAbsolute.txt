@@ -1,0 +1,14 @@
+D:\SVB\sv-dev\Svbase\Svbase.Core\bin\Debug\Svbase.Core.dll.config
+D:\SVB\sv-dev\Svbase\Svbase.Core\bin\Debug\Svbase.Core.dll
+D:\SVB\sv-dev\Svbase\Svbase.Core\bin\Debug\Svbase.Core.pdb
+D:\SVB\sv-dev\Svbase\Svbase.Core\bin\Debug\EntityFramework.dll
+D:\SVB\sv-dev\Svbase\Svbase.Core\bin\Debug\EntityFramework.SqlServer.dll
+D:\SVB\sv-dev\Svbase\Svbase.Core\bin\Debug\Microsoft.AspNet.Identity.Core.dll
+D:\SVB\sv-dev\Svbase\Svbase.Core\bin\Debug\Microsoft.AspNet.Identity.EntityFramework.dll
+D:\SVB\sv-dev\Svbase\Svbase.Core\bin\Debug\EntityFramework.xml
+D:\SVB\sv-dev\Svbase\Svbase.Core\bin\Debug\EntityFramework.SqlServer.xml
+D:\SVB\sv-dev\Svbase\Svbase.Core\bin\Debug\Microsoft.AspNet.Identity.Core.xml
+D:\SVB\sv-dev\Svbase\Svbase.Core\bin\Debug\Microsoft.AspNet.Identity.EntityFramework.xml
+D:\SVB\sv-dev\Svbase\Svbase.Core\obj\Debug\Svbase.Core.csprojResolveAssemblyReference.cache
+D:\SVB\sv-dev\Svbase\Svbase.Core\obj\Debug\Svbase.Core.dll
+D:\SVB\sv-dev\Svbase\Svbase.Core\obj\Debug\Svbase.Core.pdb

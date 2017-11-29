@@ -1,0 +1,14 @@
+﻿using System.Collections.Generic;
+using Svbase.Core.Data.Abstract;
+
+namespace Svbase.Core.Data.Entities
+{
+    public class Apartment : Entity<int>
+    {
+        public string Name { get; set; }
+        public int StreetId { get; set; }
+        public Street Street { get; set; }
+        public virtual ICollection<Flat> Flats { get; set; }
+
+    }
+}
