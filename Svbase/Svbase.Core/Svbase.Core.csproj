@@ -57,7 +57,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Consts\RoleConst.cs" />
+    <Compile Include="Consts\RoleConsts.cs" />
     <Compile Include="Data\Abstract\Entity.cs" />
     <Compile Include="Data\Abstract\IEntity.cs" />
     <Compile Include="Data\ApplicationDbContext.cs" />
@@ -75,15 +75,53 @@
     <Compile Include="Data\Entities\Street.cs" />
     <Compile Include="Enums\DistrictType.cs" />
     <Compile Include="Enums\SystemRole.cs" />
+    <Compile Include="Migrations\201712041839150_FirstMigration.cs" />
+    <Compile Include="Migrations\201712041839150_FirstMigration.Designer.cs">
+      <DependentUpon>201712041839150_FirstMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201712042137024_ChangeFlatConfiguration.cs" />
+    <Compile Include="Migrations\201712042137024_ChangeFlatConfiguration.Designer.cs">
+      <DependentUpon>201712042137024_ChangeFlatConfiguration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Migrations\DbInitializer\CreateIfNotExistWithSeed.cs" />
+    <Compile Include="Models\BaseViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\Abstract\GenericRepository.cs" />
+    <Compile Include="Repositories\Abstract\IGenericRepository.cs" />
+    <Compile Include="Repositories\Abstract\IUnitOfWork.cs" />
+    <Compile Include="Repositories\Abstract\UnitOfWork.cs" />
+    <Compile Include="Repositories\Factory\IRepositoryManager.cs" />
+    <Compile Include="Repositories\Factory\RepositoryManager.cs" />
+    <Compile Include="Repositories\Implementation\ApartmentRepository.cs" />
+    <Compile Include="Repositories\Implementation\ApplicationUserRepository.cs" />
+    <Compile Include="Repositories\Implementation\BeneficiaryRepository.cs" />
+    <Compile Include="Repositories\Implementation\CityRepository.cs" />
+    <Compile Include="Repositories\Implementation\DistrictRepository.cs" />
+    <Compile Include="Repositories\Implementation\FlatRepository.cs" />
+    <Compile Include="Repositories\Implementation\PersonRepository.cs" />
+    <Compile Include="Repositories\Implementation\StreetRepository.cs" />
+    <Compile Include="Repositories\Interfaces\IApartmentRepository.cs" />
+    <Compile Include="Repositories\Interfaces\IApplicationUserRepository.cs" />
+    <Compile Include="Repositories\Interfaces\IBeneficiaryRepository.cs" />
+    <Compile Include="Repositories\Interfaces\ICityRepository.cs" />
+    <Compile Include="Repositories\Interfaces\IDistrictRepository.cs" />
+    <Compile Include="Repositories\Interfaces\IFlatRepository.cs" />
+    <Compile Include="Repositories\Interfaces\IPersonRepository.cs" />
+    <Compile Include="Repositories\Interfaces\IStreetRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Models\" />
+    <EmbeddedResource Include="Migrations\201712041839150_FirstMigration.resx">
+      <DependentUpon>201712041839150_FirstMigration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201712042137024_ChangeFlatConfiguration.resx">
+      <DependentUpon>201712042137024_ChangeFlatConfiguration.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -5,7 +5,7 @@ using Svbase.Core.Data.Entities;
 
 namespace Svbase.Core.Data
 {
-    class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityRole, string, IdentityUserLogin, IdentityUserRole, IdentityUserClaim>
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityRole, string, IdentityUserLogin, IdentityUserRole, IdentityUserClaim>
     {
 
         #region DbSet

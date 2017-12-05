@@ -7,7 +7,7 @@ namespace Svbase.Core.Data.Configuration
     {
         public FlatConfiguration()
         {
-            ToTable("Table");
+            ToTable("Flat");
             HasKey(x => x.Id);
 
             HasRequired(x => x.Apartment)
