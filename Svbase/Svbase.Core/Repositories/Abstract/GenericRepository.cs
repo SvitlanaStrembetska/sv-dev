@@ -20,7 +20,7 @@ namespace Svbase.Core.Repositories.Abstract
             }
         }
 
-        public virtual IQueryable<IEntity> GetAll()
+        public virtual IQueryable<TEntity> GetAll()
         {
             return DbSet;
         }

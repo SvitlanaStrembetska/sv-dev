@@ -246,3 +246,5 @@ D:\Work\SVBase\sv-dev\Svbase\Svbase\obj\Debug\Svbase.dll
 D:\Work\SVBase\sv-dev\Svbase\Svbase\obj\Debug\Svbase.pdb
 D:\Work\SVBase\sv-dev\Svbase\Svbase\bin\Svbase.Core.dll
 D:\Work\SVBase\sv-dev\Svbase\Svbase\bin\Svbase.Core.pdb
+D:\Work\SVBase\sv-dev\Svbase\Svbase\bin\Svbase.Service.dll
+D:\Work\SVBase\sv-dev\Svbase\Svbase\bin\Svbase.Service.pdb

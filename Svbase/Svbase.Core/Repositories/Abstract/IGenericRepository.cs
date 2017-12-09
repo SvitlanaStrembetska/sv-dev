@@ -6,7 +6,7 @@ namespace Svbase.Core.Repositories.Abstract
 {
     public interface IGenericRepository<TEntity> : IDisposable where TEntity : IEntity
     {
-        IQueryable<IEntity> GetAll();
+        IQueryable<TEntity> GetAll();
         TEntity Find(object id);
         TEntity Add(TEntity entity);
         void Update(TEntity entity);

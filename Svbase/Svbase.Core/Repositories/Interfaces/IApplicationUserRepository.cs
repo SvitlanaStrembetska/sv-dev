@@ -5,5 +5,7 @@ namespace Svbase.Core.Repositories.Interfaces
 {
     public interface IApplicationUserRepository : IGenericRepository<ApplicationUser>
     {
+        ApplicationUser GetByUserName(string userName);
+        bool CanAccessToSystem(string userName);
     }
 }

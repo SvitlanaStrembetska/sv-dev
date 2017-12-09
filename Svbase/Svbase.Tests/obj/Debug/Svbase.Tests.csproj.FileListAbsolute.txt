@@ -112,3 +112,5 @@ D:\Work\SVBase\sv-dev\Svbase\Svbase.Tests\obj\Debug\Svbase.Tests.dll
 D:\Work\SVBase\sv-dev\Svbase\Svbase.Tests\obj\Debug\Svbase.Tests.pdb
 D:\Work\SVBase\sv-dev\Svbase\Svbase.Tests\bin\Debug\Svbase.Core.dll
 D:\Work\SVBase\sv-dev\Svbase\Svbase.Tests\bin\Debug\Svbase.Core.pdb
+D:\Work\SVBase\sv-dev\Svbase\Svbase.Tests\bin\Debug\Svbase.Service.dll
+D:\Work\SVBase\sv-dev\Svbase\Svbase.Tests\bin\Debug\Svbase.Service.pdb
