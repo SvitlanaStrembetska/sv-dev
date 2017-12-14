@@ -29,3 +29,4 @@ D:\Work\SVBase\sv-dev\Svbase\Svbase.Core\obj\Debug\Svbase.Core.pdb
 D:\Work\SVBase\sv-dev\Svbase\Svbase.Core\obj\Debug\Svbase.Core.Migrations.FirstMigration.resources
 D:\Work\SVBase\sv-dev\Svbase\Svbase.Core\obj\Debug\Svbase.Core.csproj.GenerateResource.Cache
 D:\Work\SVBase\sv-dev\Svbase\Svbase.Core\obj\Debug\Svbase.Core.Migrations.ChangeFlatConfiguration.resources
+D:\Work\SVBase\sv-dev\Svbase\Svbase.Core\obj\Debug\Svbase.Core.Migrations.ChangeInitDb.resources

@@ -83,9 +83,14 @@
     <Compile Include="Migrations\201712042137024_ChangeFlatConfiguration.Designer.cs">
       <DependentUpon>201712042137024_ChangeFlatConfiguration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201712131817484_ChangeInitDb.cs" />
+    <Compile Include="Migrations\201712131817484_ChangeInitDb.Designer.cs">
+      <DependentUpon>201712131817484_ChangeInitDb.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Migrations\DbInitializer\CreateIfNotExistWithSeed.cs" />
     <Compile Include="Models\BaseViewModel.cs" />
+    <Compile Include="Models\CityCreateModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\Abstract\GenericRepository.cs" />
     <Compile Include="Repositories\Abstract\IGenericRepository.cs" />
@@ -121,6 +126,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201712042137024_ChangeFlatConfiguration.resx">
       <DependentUpon>201712042137024_ChangeFlatConfiguration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201712131817484_ChangeInitDb.resx">
+      <DependentUpon>201712131817484_ChangeInitDb.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

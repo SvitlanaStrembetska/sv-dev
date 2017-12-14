@@ -1,4 +1,5 @@
-﻿using Svbase.Core.Repositories.Abstract;
+﻿using Svbase.Core.Data;
+using Svbase.Core.Repositories.Abstract;
 using Svbase.Core.Repositories.Factory;
 using Svbase.Service.Implementation;
 using Svbase.Service.Interfaces;
@@ -7,8 +8,8 @@ namespace Svbase.Service.Factory
 {
     public class ServiceManager : IServiceManager
     {
-        private readonly IRepositoryManager _repositoryManager;
-        private readonly IUnitOfWork _unitOfWork;
+        private IRepositoryManager _repositoryManager;
+        private IUnitOfWork _unitOfWork;
 
         #region Private Services Fields
 
@@ -23,7 +24,18 @@ namespace Svbase.Service.Factory
 
         #endregion
 
+        public ServiceManager()
+        {
+            var dbContext = ApplicationDbContext.Create();
+            Init(new UnitOfWork(dbContext), new RepositoryManager(dbContext));
+        }
+
         public ServiceManager(IUnitOfWork unitOfWork, IRepositoryManager repositoryManager)
+        {
+            Init(unitOfWork, repositoryManager);
+        }
+
+        private void Init(IUnitOfWork unitOfWork, IRepositoryManager repositoryManager)
         {
             _unitOfWork = unitOfWork;
             _repositoryManager = repositoryManager;

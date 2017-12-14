@@ -12,6 +12,8 @@ namespace Svbase
     {
         protected void Application_Start()
         {
+            AutoFacConfig.RegisterModules();
+
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);

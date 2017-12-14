@@ -3,7 +3,6 @@ using System.Security.Principal;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
-using Microsoft.AspNet.Identity.Owin;
 using Svbase.Core.Consts;
 using Svbase.Core.Data.Entities;
 using Svbase.Core.Enums;

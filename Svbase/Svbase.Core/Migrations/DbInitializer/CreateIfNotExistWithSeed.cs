@@ -5,10 +5,11 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using Svbase.Core.Data;
 using Svbase.Core.Data.Entities;
 using Svbase.Core.Consts;
+using System.Data.Entity;
 
 namespace Svbase.Core.Migrations.DbInitializer
 {
-    public class CreateIfNotExistWithSeed
+    public class CreateIfNotExistWithSeed : CreateDatabaseIfNotExists<ApplicationDbContext>
     {
         private const string UserPassword = "Adm!nSvBase";
         private const string EmailDomain = "@svbase.com";
@@ -32,15 +33,16 @@ namespace Svbase.Core.Migrations.DbInitializer
             new [] {"User", UserLastName }
         };
 
-        private readonly ApplicationDbContext _dbContext;
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
+        private ApplicationDbContext _dbContext;
+        private UserManager<ApplicationUser> _userManager;
+        private RoleManager<IdentityRole> _roleManager;
 
-        public CreateIfNotExistWithSeed(ApplicationDbContext context)
+        protected override void Seed(ApplicationDbContext context)
         {
             _dbContext = context;
             _userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
             _roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
+            InitializeDb();
         }
 
         public void InitializeDb()
