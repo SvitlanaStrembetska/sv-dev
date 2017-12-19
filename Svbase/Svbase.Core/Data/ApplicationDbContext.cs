@@ -30,5 +30,10 @@ namespace Svbase.Core.Data
 
             base.OnModelCreating(modelBuilder);
         }
+
+        public static ApplicationDbContext Create()
+        {
+            return new ApplicationDbContext();
+        }
     }
 }
