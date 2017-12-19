@@ -14,6 +14,11 @@ namespace Svbase.Controllers
             return View();
         }
 
+        public ActionResult Details()
+        {
+            return View();
+        }
+
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
