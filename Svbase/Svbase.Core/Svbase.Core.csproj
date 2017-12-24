@@ -89,9 +89,10 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Migrations\DbInitializer\CreateIfNotExistWithSeed.cs" />
+    <Compile Include="Models\CityViewModel.cs" />
     <Compile Include="Models\PersonViewModel.cs" />
     <Compile Include="Models\BaseViewModel.cs" />
-    <Compile Include="Models\CityCreateModel.cs" />
+    <Compile Include="Models\StreetViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\Abstract\GenericRepository.cs" />
     <Compile Include="Repositories\Abstract\IGenericRepository.cs" />

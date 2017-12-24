@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-using System.Web.Helpers;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using Svbase.Controllers.Abstract;
 using Svbase.Core.Consts;
 using Svbase.Core.Data.Entities;
@@ -21,13 +19,6 @@ namespace Svbase.Controllers
         }
 
         [Authorize(Roles = RoleConsts.Admin)]
-        [HttpGet]
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        [Authorize(Roles = RoleConsts.Admin)]
         [HttpPost]
         public ActionResult Create(CityCreateModel model)
         {
@@ -38,12 +29,40 @@ namespace Svbase.Controllers
 
             if (!ModelState.IsValid)
             {
-                return View();
+                return RedirectToAction("List");
             }
 
-            var newCityItem = model.UpdateCity(new City());
+            var newCityItem = model.Update(new City());
             newCityItem = _cityService.Add(newCityItem);
-            return Json(new {status = "success"});
+            return RedirectToAction("Details", new {id = newCityItem.Id});
+        }
+
+        [Authorize(Roles = RoleConsts.Admin)]
+        [HttpGet]
+        public ActionResult Details(int id)
+        {
+            var city = _cityService.GetCityById(id);
+            if (city == null)
+            {
+                RedirectToAction("List");
+            }
+            return View(city);
+        }
+
+        //[Authorize(Roles = RoleConsts.Admin)]
+        //[HttpDelete]
+        //public ActionResult Delete(int id)
+        //{
+        //    _cityService.DeleteById(id);
+        //    return RedirectToAction("List");
+        //}
+
+        [Authorize(Roles = RoleConsts.Admin)]
+        [HttpGet]
+        public ActionResult List()
+        {
+            var cities = _cityService.GetCities();
+            return View(cities);
         }
     }
 }

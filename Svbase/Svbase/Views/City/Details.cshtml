@@ -1,0 +1,50 @@
+﻿@model Svbase.Core.Models.CityViewModel
+
+<div class="row">
+    <div class="col-sm-12">
+        <h2 style="margin-top: 0">@Model.Name</h2>
+    </div>
+</div>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <div class="row">
+            <div class="col-xs-6">
+                <span>Streets</span>
+            </div>
+            <div class="col-xs-6">
+                <button class="btn btn-primary btn-xs pull-right">
+                    Add Street
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-xs-12">
+                <table class="table table-hover table-striped">
+                    <thead>
+                    <tr>
+                        <th>
+                            <span>Name</span>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var street in Model.Streets)
+                    {
+                        <tr>
+                            <td class="col-xs-12">
+                                <a>@street.Name</a>
+                            </td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+@*@Html.Partial("_CityCreatePartial", new CityCreateModel())*@
