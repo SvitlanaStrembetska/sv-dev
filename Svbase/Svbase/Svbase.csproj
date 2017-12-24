@@ -356,8 +356,9 @@
     <Content Include="Views\Home\Details.cshtml" />
     <Content Include="Views\City\Create.cshtml" />
     <Content Include="Views\City\List.cshtml" />
-    <Content Include="Views\Shared\_CityCreatePartial.cshtml" />
+    <Content Include="Views\Shared\_CityCreate.cshtml" />
     <Content Include="Views\City\Details.cshtml" />
+    <Content Include="Views\Shared\_CityEdit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -35,14 +35,17 @@
                             <tr>
                                 <td class="col-xs-12">
                                     <a href="@Url.Action("Details", new { id = city.Id })">@city.Name</a>
-                                    @*@if (city.CanDelete)
+                                    @if (city.CanDelete)
                                     {
-                                        <a href="@Url.Action("Delete", city.Id)"
-                                           class="pull-right"
-                                           style="color: red">
-                                            Remove
-                                        </a>
-                                    }*@
+                                        <i style="color: red; cursor: pointer" 
+                                           class="pull-right glyphicon glyphicon-trash"
+                                           data-action="delete" 
+                                           data-item-id="@city.Id"></i>
+                                    }
+                                    <i style="color: gray; margin-right: 5px; cursor: pointer"
+                                       class="pull-right glyphicon glyphicon-pencil"
+                                       data-action="edit"
+                                       data-item-id="@city.Id"></i>
                                 </td>
                             </tr>
                         }
@@ -53,5 +56,25 @@
     </div>
 </div>
 
-<!-- Modal -->
-@Html.Partial("_CityCreatePartial", new CityCreateModel())
+@Html.Partial("_CityCreate", new CityCreateModel())
+@Html.Partial("_CityEdit")
+
+
+<script>
+    $('[data-action="edit"]').click(function () {
+        var city = $(this).prev().text();
+        var id = $(this).data('itemId');
+        $('#EditName').val(city);
+        $('#EditId').val(id);
+        $('#cityEditModal').modal();
+    });
+
+    $('[data-action="delete"]').click(function () {
+        var that = this;
+        var id = $(this).data('itemId');
+        $.get('@Url.Action("Delete")', { id })
+            .done(() => {
+                $(that).parent().parent().remove();
+            });
+    });
+</script>
