@@ -46,3 +46,4 @@ C:\Users\svitl\source\repos\sv-dev\Svbase\Svbase.Core\obj\Debug\Svbase.Core.Migr
 C:\Users\svitl\source\repos\sv-dev\Svbase\Svbase.Core\obj\Debug\Svbase.Core.csproj.GenerateResource.Cache
 C:\Users\svitl\source\repos\sv-dev\Svbase\Svbase.Core\obj\Debug\Svbase.Core.dll
 C:\Users\svitl\source\repos\sv-dev\Svbase\Svbase.Core\obj\Debug\Svbase.Core.pdb
+D:\Work\SvBase\sv-dev\Svbase\Svbase.Core\obj\Debug\Svbase.Core.Migrations.ChangeInitDb.resources

@@ -334,3 +334,7 @@ C:\Users\svitl\source\repos\sv-dev\Svbase\Svbase\bin\Microsoft.Owin.Security.Mic
 C:\Users\svitl\source\repos\sv-dev\Svbase\Svbase\obj\Debug\Svbase.csprojResolveAssemblyReference.cache
 C:\Users\svitl\source\repos\sv-dev\Svbase\Svbase\obj\Debug\Svbase.dll
 C:\Users\svitl\source\repos\sv-dev\Svbase\Svbase\obj\Debug\Svbase.pdb
+D:\Work\SvBase\sv-dev\Svbase\Svbase\bin\Autofac.dll
+D:\Work\SvBase\sv-dev\Svbase\Svbase\bin\Autofac.Integration.Mvc.dll
+D:\Work\SvBase\sv-dev\Svbase\Svbase\bin\Autofac.xml
+D:\Work\SvBase\sv-dev\Svbase\Svbase\bin\Autofac.Integration.Mvc.xml
