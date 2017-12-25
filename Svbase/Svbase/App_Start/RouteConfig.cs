@@ -16,7 +16,7 @@ namespace Svbase
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}",
-                defaults: new { controller = "Home", action = "Index"}
+                defaults: new { controller = "Person", action = "Index"}
             );
         }
     }

@@ -50,6 +50,15 @@ namespace Svbase.Controllers.Abstract
         protected override void Initialize(RequestContext rc)
         {
             _context = rc.HttpContext;
+            if (_context.Request[GeneralConsts.RequestDirect] != "1")
+            {
+                if (CurrentUser != null)
+                {
+                    ViewBag.CurrentUser = CurrentUser;
+                  
+                }
+
+            }
             base.Initialize(rc);
         }
 

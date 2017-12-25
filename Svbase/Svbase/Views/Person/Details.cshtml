@@ -1,8 +1,8 @@
-﻿@model Svbase.Core.Models.CityViewModel
+﻿@model Svbase.Core.Models.PersonViewModel
 <div class="container body-content margin-top">
     <div class="row">
         <div class="col-sm-12">
-            <h2 style="margin-top: 0">@Model.Name</h2>
+            <h2 style="margin-top: 0">@Model.FirthName</h2>
         </div>
     </div>
     <div class="panel panel-default">
@@ -30,14 +30,14 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var street in Model.Streets)
-                            {
-                                <tr>
-                                    <td class="col-xs-12">
-                                        <a>@street.Name</a>
-                                    </td>
-                                </tr>
-                            }
+                            @*@foreach (var street in Model.Streets)
+                                {
+                                    <tr>
+                                        <td class="col-xs-12">
+                                            <a>@street.Name</a>
+                                        </td>
+                                    </tr>
+                                }*@
                         </tbody>
                     </table>
                 </div>
@@ -45,3 +45,6 @@
         </div>
     </div>
 </div>
+
+<!-- Modal -->
+@*@Html.Partial("_CityCreatePartial", new CityCreateModel())*@

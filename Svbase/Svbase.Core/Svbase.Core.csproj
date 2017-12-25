@@ -57,6 +57,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Consts\GeneralConsts.cs" />
     <Compile Include="Consts\RoleConsts.cs" />
     <Compile Include="Data\Abstract\Entity.cs" />
     <Compile Include="Data\Abstract\IEntity.cs" />
