@@ -1,5 +1,4 @@
-﻿
-<div class="modal fade" id="cityEditModal" role="dialog">
+﻿<div class="modal fade" id="apartmentEditModal" role="dialog">
     <div class="modal-dialog">
 
         <!-- Modal content-->
@@ -10,7 +9,7 @@
                 <h4 class="modal-title">Edit something</h4>
             </div>
             <div class="modal-body">
-                <form action="@Url.Action("Edit", "City")" method="post" id="editForm">
+                <form action="@Url.Action("Edit", "Apartment")" method="post" id="editForm">
                     <input type="hidden" id="EditId" />
 
                     <div class="form-horizontal">
@@ -23,11 +22,10 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" id="submitCityEdit">Edit</button>
+                        <button type="button" class="btn btn-primary" id="submitApartmentEdit">Edit</button>
                     </div>
                 </form>
             </div>
@@ -36,16 +34,16 @@
 </div>
 
 <script>
-    $("#submitCityEdit").click(function () {
-        var cityName = $('#EditName').val();
+    $("#submitApartmentEdit").click(function () {
+        var apartmentName = $('#EditName').val();
         var id = $('#EditId').val();
-        $('#cityEditModal').modal();
-        $.post('@Url.Action("Edit","City")', { Id: id, Name: cityName })
+        $('#apartmentEditModal').modal();
+        $.post('@Url.Action("Edit","Apartment")', { Id: id, Name: apartmentName })
             .done((data) => {
                 if (data.status === "success") {
-                    window.location.href = "@Url.Action("Details","City")" + "?id="+id;
+                    window.location.href = "@Url.Action("Details", "Apartment")" + "?id="+id;
                 }
             });
-
     })
 </script>
+

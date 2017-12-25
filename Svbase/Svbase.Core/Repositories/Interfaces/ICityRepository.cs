@@ -8,6 +8,6 @@ namespace Svbase.Core.Repositories.Interfaces
     public interface ICityRepository : IGenericRepository<City>
     {
         IEnumerable<CityCreateModel> GetCities();
-        CityViewModel GetCityById(int Id);
+        CityViewModel GetCityById(int id);
     }
 }

@@ -5,7 +5,7 @@ using Svbase.Core.Data.Entities;
 
 namespace Svbase.Core.Models
 {
-    public class PersonViewModel 
+    public class PersonListModel
     {
         public int Id { get; set; }
         [Display(Name = "FirthName")]
@@ -14,6 +14,10 @@ namespace Svbase.Core.Models
         public string MiddleName { get; set; }
         [Display(Name = "LastName")]
         public string LastName { get; set; }
+    }
+
+    public class PersonViewModel  : PersonListModel
+    {
         [Phone]
         public string FirthtMobilePhone { get; set; }
         [Phone]

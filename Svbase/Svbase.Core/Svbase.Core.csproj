@@ -89,8 +89,10 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Migrations\DbInitializer\CreateIfNotExistWithSeed.cs" />
+    <Compile Include="Models\ApartmentViewModel.cs" />
     <Compile Include="Models\CityViewModel.cs" />
     <Compile Include="Models\FilterSearchModel.cs" />
+    <Compile Include="Models\FlatViewModel.cs" />
     <Compile Include="Models\PersonViewModel.cs" />
     <Compile Include="Models\BaseViewModel.cs" />
     <Compile Include="Models\StreetViewModel.cs" />
