@@ -1,4 +1,5 @@
 ﻿using Svbase.Core.Data.Entities;
+using Svbase.Core.Models;
 using Svbase.Core.Repositories.Abstract;
 using Svbase.Core.Repositories.Factory;
 using Svbase.Core.Repositories.Interfaces;
@@ -13,6 +14,12 @@ namespace Svbase.Service.Implementation
             :base(unitOfWork,repositoryManager,repositoryManager.Flats)
         {
             
+        }
+
+        public FlatViewModel GetById(int id)
+        {
+            var flat = RepositoryManager.Flats.GetById(id);
+            return flat;
         }
     }
 }

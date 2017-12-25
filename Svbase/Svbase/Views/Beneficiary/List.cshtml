@@ -1,27 +1,23 @@
 ﻿@using Svbase.Core.Models
-@model CityViewModel
+@model IEnumerable<Svbase.Core.Models.BeneficiaryCreateModel>
 
 <div class="row">
     <div class="col-sm-12">
-        <h2 style="margin-top: 0">@Model.Name</h2>
-    </div>
-</div>
-
-<div class="panel panel-default">
-    <div class="panel-heading">
         <div class="row">
-            <div class="col-xs-6">
-                <span>Streets</span>
+            <div class="col-xs-8">
+                <h2 style="margin-top: 0">Beneficiaries</h2>
             </div>
-            <div class="col-xs-6">
-                <button class="btn btn-primary btn-xs pull-right" 
-                        data-toggle="modal"
-                        data-target="#streetCreateModal">
-                    Add Street
-                </button>
+            <div class="col-xs-4">
+                <a class="btn btn-primary pull-right"
+                   data-toggle="modal"
+                   data-target="#beneficiaryCreateModal">
+                    Add Beneficiary
+                </a>
             </div>
         </div>
     </div>
+</div>
+<div class="panel panel-default">
     <div class="panel-body">
         <div class="row">
             <div class="col-xs-12">
@@ -34,22 +30,22 @@
                     </tr>
                     </thead>
                     <tbody>
-                    @foreach (var street in Model.Streets)
+                    @foreach (var beneficiary in Model)
                     {
                         <tr>
                             <td class="col-xs-12">
-                                <a href="@Url.Action("Details","Street", new {id = street .Id})">@street.Name</a>
-                                @if (street.CanDelete)
+                                <a>@beneficiary.Name</a>
+                                @if (beneficiary.CanDelete)
                                 {
-                                    <i style="color: red; cursor: pointer" 
+                                    <i style="color: red; cursor: pointer"
                                        class="pull-right glyphicon glyphicon-trash"
-                                       data-action="delete" 
-                                       data-item-id="@street.Id"></i>
+                                       data-action="delete"
+                                       data-item-id="@beneficiary.Id"></i>
                                 }
                                 <i style="color: gray; margin-right: 5px; cursor: pointer"
                                    class="pull-right glyphicon glyphicon-pencil"
                                    data-action="edit"
-                                   data-item-id="@street.Id"></i>
+                                   data-item-id="@beneficiary.Id"></i>
                             </td>
                         </tr>
                     }
@@ -60,27 +56,24 @@
     </div>
 </div>
 
-@Html.Partial("_StreetCreatePartial", new StreetCreateModel { CityId = Model.Id})
-@Html.Partial("_StreetEdit")
+@Html.Partial("_BeneficiaryCreate", new BeneficiaryCreateModel());
+@Html.Partial("_BeneficiaryEdit");
 
 <script>
     $('[data-action="edit"]').click(function () {
-        var street = $(this).parent().find("a")[0].text;
+        var item = $(this).parent().find("a")[0].text;
         var id = $(this).data('itemId');
-        $('#EditName').val(street);
+        $('#EditName').val(item);
         $('#EditId').val(id);
-        $('#streetEditModal').modal();
+        $('#itemEditModal').modal();
     });
 
     $('[data-action="delete"]').click(function () {
         var that = this;
         var id = $(this).data('itemId');
-        $.get('@Url.Action("Delete","Street")', { id })
+        $.get('@Url.Action("Delete","Beneficiary")', { id })
             .done(() => {
                 $(that).parent().parent().remove();
             });
     });
 </script>
-
-<!-- Modal -->
-@*@Html.Partial("_CityCreatePartial", new CityCreateModel())*@

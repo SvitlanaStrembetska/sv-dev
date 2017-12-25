@@ -210,8 +210,12 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\Abstract\GeneralController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\ApartmentController.cs" />
+    <Compile Include="Controllers\BeneficiaryController.cs" />
     <Compile Include="Controllers\CityController.cs" />
+    <Compile Include="Controllers\FlatController.cs" />
     <Compile Include="Controllers\PersonController.cs" />
+    <Compile Include="Controllers\StreetController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -356,8 +360,21 @@
     <Content Include="Views\Shared\LoginNew.cshtml" />
     <Content Include="Views\City\Create.cshtml" />
     <Content Include="Views\City\List.cshtml" />
-    <Content Include="Views\Shared\_CityCreatePartial.cshtml" />
+    <Content Include="Views\Shared\_CityCreate.cshtml" />
     <Content Include="Views\City\Details.cshtml" />
+    <Content Include="Views\Shared\_CityEdit.cshtml" />
+    <Content Include="Views\Street\Details.cshtml" />
+    <Content Include="Views\Shared\_StreetCreatePartial.cshtml" />
+    <Content Include="Views\Shared\_StreetEdit.cshtml" />
+    <Content Include="Views\Shared\_ApartmentCreate.cshtml" />
+    <Content Include="Views\Apartment\Details.cshtml" />
+    <Content Include="Views\Shared\_ApartmentEdit.cshtml" />
+    <Content Include="Views\Flat\Details.cshtml" />
+    <Content Include="Views\Shared\_FlatCreate.cshtml" />
+    <Content Include="Views\Shared\_FlatEdit.cshtml" />
+    <Content Include="Views\Beneficiary\List.cshtml" />
+    <Content Include="Views\Shared\_BeneficiaryCreate.cshtml" />
+    <Content Include="Views\Shared\_BeneficiaryEdit.cshtml" />
     <Content Include="Views\Person\Index.cshtml" />
     <Content Include="Views\Person\Details.cshtml" />
     <Content Include="Views\Person\Create.cshtml" />

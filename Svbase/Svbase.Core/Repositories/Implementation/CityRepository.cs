@@ -33,7 +33,8 @@ namespace Svbase.Core.Repositories.Implementation
                 Streets = x.Streets.Select(s => new StreetCreateModel
                 {
                     Id = s.Id,
-                    Name = s.Name
+                    Name = s.Name,
+                    CanDelete = !s.Apartments.Any()
                 })
             })
             .FirstOrDefault(x => x.Id == id);

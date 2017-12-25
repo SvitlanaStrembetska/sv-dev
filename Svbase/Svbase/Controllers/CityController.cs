@@ -38,6 +38,25 @@ namespace Svbase.Controllers
         }
 
         [Authorize(Roles = RoleConsts.Admin)]
+        [HttpPost]
+        public ActionResult Edit(CityCreateModel model)
+        {
+            if (model == null)
+            {
+                return Json(new {status = "error"});
+            }
+
+            var city = _cityService.FindById(model.Id);
+            if (city == null)
+            {
+                return Json(new {status = "error"});
+            }
+            city =  model.Update(city);
+            _cityService.Update(city);
+            return Json(new { status = "success" });
+        }
+
+        [Authorize(Roles = RoleConsts.Admin)]
         [HttpGet]
         public ActionResult Details(int id)
         {
@@ -49,13 +68,13 @@ namespace Svbase.Controllers
             return View(city);
         }
 
-        //[Authorize(Roles = RoleConsts.Admin)]
-        //[HttpDelete]
-        //public ActionResult Delete(int id)
-        //{
-        //    _cityService.DeleteById(id);
-        //    return RedirectToAction("List");
-        //}
+        [Authorize(Roles = RoleConsts.Admin)]
+        [HttpGet]
+        public ActionResult Delete(int id)
+        {
+            _cityService.DeleteById(id);
+            return null;
+        }
 
         [Authorize(Roles = RoleConsts.Admin)]
         [HttpGet]

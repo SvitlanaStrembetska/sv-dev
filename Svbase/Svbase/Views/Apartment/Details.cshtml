@@ -1,5 +1,5 @@
 ﻿@using Svbase.Core.Models
-@model CityViewModel
+@model Svbase.Core.Models.ApartmentViewModel
 
 <div class="row">
     <div class="col-sm-12">
@@ -11,13 +11,13 @@
     <div class="panel-heading">
         <div class="row">
             <div class="col-xs-6">
-                <span>Streets</span>
+                <span>Flats</span>
             </div>
             <div class="col-xs-6">
-                <button class="btn btn-primary btn-xs pull-right" 
+                <button class="btn btn-primary btn-xs pull-right"
                         data-toggle="modal"
-                        data-target="#streetCreateModal">
-                    Add Street
+                        data-target="#flatCreateModal">
+                    Add Flat
                 </button>
             </div>
         </div>
@@ -34,22 +34,22 @@
                     </tr>
                     </thead>
                     <tbody>
-                    @foreach (var street in Model.Streets)
+                    @foreach (var flat in Model.Flats)
                     {
                         <tr>
                             <td class="col-xs-12">
-                                <a href="@Url.Action("Details","Street", new {id = street .Id})">@street.Name</a>
-                                @if (street.CanDelete)
+                                <a href="@Url.Action("Details","Flat", new {id = flat.Id})">@flat.Name</a>
+                                @if (flat.CanDelete)
                                 {
-                                    <i style="color: red; cursor: pointer" 
+                                    <i style="color: red; cursor: pointer"
                                        class="pull-right glyphicon glyphicon-trash"
-                                       data-action="delete" 
-                                       data-item-id="@street.Id"></i>
+                                       data-action="delete"
+                                       data-item-id="@flat.Id"></i>
                                 }
                                 <i style="color: gray; margin-right: 5px; cursor: pointer"
                                    class="pull-right glyphicon glyphicon-pencil"
                                    data-action="edit"
-                                   data-item-id="@street.Id"></i>
+                                   data-item-id="@flat.Id"></i>
                             </td>
                         </tr>
                     }
@@ -60,27 +60,24 @@
     </div>
 </div>
 
-@Html.Partial("_StreetCreatePartial", new StreetCreateModel { CityId = Model.Id})
-@Html.Partial("_StreetEdit")
+@Html.Partial("_FlatCreate", new FlatCreateModel { ApartmentId = Model.Id });
+@Html.Partial("_FlatEdit");
 
 <script>
     $('[data-action="edit"]').click(function () {
-        var street = $(this).parent().find("a")[0].text;
+        var flat = $(this).parent().find("a")[0].text;
         var id = $(this).data('itemId');
-        $('#EditName').val(street);
+        $('#EditName').val(flat);
         $('#EditId').val(id);
-        $('#streetEditModal').modal();
+        $('#flatEditModal').modal();
     });
 
     $('[data-action="delete"]').click(function () {
         var that = this;
         var id = $(this).data('itemId');
-        $.get('@Url.Action("Delete","Street")', { id })
+        $.get('@Url.Action("Delete","Flat")', { id })
             .done(() => {
                 $(that).parent().parent().remove();
             });
     });
 </script>
-
-<!-- Modal -->
-@*@Html.Partial("_CityCreatePartial", new CityCreateModel())*@

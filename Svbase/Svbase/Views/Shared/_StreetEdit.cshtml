@@ -1,0 +1,48 @@
+﻿<div class="modal fade" id="streetEditModal" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Edit something</h4>
+            </div>
+            <div class="modal-body">
+                <form action="@Url.Action("Edit", "Street")" method="post" id="editForm">
+                    <input type="hidden" id="EditId" />
+
+                    <div class="form-horizontal">
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <label class="control-label col-md-2" for="EditName">Name</label>
+                                <div class="col-md-10">
+                                    <input class="form-control" id="EditName" name="Name" type="text" value="">
+                                    <span class="field-validation-valid text-danger" data-valmsg-for="EditName" data-valmsg-replace="true"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="submitStreetEdit">Edit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $("#submitStreetEdit").click(function () {
+        var streetName = $('#EditName').val();
+        var id = $('#EditId').val();
+        $('#streetEditModal').modal();
+        $.post('@Url.Action("Edit","Street")', { Id: id, Name: streetName })
+            .done((data) => {
+                if (data.status === "success") {
+                    window.location.href = "@Url.Action("Details","Street")" + "?id="+id;
+                }
+            });
+    })
+</script>

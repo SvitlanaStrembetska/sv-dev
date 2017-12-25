@@ -1,0 +1,49 @@
+﻿@model Svbase.Core.Models.FlatViewModel
+
+<div class="row">
+    <div class="col-sm-12">
+        <h2 style="margin-top: 0">@Model.Name</h2>
+    </div>
+</div>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <div class="row">
+            <div class="col-xs-6">
+                <span>Persons</span>
+            </div>
+            @*<div class="col-xs-6">
+                <button class="btn btn-primary btn-xs pull-right"
+                        data-toggle="modal"
+                        data-target="#apartmentCreateModal">
+                    Add Person
+                </button>
+            </div>*@
+        </div>
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-xs-12">
+                <table class="table table-hover table-striped">
+                    <thead>
+                        <tr>
+                            <th>
+                                <span>Name</span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var person in Model.Persons)
+                        {
+                            <tr>
+                                <td class="col-xs-12">
+                                    <a>@person.FirthName @person.MiddleName @person.LastName</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
