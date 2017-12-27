@@ -29,7 +29,7 @@
         @if (Request.IsAuthenticated)
         {
             <li>
-                @Html.ActionLink(User.Identity.GetUserName() + "!", "Index", "Person", routeValues: null, htmlAttributes: new {title = "Home"})
+                @Html.ActionLink(User.Identity.GetUserName() , "Index", "Person", routeValues: null, htmlAttributes: new {title = "Home"})
             </li>
         }
             @*<li class="dropdown">
@@ -91,32 +91,32 @@
                 </a>
                 <ul class="dropdown-menu dropdown-tasks" id="hello">
                     <li>
-                        <a> <input type="checkbox"> Прізвище </a>
+                        <a id="lastNameDisplay"> <input type="checkbox"> Прізвище </a>
                     </li>
                     <li>
-                        <a> <input type="checkbox"> Ім'я </a>
+                        <a id="firstNameDisplay"> <input type="checkbox"> Ім'я </a>
                     </li>
                     <li>
-                        <a><input type="checkbox"> По батькові</a>
+                        <a id="middleNameDisplay"><input type="checkbox"> По батькові</a>
                     </li>
                     <li>
-                        <a><input type="checkbox"> Адреса</a>
+                        <a id="addressDisplay"><input type="checkbox"> Адреса</a>
                     </li>
                     <li>
-                        <a><input type="checkbox"> Телефон</a>
+                        <a id="phoneFirthtDisplay"><input type="checkbox"> Телефон 1</a>
                     </li>
                     <li>
-                        <a><input type="checkbox"> Посада</a>
+                        <a id="positionDisplay"><input type="checkbox"> Посада</a>
                     </li>
                     <li>
-                        <a><input type="checkbox"> Стать</a>
+                        <a id="genderDisplay"><input type="checkbox"> Стать</a>
                     </li>
                     <li>
-                        <a><input type="checkbox"> Тип партії</a>
+                        <a id="typePartionDisplay"><input type="checkbox"> Тип партії</a>
                     </li>
                     <li class="divider"></li>
                     <li>
-                        <a class="text-center" href="#">
+                        <a class="text-center" id="showAllDisplay">
                             <strong>Показати всіх</strong>
                             <i class="fa fa-angle-right"></i>
                         </a>
@@ -133,7 +133,6 @@
                     <a href="#">
                         <div>
                             <i class="fa fa-download fa-fw"></i> Зробити експорт
-                            @*<span class="pull-right text-muted small">4 minutes ago</span>*@
                         </div>
                     </a>
                 </li>
@@ -142,20 +141,17 @@
                     <a href="#">
                         <div>
                             <i class="fa fa-upload fa-fw"></i> Зробити імпорт
-                            @*<span class="pull-right text-muted small">4 minutes ago</span>*@
                         </div>
                     </a>
                 </li>
-                <li class="divider"></li>
+                @*<li class="divider"></li>
                 <li>
                     <a href="#">
                         <div>
                             <i class="fa fa-envelope fa-fw"></i> Згенерувати лист
-                            @*<span class="pull-right text-muted small">4 minutes ago</span>*@
                         </div>
                     </a>
-                </li>
-
+                </li>*@
             </ul>
         </li>
         <li class="dropdown">
@@ -170,10 +166,10 @@
                     <a href="#"><i class="fa fa-group fa-fw"></i> Округи</a>
                 </li>
                 <li>
-                    <a href="@Url.Action("List", "City")"><i class="fa fa-bank fa-fw"></i> Міста, райони</a>
+                    <a href="@Url.Action("Create", "City")"><i class="fa fa-bank fa-fw"></i> Міста, райони</a>
                 </li>
                 <li>
-                    <a href="#"><i class="fa fa-subway fa-fw"></i> Статуси</a>
+                    <a href="@Url.Action("List", "Beneficiary")"><i class="fa fa-subway fa-fw"></i> Статуси</a>
                 </li>
                 <li class="divider"></li>
                 @Html.Partial("_LoginPartial")
@@ -205,5 +201,10 @@
 
     $("#hello").click(function (e) {
         e.stopPropagation();
+    });
+
+    $("#lastNameDisplay").click(function () {
+        $("#lastNameHidden").hide();
+        $("#lastNameHidd").hide();
     });
 </script>

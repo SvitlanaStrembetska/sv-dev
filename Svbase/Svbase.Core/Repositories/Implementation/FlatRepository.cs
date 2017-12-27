@@ -23,9 +23,9 @@ namespace Svbase.Core.Repositories.Implementation
                 Persons = x.Persons.Select(p => new PersonListModel
                 {
                     Id = p.Id,
-                    FirthName = p.FirstName,
+                    FirstName = p.FirstName,
                     LastName = p.LastName,
-                    MiddleName = p.Patronymic
+                    MiddleName = p.MiddleName
                 })
             }).FirstOrDefault(x => x.Id == id);
 

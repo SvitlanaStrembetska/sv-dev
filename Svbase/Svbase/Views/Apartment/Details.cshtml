@@ -1,65 +1,64 @@
 ﻿@using Svbase.Core.Models
 @model Svbase.Core.Models.ApartmentViewModel
-
-<div class="row">
-    <div class="col-sm-12">
-        <h2 style="margin-top: 0">@Model.Name</h2>
+<div class="container body-content margin-top">
+    <div class="row">
+        <div class="col-sm-12">
+            <h2 style="margin-top: 0">@Model.Name</h2>
+        </div>
     </div>
-</div>
-
-<div class="panel panel-default">
-    <div class="panel-heading">
-        <div class="row">
-            <div class="col-xs-6">
-                <span>Flats</span>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-xs-6">
+                    <span>Flats</span>
+                </div>
+                <div class="col-xs-6">
+                    <button class="btn btn-primary btn-xs pull-right"
+                            data-toggle="modal"
+                            data-target="#flatCreateModal">
+                        Add Flat
+                    </button>
+                </div>
             </div>
-            <div class="col-xs-6">
-                <button class="btn btn-primary btn-xs pull-right"
-                        data-toggle="modal"
-                        data-target="#flatCreateModal">
-                    Add Flat
-                </button>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-xs-12">
+                    <table class="table table-hover table-striped">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <span>Name</span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var flat in Model.Flats)
+                            {
+                                <tr>
+                                    <td class="col-xs-12">
+                                        <a href="@Url.Action("Details","Flat", new {id = flat.Id})">@flat.Name</a>
+                                        @if (flat.CanDelete)
+                                        {
+                                            <i style="color: red; cursor: pointer"
+                                               class="pull-right glyphicon glyphicon-trash"
+                                               data-action="delete"
+                                               data-item-id="@flat.Id"></i>
+                                        }
+                                        <i style="color: gray; margin-right: 5px; cursor: pointer"
+                                           class="pull-right glyphicon glyphicon-pencil"
+                                           data-action="edit"
+                                           data-item-id="@flat.Id"></i>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
-    <div class="panel-body">
-        <div class="row">
-            <div class="col-xs-12">
-                <table class="table table-hover table-striped">
-                    <thead>
-                    <tr>
-                        <th>
-                            <span>Name</span>
-                        </th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    @foreach (var flat in Model.Flats)
-                    {
-                        <tr>
-                            <td class="col-xs-12">
-                                <a href="@Url.Action("Details","Flat", new {id = flat.Id})">@flat.Name</a>
-                                @if (flat.CanDelete)
-                                {
-                                    <i style="color: red; cursor: pointer"
-                                       class="pull-right glyphicon glyphicon-trash"
-                                       data-action="delete"
-                                       data-item-id="@flat.Id"></i>
-                                }
-                                <i style="color: gray; margin-right: 5px; cursor: pointer"
-                                   class="pull-right glyphicon glyphicon-pencil"
-                                   data-action="edit"
-                                   data-item-id="@flat.Id"></i>
-                            </td>
-                        </tr>
-                    }
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
 </div>
-
 @Html.Partial("_FlatCreate", new FlatCreateModel { ApartmentId = Model.Id });
 @Html.Partial("_FlatEdit");
 
