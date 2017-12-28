@@ -213,6 +213,7 @@
     <Compile Include="Controllers\ApartmentController.cs" />
     <Compile Include="Controllers\BeneficiaryController.cs" />
     <Compile Include="Controllers\CityController.cs" />
+    <Compile Include="Controllers\DistrictController.cs" />
     <Compile Include="Controllers\FlatController.cs" />
     <Compile Include="Controllers\PersonController.cs" />
     <Compile Include="Controllers\StreetController.cs" />
@@ -379,6 +380,9 @@
     <Content Include="Views\Person\Details.cshtml" />
     <Content Include="Views\Person\Create.cshtml" />
     <Content Include="Views\Person\Import.cshtml" />
+    <Content Include="Views\District\List.cshtml" />
+    <Content Include="Views\District\Create.cshtml" />
+    <Content Include="Views\District\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -59,5 +59,10 @@ namespace Svbase.Service.Abstract
             UnitOfWork.Commit();
             return deletedEntity;
         }
+
+        public TEntity Attach(TEntity entity)
+        {
+            return _repository.Attach(entity);
+        }
     }
 }

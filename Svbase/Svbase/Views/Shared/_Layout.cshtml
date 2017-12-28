@@ -167,13 +167,13 @@
                     <a href="@Url.Action("Create", "Person")"><i class="fa fa-user fa-fw"></i> Додати людину</a>
                 </li>
                 <li>
-                    <a href="#"><i class="fa fa-group fa-fw"></i> Округи</a>
+                    <a href="@Url.Action("List","District")"><i class="fa fa-group fa-fw"></i> Округи</a>
                 </li>
                 <li>
                     <a href="@Url.Action("List", "City")"><i class="fa fa-bank fa-fw"></i> Міста, райони</a>
                 </li>
                 <li>
-                    <a href="#"><i class="fa fa-subway fa-fw"></i> Статуси</a>
+                    <a href="@Url.Action("List","Beneficiary")"><i class="fa fa-subway fa-fw"></i> Статуси</a>
                 </li>
                 <li class="divider"></li>
                 @Html.Partial("_LoginPartial")

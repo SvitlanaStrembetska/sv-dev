@@ -11,5 +11,6 @@ namespace Svbase.Service.Abstract
         void Update(TEntity entity);
         TEntity Delete(TEntity entity);
         TEntity DeleteById(object id);
+        TEntity Attach(TEntity entity);
     }
 }

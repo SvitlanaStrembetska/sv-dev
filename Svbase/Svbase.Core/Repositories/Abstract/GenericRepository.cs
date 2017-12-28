@@ -55,6 +55,11 @@ namespace Svbase.Core.Repositories.Abstract
             return Delete(entityToDelete);
         }
 
+        public TEntity Attach(TEntity entity)
+        {
+            return DbSet.Attach(entity);
+        }
+
         #region IDisposable
 
         private bool _disposed;

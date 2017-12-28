@@ -178,3 +178,6 @@ D:\Work\SvBase\sv-dev\Svbase\Svbase.Tests\bin\Debug\Autofac.dll
 D:\Work\SvBase\sv-dev\Svbase\Svbase.Tests\bin\Debug\Autofac.Integration.Mvc.dll
 D:\Work\SvBase\sv-dev\Svbase\Svbase.Tests\bin\Debug\Autofac.xml
 D:\Work\SvBase\sv-dev\Svbase\Svbase.Tests\bin\Debug\Autofac.Integration.Mvc.xml
+D:\Work\SvBase\sv-dev\Svbase\Svbase.Tests\bin\Debug\WebGrease.dll
+D:\Work\SvBase\sv-dev\Svbase\Svbase.Tests\bin\Debug\Antlr3.Runtime.dll
+D:\Work\SvBase\sv-dev\Svbase\Svbase.Tests\bin\Debug\Antlr3.Runtime.pdb

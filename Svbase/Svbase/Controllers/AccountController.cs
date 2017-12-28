@@ -82,7 +82,7 @@ namespace Svbase.Controllers
             var result = await SignInManager.PasswordSignInAsync(user.UserName, model.Password, true, false);
             if (result == SignInStatus.Success)
             {
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index","Person");
             }
             return View(model);
         }

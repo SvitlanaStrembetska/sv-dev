@@ -20,4 +20,10 @@ namespace Svbase.Core.Models
     {
         public IEnumerable<ApartmentCreateModel> Apartments { get; set; }
     }
+
+    public class StreetSelectModel : BaseViewModel
+    {
+        public bool IsChecked { get; set; }
+        public string CityName { get; set; }
+    }
 }

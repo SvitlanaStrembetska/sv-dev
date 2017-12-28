@@ -1,4 +1,6 @@
-﻿using Svbase.Core.Data.Entities;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Svbase.Core.Data.Entities;
 using Svbase.Core.Models;
 using Svbase.Core.Repositories.Abstract;
 using Svbase.Core.Repositories.Factory;
@@ -20,6 +22,18 @@ namespace Svbase.Service.Implementation
         {
             var street = RepositoryManager.Streets.GetStreetById(id);
             return street;
+        }
+
+        public IEnumerable<StreetSelectModel> GetStreetsForSelecting()
+        {
+            var streets = RepositoryManager.Streets.GetStreetsForSelecting();
+            return streets;
+        }
+
+        public IEnumerable<Street> GetStreetsByDistrictId(int id)
+        {
+            var streets = RepositoryManager.Streets.GetStreetsByDistrictId(id);
+            return streets;
         }
     }
 }

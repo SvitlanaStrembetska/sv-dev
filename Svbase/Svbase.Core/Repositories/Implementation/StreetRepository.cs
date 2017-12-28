@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Svbase.Core.Data;
 using Svbase.Core.Data.Entities;
 using Svbase.Core.Models;
@@ -27,6 +28,25 @@ namespace Svbase.Core.Repositories.Implementation
                 })
             }).FirstOrDefault(x => x.Id == id);
             return street;
+        }
+
+        public IEnumerable<StreetSelectModel> GetStreetsForSelecting()
+        {
+            var streets = DbSet.Select(x => new StreetSelectModel
+            {
+                Id = x.Id,
+                Name = x.Name,
+                CityName = x.City.Name,
+                IsChecked = false
+            });
+
+            return streets;
+        }
+
+        public IEnumerable<Street> GetStreetsByDistrictId(int id)
+        {
+            var streets = DbSet.Where(x => x.Districts.Select(d => d.Id).Contains(id));
+            return streets;
         }
     }
 }
