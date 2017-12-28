@@ -383,6 +383,7 @@
     <Content Include="Views\District\List.cshtml" />
     <Content Include="Views\District\Create.cshtml" />
     <Content Include="Views\District\Details.cshtml" />
+    <Content Include="Views\PersonCreate.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

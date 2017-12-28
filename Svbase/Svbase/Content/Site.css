@@ -70,6 +70,20 @@ textarea {
 .margin-top {
     margin-top: 20px;
 }
+
 li.dropdown {
     cursor: pointer;
+}
+
+.block-container {
+    display: inline-block;
+    padding: 10px 0;
+}
+
+.inline-block {
+    display: inline-block;
+}
+
+.btn-svb {
+    background-color: #428bca;
 }

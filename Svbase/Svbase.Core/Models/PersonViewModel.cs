@@ -8,31 +8,58 @@ namespace Svbase.Core.Models
     public class PersonListModel
     {
         public int Id { get; set; }
-        [Display(Name = "FirthName")]
-        public string FirthName { get; set; }
-        [Display(Name = "MiddleName")]
+        [Display(Name = "Ім'я")]
+        public string FirstName { get; set; }
+        [Display(Name = "По батькові")]
         public string MiddleName { get; set; }
-        [Display(Name = "LastName")]
+        [Display(Name = "Прізвище")]
         public string LastName { get; set; }
+
+       
     }
 
     public class PersonViewModel  : PersonListModel
     {
         [Phone]
+        [Display(Name = "Мобільний телефон 1")]
         public string FirthtMobilePhone { get; set; }
         [Phone]
+        [Display(Name = "Мобільний телефон 2")]
         public string SecondMobilePhone { get; set; }
         [Phone]
+        [Display(Name = "Домашній телефон")]
         public string HomePhone { get; set; }
         [EmailAddress]
+        [Display(Name = "Електронна пошта")]
         public string Email { get; set; }
+        [DataType(DataType.Date)]
+        [Display(Name = "Дата народження")]
         public DateTime DateBirth { get; set; }
+        [Display(Name = "Посада")]
         public string Position { get; set; }
+        [Display(Name = "Партійний тип")]
         public string PartionType { get; set; }
+        [Display(Name = "Стать")]
         public bool Gender { get; set; }
+        public Person Update(Person person)
+        {
+            person.Id = Id;
+            person.FirstName = FirstName;
+            person.MiddleName = MiddleName;
+            person.LastName = LastName;
+            person.BirthdayDate = DateBirth;
+            person.Gender = Gender;
+            person.Position = Position;
+            person.MobileTelephoneFirst = FirthtMobilePhone;
+            person.MobileTelephoneSecond = SecondMobilePhone;
+            person.HomePhone = HomePhone;
+            person.Email = Email;
+            person.PartionType = PartionType;
 
-        public int BeneficiaryId { get; set; }
-        public int DistrictId { get; set; }
-        public int FlatId { get; set; }
+            return person;
+        }
+        //public int BeneficiaryId { get; set; }
+        //public int DistrictId { get; set; }
+        //public int FlatId { get; set; }
     }
 }

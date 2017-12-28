@@ -1,60 +1,61 @@
 ﻿@using Svbase.Core.Models
 @model IEnumerable<CityCreateModel>
-
-<div class="row">
-    <div class="col-sm-12">
-        <div class="row">
-            <div class="col-xs-8">
-                <h2 style="margin-top: 0">Cities</h2>
-            </div>
-            <div class="col-xs-4">
-                <a class="btn btn-primary pull-right"
-                   data-toggle="modal"
-                   data-target="#cityCreateModal">Add City
-                </a>
+<div class="container body-content margin-top">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="row">
+                <div class="col-xs-8">
+                    <h2 style="margin-top: 0">Cities</h2>
+                </div>
+                <div class="col-xs-4">
+                    <a class="btn btn-primary pull-right"
+                       data-toggle="modal"
+                       data-target="#cityCreateModal">
+                        Add City
+                    </a>
+                </div>
             </div>
         </div>
     </div>
-</div>
-<div class="panel panel-default">
-    <div class="panel-body">
-        <div class="row">
-            <div class="col-xs-12">
-                <table class="table table-hover table-striped">
-                    <thead>
-                        <tr>
-                            <th>
-                                <span>Name</span>
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var city in Model)
-                        {
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-xs-12">
+                    <table class="table table-hover table-striped">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <span>Name</span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var city in Model)
+                            {
                             <tr>
                                 <td class="col-xs-12">
                                     <a href="@Url.Action("Details", new { id = city.Id })">@city.Name</a>
                                     @if (city.CanDelete)
-                                    {
-                                        <i style="color: red; cursor: pointer" 
+                                        {
+                                        <i style="color: red; cursor: pointer"
                                            class="pull-right glyphicon glyphicon-trash"
-                                           data-action="delete" 
+                                           data-action="delete"
                                            data-item-id="@city.Id"></i>
-                                    }
+                                        }
                                     <i style="color: gray; margin-right: 5px; cursor: pointer"
                                        class="pull-right glyphicon glyphicon-pencil"
                                        data-action="edit"
                                        data-item-id="@city.Id"></i>
                                 </td>
                             </tr>
-                        }
-                    </tbody>
-                </table>
+                            }
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
 </div>
-
 @Html.Partial("_CityCreate", new CityCreateModel())
 @Html.Partial("_CityEdit")
 

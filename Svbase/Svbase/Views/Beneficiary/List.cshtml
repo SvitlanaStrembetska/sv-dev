@@ -1,61 +1,61 @@
 ﻿@using Svbase.Core.Models
 @model IEnumerable<Svbase.Core.Models.BeneficiaryCreateModel>
-
-<div class="row">
-    <div class="col-sm-12">
-        <div class="row">
-            <div class="col-xs-8">
-                <h2 style="margin-top: 0">Beneficiaries</h2>
+<div class="container body-content margin-top">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="row">
+                <div class="col-xs-8">
+                    <h2 style="margin-top: 0">Beneficiaries</h2>
+                </div>
+                <div class="col-xs-4">
+                    <a class="btn btn-primary pull-right"
+                       data-toggle="modal"
+                       data-target="#beneficiaryCreateModal">
+                        Add Beneficiary
+                    </a>
+                </div>
             </div>
-            <div class="col-xs-4">
-                <a class="btn btn-primary pull-right"
-                   data-toggle="modal"
-                   data-target="#beneficiaryCreateModal">
-                    Add Beneficiary
-                </a>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-xs-12">
+                    <table class="table table-hover table-striped">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <span>Name</span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var beneficiary in Model)
+                            {
+                                <tr>
+                                    <td class="col-xs-12">
+                                        <a>@beneficiary.Name</a>
+                                        @if (beneficiary.CanDelete)
+                                        {
+                                            <i style="color: red; cursor: pointer"
+                                               class="pull-right glyphicon glyphicon-trash"
+                                               data-action="delete"
+                                               data-item-id="@beneficiary.Id"></i>
+                                        }
+                                        <i style="color: gray; margin-right: 5px; cursor: pointer"
+                                           class="pull-right glyphicon glyphicon-pencil"
+                                           data-action="edit"
+                                           data-item-id="@beneficiary.Id"></i>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
 </div>
-<div class="panel panel-default">
-    <div class="panel-body">
-        <div class="row">
-            <div class="col-xs-12">
-                <table class="table table-hover table-striped">
-                    <thead>
-                    <tr>
-                        <th>
-                            <span>Name</span>
-                        </th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    @foreach (var beneficiary in Model)
-                    {
-                        <tr>
-                            <td class="col-xs-12">
-                                <a>@beneficiary.Name</a>
-                                @if (beneficiary.CanDelete)
-                                {
-                                    <i style="color: red; cursor: pointer"
-                                       class="pull-right glyphicon glyphicon-trash"
-                                       data-action="delete"
-                                       data-item-id="@beneficiary.Id"></i>
-                                }
-                                <i style="color: gray; margin-right: 5px; cursor: pointer"
-                                   class="pull-right glyphicon glyphicon-pencil"
-                                   data-action="edit"
-                                   data-item-id="@beneficiary.Id"></i>
-                            </td>
-                        </tr>
-                    }
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-</div>
-
 @Html.Partial("_BeneficiaryCreate", new BeneficiaryCreateModel());
 @Html.Partial("_BeneficiaryEdit");
 

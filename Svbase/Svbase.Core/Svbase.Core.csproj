@@ -49,6 +49,7 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web.Services" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -87,6 +88,14 @@
     <Compile Include="Migrations\201712131817484_ChangeInitDb.cs" />
     <Compile Include="Migrations\201712131817484_ChangeInitDb.Designer.cs">
       <DependentUpon>201712131817484_ChangeInitDb.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201712250555186_AddMiddleNameToPerson.cs" />
+    <Compile Include="Migrations\201712250555186_AddMiddleNameToPerson.Designer.cs">
+      <DependentUpon>201712250555186_AddMiddleNameToPerson.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201712250642035_AddToPerson.cs" />
+    <Compile Include="Migrations\201712250642035_AddToPerson.Designer.cs">
+      <DependentUpon>201712250642035_AddToPerson.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Migrations\DbInitializer\CreateIfNotExistWithSeed.cs" />
@@ -137,6 +146,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201712131817484_ChangeInitDb.resx">
       <DependentUpon>201712131817484_ChangeInitDb.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201712250555186_AddMiddleNameToPerson.resx">
+      <DependentUpon>201712250555186_AddMiddleNameToPerson.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201712250642035_AddToPerson.resx">
+      <DependentUpon>201712250642035_AddToPerson.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
