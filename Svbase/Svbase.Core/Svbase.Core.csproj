@@ -107,6 +107,7 @@
     <Compile Include="Models\FlatViewModel.cs" />
     <Compile Include="Models\PersonViewModel.cs" />
     <Compile Include="Models\BaseViewModel.cs" />
+    <Compile Include="Models\StreetSearchFilterModel.cs" />
     <Compile Include="Models\StreetViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\Abstract\GenericRepository.cs" />

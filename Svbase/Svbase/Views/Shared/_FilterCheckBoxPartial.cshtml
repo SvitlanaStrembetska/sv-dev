@@ -1,0 +1,8 @@
+﻿@model IList<Svbase.Core.Models.BaseViewModel>
+    
+@foreach (var item in @Model)
+{
+    <li>
+        <a><input id="2" type="checkbox" value="@item.Id">@item.Name</a>
+    </li>
+}

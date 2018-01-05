@@ -9,5 +9,12 @@ namespace Svbase.Service.Interfaces
     {
         IEnumerable<PersonViewModel> GetPersons();
         PersonViewModel GetPersonById(int id);
+
+        IList<BaseViewModel> GetDistrictsForFilter();
+        IList<BaseViewModel> GetCitiesBaseViewModels();
+        IList<BaseViewModel> GetStreetsForFilter();
+        IEnumerable<BaseViewModel> GetStretsBaseModelByStreetSearchFilter(StreetSearchFilterModel filter);
+        IEnumerable<BaseViewModel> GetApartmentsBaseModelByStreetIds(IList<int> streetIds);
+        IEnumerable<BaseViewModel> GetFlatsBaseModelByApatrmentIds(IList<int> apartmentIds);
     }
 }

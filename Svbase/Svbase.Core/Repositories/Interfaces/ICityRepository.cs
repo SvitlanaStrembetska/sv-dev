@@ -9,5 +9,7 @@ namespace Svbase.Core.Repositories.Interfaces
     {
         IEnumerable<CityCreateModel> GetCities();
         CityViewModel GetCityById(int id);
+        IEnumerable<BaseViewModel> GetStretsBaseModelByCityIds(IList<int> cityIds);
+        IEnumerable<BaseViewModel> GetStreetsBaseModelByCityId(int id);
     }
 }

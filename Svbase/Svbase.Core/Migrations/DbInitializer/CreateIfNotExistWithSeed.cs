@@ -39,14 +39,14 @@ namespace Svbase.Core.Migrations.DbInitializer
 
         protected override void Seed(ApplicationDbContext context)
         {
+            InitializeDb(context);
+        }
+
+        public void InitializeDb(ApplicationDbContext context)
+        {
             _dbContext = context;
             _userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
             _roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
-            InitializeDb();
-        }
-
-        public void InitializeDb()
-        {
             if (!_dbContext.Roles.Any())
             {
                 InitUserAndRoles();

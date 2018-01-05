@@ -9,5 +9,6 @@ namespace Svbase.Core.Repositories.Interfaces
     {
         IEnumerable<DistrictListModel> GetAllDistricts();
         DistrictCreateModel GetDistrictById(int id);
+        IEnumerable<BaseViewModel> GetStretsBaseModelByDistrictIds(IList<int> districtIds);
     }
 }

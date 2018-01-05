@@ -28,5 +28,11 @@ namespace Svbase.Service.Implementation
             var city = RepositoryManager.Cities.GetCityById(id);
             return city;
         }
+
+        public IEnumerable<BaseViewModel> GetStreetsBaseModelByCityId(int id)
+        {
+            var streets = RepositoryManager.Cities.GetStreetsBaseModelByCityId(id);
+            return streets;
+        }
     }
 }
