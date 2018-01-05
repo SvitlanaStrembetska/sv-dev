@@ -30,6 +30,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CsvHelper, Version=6.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
+      <HintPath>..\packages\CsvHelper.6.1.0\lib\net45\CsvHelper.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
       <Private>True</Private>
@@ -97,6 +101,14 @@
     <Compile Include="Migrations\201712250642035_AddToPerson.Designer.cs">
       <DependentUpon>201712250642035_AddToPerson.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201801050148302_AddPersonmigration.cs" />
+    <Compile Include="Migrations\201801050148302_AddPersonmigration.Designer.cs">
+      <DependentUpon>201801050148302_AddPersonmigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201801050223147_AddPersonFilemigration.cs" />
+    <Compile Include="Migrations\201801050223147_AddPersonFilemigration.Designer.cs">
+      <DependentUpon>201801050223147_AddPersonFilemigration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Migrations\DbInitializer\CreateIfNotExistWithSeed.cs" />
     <Compile Include="Models\ApartmentViewModel.cs" />
@@ -152,6 +164,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201712250642035_AddToPerson.resx">
       <DependentUpon>201712250642035_AddToPerson.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801050148302_AddPersonmigration.resx">
+      <DependentUpon>201801050148302_AddPersonmigration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801050223147_AddPersonFilemigration.resx">
+      <DependentUpon>201801050223147_AddPersonFilemigration.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

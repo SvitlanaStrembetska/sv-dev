@@ -19,16 +19,16 @@ namespace Svbase.Core.Repositories.Implementation
             {
                 Id = x.Id,
                 FirstName = x.FirstName,
-                MiddleName = x.MiddleName,
+                //MiddleName = x.MiddleName,
                 LastName = x.LastName,
-                Position = x.Position,
-                Gender = x.Gender,
-                Email = x.Email,
-                FirthtMobilePhone = x.MobileTelephoneFirst,
-                SecondMobilePhone = x.MobileTelephoneSecond,
-                HomePhone = x.HomePhone,
-                PartionType = x.PartionType,
-                DateBirth = x.BirthdayDate
+                //Position = x.Position,
+                //Gender = x.Gender,
+                //Email = x.Email,
+                //FirthtMobilePhone = x.MobileTelephoneFirst,
+                //SecondMobilePhone = x.MobileTelephoneSecond,
+                //HomePhone = x.HomePhone,
+                //PartionType = x.PartionType,
+                //DateBirth = x.BirthdayDate
                 //CanDelete = !x.Streets.Any()
             });
             return persons;
@@ -40,16 +40,16 @@ namespace Svbase.Core.Repositories.Implementation
                 {
                     Id = x.Id,
                     FirstName = x.FirstName,
-                    MiddleName = x.MiddleName,
+                    //MiddleName = x.MiddleName,
                     LastName = x.LastName,
-                    Position = x.Position,
-                    Gender = x.Gender,
-                    Email = x.Email,
-                    FirthtMobilePhone = x.MobileTelephoneFirst,
-                    SecondMobilePhone = x.MobileTelephoneSecond,
-                    HomePhone = x.HomePhone,
-                    PartionType = x.PartionType,
-                    DateBirth = x.BirthdayDate
+                    //Position = x.Position,
+                    //Gender = x.Gender,
+                    //Email = x.Email,
+                    //FirthtMobilePhone = x.MobileTelephoneFirst,
+                    //SecondMobilePhone = x.MobileTelephoneSecond,
+                    //HomePhone = x.HomePhone,
+                    //PartionType = x.PartionType,
+                    //DateBirth = x.BirthdayDate
                 //Streets = x.Streets.Select(s => new StreetCreateModel
                 //{
                 //    Id = s.Id,

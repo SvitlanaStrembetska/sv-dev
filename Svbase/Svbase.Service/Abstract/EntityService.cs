@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Svbase.Core.Data.Abstract;
 using Svbase.Core.Repositories.Abstract;
@@ -26,6 +27,14 @@ namespace Svbase.Service.Abstract
             TEntity addedEntity = _repository.Add(entity);
             UnitOfWork.Commit();
             return addedEntity;
+        }
+
+        public IEnumerable<TEntity> AddRange(IEnumerable<TEntity> entities)
+        {
+            if (entities == null) throw new ArgumentNullException(nameof(entities));
+            var result = entities.Select(entity => _repository.Add(entity)).ToList();
+            UnitOfWork.Commit();
+            return result;
         }
 
         IQueryable<TEntity> IEntityService<TEntity>.GetAll()

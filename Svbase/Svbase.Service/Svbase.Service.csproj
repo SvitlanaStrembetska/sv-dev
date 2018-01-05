@@ -67,6 +67,7 @@
     <Compile Include="Implementation\CityService.cs" />
     <Compile Include="Implementation\DistrictService.cs" />
     <Compile Include="Implementation\FlatService.cs" />
+    <Compile Include="Implementation\ImportModelCsvService.cs" />
     <Compile Include="Implementation\PersonService.cs" />
     <Compile Include="Implementation\StreetService.cs" />
     <Compile Include="Interfaces\IApartmentService.cs" />

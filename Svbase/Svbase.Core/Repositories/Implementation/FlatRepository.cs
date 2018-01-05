@@ -25,7 +25,7 @@ namespace Svbase.Core.Repositories.Implementation
                     Id = p.Id,
                     FirstName = p.FirstName,
                     LastName = p.LastName,
-                    MiddleName = p.MiddleName
+                    //MiddleName = p.MiddleName
                 })
             }).FirstOrDefault(x => x.Id == id);
 

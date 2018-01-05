@@ -1,29 +1,70 @@
-﻿@model Svbase.Core.Models.PersonViewModel
+﻿@model IEnumerable<Svbase.Core.Models.PersonViewModel>
 
 @{
     ViewBag.Title = "title";
 }
-<div class="container body-content margin-top">
-    @using (Html.BeginForm("Import", "Person"))
-    {
-        @Html.AntiForgeryToken()
-        <div class="form-horizontal">
-            <div class="form-group">
-                <label for="exampleInputFile">File input</label>
-                <input type="file" id="exampleInputFile">
-                <p class="help-block">Example block-level help text here.</p>
-            </div>
-            <div class="checkbox">
-                <label>
-                    <input type="checkbox"> Check me out
-                </label>
-            </div>
-            <button type="submit" class="btn btn-default">Import</button>
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="Create" class="btn btn-primary" />
+<div id=" wrapper">
+    <div id="page-wrapper">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="col-md-6">
+                    <h2 class="page-header">Вибірка</h2>
+                </div>
+                <div class="col-md-6">
+                    <button id="import" class="btn btn-default pull-right page-header">Імпорт</button>
+
+                    <button class="btn btn-default pull-right page-header" style="background-color: #428bca; color: #fff; padding-right: 10px;">Зберегти як...</button>
                 </div>
             </div>
         </div>
-    }
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example">
+                            <thead>
+                            <tr>
+
+                                <th>Ім'я</th>
+                                <th>По батькові</th>
+                                <th id="lastNameHidden">Прізвище</th>
+                                <th>Емейл</th>
+                                <th>Мобільний телефон 1</th>
+                                <th>Мобільний телефон 2</th>
+                                <th>Домашній телефон</th>
+                                <th>Позиція</th>
+                                <th>Партійний тип</th>
+                                <th>Дата народження</th>
+
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            @foreach (var person in Model)
+                            {
+                                <tr class="odd gradeX">
+                                    <td>@person.FirstName</td>
+                                    <td>@person.MiddleName</td>
+                                    <td id="lastNameHidd-@person.Id">@person.LastName</td>
+                                    <td>@person.Email</td>
+                                    <td>@person.FirthtMobilePhone</td>
+                                    <td>@person.SecondMobilePhone</td>
+                                    <td>@person.HomePhone</td>
+                                    <td>@person.Position</td>
+                                    <td>@person.PartionType</td>
+                                    <td>@person.DateBirth</td>
+                                </tr>
+                            }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+<script>
+     
+</script>
+

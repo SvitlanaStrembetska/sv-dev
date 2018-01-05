@@ -1,5 +1,7 @@
-﻿using System.Data.Entity.Infrastructure.Annotations;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
+using CsvHelper;
 using Svbase.Controllers.Abstract;
 using Svbase.Core.Consts;
 using Svbase.Core.Data.Entities;
@@ -22,7 +24,7 @@ namespace Svbase.Controllers
         public ActionResult Index()
         {
             var persons = _personService.GetPersons();
-           
+
             return View(persons);
         }
         public ActionResult Create()
@@ -58,18 +60,54 @@ namespace Svbase.Controllers
             }
             return View(person);
         }
-        public ActionResult Edit()
+        public ActionResult Import()
         {
-            return View();
+            bool isValid;
+            IEnumerable<Person> result = new List<Person>();
+            var worker = new ImportModelCsvService();
+            var error = new List<CsvErrorModel>();
+            var model = new List<PersonViewModel>();
+
+            using (var textReader = System.IO.File.OpenText(@"C:\Users\svitl\Desktop\test2.csv"))
+            {
+                var csv = new CsvReader(textReader);
+
+                isValid = worker.Validate(csv, out error);
+            }
+            if (isValid)
+            {
+                using (var textReader = System.IO.File.OpenText(@"C:\Users\svitl\Desktop\test2.csv"))
+                {
+                    var csv = new CsvReader(textReader);
+                    result = worker.Read(csv);
+
+                    var entities = new List<Person>();
+                    var i = 0;
+                    do
+                    {
+                        entities.AddRange(_personService.AddRange(result.Skip(i).Take(i + 1000)));
+                        i += 1000;
+                    } while (i < result.Count());
+
+                    foreach (var entity in entities)
+                    {
+                        var viewModel = new PersonViewModel();
+                        viewModel.SetFields(entity);
+                        model.Add(viewModel);
+                    }
+                }
+            }
+            else
+            {
+                model = new List<PersonViewModel>();
+                //error
+            }
+
+            return View("Import", model);
         }
         public ActionResult SearcResult()
         {
             return PartialView();
-        }
-
-        public ActionResult Import()
-        {
-            return View();
         }
 
         public ActionResult Export()
