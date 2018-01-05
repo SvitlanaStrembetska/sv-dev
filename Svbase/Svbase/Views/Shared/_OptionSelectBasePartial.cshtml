@@ -1,0 +1,10 @@
+﻿@model IEnumerable<Svbase.Core.Models.BaseViewModel>
+
+@if (Model.Any())
+{
+    <option disabled selected> Виберіть елемент </option>
+}
+@foreach (var item in Model)
+{
+    <option value="@item.Id">@item.Name</option>
+}

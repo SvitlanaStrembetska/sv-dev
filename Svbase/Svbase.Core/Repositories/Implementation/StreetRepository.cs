@@ -48,5 +48,39 @@ namespace Svbase.Core.Repositories.Implementation
             var streets = DbSet.Where(x => x.Districts.Select(d => d.Id).Contains(id));
             return streets;
         }
+
+        public IEnumerable<BaseViewModel> GetApartmentsBaseModelByStreetIds(IList<int> streetIds)
+        {
+            if (streetIds == null) return new List<BaseViewModel>();
+            var streets = DbSet.Where(x => streetIds.Contains(x.Id));
+            if (!streets.Any()) return new List<BaseViewModel>();
+
+            var apartmentsLists = streets
+                .Select(x => x.Apartments
+                    .Select(s => new BaseViewModel
+                    {
+                        Id = s.Id,
+                        Name = s.Name
+                    }).ToList()
+                ).ToList();
+
+            var apartments = new List<BaseViewModel>();
+            apartments = apartmentsLists
+                .Aggregate(apartments, (current, items) => current.Union(items).ToList());//Union arrays
+            apartments = apartments.GroupBy(x => x.Id).Select(x => x.FirstOrDefault()).ToList();//Distinct by field
+            return apartments;
+        }
+
+        public IEnumerable<BaseViewModel> GetApartmentsBaseModelByStreetId(int id)
+        {
+            var street = DbSet.FirstOrDefault(x => x.Id == id);
+            if (street == null) return new List<BaseViewModel>();
+            var apartments = street.Apartments.Select(x => new BaseViewModel
+            {
+                Id = x.Id,
+                Name = x.Name
+            });
+            return apartments;
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Svbase.Core.Data.Entities;
+﻿using System.Collections.Generic;
+using Svbase.Core.Data.Entities;
 using Svbase.Core.Models;
 using Svbase.Core.Repositories.Abstract;
 using Svbase.Core.Repositories.Factory;
@@ -20,6 +21,12 @@ namespace Svbase.Service.Implementation
         {
             var apartment = RepositoryManager.Apartments.GetById(id);
             return apartment;
+        }
+
+        public IEnumerable<BaseViewModel> GetFlatsBaseModelByApartmentId(int id)
+        {
+            var flats = RepositoryManager.Apartments.GetFlatsBaseModelByApartmentId(id);
+            return flats;
         }
     }
 }

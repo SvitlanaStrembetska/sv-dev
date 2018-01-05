@@ -10,5 +10,7 @@ namespace Svbase.Core.Repositories.Interfaces
         StreetViewModel GetStreetById(int id);
         IEnumerable<StreetSelectModel> GetStreetsForSelecting();
         IEnumerable<Street> GetStreetsByDistrictId(int id);
+        IEnumerable<BaseViewModel> GetApartmentsBaseModelByStreetIds(IList<int> streetIds);
+        IEnumerable<BaseViewModel> GetApartmentsBaseModelByStreetId(int id);
     }
 }

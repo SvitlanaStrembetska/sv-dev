@@ -42,5 +42,25 @@ namespace Svbase.Core.Repositories.Implementation
 
             return district;
         }
+
+        public IEnumerable<BaseViewModel> GetStretsBaseModelByDistrictIds(IList<int> districtIds)
+        {
+            if (districtIds == null) return new List<BaseViewModel>();
+            var districts = DbSet.Where(x => districtIds.Contains(x.Id));
+            if(!districts.Any()) return new List<BaseViewModel>();
+            var streetsLists = districts
+                .Select(x => x.Streets
+                    .Select(s => new BaseViewModel
+                        {
+                            Id = s.Id,
+                            Name = s.Name
+                        }).ToList()
+                ).ToList();
+            var streets = new List<BaseViewModel>();
+            streets = streetsLists
+                .Aggregate(streets, (current, items) => current.Union(items).ToList());//Union arrays
+            streets = streets.GroupBy(x => x.Id).Select(x => x.FirstOrDefault()).ToList();//Distinct by field
+            return streets;
+        }
     }
 }

@@ -15,23 +15,21 @@
                     <div class="col-md-4 ignore-padding">
                         @Html.LabelFor(model => model.FirstName, htmlAttributes: new { @class = "col-md-12" })
                         <div class="col-md-12">
-                            @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control", required="required" } })
                             @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
                         </div>
                     </div>
-
                     <div class="col-md-4 ignore-padding">
                         @Html.LabelFor(model => model.MiddleName, htmlAttributes: new { @class = "col-md-12" })
                         <div class="col-md-12">
-                            @Html.EditorFor(model => model.MiddleName, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.EditorFor(model => model.MiddleName, new { htmlAttributes = new { @class = "form-control", required = "required" } })
                             @Html.ValidationMessageFor(model => model.MiddleName, "", new { @class = "text-danger" })
                         </div>
                     </div>
-
                     <div class="col-md-4 ignore-padding">
                         @Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "col-md-12" })
                         <div class="col-md-12">
-                            @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control", required = "required" } })
                             @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
                         </div>
                     </div>
@@ -44,7 +42,6 @@
                             @Html.ValidationMessageFor(model => model.FirthtMobilePhone, "", new { @class = "text-danger" })
                         </div>
                     </div>
-
                     <div class="col-md-4 ignore-padding">
                         @Html.LabelFor(model => model.SecondMobilePhone, htmlAttributes: new { @class = "col-md-12" })
                         <div class="col-md-12">
@@ -52,7 +49,6 @@
                             @Html.ValidationMessageFor(model => model.SecondMobilePhone, "", new { @class = "text-danger" })
                         </div>
                     </div>
-
                     <div class="col-md-4 ignore-padding">
                         @Html.LabelFor(model => model.HomePhone, htmlAttributes: new { @class = "col-md-12" })
                         <div class="col-md-12">
@@ -80,22 +76,23 @@
                 <div class="col-md-12 block-container">
                     @Html.LabelFor(model => model.Gender, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
-                        @*<input value="1" name="product" class="product-list" type="checkbox">Product 1  
-                        <input value="2" name="product" class="product-list" type="checkbox">Product 2*@  
-                        <div class="col-md-2 col-sm-12 radio" type="checkbox" value="1">
+                        @*<input value="1" name="product" class="product-list" type="checkbox">Product 1
+                            <input value="2" name="product" class="product-list" type="checkbox">Product 2*@
+                        @*<div class="col-md-2 col-sm-12 radio" type="checkbox" value="1">
                             @Html.EditorFor(model => model.Gender)
-                            @Html.ValidationMessageFor(model => model.Gender, "", new {@class = "text-danger inline-block"})
+                            @Html.ValidationMessageFor(model => model.Gender, "", new { @class = "text-danger inline-block" })
                             <div class="inline-block">Жінка</div>
                         </div>
-
                         <div class="col-md-2 col-sm-12 radio" type="checkbox" value="2">
                             @Html.EditorFor(model => model.Gender)
-                            @Html.ValidationMessageFor(model => model.Gender, "", new {@class = "text-danger inline-block"})
+                            @Html.ValidationMessageFor(model => model.Gender, "", new { @class = "text-danger inline-block" })
                             <div class="inline-block">Чоловік</div>
-                        </div>
+                        </div>*@
+                        @Html.RadioButtonFor(m => m.Gender, true) @Html.Label("Чоловік")
+                        @Html.RadioButtonFor(m => m.Gender, false) @Html.Label("Жінка")
                     </div>
                 </div>
-                <div class="col-md-12 block-container">
+                @*<div class="col-md-12 block-container">
                     <div class="col-md-6 ignore-padding">
                         @Html.LabelFor(model => model.Position, htmlAttributes: new { @class = "col-md-12" })
                         <div class="col-md-12">
@@ -103,7 +100,6 @@
                             @Html.ValidationMessageFor(model => model.Position, "", new { @class = "text-danger" })
                         </div>
                     </div>
-
                     <div class="col-md-6 ignore-padding">
                         @Html.LabelFor(model => model.PartionType, htmlAttributes: new { @class = "col-md-12" })
                         <div class="col-md-12">
@@ -111,34 +107,65 @@
                             @Html.ValidationMessageFor(model => model.PartionType, "", new { @class = "text-danger" })
                         </div>
                     </div>
-                </div>
-
-
-
-                @*<div class="form-group">
-                    @Html.LabelFor(model => model.BeneficiaryId, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.BeneficiaryId, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.BeneficiaryId, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    @Html.LabelFor(model => model.DistrictId, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.DistrictId, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.DistrictId, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    @Html.LabelFor(model => model.FlatId, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.FlatId, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.FlatId, "", new { @class = "text-danger" })
-                    </div>
                 </div>*@
+                <div class="col-md-12 block-container">
+                    <div class="form-group col-sm-4">
+                        <div class="col-sm-12">
+                            <label for="cities">Місто</label>
+                            <select class="form-control" id="cities">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group col-sm-4">
+                        <div class="col-sm-12">
+                            <label for="streets">Вулиця</label>
+                            <select class="form-control" id="streets">
+                               
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 block-container">
+                    <div class="form-group col-sm-4">
+                        <div class="col-sm-12">
+                            <label for="apartments">Будинок</label>
+                            <select class="form-control" id="apartments">
+                                
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group col-sm-4">
+                        <div class="col-sm-12">
+                            <label for="flats">Квартира</label>
+                            <select required class="form-control" id="flats" name="FlatId">
+                                
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                @*<div class="form-group">
+                        @Html.LabelFor(model => model.BeneficiaryId, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.BeneficiaryId, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.BeneficiaryId, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
 
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DistrictId, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.DistrictId, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.DistrictId, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.FlatId, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.FlatId, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.FlatId, "", new { @class = "text-danger" })
+                        </div>
+                    </div>*@
                 <div class="col-md-12">
                     <div class="col-md-12 ignore-padding">
                         <input type="submit" value="Створити" class="btn btn-default pull-right btn-svb" />
@@ -147,7 +174,6 @@
             </div>
         </div>
     }
-
     <div>
         @Html.ActionLink("Повернутися", "Index")
     </div>
@@ -156,4 +182,86 @@
     $('.radio').on('change', function () {
         $('.radio').not(this).prop('checked', false);
     });
+
+    $(document).ready(() => {
+        getOptionSelectCityPartial();
+        subscribeOnSelectCity();
+        subscribeOnSelectStreet();
+        subscribeOnSelectApartment();
+    });
+
+    function getOptionSelectCityPartial() {
+        var urlAction = "@Url.Action("OptionSelectCitiesPartial")";
+        $.ajax({
+            url: urlAction,
+            type: 'Get',
+            traditional: true,
+            data: { },
+            async: false
+        }).done((data) => {
+            $("#cities").html(data);
+        });
+    }
+
+    function subscribeOnSelectCity() {
+        $("#cities").change(() => {
+            getStreetsPartial();
+            $("#apartments").empty();
+        });
+    }
+
+    function getStreetsPartial() {
+        var cityId = $("#cities").val();
+        var urlAction = "@Url.Action("OptionSelectStreetsPartial")";
+        $.ajax({
+            url: urlAction,
+            type: 'Get',
+            traditional: true,
+            data: { cityId: cityId },
+            async: false
+        }).done((data) => {
+            $("#streets").html(data);
+        });
+    }
+
+    function subscribeOnSelectStreet() {
+        $("#streets").change(() => {
+            getApartmentsPartial();
+        });
+    }
+
+    function subscribeOnSelectApartment() {
+        $("#apartments").change(() => {
+            getFlatsPartial();
+        });
+    }
+
+    function getApartmentsPartial() {
+        var streetId = $("#streets").val();
+        var urlAction = "@Url.Action("OptionSelectApartmentPartial")";
+        $.ajax({
+            url: urlAction,
+            type: 'Get',
+            traditional: true,
+            data: { streetId: streetId },
+            async: false
+        }).done((data) => {
+            $("#apartments").html(data);
+        });
+    }
+
+    function getFlatsPartial() {
+        var apartmentId = $("#apartments").val();
+        var urlAction = "@Url.Action("OptionSelectFlatPartial")";
+        $.ajax({
+            url: urlAction,
+            type: 'Get',
+            traditional: true,
+            data: { apartmentId: apartmentId },
+            async: false
+        }).done((data) => {
+            $("#flats").html(data);
+        });
+    }
+
 </script>

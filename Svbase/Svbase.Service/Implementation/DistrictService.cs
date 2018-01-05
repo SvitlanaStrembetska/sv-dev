@@ -101,5 +101,12 @@ namespace Svbase.Service.Implementation
             Update(district);
             return true;
         }
+
+        public IEnumerable<BaseViewModel> GetStretsBaseModelByDistrictIds(IList<int> districtIds)
+        {
+            if(districtIds == null) return new List<BaseViewModel>();
+            var streets = RepositoryManager.Districts.GetStretsBaseModelByDistrictIds(districtIds);
+            return streets;
+        }
     }
 }

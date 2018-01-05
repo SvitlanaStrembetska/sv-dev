@@ -40,6 +40,8 @@ namespace Svbase.Core.Models
         public string PartionType { get; set; }
         [Display(Name = "Стать")]
         public bool Gender { get; set; }
+        [Display(Name = "Квартира")]
+        public int FlatId { get; set; }
 
         public Person Update(Person person)
         {

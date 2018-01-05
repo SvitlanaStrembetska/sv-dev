@@ -12,5 +12,7 @@ namespace Svbase.Service.Interfaces
         DistrictCreateModel GetDistrictModelById(int id);
         DistrictCreateModel GetDistrictById(int id);
         bool EditDistrictByModel(DistrictCreateModel model);
+
+        IEnumerable<BaseViewModel> GetStretsBaseModelByDistrictIds(IList<int> districtIds);
     }
 }

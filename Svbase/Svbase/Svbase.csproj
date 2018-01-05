@@ -388,6 +388,8 @@
     <Content Include="Views\District\Create.cshtml" />
     <Content Include="Views\District\Details.cshtml" />
     <Content Include="Views\PersonCreate.cshtml" />
+    <Content Include="Views\Shared\_FilterCheckBoxPartial.cshtml" />
+    <Content Include="Views\Shared\_OptionSelectBasePartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
