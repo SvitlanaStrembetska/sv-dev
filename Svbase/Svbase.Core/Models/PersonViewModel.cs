@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Svbase.Core.Data.Entities;
 
@@ -34,13 +33,14 @@ namespace Svbase.Core.Models
         public string Email { get; set; }
         [DataType(DataType.Date)]
         [Display(Name = "Дата народження")]
-        public DateTime DateBirth { get; set; }
+        public DateTime? DateBirth { get; set; }
         [Display(Name = "Посада")]
         public string Position { get; set; }
         [Display(Name = "Партійний тип")]
         public string PartionType { get; set; }
         [Display(Name = "Стать")]
         public bool Gender { get; set; }
+
         public Person Update(Person person)
         {
             person.Id = Id;
@@ -52,11 +52,27 @@ namespace Svbase.Core.Models
             person.Position = Position;
             person.MobileTelephoneFirst = FirthtMobilePhone;
             person.MobileTelephoneSecond = SecondMobilePhone;
-            person.HomePhone = HomePhone;
+            person.StationaryPhone = HomePhone;
             person.Email = Email;
             person.PartionType = PartionType;
 
             return person;
+        }
+
+        public void SetFields(Person entity)
+        {
+            FirstName = entity.FirstName;
+            MiddleName = entity.MiddleName;
+            LastName = entity.LastName;
+            DateBirth = entity.BirthdayDate;
+            Email = entity.Email;
+            Gender = entity.Gender;
+            Position = entity.Position;
+            PartionType = entity.PartionType;
+            FirthtMobilePhone = entity.MobileTelephoneFirst;
+            SecondMobilePhone = entity.MobileTelephoneSecond;
+            HomePhone = entity.StationaryPhone;
+
         }
         //public int BeneficiaryId { get; set; }
         //public int DistrictId { get; set; }
