@@ -109,6 +109,10 @@
     <Compile Include="Migrations\201801050223147_AddPersonFilemigration.Designer.cs">
       <DependentUpon>201801050223147_AddPersonFilemigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201801091547397_MigrationsEnambled.cs" />
+    <Compile Include="Migrations\201801091547397_MigrationsEnambled.Designer.cs">
+      <DependentUpon>201801091547397_MigrationsEnambled.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Migrations\DbInitializer\CreateIfNotExistWithSeed.cs" />
     <Compile Include="Models\ApartmentViewModel.cs" />
@@ -171,6 +175,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201801050223147_AddPersonFilemigration.resx">
       <DependentUpon>201801050223147_AddPersonFilemigration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801091547397_MigrationsEnambled.resx">
+      <DependentUpon>201801091547397_MigrationsEnambled.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

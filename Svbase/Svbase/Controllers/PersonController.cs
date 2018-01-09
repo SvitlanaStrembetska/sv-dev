@@ -1,8 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Collections.Generic;
-using System.Data.Entity.Infrastructure.Annotations;
-using System.Linq;
 using System.Web.Mvc;
 using CsvHelper;
 using Svbase.Controllers.Abstract;
@@ -206,10 +203,6 @@ namespace Svbase.Controllers
             }
 
             return View("Import", model);
-        }
-        public ActionResult SearcResult()
-        {
-            return PartialView();
         }
 
         public ActionResult Export()

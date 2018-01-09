@@ -42,36 +42,92 @@ namespace Svbase.Core.Migrations.DbInitializer
             InitializeDb(context);
         }
 
-        public void InitializeDb(ApplicationDbContext context)
+        //public void InitializeDb(ApplicationDbContext context)
+        //{
+        //    _dbContext = context;
+        //    _userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
+        //    _roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
+        //    if (!_dbContext.Roles.Any())
+        //    {
+        //        InitUserAndRoles();
+        //    }
+        //}
+
+        public static void InitializeDb(ApplicationDbContext context)
         {
-            _dbContext = context;
-            _userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
-            _roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
-            if (!_dbContext.Roles.Any())
+            if (!context.Roles.Any())
             {
-                InitUserAndRoles();
+                InitUserAndRoles(context);
             }
         }
 
-        private void InitUserAndRoles()
+        //private void InitUserAndRoles()
+        //{
+        //    var roleResult = InitRoles();
+        //    roleResult.ContinueWith(x => InitUsers());
+        //}
+
+        private static void InitUserAndRoles(ApplicationDbContext context)
         {
-            var roleResult = InitRoles();
-            roleResult.ContinueWith(x => InitUsers());
+            InitRoles(context);
+            InitUsers(context);
         }
 
-        private async Task InitRoles()
+        //private async Task InitRoles()
+        //{
+        //    var roles = RoleConsts.GetAllRoles();
+        //    foreach (var roleName in roles)
+        //    {
+        //        var role = new IdentityRole(roleName);
+        //        await _roleManager.CreateAsync(role);
+        //    }
+        //    await _dbContext.SaveChangesAsync();
+        //}
+
+        private static void InitRoles(ApplicationDbContext context)
         {
             var roles = RoleConsts.GetAllRoles();
+            var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
             foreach (var roleName in roles)
             {
                 var role = new IdentityRole(roleName);
-                await _roleManager.CreateAsync(role);
+                roleManager.Create(role);
             }
-            await _dbContext.SaveChangesAsync();
+            context.SaveChanges();
         }
 
-        private async void InitUsers()
+        //private async void InitUsers()
+        //{
+        //    foreach (var profile in Profiles)
+        //    {
+        //        var email = profile[1] + EmailDomain;
+        //        var user = new ApplicationUser
+        //        {
+        //            FirstName = profile[0],
+        //            LastName = profile[1],
+        //            Email = email,
+        //            UserName = email,
+        //            EmailConfirmed = true,
+        //        };
+
+        //        await _userManager.CreateAsync(user, UserPassword);
+        //        await _dbContext.SaveChangesAsync();
+
+        //        if (Admins.Contains(user.LastName))
+        //        {
+        //            await _userManager.AddToRoleAsync(user.Id, RoleConsts.Admin);
+        //        }
+        //        else if (Users.Contains(user.LastName))
+        //        {
+        //            await _userManager.AddToRoleAsync(user.Id, RoleConsts.User);
+        //        }
+        //    }
+        //    await _dbContext.SaveChangesAsync();
+        //}
+
+        private static void InitUsers(ApplicationDbContext context)
         {
+            var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
             foreach (var profile in Profiles)
             {
                 var email = profile[1] + EmailDomain;
@@ -84,19 +140,19 @@ namespace Svbase.Core.Migrations.DbInitializer
                     EmailConfirmed = true,
                 };
 
-                await _userManager.CreateAsync(user, UserPassword);
-                await _dbContext.SaveChangesAsync();
+                userManager.Create(user, UserPassword);
+                context.SaveChanges();
 
                 if (Admins.Contains(user.LastName))
                 {
-                    await _userManager.AddToRoleAsync(user.Id, RoleConsts.Admin);
+                    userManager.AddToRole(user.Id, RoleConsts.Admin);
                 }
                 else if (Users.Contains(user.LastName))
                 {
-                    await _userManager.AddToRoleAsync(user.Id, RoleConsts.User);
+                    userManager.AddToRole(user.Id, RoleConsts.User);
                 }
             }
-            await _dbContext.SaveChangesAsync();
+            context.SaveChanges();
         }
     }
 }
