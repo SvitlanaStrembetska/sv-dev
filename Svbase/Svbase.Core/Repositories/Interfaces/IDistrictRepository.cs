@@ -8,7 +8,8 @@ namespace Svbase.Core.Repositories.Interfaces
     public interface IDistrictRepository : IGenericRepository<District>
     {
         IEnumerable<DistrictListModel> GetAllDistricts();
-        DistrictCreateModel GetDistrictById(int id);
-        IEnumerable<BaseViewModel> GetStretsBaseModelByDistrictIds(IList<int> districtIds);
+        DashboardDistrictsModel GetDashboardDistrictsModel();
+        //DistrictCreateModel GetDistrictById(int id);
+        //IEnumerable<BaseViewModel> GetStretsBaseModelByDistrictIds(IList<int> districtIds);
     }
 }

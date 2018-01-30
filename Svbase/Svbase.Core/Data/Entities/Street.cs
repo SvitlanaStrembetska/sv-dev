@@ -11,6 +11,6 @@ namespace Svbase.Core.Data.Entities
 
         public virtual ICollection<Apartment> Apartments { get; set; }
 
-        public virtual ICollection<District> Districts { get; set; }
+        
     }
 }

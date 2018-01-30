@@ -43,11 +43,11 @@ namespace Svbase.Core.Repositories.Implementation
             return streets;
         }
 
-        public IEnumerable<Street> GetStreetsByDistrictId(int id)
-        {
-            var streets = DbSet.Where(x => x.Districts.Select(d => d.Id).Contains(id));
-            return streets;
-        }
+        //public IEnumerable<Street> GetStreetsByDistrictId(int id)
+        //{
+        //    var streets = DbSet.Where(x => x.Districts.Select(d => d.Id).Contains(id));
+        //    return streets;
+        //}
 
         public IEnumerable<BaseViewModel> GetApartmentsBaseModelByStreetIds(IList<int> streetIds)
         {

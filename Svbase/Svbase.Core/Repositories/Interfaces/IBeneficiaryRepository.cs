@@ -8,5 +8,6 @@ namespace Svbase.Core.Repositories.Interfaces
     public interface IBeneficiaryRepository : IGenericRepository<Beneficiary>
     {
         IEnumerable<BeneficiaryCreateModel> GetAllBeneficiaries();
+        IEnumerable<DashboardItemModel> GetDashboardBeneficiaries();
     }
 }

@@ -12,5 +12,6 @@ namespace Svbase.Service.Factory
         IFlatService FlatService { get; }
         IPersonService PersonService { get; }
         IStreetService StreetService { get; }
+        IDashboardService DashboardService { get; }
     }
 }

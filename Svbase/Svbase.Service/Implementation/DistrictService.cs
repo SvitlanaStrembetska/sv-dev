@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Svbase.Core.Data.Entities;
 using Svbase.Core.Models;
 using Svbase.Core.Repositories.Abstract;
@@ -23,90 +22,90 @@ namespace Svbase.Service.Implementation
             return RepositoryManager.Districts.GetAllDistricts();
         }
 
-        public bool CreateDistrictByModel(DistrictCreateModel model)
-        {
-            if (model == null)
-            {
-                return false;
-            }
-            model.Streets = model.Streets.Where(x => x.IsChecked).ToList();
-            var district = model.Update(new District());
-            district.Streets = model.Streets.Select(x => new Street
-            {
-                Id = x.Id
-            }).ToList();
-            district.DistrictType = model.DistrictType;
-            foreach (var street in district.Streets)
-            {
-                RepositoryManager.Streets.Attach(street);
-            }
-            Add(district);
-            return true;
-        }
+        //public bool CreateDistrictByModel(DistrictCreateModel model)
+        //{
+        //    if (model == null)
+        //    {
+        //        return false;
+        //    }
+        //    model.Streets = model.Streets.Where(x => x.IsChecked).ToList();
+        //    var district = model.Update(new District());
+        //    district.Streets = model.Streets.Select(x => new Street
+        //    {
+        //        Id = x.Id
+        //    }).ToList();
+        //    district.DistrictType = model.DistrictType;
+        //    foreach (var street in district.Streets)
+        //    {
+        //        RepositoryManager.Streets.Attach(street);
+        //    }
+        //    Add(district);
+        //    return true;
+        //}
 
-        public DistrictCreateModel GetDistrictModelById(int id)
-        {
-            var district = GetDistrictById(id);
-            var streets = RepositoryManager.Streets.GetStreetsForSelecting().ToList();
-            var selectedStreetIds = district.Streets.Select(x => x.Id).ToList();
-            foreach (var street in streets)
-            {
-                if (selectedStreetIds.Contains(street.Id))
-                {
-                    street.IsChecked = true;
-                }
-            }
-            district.Streets = streets.ToList();
-            return district;
-        }
+        //public DistrictCreateModel GetDistrictModelById(int id)
+        //{
+        //    var district = GetDistrictById(id);
+        //    var streets = RepositoryManager.Streets.GetStreetsForSelecting().ToList();
+        //    var selectedStreetIds = district.Streets.Select(x => x.Id).ToList();
+        //    foreach (var street in streets)
+        //    {
+        //        if (selectedStreetIds.Contains(street.Id))
+        //        {
+        //            street.IsChecked = true;
+        //        }
+        //    }
+        //    district.Streets = streets.ToList();
+        //    return district;
+        //}
 
-        public DistrictCreateModel GetDistrictById(int id)
-        {
-            var district = RepositoryManager.Districts.GetDistrictById(id);
-            return district;
-        }
+        //public DistrictCreateModel GetDistrictById(int id)
+        //{
+        //    var district = RepositoryManager.Districts.GetDistrictById(id);
+        //    return district;
+        //}
 
-        public bool EditDistrictByModel(DistrictCreateModel model)
-        {
-            if (model == null)
-            {
-                return false;
-            }
+        //public bool EditDistrictByModel(DistrictCreateModel model)
+        //{
+        //    if (model == null)
+        //    {
+        //        return false;
+        //    }
 
-            var district = FindById(model.Id);
+        //    var district = FindById(model.Id);
 
-            if (district == null)
-            {
-                return false;
-            }
-            district = model.Update(district);
+        //    if (district == null)
+        //    {
+        //        return false;
+        //    }
+        //    district = model.Update(district);
 
-            var allStreets = RepositoryManager.Streets.GetAll().ToList();
-            model.Streets = model.Streets.Where(x => x.IsChecked).ToList();
-            var selectedStreetIds = model.Streets.Select(x => x.Id);
+        //    var allStreets = RepositoryManager.Streets.GetAll().ToList();
+        //    model.Streets = model.Streets.Where(x => x.IsChecked).ToList();
+        //    var selectedStreetIds = model.Streets.Select(x => x.Id);
 
-            var removedStreets = district.Streets.Where(x => !selectedStreetIds.Contains(x.Id)).ToList();
-            foreach (var street in removedStreets)
-            {
-                district.Streets.Remove(street);
-            }
+        //    var removedStreets = district.Streets.Where(x => !selectedStreetIds.Contains(x.Id)).ToList();
+        //    foreach (var street in removedStreets)
+        //    {
+        //        district.Streets.Remove(street);
+        //    }
 
-            var districtStreetIds = district.Streets.Select(x => x.Id);
-            var addedStreets =
-                allStreets.Where(x => selectedStreetIds.Contains(x.Id) && !districtStreetIds.Contains(x.Id));
-            foreach (var street in addedStreets)
-            {
-                district.Streets.Add(street);
-            }
-            Update(district);
-            return true;
-        }
+        //    var districtStreetIds = district.Streets.Select(x => x.Id);
+        //    var addedStreets =
+        //        allStreets.Where(x => selectedStreetIds.Contains(x.Id) && !districtStreetIds.Contains(x.Id));
+        //    foreach (var street in addedStreets)
+        //    {
+        //        district.Streets.Add(street);
+        //    }
+        //    Update(district);
+        //    return true;
+        //}
 
-        public IEnumerable<BaseViewModel> GetStretsBaseModelByDistrictIds(IList<int> districtIds)
-        {
-            if(districtIds == null) return new List<BaseViewModel>();
-            var streets = RepositoryManager.Districts.GetStretsBaseModelByDistrictIds(districtIds);
-            return streets;
-        }
+        //public IEnumerable<BaseViewModel> GetStretsBaseModelByDistrictIds(IList<int> districtIds)
+        //{
+        //    if(districtIds == null) return new List<BaseViewModel>();
+        //    var streets = RepositoryManager.Districts.GetStretsBaseModelByDistrictIds(districtIds);
+        //    return streets;
+        //}
     }
 }

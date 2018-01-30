@@ -37,33 +37,33 @@ namespace Svbase.Controllers
             return View(new DistrictCreateModel { Streets = streets });
         }
 
-        [Authorize(Roles = RoleConsts.Admin)]
-        [HttpPost]
-        public ActionResult Create(DistrictCreateModel model)//Todo 
-        {
-            var isCreated = _districtService.CreateDistrictByModel(model);
-            return !isCreated
-                ? RedirectToAction("Create")
-                : RedirectToAction("List");
-        }
+        //[Authorize(Roles = RoleConsts.Admin)]
+        //[HttpPost]
+        //public ActionResult Create(DistrictCreateModel model)//Todo 
+        //{
+        //    var isCreated = _districtService.CreateDistrictByModel(model);
+        //    return !isCreated
+        //        ? RedirectToAction("Create")
+        //        : RedirectToAction("List");
+        //}
 
-        [Authorize(Roles = RoleConsts.Admin)]
-        [HttpGet]
-        public ActionResult Details(int id)
-        {
-            var district = _districtService.GetDistrictModelById(id);
-            return View(district);
-        }
+        //[Authorize(Roles = RoleConsts.Admin)]
+        //[HttpGet]
+        //public ActionResult Details(int id)
+        //{
+        //    var district = _districtService.GetDistrictModelById(id);
+        //    return View(district);
+        //}
 
-        [Authorize(Roles = RoleConsts.Admin)]
-        [HttpPost]
-        public ActionResult Edit(DistrictCreateModel model)
-        {
-            var isEdited = _districtService.EditDistrictByModel(model);
+        //[Authorize(Roles = RoleConsts.Admin)]
+        //[HttpPost]
+        //public ActionResult Edit(DistrictCreateModel model)
+        //{
+        //    var isEdited = _districtService.EditDistrictByModel(model);
 
-            return !isEdited 
-                ? RedirectToAction("Details", new {id = model.Id}) 
-                : RedirectToAction("List");
-        }
+        //    return !isEdited 
+        //        ? RedirectToAction("Details", new {id = model.Id}) 
+        //        : RedirectToAction("List");
+        //}
     }
 }

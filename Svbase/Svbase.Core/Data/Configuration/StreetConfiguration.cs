@@ -15,11 +15,7 @@ namespace Svbase.Core.Data.Configuration
                 .HasForeignKey(x => x.CityId)
                 .WillCascadeOnDelete(true);
 
-            HasMany(x => x.Districts)
-                .WithMany(x => x.Streets)
-                .Map(t => t.MapLeftKey("StreetId")
-                    .MapRightKey("DistrictId")
-                    .ToTable("StreetDistrict"));
+            
         }
     }
 }

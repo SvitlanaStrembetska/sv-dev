@@ -24,5 +24,16 @@ namespace Svbase.Core.Repositories.Implementation
 
             return beneficiaries;
         }
+
+        public IEnumerable<DashboardItemModel> GetDashboardBeneficiaries()
+        {
+            var beneficiaries = DbSet.Select(x => new DashboardItemModel
+            {
+                Id = x.Id,
+                Name = x.Name,
+                PersonsCount = x.Persons.Count
+            });
+            return beneficiaries;
+        }
     }
 }

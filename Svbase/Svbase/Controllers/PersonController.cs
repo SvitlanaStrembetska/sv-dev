@@ -11,6 +11,7 @@ using Svbase.Service.Interfaces;
 
 namespace Svbase.Controllers
 {
+    [Authorize]
     public class PersonController : GeneralController
     {
         private readonly IPersonService _personService;
@@ -102,12 +103,12 @@ namespace Svbase.Controllers
             return PartialView("_FilterCheckBoxPartial", streets);
         }
 
-        [HttpGet]
-        public ActionResult FilterStreetsByStreetSearchFilter(StreetSearchFilterModel filter)
-        {
-            var streets = _personService.GetStretsBaseModelByStreetSearchFilter(filter);
-            return PartialView("_FilterCheckBoxPartial", streets.ToList());
-        }
+        //[HttpGet]
+        //public ActionResult FilterStreetsByStreetSearchFilter(StreetSearchFilterModel filter)
+        //{
+        //    var streets = _personService.GetStretsBaseModelByStreetSearchFilter(filter);
+        //    return PartialView("_FilterCheckBoxPartial", streets.ToList());
+        //}
 
         [HttpGet]
         public ActionResult FilterApartmentsByStreetIds(IList<int> streetIds)
@@ -151,14 +152,14 @@ namespace Svbase.Controllers
             return PartialView("_OptionSelectBasePartial", flats);
         }
 
-        public ActionResult Edit()
-        {
-            return View();
-        }
-        public ActionResult SearcResult()
-        {
-            return PartialView();
-        }
+        //public ActionResult Edit()
+        //{
+        //    return View();
+        //}
+        //public ActionResult SearcResult()
+        //{
+        //    return PartialView();
+        //}
         public ActionResult Import()
         {
             bool isValid;
@@ -205,10 +206,10 @@ namespace Svbase.Controllers
             return View("Import", model);
         }
 
-        public ActionResult Export()
-        {
-            return View();
-        }
+        //public ActionResult Export()
+        //{
+        //    return View();
+        //}
     }
 
 }

@@ -65,6 +65,7 @@
     <Compile Include="Implementation\ApplicationUserService.cs" />
     <Compile Include="Implementation\BeneficiaryService.cs" />
     <Compile Include="Implementation\CityService.cs" />
+    <Compile Include="Implementation\DashboardService.cs" />
     <Compile Include="Implementation\DistrictService.cs" />
     <Compile Include="Implementation\FlatService.cs" />
     <Compile Include="Implementation\ImportModelCsvService.cs" />
@@ -74,6 +75,7 @@
     <Compile Include="Interfaces\IApplicationUserService.cs" />
     <Compile Include="Interfaces\IBeneficiaryService.cs" />
     <Compile Include="Interfaces\ICityService.cs" />
+    <Compile Include="Interfaces\IDashboardService.cs" />
     <Compile Include="Interfaces\IDistrictService.cs" />
     <Compile Include="Interfaces\IFlatService.cs" />
     <Compile Include="Interfaces\IPersonService.cs" />

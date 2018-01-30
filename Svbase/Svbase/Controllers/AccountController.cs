@@ -82,16 +82,15 @@ namespace Svbase.Controllers
             var result = await SignInManager.PasswordSignInAsync(user.UserName, model.Password, true, false);
             if (result == SignInStatus.Success)
             {
-                return RedirectToAction("Index","Person");
+                return RedirectToAction("Details","Dashboard");
             }
             return View(model);
         }
 
-        [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult LogOff()
         {
-            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+            AuthenticationManager.SignOut();
             return RedirectToAction("Login", "Account");
         }
 

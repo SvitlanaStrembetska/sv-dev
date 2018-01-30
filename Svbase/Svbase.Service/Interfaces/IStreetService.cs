@@ -9,7 +9,7 @@ namespace Svbase.Service.Interfaces
     {
         StreetViewModel GetStreetById(int id);
         IEnumerable<StreetSelectModel> GetStreetsForSelecting();
-        IEnumerable<Street> GetStreetsByDistrictId(int id);
+        //IEnumerable<Street> GetStreetsByDistrictId(int id);
         IEnumerable<BaseViewModel> GetApartmentsBaseModelByStreetId(int id);
     }
 }

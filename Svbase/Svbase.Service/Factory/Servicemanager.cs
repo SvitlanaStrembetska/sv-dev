@@ -21,6 +21,7 @@ namespace Svbase.Service.Factory
         private IFlatService _flatService;
         private IPersonService _personService;
         private IStreetService _streetService;
+        private IDashboardService _dashboardService;
 
         #endregion
 
@@ -67,6 +68,9 @@ namespace Svbase.Service.Factory
 
         public IStreetService StreetService =>
             _streetService ?? (_streetService = new StreetService(_unitOfWork, _repositoryManager));
+
+        public IDashboardService DashboardService =>
+            _dashboardService ?? (_dashboardService = new DashboardService(_unitOfWork, _repositoryManager));
 
         #endregion
     }

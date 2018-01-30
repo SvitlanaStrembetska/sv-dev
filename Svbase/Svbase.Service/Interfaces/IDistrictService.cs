@@ -8,11 +8,11 @@ namespace Svbase.Service.Interfaces
     public interface IDistrictService : IEntityService<District>
     {
         IEnumerable<DistrictListModel> GetAllDistricts();
-        bool CreateDistrictByModel(DistrictCreateModel model);
-        DistrictCreateModel GetDistrictModelById(int id);
-        DistrictCreateModel GetDistrictById(int id);
-        bool EditDistrictByModel(DistrictCreateModel model);
+        //bool CreateDistrictByModel(DistrictCreateModel model);
+        //DistrictCreateModel GetDistrictModelById(int id);
+        //DistrictCreateModel GetDistrictById(int id);
+        //bool EditDistrictByModel(DistrictCreateModel model);
 
-        IEnumerable<BaseViewModel> GetStretsBaseModelByDistrictIds(IList<int> districtIds);
+        //IEnumerable<BaseViewModel> GetStretsBaseModelByDistrictIds(IList<int> districtIds);
     }
 }

@@ -60,15 +60,15 @@ namespace Svbase.Service.Implementation
             return streets;
         }
 
-        public IEnumerable<BaseViewModel> GetStretsBaseModelByStreetSearchFilter(StreetSearchFilterModel filter)
-        {
-            if (filter == null) return new List<BaseViewModel>(); ;
-            var districtStreets = RepositoryManager.Districts.GetStretsBaseModelByDistrictIds(filter.DistrictIds);
-            var cityStreets = RepositoryManager.Cities.GetStretsBaseModelByCityIds(filter.CityIds);
-            var streets = districtStreets.Union(cityStreets).ToList();
-            streets = streets.GroupBy(x => x.Id).Select(x => x.FirstOrDefault()).ToList();//Distinct by field
-            return streets;
-        }
+        //public IEnumerable<BaseViewModel> GetStretsBaseModelByStreetSearchFilter(StreetSearchFilterModel filter)
+        //{
+        //    if (filter == null) return new List<BaseViewModel>(); ;
+        //    var districtStreets = RepositoryManager.Districts.GetStretsBaseModelByDistrictIds(filter.DistrictIds);
+        //    var cityStreets = RepositoryManager.Cities.GetStretsBaseModelByCityIds(filter.CityIds);
+        //    var streets = districtStreets.Union(cityStreets).ToList();
+        //    streets = streets.GroupBy(x => x.Id).Select(x => x.FirstOrDefault()).ToList();//Distinct by field
+        //    return streets;
+        //}
 
         public IEnumerable<BaseViewModel> GetApartmentsBaseModelByStreetIds(IList<int> streetIds)
         {

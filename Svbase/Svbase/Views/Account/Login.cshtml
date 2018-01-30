@@ -5,7 +5,7 @@
 }
 
 <div class="gradient-left"></div>
-<img src="~/Images/Tumblr.jpg" style="width: 100%"/>
+<img src="~/Images/Tumblr.jpg" style="width: 100%" alt=""/>
 <div>
     <div class="row login-block">
         <div class="col-md-12 center">
@@ -17,18 +17,22 @@
                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                     <div class="form-group">
                         @Html.LabelFor(m => m.Email, new { @class = "col-md-12 control-label", @style = "text-align: left;" })
-                        <div class="col-md-12">
+                        <div class="col-md-12 input-group">
                             @Html.TextBoxFor(m => m.Email, new { @class = "form-control ignore-margin" })
                             @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
-                           <i class="fa fa-envelope-o" aria-hidden="true"></i>
+                            <span class="input-group-addon">
+                                <i class="fa fa-envelope" aria-hidden="true"></i>
+                            </span>
                         </div>
                     </div>
                     <div class="form-group">
                         @Html.LabelFor(m => m.Password, new { @class = "col-md-12 control-label", @style = "text-align: left;" })
-                        <div class="col-md-12">
+                        <div class="col-md-12 input-group">
                             @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
                             @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
-                            <i class="fa fa-lock" aria-hidden="true"></i>
+                            <span class="input-group-addon">
+                                <i class="fa fa-lock" aria-hidden="true"></i>
+                            </span>
                         </div>
                     </div>
                     <div class="form-group">

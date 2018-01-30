@@ -1,0 +1,133 @@
+﻿@model Svbase.Core.Models.DashboardViewModel
+
+<div class="container body-content margin-top">
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading" style="font-weight: bold">Категорії</div>
+                        <div class="panel-body">
+                            @foreach (var item in Model.Beneficiaries)
+                            {
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <a class="text-center">@item.Name - @item.PersonsCount</a>
+                                    </div>
+                                </div> 
+                            }
+                           
+                            @*<div class="row">
+                                <div class="col-sm-12">
+                                    <span class="text-center">Симпатики - 2844</span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <span class="text-center">Пенсіонери - 6598</span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <span class="text-center">Студенти - 5477</span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <span class="text-center">Прочани - 412</span>
+                                </div>
+                            </div>*@
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-8">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading" style="font-weight: bold">Округи</div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="row">
+                                        <div class="col-sm-12 text-center">
+                                            <span style="font-weight: bold">Партійні</span>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            @foreach (var item in Model.DistrictsModel.ConstituencyDistrcits)
+                                            {
+                                                <div class="row">
+                                                    <div class="col-sm-12 text-center">
+                                                        <a class="text-center">@item - @item.PersonsCount</a>
+                                                    </div>
+                                                </div>
+                                            }
+                                           
+                                            @*<div class="row">
+                                                <div class="col-sm-12 text-center">
+                                                    <span class="text-center">Пасічна - 2844</span>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-sm-12 text-center">
+                                                    <span class="text-center">Каскад - 6598</span>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-sm-12 text-center">
+                                                    <span class="text-center">Центр - 5477</span>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-sm-12 text-center">
+                                                    <span class="text-center">Крихівці - 412</span>
+                                                </div>
+                                            </div>*@
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="row">
+                                        <div class="col-sm-12 text-center">
+                                            <span style="font-weight: bold">Виборчі</span>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            @foreach (var item in Model.DistrictsModel.CustomDistricts)
+                                            {
+                                                <div class="row">
+                                                    <div class="col-sm-12 text-center">
+                                                        <a class="text-center">@item - @item.PersonsCount</a>
+                                                    </div>
+                                                </div>
+                                            }
+                                            @*<div class="row">
+                                                <div class="col-sm-12 text-center">
+                                                    <span class="text-center">Округ 157 - 2844</span>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-sm-12 text-center">
+                                                    <span class="text-center">Округ 158 - 6598</span>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-sm-12 text-center">
+                                                    <span class="text-center">Округ 159 - 5477</span>
+                                                </div>
+                                            </div>*@
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

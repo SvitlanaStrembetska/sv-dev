@@ -8,7 +8,7 @@ namespace Svbase.Core.Data.Entities
     {
         public string Name { get; set; }
         public DistrictType DistrictType { get; set; }
-        public virtual ICollection<Street> Streets { get; set; }
+        public virtual ICollection<Apartment> Apartments { get; set; }
 
     }
 }
