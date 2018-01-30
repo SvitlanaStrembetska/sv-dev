@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Svbase.Core.Data.Entities;
 
@@ -42,7 +43,7 @@ namespace Svbase.Core.Models
         public bool Gender { get; set; }
         [Display(Name = "Квартира")]
         public int FlatId { get; set; }
-
+        public IList<CheckboxItemModel> Beneficiaries { get; set; }
         public Person Update(Person person)
         {
             person.Id = Id;

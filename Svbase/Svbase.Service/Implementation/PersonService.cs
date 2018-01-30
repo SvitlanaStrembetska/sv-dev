@@ -81,5 +81,41 @@ namespace Svbase.Service.Implementation
             var flats = RepositoryManager.Apartments.GetFlatBaseModelByApartmentIds(apartmentIds);
             return flats;
         }
+
+        public bool CreatePersonByModel(PersonViewModel model)
+        {
+            if (model == null)
+            {
+                return false;
+            }
+
+            var newPerson = model.Update(new Person());
+            var selectedBeneficiaries = model.Beneficiaries
+                .Where(x => x.IsChecked)
+                .ToList();
+            newPerson.Beneficiaries = selectedBeneficiaries
+                .Select(x => new Beneficiary
+                {
+                    Id = x.Id
+                }).ToList();
+            foreach (var beneficiary in newPerson.Beneficiaries)
+            {
+                RepositoryManager.Beneficiaries.Attach(beneficiary);
+            }
+            var flats = new List<Flat>
+            {
+                new Flat
+                {
+                    Id = model.FlatId
+                }
+            };
+            foreach (var flat in flats)
+            {
+                RepositoryManager.Flats.Attach(flat);
+            }
+            newPerson.Flats = flats;
+            Add(newPerson);
+            return true;
+        }
     }
 }

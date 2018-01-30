@@ -19,6 +19,7 @@ namespace Svbase.Controllers
         private readonly IStreetService _streetService;
         private readonly IApartmentService _apartmentService;
         private readonly IFlatService _flatService;
+        private readonly IBeneficiaryService _beneficiaryService;
 
         public PersonController(IServiceManager serviceManager)
             : base(serviceManager)
@@ -28,6 +29,7 @@ namespace Svbase.Controllers
             _streetService = ServiceManager.StreetService;
             _apartmentService = ServiceManager.ApartmentService;
             _flatService = ServiceManager.FlatService;
+            _beneficiaryService = ServiceManager.BeneficiaryService;
         }
 
         public ActionResult Index()
@@ -38,37 +40,17 @@ namespace Svbase.Controllers
         }
         public ActionResult Create()
         {
-            return View();
+            var beneficiaries = _beneficiaryService.GetBeneficiariesForSelecting().ToList();
+            return View(new PersonViewModel { Beneficiaries = beneficiaries });
         }
         [Authorize(Roles = RoleConsts.Admin)]
         [HttpPost]
         public ActionResult Create(PersonViewModel model)
         {
-            if (string.IsNullOrEmpty(model.FirstName))
-            {
-                ModelState.AddModelError("", "Invalid FirstName");
-            }
-
-            if (!ModelState.IsValid)
-            {
-                return RedirectToAction("Create");
-            }
-
-            var newPersonItem = model.Update(new Person());
-            var flats = new List<Flat>
-            {
-                new Flat
-                {
-                    Id = model.FlatId
-                }
-            };
-            foreach (var flat in flats)
-            {
-                _flatService.Attach(flat);
-            }
-            newPersonItem.Flats = flats;
-            newPersonItem = _personService.Add(newPersonItem);
-            return RedirectToAction("Details", new { id = newPersonItem.Id });
+            var isCreated = _personService.CreatePersonByModel(model);
+            return !isCreated
+                ? RedirectToAction("Create")
+                : RedirectToAction("Index");
         }
         [Authorize(Roles = RoleConsts.Admin)]
         [HttpGet]

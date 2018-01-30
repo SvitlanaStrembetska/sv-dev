@@ -87,3 +87,8 @@ li.dropdown {
 .btn-svb {
     background-color: #428bca;
 }
+
+.nav > li {
+    position: relative;
+    display: inline-block;
+}

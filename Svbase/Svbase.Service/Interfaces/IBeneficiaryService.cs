@@ -8,5 +8,6 @@ namespace Svbase.Service.Interfaces
     public interface IBeneficiaryService : IEntityService<Beneficiary>
     {
         IEnumerable<BeneficiaryCreateModel> GetAllBeneficiaries();
+        IEnumerable<CheckboxItemModel> GetBeneficiariesForSelecting();
     }
 }

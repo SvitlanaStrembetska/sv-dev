@@ -35,5 +35,16 @@ namespace Svbase.Core.Repositories.Implementation
             });
             return beneficiaries;
         }
+
+        public IEnumerable<CheckboxItemModel> GetBeneficiariesForSelecting()
+        {
+            var beneficiaries = DbSet.Select(x => new CheckboxItemModel
+            {
+                Id = x.Id,
+                Name = x.Name,
+                IsChecked = false
+            });
+            return beneficiaries;
+        }
     }
 }

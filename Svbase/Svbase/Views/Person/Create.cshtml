@@ -15,7 +15,7 @@
                     <div class="col-md-4 ignore-padding">
                         @Html.LabelFor(model => model.FirstName, htmlAttributes: new { @class = "col-md-12" })
                         <div class="col-md-12">
-                            @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control", required="required" } })
+                            @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control", required = "required" } })
                             @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
                         </div>
                     </div>
@@ -79,49 +79,46 @@
                         @*<input value="1" name="product" class="product-list" type="checkbox">Product 1
                             <input value="2" name="product" class="product-list" type="checkbox">Product 2*@
                         @*<div class="col-md-2 col-sm-12 radio" type="checkbox" value="1">
-                            @Html.EditorFor(model => model.Gender)
-                            @Html.ValidationMessageFor(model => model.Gender, "", new { @class = "text-danger inline-block" })
-                            <div class="inline-block">Жінка</div>
-                        </div>
-                        <div class="col-md-2 col-sm-12 radio" type="checkbox" value="2">
-                            @Html.EditorFor(model => model.Gender)
-                            @Html.ValidationMessageFor(model => model.Gender, "", new { @class = "text-danger inline-block" })
-                            <div class="inline-block">Чоловік</div>
-                        </div>*@
+                                @Html.EditorFor(model => model.Gender)
+                                @Html.ValidationMessageFor(model => model.Gender, "", new { @class = "text-danger inline-block" })
+                                <div class="inline-block">Жінка</div>
+                            </div>
+                            <div class="col-md-2 col-sm-12 radio" type="checkbox" value="2">
+                                @Html.EditorFor(model => model.Gender)
+                                @Html.ValidationMessageFor(model => model.Gender, "", new { @class = "text-danger inline-block" })
+                                <div class="inline-block">Чоловік</div>
+                            </div>*@
                         @Html.RadioButtonFor(m => m.Gender, true) @Html.Label("Чоловік")
                         @Html.RadioButtonFor(m => m.Gender, false) @Html.Label("Жінка")
                     </div>
                 </div>
                 @*<div class="col-md-12 block-container">
-                    <div class="col-md-6 ignore-padding">
-                        @Html.LabelFor(model => model.Position, htmlAttributes: new { @class = "col-md-12" })
-                        <div class="col-md-12">
-                            @Html.EditorFor(model => model.Position, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.Position, "", new { @class = "text-danger" })
+                        <div class="col-md-6 ignore-padding">
+                            @Html.LabelFor(model => model.Position, htmlAttributes: new { @class = "col-md-12" })
+                            <div class="col-md-12">
+                                @Html.EditorFor(model => model.Position, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Position, "", new { @class = "text-danger" })
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-md-6 ignore-padding">
-                        @Html.LabelFor(model => model.PartionType, htmlAttributes: new { @class = "col-md-12" })
-                        <div class="col-md-12">
-                            @Html.EditorFor(model => model.PartionType, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.PartionType, "", new { @class = "text-danger" })
+                        <div class="col-md-6 ignore-padding">
+                            @Html.LabelFor(model => model.PartionType, htmlAttributes: new { @class = "col-md-12" })
+                            <div class="col-md-12">
+                                @Html.EditorFor(model => model.PartionType, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.PartionType, "", new { @class = "text-danger" })
+                            </div>
                         </div>
-                    </div>
-                </div>*@
+                    </div>*@
                 <div class="col-md-12 block-container">
                     <div class="form-group col-sm-4">
                         <div class="col-sm-12">
                             <label for="cities">Місто</label>
-                            <select class="form-control" id="cities">
-                            </select>
+                            <select class="form-control" id="cities"></select>
                         </div>
                     </div>
                     <div class="form-group col-sm-4">
                         <div class="col-sm-12">
                             <label for="streets">Вулиця</label>
-                            <select class="form-control" id="streets">
-                               
-                            </select>
+                            <select class="form-control" id="streets"></select>
                         </div>
                     </div>
                 </div>
@@ -129,17 +126,13 @@
                     <div class="form-group col-sm-4">
                         <div class="col-sm-12">
                             <label for="apartments">Будинок</label>
-                            <select class="form-control" id="apartments">
-                                
-                            </select>
+                            <select class="form-control" id="apartments"></select>
                         </div>
                     </div>
                     <div class="form-group col-sm-4">
                         <div class="col-sm-12">
                             <label for="flats">Квартира</label>
-                            <select required class="form-control" id="flats" name="FlatId">
-                                
-                            </select>
+                            <select required class="form-control" id="flats" name="FlatId"></select>
                         </div>
                     </div>
                 </div>
@@ -166,6 +159,36 @@
                             @Html.ValidationMessageFor(model => model.FlatId, "", new { @class = "text-danger" })
                         </div>
                     </div>*@
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    Категорії
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    @for (var i = 0; i < Model.Beneficiaries.Count(); i++)
+                                    {
+                                        <div class="form-group">
+                                            <div class="control-label col-xs-2">@Model.Beneficiaries[i].Name</div>
+                                            <div class="col-md-10">
+                                                <div class="checkbox">
+                                                    @Html.HiddenFor(model => model.Beneficiaries[i].Id)
+                                                    @Html.EditorFor(model => Model.Beneficiaries[i].IsChecked)
+                                                    @Html.ValidationMessageFor(model => Model.Beneficiaries[i].IsChecked, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="col-md-12">
                     <div class="col-md-12 ignore-padding">
                         <input type="submit" value="Створити" class="btn btn-default pull-right btn-svb" />
@@ -196,7 +219,7 @@
             url: urlAction,
             type: 'Get',
             traditional: true,
-            data: { },
+            data: {},
             async: false
         }).done((data) => {
             $("#cities").html(data);

@@ -22,5 +22,11 @@ namespace Svbase.Service.Implementation
             var beneficiaries = RepositoryManager.Beneficiaries.GetAllBeneficiaries();
             return beneficiaries;
         }
+
+        public IEnumerable<CheckboxItemModel> GetBeneficiariesForSelecting()
+        {
+            var beneficiaries = RepositoryManager.Beneficiaries.GetBeneficiariesForSelecting();
+            return beneficiaries;
+        }
     }
 }

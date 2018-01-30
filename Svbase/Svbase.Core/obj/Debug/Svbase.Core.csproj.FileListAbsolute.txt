@@ -72,3 +72,4 @@ D:\SVBase\sv-dev\Svbase\Svbase.Core\obj\Debug\Svbase.Core.Migrations.ApartmentDi
 D:\SVBase\sv-dev\Svbase\Svbase.Core\obj\Debug\Svbase.Core.csproj.GenerateResource.Cache
 D:\SVBase\sv-dev\Svbase\Svbase.Core\obj\Debug\Svbase.Core.dll
 D:\SVBase\sv-dev\Svbase\Svbase.Core\obj\Debug\Svbase.Core.pdb
+D:\SVBase\sv-dev\Svbase\Svbase.Core\obj\Debug\Svbase.Core.csprojResolveAssemblyReference.cache
