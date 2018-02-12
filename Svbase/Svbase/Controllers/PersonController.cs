@@ -38,6 +38,12 @@ namespace Svbase.Controllers
 
             return View(persons);
         }
+        public ActionResult PersonsByBeneficiaryId(int id)
+        {
+            var persons = _personService.GetPersonsByBeneficiariesId(id);
+            return View("Index",persons);
+        }
+
         public ActionResult Create()
         {
             var beneficiaries = _beneficiaryService.GetBeneficiariesForSelecting().ToList();

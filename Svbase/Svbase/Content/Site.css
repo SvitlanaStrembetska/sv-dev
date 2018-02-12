@@ -92,3 +92,9 @@ li.dropdown {
     position: relative;
     display: inline-block;
 }
+
+.table-horizontal-scroll {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+}
