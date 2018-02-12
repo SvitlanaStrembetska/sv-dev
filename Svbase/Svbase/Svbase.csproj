@@ -392,6 +392,7 @@
     <Content Include="Views\Shared\_FilterCheckBoxPartial.cshtml" />
     <Content Include="Views\Shared\_OptionSelectBasePartial.cshtml" />
     <Content Include="Views\Dashboard\Details.cshtml" />
+    <Content Include="Views\Person\Export.cshtml" />
     <Content Include="Views\Shared\SelectionPersonPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>

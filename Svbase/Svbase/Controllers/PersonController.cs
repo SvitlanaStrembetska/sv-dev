@@ -194,10 +194,10 @@ namespace Svbase.Controllers
             return View("Import", model);
         }
 
-        //public ActionResult Export()
-        //{
-        //    return View();
-        //}
+        public ActionResult Export()
+        {
+            return View();
+        }
     }
 
 }
