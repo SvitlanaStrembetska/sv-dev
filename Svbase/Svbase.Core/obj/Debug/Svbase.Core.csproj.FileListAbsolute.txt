@@ -72,7 +72,6 @@ D:\SVBase\sv-dev\Svbase\Svbase.Core\obj\Debug\Svbase.Core.Migrations.ApartmentDi
 D:\SVBase\sv-dev\Svbase\Svbase.Core\obj\Debug\Svbase.Core.csproj.GenerateResource.Cache
 D:\SVBase\sv-dev\Svbase\Svbase.Core\obj\Debug\Svbase.Core.dll
 D:\SVBase\sv-dev\Svbase\Svbase.Core\obj\Debug\Svbase.Core.pdb
-D:\SVBase\sv-dev\Svbase\Svbase.Core\obj\Debug\Svbase.Core.csprojResolveAssemblyReference.cache
 C:\Users\NetfullyPart\Source\Repos\svbase\Svbase\Svbase.Core\bin\Debug\Svbase.Core.dll.config
 C:\Users\NetfullyPart\Source\Repos\svbase\Svbase\Svbase.Core\bin\Debug\Svbase.Core.dll
 C:\Users\NetfullyPart\Source\Repos\svbase\Svbase\Svbase.Core\bin\Debug\Svbase.Core.pdb
@@ -99,3 +98,4 @@ C:\Users\NetfullyPart\Source\Repos\svbase\Svbase\Svbase.Core\obj\Debug\Svbase.Co
 C:\Users\NetfullyPart\Source\Repos\svbase\Svbase\Svbase.Core\obj\Debug\Svbase.Core.csproj.GenerateResource.Cache
 C:\Users\NetfullyPart\Source\Repos\svbase\Svbase\Svbase.Core\obj\Debug\Svbase.Core.dll
 C:\Users\NetfullyPart\Source\Repos\svbase\Svbase\Svbase.Core\obj\Debug\Svbase.Core.pdb
+D:\SVBase\sv-dev\Svbase\Svbase.Core\obj\Debug\Svbase.Core.csprojResolveAssemblyReference.cache

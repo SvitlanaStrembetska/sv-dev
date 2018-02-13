@@ -23,6 +23,11 @@ namespace Svbase.Service.Implementation
             var persons = RepositoryManager.Persons.GetPersons();
             return persons;
         }
+        public IEnumerable<PersonViewModel> GetPersonsByBeneficiariesId(int beneficiaryId)
+        {
+            var persons = RepositoryManager.Beneficiaries.GetPersonsByBeneficiariesId(beneficiaryId);
+            return persons;
+        }
 
         public PersonViewModel GetPersonById(int id)
         {

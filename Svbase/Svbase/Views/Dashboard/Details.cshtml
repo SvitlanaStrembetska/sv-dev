@@ -12,31 +12,13 @@
                             {
                                 <div class="row">
                                     <div class="col-sm-12">
-                                        <a class="text-center">@item.Name - @item.PersonsCount</a>
+                                        <a class="text-center"
+                                           href="@Url.Action("PersonsByBeneficiaryId","Person", new {id = item.Id})">
+                                            @item.Name - @item.PersonsCount
+                                        </a>
                                     </div>
                                 </div> 
                             }
-                           
-                            @*<div class="row">
-                                <div class="col-sm-12">
-                                    <span class="text-center">Симпатики - 2844</span>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <span class="text-center">Пенсіонери - 6598</span>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <span class="text-center">Студенти - 5477</span>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <span class="text-center">Прочани - 412</span>
-                                </div>
-                            </div>*@
                         </div>
                     </div>
                 </div>
@@ -65,27 +47,6 @@
                                                     </div>
                                                 </div>
                                             }
-                                           
-                                            @*<div class="row">
-                                                <div class="col-sm-12 text-center">
-                                                    <span class="text-center">Пасічна - 2844</span>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-sm-12 text-center">
-                                                    <span class="text-center">Каскад - 6598</span>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-sm-12 text-center">
-                                                    <span class="text-center">Центр - 5477</span>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-sm-12 text-center">
-                                                    <span class="text-center">Крихівці - 412</span>
-                                                </div>
-                                            </div>*@
                                         </div>
                                     </div>
                                 </div>
@@ -105,21 +66,6 @@
                                                     </div>
                                                 </div>
                                             }
-                                            @*<div class="row">
-                                                <div class="col-sm-12 text-center">
-                                                    <span class="text-center">Округ 157 - 2844</span>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-sm-12 text-center">
-                                                    <span class="text-center">Округ 158 - 6598</span>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-sm-12 text-center">
-                                                    <span class="text-center">Округ 159 - 5477</span>
-                                                </div>
-                                            </div>*@
                                         </div>
                                     </div>
                                 </div>

@@ -1,4 +1,5 @@
-﻿using Svbase.Core.Models;
+﻿using System.Collections.Generic;
+using Svbase.Core.Models;
 
 namespace Svbase.Service.Interfaces
 {

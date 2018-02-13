@@ -396,6 +396,7 @@
     <Content Include="Views\Shared\_OptionSelectBasePartial.cshtml" />
     <Content Include="Views\Dashboard\Details.cshtml" />
     <Content Include="Views\Person\Export.cshtml" />
+    <Content Include="Views\Shared\SelectionPersonPartial.cshtml" />
     <Content Include="Views\Beneficiary\List.cshtml" />
     <Content Include="Views\Shared\_DistrictCreate.cshtml" />
   </ItemGroup>
