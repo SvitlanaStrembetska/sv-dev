@@ -8,8 +8,8 @@
         <div class="form-horizontal">
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
             <div class="form-group">
-                <div class="col-xs-10">
-                    @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", placeholder = "Name", required = "required" } })
+                <div class="col-xs-12">
+                    @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", placeholder = "Введіть назву вулиці", required = "required" } })
                     @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -17,7 +17,7 @@
                 <div class="panel-heading">
                     <div class="row">
                         <div class="col-xs-6">
-                            <span>Streets</span>
+                            <span>Вулиці:</span>
                         </div>
                     </div>
                 </div>
@@ -43,8 +43,8 @@
             </div>
             <div class="row">
                 <div class="col-xs-12">
-                    <button class="btn btn-primary pull-right" type="submit">Save</button>
-                    <a class="pull-right" style="padding: 7px 12px;" href="@Url.Action("List")">Cancel</a>
+                    <button class="btn btn-primary pull-right" type="submit">Зберегти</button>
+                    <a class="pull-right" style="padding: 7px 12px;" href="@Url.Action("List")">Відмінити</a>
                 </div>
             </div>
         </div>

@@ -1,4 +1,5 @@
 ﻿@using Svbase.Core.Enums
+@using Svbase.Core.Models
 @model IEnumerable<Svbase.Core.Models.DistrictListModel>
 
 <div class="container body-content margin-top">
@@ -9,7 +10,9 @@
                     <h2 style="margin-top: 0">Округи</h2>
                 </div>
                 <div class="col-xs-4">
-                    <a class="btn btn-primary pull-right" href="@Url.Action("Create")">
+                    <a class="btn btn-primary pull-right"
+                       data-toggle="modal"
+                       data-target="#districtCreateModal" >
                         Додати округ
                     </a>
                 </div>
@@ -22,34 +25,34 @@
                 <div class="col-xs-12">
                     <table class="table table-hover table-striped">
                         <thead>
-                            <tr>
-                                <th class="col-xs-6">
-                                    <span>Назва</span>
-                                </th>
-                                <th class="col-xs-6">
-                                    <span>Тип округа</span>
-                                </th>
-                            </tr>
+                        <tr>
+                            <th class="col-xs-6">
+                                <span>Назва</span>
+                            </th>
+                            <th class="col-xs-6">
+                                <span>Тип округа</span>
+                            </th>
+                        </tr>
                         </thead>
                         <tbody>
-                            @foreach (var district in Model)
-                            {
-                                <tr>
-                                    <td class="col-xs-6">
-                                        <a href="@Url.Action("Details", new {id = district.Id})">@district.Name</a>
-                                    </td>
-                                    <td class="col-xs-6">
-                                        @if (district.DistrictType == DistrictType.Сonstituency)
-                                        {
-                                            <span>Constituency</span>
-                                        }
-                                        @if (district.DistrictType == DistrictType.Custom)
-                                        {
-                                            <span>Custom</span>
-                                        }
-                                    </td>
-                                </tr>
-                            }
+                        @foreach (var district in Model)
+                        {
+                            <tr>
+                                <td class="col-xs-6">
+                                    <a href="@Url.Action("Details", new {id = district.Id})">@district.Name</a>
+                                </td>
+                                <td class="col-xs-6">
+                                    @if (district.DistrictType == DistrictType.Сonstituency)
+                                    {
+                                        <span>Constituency</span>
+                                    }
+                                    @if (district.DistrictType == DistrictType.Custom)
+                                    {
+                                        <span>Custom</span>
+                                    }
+                                </td>
+                            </tr>
+                        }
                         </tbody>
                     </table>
                 </div>
@@ -57,3 +60,4 @@
         </div>
     </div>
 </div>
+@Html.Partial("_DistrictCreate", new DistrictCreateModel());

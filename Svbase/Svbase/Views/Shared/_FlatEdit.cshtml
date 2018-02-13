@@ -6,7 +6,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Edit something</h4>
+                <h4 class="modal-title">Редагувати</h4>
             </div>
             <div class="modal-body">
                 <form action="@Url.Action("Edit", "Street")" method="post" id="editForm">
@@ -15,17 +15,17 @@
                     <div class="form-horizontal">
                         <div class="form-horizontal">
                             <div class="form-group">
-                                <label class="control-label col-md-2" for="EditName">Name</label>
+                                <label class="control-label col-md-2" for="EditName">Назва</label>
                                 <div class="col-md-10">
-                                    <input class="form-control" id="EditName" name="Name" type="text" value="">
+                                    <input class="form-control" id="EditName" name="Назва" type="text" value="">
                                     <span class="field-validation-valid text-danger" data-valmsg-for="EditName" data-valmsg-replace="true"></span>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" id="submitFlatEdit">Edit</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Відмінити</button>
+                        <button type="button" class="btn btn-primary" id="submitFlatEdit">Зберегти</button>
                     </div>
                 </form>
             </div>

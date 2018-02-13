@@ -213,6 +213,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\Abstract\GeneralController.cs" />
+    <Compile Include="Controllers\UploadController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ApartmentController.cs" />
     <Compile Include="Controllers\BeneficiaryController.cs" />
@@ -280,6 +281,8 @@
     <Content Include="less\bootstrap-social.scss" />
     <Content Include="less\dataTables.responsive.scss" />
     <Content Include="Content\font-awesome\font-awesome.css.map" />
+    <Content Include="Images\test2.xlsx" />
+    <Content Include="Images\test2.csv" />
     <None Include="Properties\PublishProfiles\SDolinovska.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\dataTables.bootstrap.css" />
@@ -378,7 +381,7 @@
     <Content Include="Views\Flat\Details.cshtml" />
     <Content Include="Views\Shared\_FlatCreate.cshtml" />
     <Content Include="Views\Shared\_FlatEdit.cshtml" />
-    <Content Include="Views\Beneficiary\List.cshtml" />
+    <Content Include="Views\Upload\UploadDocument.cshtml" />
     <Content Include="Views\Shared\_BeneficiaryCreate.cshtml" />
     <Content Include="Views\Shared\_BeneficiaryEdit.cshtml" />
     <Content Include="Views\Person\Index.cshtml" />
@@ -393,6 +396,8 @@
     <Content Include="Views\Shared\_OptionSelectBasePartial.cshtml" />
     <Content Include="Views\Dashboard\Details.cshtml" />
     <Content Include="Views\Person\Export.cshtml" />
+    <Content Include="Views\Beneficiary\List.cshtml" />
+    <Content Include="Views\Shared\_DistrictCreate.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

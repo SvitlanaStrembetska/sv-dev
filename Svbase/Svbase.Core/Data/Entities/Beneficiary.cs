@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using Svbase.Core.Data.Abstract;
 
 namespace Svbase.Core.Data.Entities

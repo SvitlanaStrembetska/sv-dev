@@ -1,17 +1,17 @@
-﻿@model Svbase.Core.Models.CityCreateModel
+﻿@model Svbase.Core.Models.DistrictCreateModel
 
-<div class="modal fade" id="cityCreateModal" role="dialog">
+<div class="modal fade" id="districtCreateModal" role="dialog">
     <div class="modal-dialog">
 
         <!-- Modal content-->
 
-        @Html.BeginForm("Create", "City")
+        @Html.BeginForm("Create", "District")
         {
         @Html.AntiForgeryToken()
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Створити місто</h4>
+                <h4 class="modal-title">Створити округ</h4>
             </div>
             <div class="modal-body">
                 <div class="form-horizontal">

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web.Mvc;
 using CsvHelper;
@@ -149,8 +150,9 @@ namespace Svbase.Controllers
             var worker = new ImportModelCsvService();
             var error = new List<CsvErrorModel>();
             var model = new List<PersonViewModel>();
-
-            using (var textReader = System.IO.File.OpenText(@"C:\Users\svitl\Desktop\test2.csv"))
+            var fileName = Path.GetFileName("test2.csv");
+            var path = Path.Combine(Server.MapPath("~/Images/"), fileName);
+            using (var textReader = System.IO.File.OpenText(path))
             {
                 var csv = new CsvReader(textReader);
 
@@ -158,7 +160,7 @@ namespace Svbase.Controllers
             }
             if (isValid)
             {
-                using (var textReader = System.IO.File.OpenText(@"C:\Users\svitl\Desktop\test2.csv"))
+                using (var textReader = System.IO.File.OpenText(path))
                 {
                     var csv = new CsvReader(textReader);
                     result = worker.Read(csv);
