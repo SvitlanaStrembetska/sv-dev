@@ -146,6 +146,7 @@ namespace Svbase.Controllers
         public ActionResult Import()
         {
             bool isValid;
+
             IEnumerable<Person> result = new List<Person>();
             var worker = new ImportModelCsvService();
             var error = new List<CsvErrorModel>();
