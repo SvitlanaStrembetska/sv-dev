@@ -92,6 +92,13 @@ namespace Svbase.Controllers
             return PartialView("_FilterCheckBoxPartial", streets);
         }
 
+
+        [HttpPost]
+        public ActionResult SearchPersonsByFilter(FilterSearchModel filter)
+        {
+            var persons = _personService.SearchPersonsByFilter(filter);
+            return PartialView("SelectionPersonPartial", persons);
+        }
         //[HttpGet]
         //public ActionResult FilterStreetsByStreetSearchFilter(StreetSearchFilterModel filter)
         //{
