@@ -34,6 +34,13 @@ namespace Svbase.Controllers
 
             var newCityItem = model.Update(new City());
             newCityItem = _cityService.Add(newCityItem);
+            if (Request.IsAjaxRequest())
+            {
+                return Json(new
+                {
+                    status = "success"
+                });
+            }
             return RedirectToAction("Details", new {id = newCityItem.Id});
         }
 

@@ -15,7 +15,11 @@ namespace Svbase.Controllers
         {
             _dashboardService = ServiceManager.DashboardService;
         }
-
+        public ActionResult Index()
+        {
+            var dashboardViewModel = _dashboardService.GetDashboardModel();
+            return View(dashboardViewModel);
+        }
         public ActionResult Details()
         {
             var dashboardViewModel = _dashboardService.GetDashboardViewModel();
@@ -24,7 +28,7 @@ namespace Svbase.Controllers
 
         public ActionResult PersonsByBeneficiariesId(int id)
         {
-            return RedirectToAction("PersonsByBeneficiaryId","Person", new { id });
+            return RedirectToAction("PersonsByBeneficiaryId", "Person", new { id });
         }
     }
 }

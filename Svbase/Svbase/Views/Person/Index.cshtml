@@ -74,7 +74,12 @@
                     <h2 class="page-header">Вибірка</h2>
                 </div>
                 <div class="col-md-6 ignore-padding">
-                    <button id="export" class="btn btn-default pull-right page-header"><a href="@Url.Action("Import", "Person")">Iмпорт</a></button>
+                   
+                    <button class="btn btn-primary pull-right page-header">
+                    <a class="white-color" href="@Url.Action("Create", "Person")">Додати людину</a></button>
+
+                    <button id="export" class="btn btn-default pull-right page-header margin-right">
+                    <a href="@Url.Action("Import", "Person")">Завантажити список</a></button>
                 </div>
             </div>
         </div>

@@ -1,0 +1,217 @@
+﻿@using Svbase.Core.Models
+@model DashboardManagementViewModel
+
+<div class="body-content margin-top">
+    <div class="col-md-12">
+        <h2 class="page-header">Управління округами</h2>
+    </div>
+    <div class="row">
+        <div class="col-sm-2">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading" style="font-weight: bold">
+                            Тип округа
+                            <i class="fa fa-plus-square fa-lg" style="color: #428bca; text-align: right; float: right"
+                               data-toggle="modal" 
+                               data-target="#beneficiaryCreateModal"></i>
+                        </div>
+                        @if (Model.Beneficiaries != null && Model.Beneficiaries.Any())
+                        {
+                            <div class="panel-body">
+                                @foreach (var item in Model.Beneficiaries)
+                                {
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <a class="text-center"
+                                               href="@Url.Action("PersonsByBeneficiaryId","Person", new {id = item.Id})">
+                                                @item.Name - @item.PersonsCount
+                                            </a>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading" style="font-weight: bold">
+                            Округи
+                            <i class="fa fa-plus-square fa-lg" style="color: #428bca; text-align: right; float: right"
+                               data-toggle="modal"
+                               data-target="#districtCreateModal"></i>
+                        </div>
+                        @if (Model.DistrictsModel != null && Model.DistrictsModel.Any())
+                        {
+                            <div class="panel-body">
+                                @foreach (var item in Model.DistrictsModel)
+                                {
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <a class="text-center"
+                                               href="@Url.Action("List","District")">
+                                                @item.Name
+                                            </a>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading" style="font-weight: bold">
+                            Населений пункт
+                            <i class="fa fa-plus-square fa-lg" style="color: #428bca; text-align: right; float: right"
+                               data-toggle="modal"
+                               data-target="#cityCreateModal"></i>
+                        </div>
+                        @if (Model.CityViewModels != null && Model.CityViewModels.Any())
+                        {
+                            <div class="panel-body">
+                                @foreach (var item in Model.CityViewModels)
+                                {
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <a class="text-center"
+                                               href="@Url.Action("Details","City", new {id = item.Id})">
+                                                @item.Name
+                                            </a>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading" style="font-weight: bold">
+                            Вулиця
+                            <i class="fa fa-plus-square fa-lg" style="color: #428bca; text-align: right; float: right"
+                               data-toggle="modal"
+                               data-target="#streetCreateModal"></i>
+                        </div>
+                        @if (Model.StreetViewModels != null && Model.StreetViewModels.Any())
+                        {
+                            <div class="panel-body">
+                                @foreach (var item in Model.StreetViewModels)
+                                {
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <a class="text-center"
+                                               href="@Url.Action("Details","Street", new {id = item.Id})">
+                                                @item.Name
+                                            </a>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading" style="font-weight: bold">
+                            Будинки
+                            <i class="fa fa-plus-square fa-lg" style="color: #428bca; text-align: right; float: right"
+                               data-toggle="modal"
+                               data-target="#apartmentCreateModal"></i>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="row">
+                                        <div class="col-sm-12 text-center">
+                                            <span style="font-weight: bold">Партійні</span>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        @if (Model.Apartments != null && Model.Apartments.Any())
+                                        {
+                                            <div class="col-sm-12">
+                                                @foreach (var item in Model.Apartments)
+                                                {
+                                                    <div class="row">
+                                                        <div class="col-sm-12 text-center">
+                                                            <a class="text-center">@item - @item.Name</a>
+                                                        </div>
+                                                    </div>
+                                                }
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading" style="font-weight: bold">
+                            Квартири
+                            <i class="fa fa-plus-square fa-lg" style="color: #428bca; text-align: right; float: right"
+                               data-toggle="modal"
+                               data-target="#flatCreateModal"></i>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="row">
+                                        <div class="col-sm-12 text-center">
+                                            <span style="font-weight: bold">Партійні</span>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        @if (Model.FlatViewModels != null && Model.FlatViewModels.Any())
+                                        {
+                                            <div class="col-sm-12">
+                                                @foreach (var item in Model.FlatViewModels)
+                                                {
+                                                    <div class="row">
+                                                        <div class="col-sm-12 text-center">
+                                                            <a class="text-center">@item - @item.Name</a>
+                                                        </div>
+                                                    </div>
+                                                }
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@Html.Partial("_BeneficiaryCreate", new BeneficiaryCreateModel())
+@Html.Partial("_DistrictCreate", new DistrictCreateModel())
+@Html.Partial("_CityCreate", new CityCreateModel())
+@Html.Partial("_StreetCreatePartial", new StreetCreateModel())
+@Html.Partial("_ApartmentCreate", new ApartmentCreateModel())
+@Html.Partial("_FlatCreate", new FlatCreateModel())

@@ -42,7 +42,7 @@
 
                             @foreach (var person in Model)
                             {
-                                <tr class="odd gradeX">
+                                <tr class="odd gradeX" url="@Url.Action("")">
                                     <td>@person.FirstName</td>
                                     <td>@person.MiddleName</td>
                                     <td id="lastNameHidd-@person.Id">@person.LastName</td>

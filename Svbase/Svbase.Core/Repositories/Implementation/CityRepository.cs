@@ -23,6 +23,15 @@ namespace Svbase.Core.Repositories.Implementation
             });
             return cities;
         }
+        public IEnumerable<CityViewModel> GetAllCities()
+        {
+            var cities = DbSet.Select(x => new CityViewModel
+            {
+                Id = x.Id,
+                Name = x.Name,
+            });
+            return cities;
+        }
 
         public CityViewModel GetCityById(int id)
         {

@@ -42,6 +42,13 @@ namespace Svbase.Controllers
 
             var newItem = model.Update(new Beneficiary());
             newItem = _beneficiaryService.Add(newItem);
+            if (Request.IsAjaxRequest())
+            {
+                return Json(new
+                {
+                    status = "success"
+                });
+            }
             return RedirectToAction("List");
         }
 

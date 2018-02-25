@@ -5,6 +5,8 @@ namespace Svbase.Service.Interfaces
 {
     public interface IDashboardService
     {
+        DashboardManagementViewModel GetDashboardModel();
         DashboardViewModel GetDashboardViewModel();
+
     }
 }

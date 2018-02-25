@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Svbase.Core.Models;
 using Svbase.Core.Repositories.Abstract;
 using Svbase.Core.Repositories.Factory;
@@ -16,6 +17,22 @@ namespace Svbase.Service.Implementation
             RepositoryManager = repositoryManager;
         }
 
+        public DashboardManagementViewModel GetDashboardModel()
+        {
+            var beneficiaries = RepositoryManager.Beneficiaries.GetDashboardBeneficiaries();
+            var districtsModel = RepositoryManager.Districts.GetAllDistricts();
+            var cities = RepositoryManager.Cities.GetAllCities();
+            var streats = RepositoryManager.Streets.GetStreetsForSelecting();
+            var dashboardModel = new DashboardManagementViewModel
+            {
+                Beneficiaries = beneficiaries,
+                DistrictsModel = districtsModel,
+                CityViewModels = cities,
+                StreetViewModels = streats,
+            };
+            return dashboardModel;
+        }
+
         public DashboardViewModel GetDashboardViewModel()
         {
             var beneficiaries = RepositoryManager.Beneficiaries.GetDashboardBeneficiaries();
@@ -23,7 +40,7 @@ namespace Svbase.Service.Implementation
             var dashboardViewModel = new DashboardViewModel
             {
                 Beneficiaries = beneficiaries,
-                DistrictsModel = districtsModel
+                DistrictsModel = districtsModel,
             };
             return dashboardViewModel;
         }

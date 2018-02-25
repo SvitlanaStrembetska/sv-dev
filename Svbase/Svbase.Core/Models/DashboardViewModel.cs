@@ -8,6 +8,15 @@ namespace Svbase.Core.Models
         public IEnumerable<DashboardItemModel> Beneficiaries { get; set; }
         public DashboardDistrictsModel DistrictsModel { get; set; }
     }
+    public class DashboardManagementViewModel
+    {
+        public IEnumerable<DistrictListModel> DistrictsModel { get; set; }
+        public IEnumerable<CityViewModel> CityViewModels { get; set; }
+        public IEnumerable<StreetSelectModel> StreetViewModels { get; set; }
+        public IEnumerable<ApartmentViewModel> Apartments { get; set; }
+        public IEnumerable<FlatViewModel> FlatViewModels { get; set; }
+        public IEnumerable<DashboardItemModel> Beneficiaries { get; set; }
+    }
 
     public class DashboardDistrictsModel
     {

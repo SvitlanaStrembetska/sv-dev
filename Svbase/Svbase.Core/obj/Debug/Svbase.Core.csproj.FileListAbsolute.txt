@@ -85,7 +85,6 @@ C:\Users\NetfullyPart\Source\Repos\svbase\Svbase\Svbase.Core\bin\Debug\EntityFra
 C:\Users\NetfullyPart\Source\Repos\svbase\Svbase\Svbase.Core\bin\Debug\EntityFramework.SqlServer.xml
 C:\Users\NetfullyPart\Source\Repos\svbase\Svbase\Svbase.Core\bin\Debug\Microsoft.AspNet.Identity.Core.xml
 C:\Users\NetfullyPart\Source\Repos\svbase\Svbase\Svbase.Core\bin\Debug\Microsoft.AspNet.Identity.EntityFramework.xml
-C:\Users\NetfullyPart\Source\Repos\svbase\Svbase\Svbase.Core\obj\Debug\Svbase.Core.csprojResolveAssemblyReference.cache
 C:\Users\NetfullyPart\Source\Repos\svbase\Svbase\Svbase.Core\obj\Debug\Svbase.Core.Migrations.FirstMigration.resources
 C:\Users\NetfullyPart\Source\Repos\svbase\Svbase\Svbase.Core\obj\Debug\Svbase.Core.Migrations.ChangeFlatConfiguration.resources
 C:\Users\NetfullyPart\Source\Repos\svbase\Svbase\Svbase.Core\obj\Debug\Svbase.Core.Migrations.ChangeInitDb.resources
@@ -99,3 +98,4 @@ C:\Users\NetfullyPart\Source\Repos\svbase\Svbase\Svbase.Core\obj\Debug\Svbase.Co
 C:\Users\NetfullyPart\Source\Repos\svbase\Svbase\Svbase.Core\obj\Debug\Svbase.Core.dll
 C:\Users\NetfullyPart\Source\Repos\svbase\Svbase\Svbase.Core\obj\Debug\Svbase.Core.pdb
 D:\SVBase\sv-dev\Svbase\Svbase.Core\obj\Debug\Svbase.Core.csprojResolveAssemblyReference.cache
+C:\Users\NetfullyPart\Source\Repos\svbase\Svbase\Svbase.Core\obj\Debug\Svbase.Core.csprojResolveAssemblyReference.cache
