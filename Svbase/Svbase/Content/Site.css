@@ -123,6 +123,10 @@ button a.white-color:focus {
     padding-top: 5px;
 }
 
+.padding-top-7 {
+    padding-top: 7px;
+}
+
 .padding-lr {
     padding: 0 20px;
 }
@@ -131,8 +135,16 @@ button a.white-color:focus {
     padding: 20px;
 }
 
+.padding-item {
+    padding: 0 3px;
+}
+
 .margin-right {
     margin-right: 15px !important;
+}
+
+.margin-top-30 {
+    margin-top: 30px;
 }
 
 .margin-left {
