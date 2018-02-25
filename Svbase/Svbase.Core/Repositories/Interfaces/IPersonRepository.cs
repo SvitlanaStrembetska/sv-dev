@@ -10,5 +10,6 @@ namespace Svbase.Core.Repositories.Interfaces
         IEnumerable<PersonViewModel> GetPersons();
         PersonViewModel GetPersonById(int id);
         IEnumerable<PersonViewModel> GetPersonsByBeneficiariesId(int beneficiaryId);
+        IEnumerable<PersonViewModel> GetPersonsByIds(IEnumerable<int> ids);
     }
 }

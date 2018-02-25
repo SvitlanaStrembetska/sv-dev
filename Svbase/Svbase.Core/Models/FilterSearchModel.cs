@@ -6,11 +6,11 @@ namespace Svbase.Core.Models
 {
     public class FilterSearchModel
     {
-        public ICollection<int> StreatIds { get; set; }
-        public ICollection<int> DistrictIds { get; set; }
+        public IEnumerable<int> StreatIds { get; set; }
+        public IEnumerable<int> DistrictIds { get; set; }
         public DistrictType DistrictType { get; set; }
-        public ICollection<int> FlatIds { get; set; }
-        public ICollection<int> ApartmentIds { get; set; }
-        public ICollection<int> BeneficiaryIds { get; set; }
+        public IEnumerable<int> FlatIds { get; set; }
+        public IEnumerable<int> ApartmentIds { get; set; }
+        public IEnumerable<int> BeneficiaryIds { get; set; }
     }
 }

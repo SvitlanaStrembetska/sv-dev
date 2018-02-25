@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Svbase.Core.Models;
 using Svbase.Core.Repositories.Abstract;
 using Svbase.Core.Repositories.Factory;

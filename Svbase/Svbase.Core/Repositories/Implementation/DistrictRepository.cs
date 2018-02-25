@@ -25,17 +25,32 @@ namespace Svbase.Core.Repositories.Implementation
             return districts;
         }
 
+        private int GetPersonsCountByApartments(ICollection<Apartment> apartments)
+        {
+            var sum = apartments.Sum(a => a.Flats.Sum(f => f.Persons.Count));
+            return sum;
+        }
+
         public DashboardDistrictsModel GetDashboardDistrictsModel()
         {
-
             var districts = DbSet
                 .Select(x => new DashboardDistrictItemModel
                 {
                     Id = x.Id,
                     Name = x.Name,
                     DistrictType = x.DistrictType,
-                    PersonsCount = x.Apartments.Sum(a => a.Flats.Sum(f => f.Persons.Count))
-                });
+                }).ToList();
+
+
+            var apartmentsList = DbSet.Select(x => x.Apartments).ToList();
+
+            if (apartmentsList.Count == districts.Count)
+            {
+                for (var i = 0; i < apartmentsList.Count; i++)
+                {
+                    districts[i].PersonsCount = GetPersonsCountByApartments(apartmentsList[i]);
+                }
+            }
 
             var constituencyDistrcits = districts
                 .Where(x => x.DistrictType == DistrictType.Сonstituency)
@@ -61,6 +76,49 @@ namespace Svbase.Core.Repositories.Implementation
                 CustomDistricts = customDistricts
             };
             return dashboardDistrictsModel;
+        }
+
+        public IEnumerable<int> GetPersonsIdsByDistrictIds(IEnumerable<int> districtIds)
+        {
+            if(districtIds == null) return new List<int>();
+            var districts = DbSet.Where(x => districtIds.ToList().Contains(x.Id)).Select(x => x);
+            if(!districts.Any())
+                return new List<int>();
+
+            var districtApartments = districts.Select(x => x.Apartments).ToList();
+            if(!districtApartments.Any())
+                return new List<int>();
+
+            var apartments = new List<Apartment>();
+            foreach (var districtApartment in districtApartments)
+            {
+                apartments.AddRange(districtApartment);
+            }
+
+            apartments = apartments.Distinct().ToList();
+            if(!apartments.Any())
+                return new List<int>();
+
+            var apartmentFlats = apartments.Select(x => x.Flats).ToList();
+            if (!apartmentFlats.Any())
+                return new List<int>();
+
+            var flats = new List<Flat>();
+            foreach (var apartmentFlat in apartmentFlats)
+            {
+                flats.AddRange(apartmentFlat);
+            }
+            if (!flats.Any())
+                return new List<int>();
+
+            var flatPersons = flats.Select(x => x.Persons);
+            var persons = new List<Person>();
+            foreach (var flatPerson in flatPersons)
+            {
+                persons.AddRange(flatPerson);
+            }
+            var personsIds = persons.Select(p => p.Id);
+            return personsIds;
         }
 
         //public DistrictCreateModel GetDistrictById(int id)

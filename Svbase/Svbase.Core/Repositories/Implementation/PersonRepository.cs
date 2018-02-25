@@ -41,19 +41,19 @@ namespace Svbase.Core.Repositories.Implementation
         public PersonViewModel GetPersonById(int id)
         {
             var person = DbSet.Select(x => new PersonViewModel()
-                {
-                    Id = x.Id,
-                    FirstName = x.FirstName,
-                    //MiddleName = x.MiddleName,
-                    LastName = x.LastName,
-                    //Position = x.Position,
-                    //Gender = x.Gender,
-                    //Email = x.Email,
-                    //FirthtMobilePhone = x.MobileTelephoneFirst,
-                    //SecondMobilePhone = x.MobileTelephoneSecond,
-                    //HomePhone = x.HomePhone,
-                    //PartionType = x.PartionType,
-                    //DateBirth = x.BirthdayDate
+            {
+                Id = x.Id,
+                FirstName = x.FirstName,
+                //MiddleName = x.MiddleName,
+                LastName = x.LastName,
+                //Position = x.Position,
+                //Gender = x.Gender,
+                //Email = x.Email,
+                //FirthtMobilePhone = x.MobileTelephoneFirst,
+                //SecondMobilePhone = x.MobileTelephoneSecond,
+                //HomePhone = x.HomePhone,
+                //PartionType = x.PartionType,
+                //DateBirth = x.BirthdayDate
                 //Streets = x.Streets.Select(s => new StreetCreateModel
                 //{
                 //    Id = s.Id,
@@ -86,6 +86,35 @@ namespace Svbase.Core.Repositories.Implementation
                 //return persons;
                 ;
             return new List<PersonViewModel>();
+        }
+
+        public IEnumerable<PersonViewModel> GetPersonsByIds(IEnumerable<int> ids)
+        {
+            if (ids == null) return new List<PersonViewModel>();
+            var persons = DbSet
+                .Where(x => ids.ToList().Contains(x.Id))
+                .Select(x => new PersonViewModel
+                {
+                    Id = x.Id,
+                    FirstName = x.FirstName,
+                    MiddleName = x.MiddleName,
+                    LastName = x.LastName,
+                    DateBirth = x.BirthdayDate,
+                    Gender = x.Gender,
+                    Position = x.Position,
+                    FirthtMobilePhone = x.MobileTelephoneFirst,
+                    SecondMobilePhone = x.MobileTelephoneSecond,
+                    HomePhone = x.StationaryPhone,
+                    Email = x.Email,
+                    PartionType = x.PartionType,
+                    Beneficiaries = x.Beneficiaries.Select(b => new CheckboxItemModel
+                    {
+                        Id = b.Id,
+                        Name = b.Name
+                    }).ToList()
+                })
+                .ToList();
+            return persons;
         }
     }
 }

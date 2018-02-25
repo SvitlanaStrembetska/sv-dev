@@ -122,5 +122,16 @@ namespace Svbase.Service.Implementation
             Add(newPerson);
             return true;
         }
+
+        public List<PersonViewModel> SearchPersonsByFilter(FilterSearchModel filter)
+        {
+            var personIdsByDistricts = RepositoryManager.Districts
+                .GetPersonsIdsByDistrictIds(filter.DistrictIds);
+
+            var personsIds = new List<int>();
+            personsIds.AddRange(personIdsByDistricts);
+            var persons = RepositoryManager.Persons.GetPersonsByIds(personsIds);
+            return persons.ToList();
+        }
     }
 }

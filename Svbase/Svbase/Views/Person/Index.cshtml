@@ -55,13 +55,11 @@
                     </li>
                     <li>
                         <a data-toggle="collapse" data-parent="#accordion" href="#apartments"><i class="fa fa-table fa-fw"></i> Будинки </a>
-                        <ul id="apartments" class="panel-collapse collapse nav nav-second-level">
-                        </ul>
+                        <ul id="apartments" class="panel-collapse collapse nav nav-second-level"></ul>
                     </li>
                     <li>
                         <a data-toggle="collapse" data-parent="#accordion" href="#flats"><i class="fa fa-wrench fa-fw"></i> Номер квартири<span class="fa arrow"></span></a>
-                        <ul id="flats" class="panel-collapse collapse nav nav-second-level">
-                        </ul>
+                        <ul id="flats" class="panel-collapse collapse nav nav-second-level"></ul>
                     </li>
                 </ul>
             </div>
@@ -87,7 +85,7 @@
             <div class="col-lg-12">
                 <div class="panel panel-default">
                     <div class="panel-body">
-                        <table class="table table-striped table-bordered table-hover table-horizontal-scroll" 
+                        <table class="table table-striped table-bordered table-hover table-horizontal-scroll"
                                id="dataTables-example">
                             <thead>
                                 <tr>
@@ -129,10 +127,21 @@
     });
 
     $(document).ready(() => {
+        subscribeEvents();
         getDistrictPartialView();
-        getCitiesPartialView();
-        getStreetsPartialView();
+        //getCitiesPartialView();
+        //getStreetsPartialView();
     });
+
+    function subscribeEvents() {
+        onClickSearch();
+    }
+
+    function onClickSearch() {
+        $("#search").click(() => {
+            search();
+        });
+    }
 
     //$("#districts-header").click(() => {
     //    getDistrictPartialView();
@@ -157,17 +166,45 @@
             if (data) {
                 $("#districts").html(data);
             }
-            subscribeOnClickDistrict();
+            //subscribeOnClickDistrict();
         });
     }
 
-    function subscribeOnClickDistrict() {
-        $("#districts input").change(() => {
-            getStreets();
+    function search() {
+        var urlAction = "@Url.Action("SearchPersonsByFilter")";
+        var districtIds = getCheckedDistrictIds();
+        var filter = {
+            districtIds: districtIds
+        };
+        //var json = JSON.stringify({filter: data});
+        $.ajax({
+            url: urlAction,
+            type: 'Post',
+            data: { filter: filter },
+            async: false
+        }).done((data) => {
+            $("#selectionBody").html(data);
         });
     }
 
-    function getCitiesPartialView() {
+    function getCheckedDistrictIds() {
+        var districtIds = [];
+        $("#districts input:checked").each((index, element) => {
+            if (!isNaN($(element).val())) {
+                var id = Number($(element).val());
+                districtIds.push(id);
+            }
+        });
+        return districtIds;
+    }
+
+    //function subscribeOnClickDistrict() {
+    //    $("#districts input").change(() => {
+    //        getStreets();
+    //    });
+    //}
+
+    @*function getCitiesPartialView() {
         var urlAction = "@Url.Action("FilterCities")";
         $.ajax({
             url: urlAction,
@@ -314,5 +351,5 @@
             }
         });
         return apartmentIds;
-    }
+    }*@
 </script>

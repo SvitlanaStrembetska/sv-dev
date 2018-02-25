@@ -44,6 +44,26 @@ namespace Svbase.Core.Models
         [Display(Name = "Квартира")]
         public int FlatId { get; set; }
         public IList<CheckboxItemModel> Beneficiaries { get; set; }
+
+        public PersonViewModel()
+        {
+        }
+
+        public PersonViewModel(Person person)
+        {
+            Id = person.Id;
+            FirstName = person.FirstName;
+            MiddleName = person.MiddleName;
+            LastName = person.LastName;
+            DateBirth = person.BirthdayDate;
+            Gender = person.Gender;
+            Position = person.Position;
+            FirthtMobilePhone = person.MobileTelephoneFirst;
+            SecondMobilePhone = person.MobileTelephoneSecond;
+            HomePhone = person.StationaryPhone;
+            Email = person.Email;
+            PartionType = person.PartionType;
+        }
         public Person Update(Person person)
         {
             person.Id = Id;

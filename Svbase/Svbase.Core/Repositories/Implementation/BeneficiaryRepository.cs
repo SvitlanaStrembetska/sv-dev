@@ -32,7 +32,7 @@ namespace Svbase.Core.Repositories.Implementation
                 Id = x.Id,
                 Name = x.Name,
                 PersonsCount = x.Persons.Count
-            });
+            }).ToList();
             return beneficiaries;
         }
 
