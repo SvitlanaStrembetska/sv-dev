@@ -152,3 +152,11 @@ button a.white-color:focus {
 .navbar-default .navbar-nav > li > a {
     color: #428bca !important;
 }
+
+.street-filter-parent-name {
+    margin-right: 15px;
+}
+
+.main-filter-raw-header {
+    cursor: pointer;
+}

@@ -4,6 +4,7 @@ namespace Svbase.Core.Models
 {
     public class ItemFilterModel
     {
+        public int ParentId { get; set; }
         public string ParentName { get; set; }
         public List<BaseViewModel> Items { get; set; }
     }

@@ -2,15 +2,44 @@
 
 @foreach (var filterItem in @Model)
 {
-    <li style="padding-left: 10px;">
-        <b>@filterItem.ParentName</b>
+    <li style="padding-left: 20px;">
+        <b>
+            <input id="@("streetParent_" + filterItem.ParentId)"
+                   type="checkbox"
+                   class="pull-right street-filter-parent-name"
+                   style="margin-right: 15px;"
+                   onchange="onChangeStreetParent(@filterItem.ParentId)" />
+            @filterItem.ParentName
+        </b>
     </li>
     foreach (var item in filterItem.Items)
     {
-        <li>
-            <a><input id="2" type="checkbox" value="@item.Id"> @item.Name</a>
+        <li class="@("street_"+filterItem.ParentId)">
+            <a>
+                <input id="2"
+                       type="checkbox"
+                       onchange="onChangeStreet(@filterItem.ParentId)"
+                       value="@item.Id">
+                @item.Name
+            </a>
         </li>
     }
-
 }
+
+<script>
+
+    function onChangeStreetParent(parentId) {
+        var value = $("#streetParent_" + parentId).prop("checked");
+        if (value) {
+            $(".street_" + parentId).find("input").prop('checked', true);
+        } else {
+            $(".street_" + parentId).find("input").prop('checked', false);
+        }
+    }
+
+    function onChangeStreet(parentId) {
+        $("#streetParent_" + parentId).prop("checked", false);
+    }
+
+</script>
 

@@ -25,9 +25,8 @@
                     </li>
                     <li>
                         <a id="districts-header"
-                           data-toggle="collapse"
-                           data-parent="#accordion"
-                           href="#districts">
+                           class="main-filter-raw-header"
+                           onclick="toggleInById('districts')">
                             <i class="fa fa-group fa-fw"></i>Округи
                         </a>
                         <ul id="districts" class="panel-collapse collapse nav nav-second-level">
@@ -36,9 +35,8 @@
                     </li>
                     <li>
                         <a id="cities-header"
-                           data-toggle="collapse"
-                           data-parent="#accordion"
-                           href="#cities">
+                           class="main-filter-raw-header"
+                           onclick="toggleInById('cities')">
                             <i class="fa fa-dashboard fa-fw"></i> Місто, район
                         </a>
                         <ul id="cities"
@@ -46,20 +44,27 @@
                     </li>
                     <li>
                         <a id="street-header"
-                           data-toggle="collapse"
-                           data-parent="#accordion"
-                           href="#streets">
+                           class="main-filter-raw-header"
+                           onclick="toggleInById('streets')">
                             <i class="fa fa-bar-chart-o fa-fw"></i> Вулиця<span class="fa arrow"></span>
                         </a>
                         <ul id="streets" class="panel-collapse collapse nav nav-second-level"></ul>
                     </li>
                     <li>
-                        <a data-toggle="collapse" data-parent="#accordion" href="#apartments"><i class="fa fa-table fa-fw"></i> Будинки </a>
-                        <ul id="apartments" class="panel-collapse collapse nav nav-second-level"></ul>
+                        <a class="main-filter-raw-header"
+                           onclick="toggleInById('apartments')">
+                            <i class="fa fa-table fa-fw"></i> Будинки
+                        </a>
+                        <ul id="apartments"
+                            class="panel-collapse collapse nav nav-second-level"></ul>
                     </li>
                     <li>
-                        <a data-toggle="collapse" data-parent="#accordion" href="#flats"><i class="fa fa-wrench fa-fw"></i> Номер квартири<span class="fa arrow"></span></a>
-                        <ul id="flats" class="panel-collapse collapse nav nav-second-level"></ul>
+                        <a class="main-filter-raw-header"
+                           onclick="toggleInById('flats')">
+                            <i class="fa fa-wrench fa-fw"></i> Номер квартири<span class="fa arrow"></span>
+                        </a>
+                        <ul id="flats"
+                            class="panel-collapse collapse nav nav-second-level"></ul>
                     </li>
                 </ul>
             </div>
@@ -72,12 +77,14 @@
                     <h2 class="page-header">Вибірка</h2>
                 </div>
                 <div class="col-md-6 ignore-padding">
-                   
+
                     <button class="btn btn-primary pull-right page-header">
-                    <a class="white-color" href="@Url.Action("Create", "Person")">Додати людину</a></button>
+                        <a class="white-color" href="@Url.Action("Create", "Person")">Додати людину</a>
+                    </button>
 
                     <button id="export" class="btn btn-default pull-right page-header margin-right">
-                    <a href="@Url.Action("Import", "Person")">Завантажити список</a></button>
+                        <a href="@Url.Action("Import", "Person")">Завантажити список</a>
+                    </button>
                 </div>
             </div>
         </div>
@@ -113,6 +120,11 @@
     </div>
 </div>
 <script>
+
+    function toggleInById(itemId) {
+        $("#" + itemId).toggle('in');
+    }
+
     $("#lastNameDisplay").click(function () {
         $("#lastNameHidden").hide();
 
@@ -240,7 +252,7 @@
 
 
 
-   
+
 
     function getCheckedCityIds() {
         var cityIds = [];
@@ -293,14 +305,6 @@
             }
         });
         return districtIds;
-    }
-
-
-
-    function subscribeOnClickStreet() {
-        $("#streets input").change(() => {
-            getApartments();
-        });
     }
 
     function getApartments() {
@@ -360,4 +364,6 @@
         });
         return apartmentIds;
     }
+
+
 </script>
