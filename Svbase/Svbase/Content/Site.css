@@ -94,9 +94,7 @@ li.dropdown {
 }
 
 .table-horizontal-scroll {
-    display: block;
     overflow-x: auto;
-    white-space: nowrap;
 }
 
 .white-color {
