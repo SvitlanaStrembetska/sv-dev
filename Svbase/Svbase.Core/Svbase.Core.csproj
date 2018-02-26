@@ -127,6 +127,7 @@
     <Compile Include="Models\DistrictViewModel.cs" />
     <Compile Include="Models\FilterSearchModel.cs" />
     <Compile Include="Models\FlatViewModel.cs" />
+    <Compile Include="Models\ItemFilterModel.cs" />
     <Compile Include="Models\PersonViewModel.cs" />
     <Compile Include="Models\BaseViewModel.cs" />
     <Compile Include="Models\StreetSearchFilterModel.cs" />

@@ -81,5 +81,64 @@ namespace Svbase.Core.Repositories.Implementation
             });
             return streets;
         }
+
+        public IEnumerable<int> GetPersonsIdsByCityIds(List<int> cityIds)
+        {
+            if(cityIds == null || !cityIds.Any())
+                return new List<int>();
+
+            var cities = DbSet.Where(x => cityIds.Contains(x.Id)).Select(x => x);
+            if (!cities.Any())
+                return new List<int>();
+
+            var cityStreets = cities.Select(x => x.Streets).ToList();
+            if (!cityStreets.Any())
+                return new List<int>();
+
+            var streets = new List<Street>();
+            foreach (var street in cityStreets)
+            {
+                streets.AddRange(street);
+            }
+
+            streets = streets.Distinct().ToList();
+            if (!streets.Any())
+                return new List<int>();
+
+            var streetApartments = streets.Select(x => x.Apartments).ToList();
+            if (!streetApartments.Any())
+                return new List<int>();
+
+            var apartments = new List<Apartment>();
+            foreach (var streetApartmentApartment in streetApartments)
+            {
+                apartments.AddRange(streetApartmentApartment);
+            }
+
+            apartments = apartments.Distinct().ToList();
+            if (!apartments.Any())
+                return new List<int>();
+
+            var apartmentFlats = apartments.Select(x => x.Flats).ToList();
+            if (!apartmentFlats.Any())
+                return new List<int>();
+
+            var flats = new List<Flat>();
+            foreach (var apartmentFlat in apartmentFlats)
+            {
+                flats.AddRange(apartmentFlat);
+            }
+            if (!flats.Any())
+                return new List<int>();
+
+            var flatPersons = flats.Select(x => x.Persons);
+            var persons = new List<Person>();
+            foreach (var flatPerson in flatPersons)
+            {
+                persons.AddRange(flatPerson);
+            }
+            var personsIds = persons.Select(p => p.Id);
+            return personsIds;
+        }
     }
 }

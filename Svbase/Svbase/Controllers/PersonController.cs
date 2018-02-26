@@ -39,17 +39,19 @@ namespace Svbase.Controllers
 
             return View(persons);
         }
+
         public ActionResult PersonsByBeneficiaryId(int id)
         {
             var persons = _personService.GetPersonsByBeneficiariesId(id);
-            return View("Index",persons);
+            return View("Index", persons);
         }
 
         public ActionResult Create()
         {
             var beneficiaries = _beneficiaryService.GetBeneficiariesForSelecting().ToList();
-            return View(new PersonViewModel { Beneficiaries = beneficiaries });
+            return View(new PersonViewModel {Beneficiaries = beneficiaries});
         }
+
         [Authorize(Roles = RoleConsts.Admin)]
         [HttpPost]
         public ActionResult Create(PersonViewModel model)
@@ -59,6 +61,7 @@ namespace Svbase.Controllers
                 ? RedirectToAction("Create")
                 : RedirectToAction("Index");
         }
+
         [Authorize(Roles = RoleConsts.Admin)]
         [HttpGet]
         public ActionResult Details(int id)
@@ -68,6 +71,7 @@ namespace Svbase.Controllers
             {
                 RedirectToAction("Index");
             }
+
             return View(person);
         }
 
@@ -105,6 +109,13 @@ namespace Svbase.Controllers
         //    var streets = _personService.GetStretsBaseModelByStreetSearchFilter(filter);
         //    return PartialView("_FilterCheckBoxPartial", streets.ToList());
         //}
+
+        [HttpGet]
+        public ActionResult FilterStreetsByCityIds(IList<int> cityIds)
+        {
+            var streets = _personService.GetFilterStreetsByCityIds(cityIds).ToList();
+            return PartialView("FilterItemPartial", streets);
+        }
 
         [HttpGet]
         public ActionResult FilterApartmentsByStreetIds(IList<int> streetIds)

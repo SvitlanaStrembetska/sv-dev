@@ -13,9 +13,9 @@ namespace Svbase.Service.Implementation
     public class PersonService : EntityService<IPersonRepository, Person>, IPersonService
     {
         public PersonService(IUnitOfWork unitOfWork, IRepositoryManager repositoryManager)
-            :base(unitOfWork,repositoryManager,repositoryManager.Persons)
+            : base(unitOfWork, repositoryManager, repositoryManager.Persons)
         {
-            
+
         }
 
         public IEnumerable<PersonViewModel> GetPersons()
@@ -81,6 +81,12 @@ namespace Svbase.Service.Implementation
             return apartments;
         }
 
+        public IEnumerable<ItemFilterModel> GetFilterStreetsByCityIds(IList<int> cityIds)
+        {
+            var streets = RepositoryManager.Streets.GetFilterStreetsByCityIds(cityIds);
+            return streets;
+        }
+
         public IEnumerable<BaseViewModel> GetFlatsBaseModelByApatrmentIds(IList<int> apartmentIds)
         {
             var flats = RepositoryManager.Apartments.GetFlatBaseModelByApartmentIds(apartmentIds);
@@ -125,11 +131,27 @@ namespace Svbase.Service.Implementation
 
         public List<PersonViewModel> SearchPersonsByFilter(FilterSearchModel filter)
         {
+            var personsIds = new List<int>();
+
             var personIdsByDistricts = RepositoryManager.Districts
                 .GetPersonsIdsByDistrictIds(filter.DistrictIds);
 
-            var personsIds = new List<int>();
+            if (filter.StreetIds == null && filter.CityIds != null)
+            {
+                var personIdsByCityIds = RepositoryManager.Cities
+                    .GetPersonsIdsByCityIds(filter.CityIds?.ToList());
+                personsIds.AddRange(personIdsByCityIds);
+            }
+
+            if (filter.ApartmentIds == null && filter.StreetIds != null)
+            {
+                var personIdsByStreetIds = RepositoryManager.Streets
+                    .GetPersonsIdsByStreetIds(filter.StreetIds?.ToList());
+                personsIds.AddRange(personIdsByStreetIds);
+            }
             personsIds.AddRange(personIdsByDistricts);
+
+            personsIds = personsIds.Distinct().ToList();
             var persons = RepositoryManager.Persons.GetPersonsByIds(personsIds);
             return persons.ToList();
         }

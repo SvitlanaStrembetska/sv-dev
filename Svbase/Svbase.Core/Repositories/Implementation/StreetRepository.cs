@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using Svbase.Core.Data;
 using Svbase.Core.Data.Entities;
@@ -81,6 +82,91 @@ namespace Svbase.Core.Repositories.Implementation
                 Name = x.Name
             });
             return apartments;
+        }
+
+        public IEnumerable<ItemFilterModel> GetFilterStreetsByCityIds(IList<int> cityIds)
+        {
+            if (cityIds == null || !cityIds.Any())
+            {
+                return new List<ItemFilterModel>();
+            }
+
+            var streetsDb = DbSet
+                .Where(x => cityIds.Contains(x.CityId))
+                .Include(x => x.City);
+
+            var streetList = new List<List<Street>>();
+            foreach (var cityId in cityIds)
+            {
+                var streetsById = streetsDb.Where(x => x.CityId == cityId).ToList();
+                streetList.Add(streetsById);
+            }
+            var filterItems = new List<ItemFilterModel>();
+            foreach (var streets in streetList)
+            {
+                var item = new ItemFilterModel
+                {
+                    ParentName = streets.FirstOrDefault()?.City?.Name,
+                    Items = streets.Select(x => new BaseViewModel
+                        {
+                            Id = x.Id,
+                            Name = x.Name
+                        })
+                        .ToList()
+                };
+                filterItems.Add(item);
+            }
+
+            return filterItems;
+        }
+
+        public IEnumerable<int> GetPersonsIdsByStreetIds(List<int> streetIds)
+        {
+            if (streetIds == null || !streetIds.Any())
+                return new List<int>();
+
+            var streets = DbSet.Where(x => streetIds.Contains(x.Id)).Select(x => x);
+            if (!streets.Any())
+                return new List<int>();
+
+            if (!streets.Any())
+                return new List<int>();
+
+            var streetApartments = streets.Select(x => x.Apartments).ToList();
+            if (!streetApartments.Any())
+                return new List<int>();
+
+            var apartments = new List<Apartment>();
+            foreach (var streetApartmentApartment in streetApartments)
+            {
+                apartments.AddRange(streetApartmentApartment);
+            }
+
+            apartments = apartments.Distinct().ToList();
+            if (!apartments.Any())
+                return new List<int>();
+
+            var apartmentFlats = apartments.Select(x => x.Flats).ToList();
+            if (!apartmentFlats.Any())
+                return new List<int>();
+
+            var flats = new List<Flat>();
+            foreach (var apartmentFlat in apartmentFlats)
+            {
+                flats.AddRange(apartmentFlat);
+            }
+            if (!flats.Any())
+                return new List<int>();
+
+            var flatPersons = flats.Select(x => x.Persons);
+            var persons = new List<Person>();
+            foreach (var flatPerson in flatPersons)
+            {
+                persons.AddRange(flatPerson);
+            }
+            var personsIds = persons.Select(p => p.Id);
+            return personsIds;
+
         }
     }
 }

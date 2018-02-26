@@ -129,7 +129,7 @@
     $(document).ready(() => {
         subscribeEvents();
         getDistrictPartialView();
-        //getCitiesPartialView();
+        getCitiesPartialView();
         //getStreetsPartialView();
     });
 
@@ -173,8 +173,13 @@
     function search() {
         var urlAction = "@Url.Action("SearchPersonsByFilter")";
         var districtIds = getCheckedDistrictIds();
+        var cityIds = getCheckedCityIds();
+        var streetIds = getCheckedStreetIds();
+
         var filter = {
-            districtIds: districtIds
+            districtIds: districtIds,
+            cityIds: cityIds,
+            streetIds: streetIds
         };
         //var json = JSON.stringify({filter: data});
         $.ajax({
@@ -204,7 +209,7 @@
     //    });
     //}
 
-    @*function getCitiesPartialView() {
+    function getCitiesPartialView() {
         var urlAction = "@Url.Action("FilterCities")";
         $.ajax({
             url: urlAction,
@@ -226,42 +231,16 @@
     }
 
     function getStreets() {
-        var districtIds = getCheckedDistrictIds();
         var cityIds = getCheckedCityIds();
         var filter = {
-            districtIds: districtIds,
             cityIds: cityIds
         }
-        getStreetsPartialViewByStreetSearchFilter(filter);
-    }
-
-    function getStreetsPartialView() {
-        var urlAction = "@Url.Action("FilterStreet")";
-        $.ajax({
-            url: urlAction,
-            type: 'Get',
-            data: {},
-            async: false
-        }).done((data) => {
-            if (data) {
-                $("#streets").html(data);
-            }
-            subscribeOnClickStreet();
-        });
+        getStreetsPartialViewByCityIds(filter);
     }
 
 
 
-    function getCheckedDistrictIds() {
-        var districtIds = [];
-        $("#districts input:checked").each((index, element) => {
-            if (!isNaN($(element).val())) {
-                var id = Number($(element).val());
-                districtIds.push(id);
-            }
-        });
-        return districtIds;
-    }
+   
 
     function getCheckedCityIds() {
         var cityIds = [];
@@ -274,8 +253,8 @@
         return cityIds;
     }
 
-    function getStreetsPartialViewByStreetSearchFilter(filter) {
-        var urlAction = "@Url.Action("FilterStreetsByStreetSearchFilter")";
+    function getStreetsPartialViewByCityIds(filter) {
+        var urlAction = "@Url.Action("FilterStreetsByCityIds")";
         $.ajax({
             url: urlAction,
             type: 'Get',
@@ -284,10 +263,39 @@
             async: false
         }).done((data) => {
             $("#streets").html(data);
-            subscribeOnClickStreet();
-            $("#apartments").empty();
+            //subscribeOnClickStreet();
+            //$("#apartments").empty();
         });
     }
+
+
+    @*function getStreetsPartialView() {
+         var urlAction = "@Url.Action("FilterStreet")";
+         $.ajax({
+             url: urlAction,
+             type: 'Get',
+             data: {},
+             async: false
+         }).done((data) => {
+             if (data) {
+                 $("#streets").html(data);
+             }
+             //subscribeOnClickStreet();
+         });
+     }*@
+
+    function getCheckedDistrictIds() {
+        var districtIds = [];
+        $("#districts input:checked").each((index, element) => {
+            if (!isNaN($(element).val())) {
+                var id = Number($(element).val());
+                districtIds.push(id);
+            }
+        });
+        return districtIds;
+    }
+
+
 
     function subscribeOnClickStreet() {
         $("#streets input").change(() => {
@@ -351,5 +359,5 @@
             }
         });
         return apartmentIds;
-    }*@
+    }
 </script>

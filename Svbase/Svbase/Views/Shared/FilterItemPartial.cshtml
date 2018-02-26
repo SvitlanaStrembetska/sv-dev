@@ -1,0 +1,16 @@
+﻿@model IList<Svbase.Core.Models.ItemFilterModel>
+
+@foreach (var filterItem in @Model)
+{
+    <li style="padding-left: 10px;">
+        <b>@filterItem.ParentName</b>
+    </li>
+    foreach (var item in filterItem.Items)
+    {
+        <li>
+            <a><input id="2" type="checkbox" value="@item.Id"> @item.Name</a>
+        </li>
+    }
+
+}
+
