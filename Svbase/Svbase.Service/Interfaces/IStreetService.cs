@@ -11,5 +11,6 @@ namespace Svbase.Service.Interfaces
         IEnumerable<StreetSelectModel> GetStreetsForSelecting();
         //IEnumerable<Street> GetStreetsByDistrictId(int id);
         IEnumerable<BaseViewModel> GetApartmentsBaseModelByStreetId(int id);
+        IEnumerable<ApartmentFilterModel> GetFilterApartmentsByStreetIds(IList<int> streetIds);
     }
 }

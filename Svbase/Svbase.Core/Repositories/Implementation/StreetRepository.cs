@@ -121,6 +121,81 @@ namespace Svbase.Core.Repositories.Implementation
             return filterItems;
         }
 
+        public IEnumerable<ApartmentFilterModel> GetFilterApartmentsByStreetIds(IList<int> streetIds)
+        {
+            if (streetIds == null || !streetIds.Any())
+            {
+                return new List<ApartmentFilterModel>();
+            }
+
+            var streetsDb = DbSet
+              .Where(x => streetIds.Contains(x.Id))
+              .Include(x => x.City)
+              .Include(x => x.Apartments);
+
+            var cityIds = streetsDb.Select(x => x.CityId).Distinct().ToList();
+            var streetList = new List<List<Street>>();
+            foreach (var cityId in cityIds)
+            {
+                var streetsByCityId = streetsDb.Where(x => x.CityId == cityId).ToList();
+                streetList.Add(streetsByCityId);
+            }
+
+            var filterItems = new List<ApartmentFilterModel>();
+            foreach (var streets in streetList)
+            {
+                var item = new ApartmentFilterModel
+                {
+                    City = new BaseViewModel
+                    {
+                        Id = streets.FirstOrDefault()?.CityId ?? 0,
+                        Name = streets.FirstOrDefault()?.City?.Name
+                    },
+                    Streets = streets.Select(x => new ItemFilterModel
+                    {
+                        ParentId = x.Id,
+                        ParentName = x.Name,
+                        Items = x.Apartments.Select(a => new BaseViewModel
+                        {
+                            Id = a.Id,
+                            Name = a.Name
+                        }).ToList()
+                    }).ToList()
+                };
+                filterItems.Add(item);
+            }
+
+
+            //var streets = streetsDb.Select(x => new ItemFilterModel
+            //{
+            //    ParentId = x.CityId,
+            //    ParentName = x.City.Name,
+            //    Items = x.Apartments.Select(a => new BaseViewModel
+            //    {
+            //        Id = a.Id,
+            //        Name = a.Name
+            //    }).ToList()
+            //}).ToList();
+
+            //var cityIds = streets.Select(x => x.ParentId).Distinct();
+            //var filterItems = new List<ApartmentFilterModel>();
+            //foreach(var cityId in cityIds)
+            //{
+            //    var cityStreets = streets.Where(x => x.ParentId == cityId).ToList();
+            //    var filterItem = new ApartmentFilterModel
+            //    {
+            //        City = new BaseViewModel
+            //        {
+            //            Id = cityStreets.FirstOrDefault()?.ParentId??0,
+            //            Name = cityStreets.FirstOrDefault()?.ParentName
+            //        },
+            //        Streets = cityStreets
+            //    };
+            //    filterItems.Add(filterItem);
+            //}
+            return filterItems;
+        }
+
         public IEnumerable<int> GetPersonsIdsByStreetIds(List<int> streetIds)
         {
             if (streetIds == null || !streetIds.Any())

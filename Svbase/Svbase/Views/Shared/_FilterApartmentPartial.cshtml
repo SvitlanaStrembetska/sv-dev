@@ -1,0 +1,41 @@
+﻿@model IList<Svbase.Core.Models.ApartmentFilterModel>
+
+@foreach (var filterItem in @Model)
+{
+    <li style="padding-left: 20px;">
+        <b>
+            @filterItem.City.Name
+        </b>
+    </li>
+    foreach (var street in filterItem.Streets)
+    {
+        <li style="padding-left: 30px;">
+            <span>
+                @street.ParentName
+            </span>
+        </li>
+        foreach (var apartment in street.Items)
+        {
+            <li class="@("apartment_"+street.ParentId) main-filter-raw-header">
+                <a>
+                    <input onchange="onChangeApartment(@street.ParentId)"
+                           type="checkbox"
+                           value="@apartment.Id">
+                    @apartment.Name
+                </a>
+            </li>
+        }
+    }
+}
+
+<script>
+
+    function onChangeApartment(streetId) {
+        uncheckStreetByStreetId(streetId);
+    }
+
+    function uncheckStreetByStreetId(streetId) {
+        $("#street_" + streetId).prop('checked', false);
+    }
+
+</script>

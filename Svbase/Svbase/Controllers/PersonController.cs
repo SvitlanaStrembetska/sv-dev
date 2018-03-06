@@ -86,7 +86,7 @@ namespace Svbase.Controllers
         public ActionResult FilterCities()
         {
             var cities = _personService.GetCitiesBaseViewModels();
-            return PartialView("_FilterCheckBoxPartial", cities);
+            return PartialView("_FilterCityPartial", cities);
         }
 
         [HttpGet]
@@ -120,8 +120,8 @@ namespace Svbase.Controllers
         [HttpGet]
         public ActionResult FilterApartmentsByStreetIds(IList<int> streetIds)
         {
-            var apartments = _personService.GetApartmentsBaseModelByStreetIds(streetIds);
-            return PartialView("_FilterCheckBoxPartial", apartments.ToList());
+            var apartments = _streetService.GetFilterApartmentsByStreetIds(streetIds);
+            return PartialView("_FilterApartmentPartial", apartments);
         }
 
         [HttpGet]

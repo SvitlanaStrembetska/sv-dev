@@ -160,3 +160,8 @@ button a.white-color:focus {
 .main-filter-raw-header {
     cursor: pointer;
 }
+
+.highlighted-filter-item {
+    background-color: #cde1f3 !important;
+    color:black;
+}

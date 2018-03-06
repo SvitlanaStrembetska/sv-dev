@@ -41,5 +41,11 @@ namespace Svbase.Service.Implementation
             var apartments = RepositoryManager.Streets.GetApartmentsBaseModelByStreetId(id);
             return apartments;
         }
+
+        public IEnumerable<ApartmentFilterModel> GetFilterApartmentsByStreetIds(IList<int> streetIds)
+        {
+            var apartments = RepositoryManager.Streets.GetFilterApartmentsByStreetIds(streetIds);
+            return apartments;
+        }
     }
 }

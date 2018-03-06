@@ -1,0 +1,13 @@
+﻿@model IList<Svbase.Core.Models.BaseViewModel>
+
+@foreach (var item in @Model)
+{
+    <li class="main-filter-raw-header">
+        <a>
+            <input class="filter-city-input"
+                   type="checkbox"
+                   id="@("city_"+item.Id)"
+                   value="@item.Id"> @item.Name
+        </a>
+    </li>
+}
