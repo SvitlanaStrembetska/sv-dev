@@ -106,6 +106,7 @@ namespace Svbase.Core.Repositories.Implementation
             {
                 var item = new ItemFilterModel
                 {
+                    ParentId = streets.FirstOrDefault()?.CityId ?? 0,
                     ParentName = streets.FirstOrDefault()?.City?.Name,
                     Items = streets.Select(x => new BaseViewModel
                         {
