@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8"/>
+    <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - SVBase Application</title>
     @Styles.Render("~/Content/css")
@@ -14,184 +14,111 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
-<div class="navbar navbar-fixed-top navbar-default navbar-static-top" role="navigation">
+    <div class="navbar navbar-fixed-top navbar-default navbar-static-top padding-lr" role="navigation">
 
-    <div class="navbar-header">
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand" href="@Url.Action("Index", "Person")">SB Адмін v 1.0</a>
-    </div>
-    <ul class="nav navbar-top-links navbar-right">
-        @if (Request.IsAuthenticated)
-        {
-            <li>
-                @Html.ActionLink(User.Identity.GetUserName() , "Index", "Person", routeValues: null, htmlAttributes: new {title = "Home"})
-            </li>
-        }
-            @*<li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        <i class="fa fa-envelope fa-fw"></i> <i class="fa fa-caret-down"></i>
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="@Url.Action("Details", "Dashboard")">SV Base</a>
+        </div>
+        <div class="navbar-collapse collapse" style="height: 1px;">
+            <ul class="nav navbar-nav navbar-top-links navbar-right padding-top-5">
+                @{
+                    string path = HttpContext.Current.Request.Url.AbsolutePath;
+                }
+                @if (Request.IsAuthenticated)
+                {
+                    <li>
+                        <a href="@Url.Action("Index", "Person")"><i class="fa fa-user fa-fw"></i> Усі люди</a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("Index", "Dashboard")"><i class="fa fa-archive fa-fw"></i> Вибірка</a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("Import", "Person")"><i class="fa fa-upload fa-fw"></i> Завантажити(.csv)</a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("List","Beneficiary")"><i class="fa fa-columns fa-fw"></i> Категорії</a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("List","District")"><i class="fa fa-database fa-fw"></i> Округи</a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("List", "City")"><i class="fa fa-book fa-fw"></i> Адреси</a>
+                    </li>
+
+                    if (path == "/Person/Index")
+                    {
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown">
+                                <i class="fa fa-tasks fa-fw"></i> <i class="fa fa-caret-down"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-tasks" id="hello">
+                                <li>
+                                    <a id="lastNameDisplay"> <input type="checkbox"> Прізвище </a>
+                                </li>
+                                <li>
+                                    <a id="firstNameDisplay"> <input type="checkbox"> Ім'я </a>
+                                </li>
+                                <li>
+                                    <a id="middleNameDisplay"><input type="checkbox"> По батькові</a>
+                                </li>
+                                <li>
+                                    <a id="addressDisplay"><input type="checkbox"> Адреса</a>
+                                </li>
+                                <li>
+                                    <a id="phoneFirthtDisplay"><input type="checkbox"> Телефон 1</a>
+                                </li>
+                                <li>
+                                    <a id="positionDisplay"><input type="checkbox"> Посада</a>
+                                </li>
+                                <li>
+                                    <a id="genderDisplay"><input type="checkbox"> Стать</a>
+                                </li>
+                                <li>
+                                    <a id="typePartionDisplay"><input type="checkbox"> Тип партії</a>
+                                </li>
+                                <li class="divider"></li>
+                                <li>
+                                    <a class="text-center" id="showAllDisplay">
+                                        <strong>Показати всіх</strong>
+                                        <i class="fa fa-angle-right"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    }
+                }
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown">
+                        <i class="fa fa-caret-down"></i>
                     </a>
-                    <ul class="dropdown-menu dropdown-messages">
-                        <li>
-                            <a href="#">
-                                <div>
-                                    <strong>John Smith</strong>
-                                    <span class="pull-right text-muted">
-                                        <em>Yesterday</em>
-                                    </span>
-                                </div>
-                                <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eleifend...</div>
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a href="#">
-                                <div>
-                                    <strong>John Smith</strong>
-                                    <span class="pull-right text-muted">
-                                        <em>Yesterday</em>
-                                    </span>
-                                </div>
-                                <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eleifend...</div>
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a href="#">
-                                <div>
-                                    <strong>John Smith</strong>
-                                    <span class="pull-right text-muted">
-                                        <em>Yesterday</em>
-                                    </span>
-                                </div>
-                                <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eleifend...</div>
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a class="text-center" href="#">
-                                <strong>Read All Messages</strong>
-                                <i class="fa fa-angle-right"></i>
-                            </a>
-                        </li>
+                    <ul class="dropdown-menu">
+                        @Html.Partial("_LoginPartial")
                     </ul>
-                </li>*@
-@{
-    string path = HttpContext.Current.Request.Url.AbsolutePath;
-}
-        @if (path == "/" || path == "/Person/Index") {
-            <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown">
-                    <i class="fa fa-tasks fa-fw"></i> <i class="fa fa-caret-down"></i>
-                </a>
-                <ul class="dropdown-menu dropdown-tasks" id="hello">
-                    <li>
-                        <a id="lastNameDisplay"> <input type="checkbox"> Прізвище </a>
-                    </li>
-                    <li>
-                        <a id="firstNameDisplay"> <input type="checkbox"> Ім'я </a>
-                    </li>
-                    <li>
-                        <a id="middleNameDisplay"><input type="checkbox"> По батькові</a>
-                    </li>
-                    <li>
-                        <a id="addressDisplay"><input type="checkbox"> Адреса</a>
-                    </li>
-                    <li>
-                        <a id="phoneFirthtDisplay"><input type="checkbox"> Телефон 1</a>
-                    </li>
-                    <li>
-                        <a id="positionDisplay"><input type="checkbox"> Посада</a>
-                    </li>
-                    <li>
-                        <a id="genderDisplay"><input type="checkbox"> Стать</a>
-                    </li>
-                    <li>
-                        <a id="typePartionDisplay"><input type="checkbox"> Тип партії</a>
-                    </li>
-                    <li class="divider"></li>
-                    <li>
-                        <a class="text-center" id="showAllDisplay">
-                            <strong>Показати всіх</strong>
-                            <i class="fa fa-angle-right"></i>
-                        </a>
-                    </li>
-                </ul>
-            </li>
-        }
-        <li class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown">
-                <i class="fa fa-bell fa-fw"></i> <i class="fa fa-caret-down"></i>
-            </a>
-            <ul class="dropdown-menu dropdown-alerts">
-                <li>
-                    <a href="@Url.Action("Export", "Person")">
-                        <div>
-                            <i class="fa fa-download fa-fw"></i> Зробити експорт
-                        </div>
-                    </a>
                 </li>
-                <li class="divider"></li>
-                <li>
-                    <a href="@Url.Action("Import", "Person")">
-                        <div>
-                            <i class="fa fa-upload fa-fw"></i> Зробити імпорт
-                        </div>
-                    </a>
-                </li>
-                @*<li class="divider"></li>
-                <li>
-                    <a href="#">
-                        <div>
-                            <i class="fa fa-envelope fa-fw"></i> Згенерувати лист
-                        </div>
-                    </a>
-                </li>*@
             </ul>
-        </li>
-        <li class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown">
-                <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
-            </a>
-            <ul class="dropdown-menu">
-                <li>
-                    <a href="@Url.Action("Create", "Person")"><i class="fa fa-user fa-fw"></i> Додати людину</a>
-                </li>
-                <li>
-                    <a href="@Url.Action("List","District")"><i class="fa fa-group fa-fw"></i> Округи</a>
-                </li>
-                <li>
-                    <a href="@Url.Action("List", "City")"><i class="fa fa-bank fa-fw"></i> Міста, райони</a>
-                </li>
-                <li>
-                    <a href="@Url.Action("List","Beneficiary")"><i class="fa fa-subway fa-fw"></i> Статуси</a>
-                </li>
-                <li class="divider"></li>
-                @Html.Partial("_LoginPartial")
-            </ul>
-        </li>
-    </ul>
-</div>
-<div>
-    @RenderBody()
-</div>
-@Scripts.Render("~/bundles/jquery")
-@Scripts.Render("~/bundles/bootstrap")
-<script defer src="https://use.fontawesome.com/releases/v5.0.2/js/all.js"></script>
+        </div>
+    </div>
+    <div>
+        @RenderBody()
+    </div>
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    <script defer src="https://use.fontawesome.com/releases/v5.0.2/js/all.js"></script>
 
-@RenderSection("scripts", required: false)
-<script src="~/Scripts/jquery-1.10.2.min.js"></script>
-<script src="~/Scripts/bootstrap.min.js"></script>
-<script src="~/Scripts/metisMenu.min.js"></script>
-<script src="~/Scripts/datatables/jquery.dataTables.min.js"></script>
-<script src="~/Scripts/datatables/dataTables.bootstrap.min.js"></script>
-<script src="~/Scripts/dataTables.responsive.js"></script>
-<script src="~/Scripts/sb-admin-2.js"></script>
+    @RenderSection("scripts", required: false)
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/metisMenu.min.js"></script>
+    <script src="~/Scripts/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/Scripts/datatables/dataTables.bootstrap.min.js"></script>
+    <script src="~/Scripts/dataTables.responsive.js"></script>
+    <script src="~/Scripts/sb-admin-2.js"></script>
 </body>
 </html>
 <script>

@@ -92,3 +92,63 @@ li.dropdown {
     position: relative;
     display: inline-block;
 }
+
+.table-horizontal-scroll {
+    overflow-x: auto;
+}
+
+.white-color {
+    color: #fff;
+    text-decoration: none;
+}
+
+button a.white-color:hover,
+button a.white-color:focus {
+    color: #fff;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.padding-right {
+    padding-right: 15px;
+}
+
+.padding-left {
+    padding-left: 15px;
+}
+
+.padding-top-5 {
+    padding-top: 5px;
+}
+
+.padding-top-7 {
+    padding-top: 7px;
+}
+
+.padding-lr {
+    padding: 0 20px;
+}
+
+.padding-20 {
+    padding: 20px;
+}
+
+.padding-item {
+    padding: 0 3px;
+}
+
+.margin-right {
+    margin-right: 15px !important;
+}
+
+.margin-top-30 {
+    margin-top: 30px;
+}
+
+.margin-left {
+    margin-left: 15px !important;
+}
+
+.navbar-default .navbar-nav > li > a {
+    color: #428bca !important;
+}
