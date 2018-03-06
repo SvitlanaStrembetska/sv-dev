@@ -62,6 +62,34 @@ namespace Svbase.Controllers
                 : RedirectToAction("Index");
         }
 
+        public ActionResult Edit(int id)
+        {
+            var beneficiaries = _beneficiaryService.GetBeneficiariesForSelecting().ToList();
+            var person = _personService.GetPersonById(id);
+
+            return View("Create",new PersonViewModel { Beneficiaries = beneficiaries });
+        }
+
+        [Authorize(Roles = RoleConsts.Admin)]
+        [HttpPost]
+        public ActionResult Edit(PersonViewModel model)
+        {
+            var isCreated = _personService.CreatePersonByModel(model);
+            return !isCreated
+                ? RedirectToAction("Create")
+                : RedirectToAction("Index");
+        }
+
+        public ActionResult Delete(int id)
+        {
+            var person = _personService.FindById(id);
+            if (person != null)
+            {
+                _personService.Delete(person);
+            }
+            return RedirectToAction("Index");
+        }
+
         [Authorize(Roles = RoleConsts.Admin)]
         [HttpGet]
         public ActionResult Details(int id)
@@ -159,10 +187,7 @@ namespace Svbase.Controllers
             return PartialView("_OptionSelectBasePartial", flats);
         }
 
-        //public ActionResult Edit()
-        //{
-        //    return View();
-        //}
+      
         //public ActionResult SearcResult()
         //{
         //    return PartialView();
