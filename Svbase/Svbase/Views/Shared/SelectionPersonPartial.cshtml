@@ -19,5 +19,17 @@
         <td>@person.Position</td>
         <td>@person.PartionType</td>
         <td>@person.DateBirth</td>
+        <td> 
+            <i style="color: red; cursor: pointer"
+               class="pull-right glyphicon glyphicon-trash"
+               data-action="delete"
+               data-item-id="@person.Id"></i>
+        </td>
+        <td>
+        <i style="color: gray; margin-right: 5px; cursor: pointer"
+           class="pull-right glyphicon glyphicon-pencil"
+           data-action="edit"
+           data-item-id="@person.Id"></i>
+        </td>
     </tr>
 }
