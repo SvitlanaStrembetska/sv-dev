@@ -1,0 +1,36 @@
+﻿@model IList<Svbase.Core.Models.CityFlatFilterModel>
+
+@foreach (var cityItem in Model)
+{
+    <li style="padding-left: 20px;">
+        <b>
+            @cityItem.City.Name
+        </b>
+    </li>
+    foreach (var streetItem in cityItem.Streets)
+    {
+        <li style="padding-left: 30px;">
+            <span>
+                @streetItem.Street.Name
+            </span>
+        </li>
+        foreach (var apartmentItem in streetItem.Apartments)
+        {
+            <li style="padding-left: 30px;">
+                <span>
+                    @apartmentItem.Apartment.Name
+                </span>
+            </li>
+            foreach (var flatItem in apartmentItem.Flats)
+            {
+                <li class="@("flat_"+apartmentItem.Apartment.Id) main-filter-raw-header">
+                    <a>
+                        <input type="checkbox"
+                               value="@flatItem.Id">
+                        @flatItem.Name
+                    </a>
+                </li>
+            }
+        }
+    }
+}

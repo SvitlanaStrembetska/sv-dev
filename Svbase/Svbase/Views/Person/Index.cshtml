@@ -304,20 +304,6 @@
         return streetIds;
     }
 
-    @*function getFlats() {
-        var apartmentIds = getCheckedApartmentIds();
-        var urlAction = "@Url.Action("FilterFlatsByApartmentIds")";
-        $.ajax({
-            url: urlAction,
-            type: 'Get',
-            traditional: true,
-            data: { apartmentIds: apartmentIds },
-            async: false
-        }).done((data) => {
-            $("#flats").html(data);
-        });
-    }*@
-
     function getCheckedApartmentIds() {
         var apartmentIds = [];
         $("#apartments input:checked").each((index, element) => {
@@ -435,15 +421,50 @@
                 var isHighlighted = $(target)
                     .parent().hasClass("highlighted-filter-item");
                 if (isChecked && !isHighlighted) {
-                    //changeHighlightedStatus($(target).parent());
-                    //getApartments();
+                    changeHighlightedStatus($(target).parent());
+                    getFlats()
                 } else {
                     //checkApartmentsByCheckedStreets();
                 }
             } else {
-                //changeHighlightedStatus(target);
-                //getApartments();
+                changeHighlightedStatus(target);
+                getFlats()
             }
+        });
+    }
+
+    function getFlats() {
+        var apartmentIds = getActiveApartmentIds();
+        var filter = {
+            apartmentIds: apartmentIds
+        }
+        getFlatsPartialViewByApartmentIds(filter);
+    }
+
+
+    function getActiveApartmentIds() {
+        var apartmentIds = [];
+        $("#apartments").find(".highlighted-filter-item input").each((index, element) => {
+            if (!isNaN($(element).val())) {
+                var id = Number($(element).val());
+                apartmentIds.push(id);
+            }
+        });
+        return apartmentIds;
+    }
+
+    function getFlatsPartialViewByApartmentIds(filter) {
+        var urlAction = "@Url.Action("FilterFlatsByApartmentIds")";
+        $.ajax({
+            url: urlAction,
+            type: 'Get',
+            traditional: true,
+            data: filter,
+            async: false
+        }).done((data) => {
+            $("#flats").html(data);
+            //checkApartmentsByCheckedStreets();
+            //subscribeOnClickApartment();
         });
     }
 

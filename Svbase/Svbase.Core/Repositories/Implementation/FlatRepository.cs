@@ -4,6 +4,7 @@ using Svbase.Core.Data.Entities;
 using Svbase.Core.Models;
 using Svbase.Core.Repositories.Abstract;
 using Svbase.Core.Repositories.Interfaces;
+using System.Collections.Generic;
 
 namespace Svbase.Core.Repositories.Implementation
 {
@@ -31,5 +32,19 @@ namespace Svbase.Core.Repositories.Implementation
 
             return flat;
         }
+
+        //public IEnumerable<ApartmentFilterModel> GetFilterFlatsByApartmentIds(IList<int> apartmentIds)
+        //{
+        //    if (apartmentIds == null || !apartmentIds.Any())
+        //    {
+        //        return new List<ApartmentFilterModel>();
+        //    }
+
+        //    var flatDb = DbSet
+        //      .Where(x => apartmentIds.Contains(x.Id));
+
+        //    var streets = apartmentsDb
+        //        .Select(x => x.s)
+        //}
     }
 }

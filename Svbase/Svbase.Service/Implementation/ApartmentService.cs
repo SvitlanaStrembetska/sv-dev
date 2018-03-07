@@ -28,5 +28,11 @@ namespace Svbase.Service.Implementation
             var flats = RepositoryManager.Apartments.GetFlatsBaseModelByApartmentId(id);
             return flats;
         }
+
+        public IEnumerable<CityFlatFilterModel> GetFilterFlatsByApartmentIds(IList<int> apartmentIds)
+        {
+            var items = RepositoryManager.Apartments.GetFilterFlatsByApartmentIds(apartmentIds);
+            return items;
+        }
     }
 }

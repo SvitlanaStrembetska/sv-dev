@@ -9,5 +9,6 @@ namespace Svbase.Service.Interfaces
     {
         ApartmentViewModel GetById(int id);
         IEnumerable<BaseViewModel> GetFlatsBaseModelByApartmentId(int id);
+        IEnumerable<CityFlatFilterModel> GetFilterFlatsByApartmentIds(IList<int> apartmentIds);
     }
 }
