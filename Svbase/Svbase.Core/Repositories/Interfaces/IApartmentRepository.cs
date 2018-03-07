@@ -10,5 +10,6 @@ namespace Svbase.Core.Repositories.Interfaces
         ApartmentViewModel GetById(int id);
         IEnumerable<BaseViewModel> GetFlatBaseModelByApartmentIds(IList<int> apartmentIds);
         IEnumerable<BaseViewModel> GetFlatsBaseModelByApartmentId(int id);
+        IEnumerable<int> GetPersonsIdsByApartmentIds(List<int> apartmentIds);
     }
 }

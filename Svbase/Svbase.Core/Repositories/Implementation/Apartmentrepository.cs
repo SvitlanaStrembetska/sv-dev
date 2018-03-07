@@ -64,5 +64,36 @@ namespace Svbase.Core.Repositories.Implementation
             });
             return flats;
         }
+
+        public IEnumerable<int> GetPersonsIdsByApartmentIds(List<int> apartmentIds)
+        {
+            if (apartmentIds == null || !apartmentIds.Any())
+                return new List<int>();
+
+            var apartments = DbSet
+                .Where(x => apartmentIds.Contains(x.Id))
+                .Select(x => x);
+
+            var apartmentFlats = apartments.Select(x => x.Flats).ToList();
+            if (!apartmentFlats.Any())
+                return new List<int>();
+
+            var flats = new List<Flat>();
+            foreach (var apartmentFlat in apartmentFlats)
+            {
+                flats.AddRange(apartmentFlat);
+            }
+            if (!flats.Any())
+                return new List<int>();
+
+            var flatPersons = flats.Select(x => x.Persons);
+            var persons = new List<Person>();
+            foreach (var flatPerson in flatPersons)
+            {
+                persons.AddRange(flatPerson);
+            }
+            var personsIds = persons.Select(p => p.Id);
+            return personsIds;
+        }
     }
 }

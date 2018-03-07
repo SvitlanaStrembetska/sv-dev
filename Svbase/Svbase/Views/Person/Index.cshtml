@@ -125,19 +125,6 @@
         $("#" + itemId).toggle('in');
     }
 
-    $("#lastNameDisplay").click(function () {
-        $("#lastNameHidden").hide();
-
-        @*$(".gradeX").each(function () {
-            $("#lastNameHidd-"+ @person.Id).hide();
-        });
-
-        @foreach (var person in Model)
-        {
-            $("#lastNameHidd-" + @person.Id).hide();
-        }*@
-    });
-
     $(document).ready(() => {
         subscribeEvents();
         getDistrictPartialView();
@@ -155,18 +142,6 @@
         });
     }
 
-    //$("#districts-header").click(() => {
-    //    getDistrictPartialView();
-    //});
-
-    //$("#cities-header").click(() => {
-    //    getCitiesPartialView();
-    //});
-
-    //$("#street-header").click(() => {
-    //    getStreetsPartialView();
-    //});
-
     function getDistrictPartialView() {
         var urlAction = "@Url.Action("FilterDistricts")";
         $.ajax({
@@ -178,7 +153,6 @@
             if (data) {
                 $("#districts").html(data);
             }
-            //subscribeOnClickDistrict();
         });
     }
 
@@ -187,11 +161,13 @@
         var districtIds = getCheckedDistrictIds();
         var cityIds = getCheckedCityIds();
         var streetIds = getCheckedStreetIds();
+        var apartmentIds = getCheckedApartmentIds();
 
         var filter = {
             districtIds: districtIds,
             cityIds: cityIds,
-            streetIds: streetIds
+            streetIds: streetIds,
+            apartmentIds: apartmentIds
         };
         //var json = JSON.stringify({filter: data});
         $.ajax({
@@ -237,13 +213,27 @@
     }
 
     function subscribeOnClickCity() {
-        $("#cities input").change(() => {
-            getStreets();
+        $("#cities > li > a").click((event) => {
+            var target = event.target;
+            if (target instanceof HTMLInputElement) {
+                var isChecked = $(target).prop("checked");
+                var isHighlighted = $(target)
+                    .parent().hasClass("highlighted-filter-item");
+                if (isChecked && !isHighlighted) {
+                    changeHighlightedStatus($(target).parent());
+                    getStreets();
+                } else {
+                    checkStreetsByCheckedCities();
+                }
+            } else {
+                changeHighlightedStatus(target);
+                getStreets();
+            }
         });
     }
 
     function getStreets() {
-        var cityIds = getCheckedCityIds();
+        var cityIds = getActiveCityIds();
         var filter = {
             cityIds: cityIds
         }
@@ -251,7 +241,16 @@
     }
 
 
-
+    function getActiveCityIds() {
+        var cityIds = [];
+        $("#cities").find(".highlighted-filter-item input").each((index, element) => {
+            if (!isNaN($(element).val())) {
+                var id = Number($(element).val());
+                cityIds.push(id);
+            }
+        });
+        return cityIds;
+    }
 
 
     function getCheckedCityIds() {
@@ -275,26 +274,11 @@
             async: false
         }).done((data) => {
             $("#streets").html(data);
-            //subscribeOnClickStreet();
-            //$("#apartments").empty();
+            checkStreetsByCheckedCities();
+            subscribeOnClickStreet();
+            getApartments();
         });
     }
-
-
-    @*function getStreetsPartialView() {
-         var urlAction = "@Url.Action("FilterStreet")";
-         $.ajax({
-             url: urlAction,
-             type: 'Get',
-             data: {},
-             async: false
-         }).done((data) => {
-             if (data) {
-                 $("#streets").html(data);
-             }
-             //subscribeOnClickStreet();
-         });
-     }*@
 
     function getCheckedDistrictIds() {
         var districtIds = [];
@@ -307,20 +291,7 @@
         return districtIds;
     }
 
-    function getApartments() {
-        var streetIds = getCheckedStreetIds();
-        var urlAction = "@Url.Action("FilterApartmentsByStreetIds")";
-        $.ajax({
-            url: urlAction,
-            type: 'Get',
-            traditional: true,
-            data: { streetIds: streetIds },
-            async: false
-        }).done((data) => {
-            $("#apartments").html(data);
-            subscribeOnClickApartment();
-        });
-    }
+
 
     function getCheckedStreetIds() {
         var streetIds = [];
@@ -333,13 +304,7 @@
         return streetIds;
     }
 
-    function subscribeOnClickApartment() {
-        $("#apartments input").change(() => {
-            getFlats();
-        });
-    }
-
-    function getFlats() {
+    @*function getFlats() {
         var apartmentIds = getCheckedApartmentIds();
         var urlAction = "@Url.Action("FilterFlatsByApartmentIds")";
         $.ajax({
@@ -350,9 +315,8 @@
             async: false
         }).done((data) => {
             $("#flats").html(data);
-            //subscribeOnClickStreet();
         });
-    }
+    }*@
 
     function getCheckedApartmentIds() {
         var apartmentIds = [];
@@ -365,5 +329,122 @@
         return apartmentIds;
     }
 
+    function checkStreetsByCheckedCities() {
+        uncheckAllStreets();
+        var cityIds = getCheckedCityIds();
+        if (!cityIds)
+            return;
+        cityIds.forEach((x) => {
+            var target = $(".street_" + x + " input");
+            $(target).prop("checked", true);
+            if (!$(target).parent().hasClass("highlighted-filter-item")) {
+                changeHighlightedStatus($(target).parent());
+            }
+            getApartments();
+        });
+    }
+
+    function uncheckAllStreets() {
+        $("#streets input").prop("checked", false);
+    }
+
+    function changeHighlightedStatus(target) {
+        var active = $(target).hasClass("highlighted-filter-item");
+        if(active){
+            $(target).removeClass("highlighted-filter-item");
+            $(target).children().prop("checked", false);
+        }else{
+            $(target).addClass("highlighted-filter-item");
+        }
+    }
+
+    function subscribeOnClickStreet() {
+        $("#streets > li > a").click((event) => {
+            var target = event.target;
+            if (target instanceof HTMLInputElement) {
+                var isChecked = $(target).prop("checked");
+                var isHighlighted = $(target)
+                    .parent().hasClass("highlighted-filter-item");
+                if (isChecked && !isHighlighted) {
+                    changeHighlightedStatus($(target).parent());
+                    getApartments();
+                } else {
+                    checkApartmentsByCheckedStreets();
+                }
+            } else {
+                changeHighlightedStatus(target);
+                getApartments();
+            }
+        });
+    }
+
+    function getApartments() {
+        var streetIds = getActiveStreetIds();
+        var filter = {
+            streetIds: streetIds
+        }
+        getApartmentsPartialViewByStreetIds(filter);
+    }
+
+    function getActiveStreetIds() {
+        var streetIds = [];
+        $("#streets").find(".highlighted-filter-item input").each((index, element) => {
+            if (!isNaN($(element).val())) {
+                var id = Number($(element).val());
+                streetIds.push(id);
+            }
+        });
+        return streetIds;
+    }
+
+    function getApartmentsPartialViewByStreetIds(filter) {
+        var urlAction = "@Url.Action("FilterApartmentsByStreetIds")";
+        $.ajax({
+            url: urlAction,
+            type: 'Get',
+            traditional: true,
+            data: filter,
+            async: false
+        }).done((data) => {
+            $("#apartments").html(data);
+            checkApartmentsByCheckedStreets();
+            subscribeOnClickApartment();
+        });
+    }
+
+    function checkApartmentsByCheckedStreets() {
+        uncheckAllApartments();
+        var streetIds = getCheckedStreetIds();
+        if (!streetIds)
+            return;
+        streetIds.forEach((x) => {
+            $(".apartment_" + x + " input").prop("checked", true);
+        });
+    }
+
+    function uncheckAllApartments() {
+        $("#apartments input").prop("checked", false);
+    }
+
+
+    function subscribeOnClickApartment() {
+        $("#apartments > li > a").click((event) => {
+            var target = event.target;
+            if (target instanceof HTMLInputElement) {
+                var isChecked = $(target).prop("checked");
+                var isHighlighted = $(target)
+                    .parent().hasClass("highlighted-filter-item");
+                if (isChecked && !isHighlighted) {
+                    //changeHighlightedStatus($(target).parent());
+                    //getApartments();
+                } else {
+                    //checkApartmentsByCheckedStreets();
+                }
+            } else {
+                //changeHighlightedStatus(target);
+                //getApartments();
+            }
+        });
+    }
 
 </script>

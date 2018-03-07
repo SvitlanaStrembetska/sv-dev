@@ -135,21 +135,28 @@ namespace Svbase.Service.Implementation
 
             var personIdsByDistricts = RepositoryManager.Districts
                 .GetPersonsIdsByDistrictIds(filter.DistrictIds);
+            personsIds.AddRange(personIdsByDistricts);
 
-            if (filter.StreetIds == null && filter.CityIds != null)
+            if (filter.CityIds != null)
             {
                 var personIdsByCityIds = RepositoryManager.Cities
                     .GetPersonsIdsByCityIds(filter.CityIds?.ToList());
                 personsIds.AddRange(personIdsByCityIds);
             }
 
-            if (filter.ApartmentIds == null && filter.StreetIds != null)
+            if (filter.StreetIds != null)
             {
                 var personIdsByStreetIds = RepositoryManager.Streets
                     .GetPersonsIdsByStreetIds(filter.StreetIds?.ToList());
                 personsIds.AddRange(personIdsByStreetIds);
             }
-            personsIds.AddRange(personIdsByDistricts);
+
+            if(filter.ApartmentIds != null)
+            {
+                var personIdsByApartmentIds = RepositoryManager.Apartments
+                    .GetPersonsIdsByApartmentIds(filter.ApartmentIds?.ToList());
+                personsIds.AddRange(personIdsByApartmentIds);
+            }
 
             personsIds = personsIds.Distinct().ToList();
             var persons = RepositoryManager.Persons.GetPersonsByIds(personsIds);

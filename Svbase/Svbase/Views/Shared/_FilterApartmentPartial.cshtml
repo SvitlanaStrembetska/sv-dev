@@ -18,7 +18,7 @@
         {
             <li class="@("apartment_"+street.ParentId) main-filter-raw-header">
                 <a>
-                    <input onchange="onChangeApartment(@street.ParentId)"
+                    <input onchange="onChangeApartment(@street.ParentId, @filterItem.City.Id)"
                            type="checkbox"
                            value="@apartment.Id">
                     @apartment.Name
@@ -30,12 +30,17 @@
 
 <script>
 
-    function onChangeApartment(streetId) {
+    function onChangeApartment(streetId, cityId) {
         uncheckStreetByStreetId(streetId);
+        uncheckCityByCityId(cityId);
     }
 
     function uncheckStreetByStreetId(streetId) {
         $("#street_" + streetId).prop('checked', false);
+    }
+
+    function uncheckCityByCityId(cityId) {
+        $("#city_" + cityId).prop('checked', false);
     }
 
 </script>
