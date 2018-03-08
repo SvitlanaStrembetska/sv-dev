@@ -1,0 +1,68 @@
+﻿@model IList<Svbase.Core.Models.CityFlatFilterModel>
+
+@foreach (var cityItem in Model)
+{
+    if (cityItem.Streets.Any() && cityItem.Streets.Any(s => s.Apartments.Any(a => a.Flats.Any())))
+    {
+        <li style="padding-left: 20px;">
+            <b>
+                @cityItem.City.Name
+            </b>
+        </li>
+        foreach (var streetItem in cityItem.Streets)
+        {
+            if (streetItem.Apartments.Any() && streetItem.Apartments.Any(a => a.Flats.Any()))
+            {
+                <li style="padding-left: 30px;">
+                    <span>
+                        @streetItem.Street.Name
+                    </span>
+                </li>
+                foreach (var apartmentItem in streetItem.Apartments)
+                {
+                    if (apartmentItem.Flats.Any())
+                    {
+                        <li style="padding-left: 30px;">
+                            <span>
+                                @apartmentItem.Apartment.Name
+                            </span>
+                        </li>
+                        foreach (var flatItem in apartmentItem.Flats)
+                        {
+                            <li class="@("flat_"+apartmentItem.Apartment.Id) main-filter-raw-header">
+                                <a>
+                                    <input type="checkbox"
+                                           onchange="onChangeFlat(@cityItem.City.Id, @streetItem.Street.Id, @apartmentItem.Apartment.Id)"
+                                           value="@flatItem.Id">
+                                    @flatItem.Name
+                                </a>
+                            </li>
+                        }
+                    }
+
+                }
+            }
+        }
+    }
+
+}
+
+<script>
+    function onChangeFlat(cityId, streetId, apartmentId) {
+        uncheckApartmentByApartmentId(apartmentId);
+        uncheckStreetByStreetId(streetId);
+        uncheckCityByCityId(cityId);
+    }
+
+    function uncheckApartmentByApartmentId(apartmentId) {
+        $("#apartment_" + apartmentId).prop('checked', false);
+    }
+
+    function uncheckStreetByStreetId(streetId) {
+        $("#street_" + streetId).prop('checked', false);
+    }
+
+    function uncheckCityByCityId(cityId) {
+        $("#city_" + cityId).prop('checked', false);
+    }
+</script>

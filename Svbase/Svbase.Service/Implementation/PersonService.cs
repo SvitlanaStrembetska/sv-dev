@@ -133,9 +133,12 @@ namespace Svbase.Service.Implementation
         {
             var personsIds = new List<int>();
 
-            var personIdsByDistricts = RepositoryManager.Districts
-                .GetPersonsIdsByDistrictIds(filter.DistrictIds);
-            personsIds.AddRange(personIdsByDistricts);
+            if(filter.DistrictIds != null)
+            {
+                var personIdsByDistricts = RepositoryManager.Districts
+               .GetPersonsIdsByDistrictIds(filter.DistrictIds);
+                personsIds.AddRange(personIdsByDistricts);
+            }
 
             if (filter.CityIds != null)
             {
@@ -156,6 +159,13 @@ namespace Svbase.Service.Implementation
                 var personIdsByApartmentIds = RepositoryManager.Apartments
                     .GetPersonsIdsByApartmentIds(filter.ApartmentIds?.ToList());
                 personsIds.AddRange(personIdsByApartmentIds);
+            }
+
+            if(filter.FlatIds != null)
+            {
+                var personIdsByFlatIds = RepositoryManager.Flats
+                    .GetPersonIdsByFlatIds(filter.FlatIds?.ToList());
+                personsIds.AddRange(personIdsByFlatIds);
             }
 
             personsIds = personsIds.Distinct().ToList();

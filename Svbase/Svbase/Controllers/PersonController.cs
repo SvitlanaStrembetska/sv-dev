@@ -167,8 +167,8 @@ namespace Svbase.Controllers
         [HttpGet]
         public ActionResult FilterFlatsByApartmentIds(IList<int> apartmentIds)
         {
-            var apartments = _personService.GetFlatsBaseModelByApatrmentIds(apartmentIds);
-            return PartialView("_FilterCheckBoxPartial", apartments.ToList());
+            var flats = _apartmentService.GetFilterFlatsByApartmentIds(apartmentIds);
+            return PartialView("_FilterFlatPartial", flats.ToList());
         }
 
         [HttpGet]

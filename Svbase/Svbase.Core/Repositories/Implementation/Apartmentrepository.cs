@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Data.Entity;
 using Svbase.Core.Data;
 using Svbase.Core.Data.Entities;
 using Svbase.Core.Models;
@@ -95,5 +96,72 @@ namespace Svbase.Core.Repositories.Implementation
             var personsIds = persons.Select(p => p.Id);
             return personsIds;
         }
+
+        public IEnumerable<CityFlatFilterModel> GetFilterFlatsByApartmentIds(IList<int> apartmentIds)
+        {
+            if (apartmentIds == null || !apartmentIds.Any())
+            {
+                return new List<CityFlatFilterModel>();
+            }
+
+            var apartmentsDb = DbSet
+                .Include(x => x.Street.City)
+                .Where(x => apartmentIds.Contains(x.Id));
+
+            var streetsDb = apartmentsDb
+                .Include(x => x.Street.City)
+                .Select(x => x.Street)
+                .Distinct();
+
+            streetsDb = streetsDb
+                .Include(x => x.City);
+
+            var cityIds = streetsDb.Select(x => x.CityId).Distinct().ToList();
+            var streetList = new List<List<Street>>();
+            foreach (var cityId in cityIds)
+            {
+                var streetsByCityId = streetsDb.Where(x => x.CityId == cityId).ToList();
+                streetList.Add(streetsByCityId);
+            }
+
+            var filterItems = new List<CityFlatFilterModel>();
+            foreach (var streets in streetList)
+            {
+                var item = new CityFlatFilterModel
+                {
+                    City = new BaseViewModel
+                    {
+                        Id = streets.FirstOrDefault()?.CityId ?? 0,
+                        Name = streets.FirstOrDefault()?.City?.Name
+                    },
+                    Streets = streets.Select(x => new StreetFlatFilterModel
+                    {
+                        Street = new BaseViewModel
+                        {
+                            Id = x.Id,
+                            Name = x.Name
+                        },
+                        Apartments = x.Apartments
+                            .Where(a => apartmentIds.Contains(a.Id))
+                            .Select(a => new ApartmentFlatModel
+                        {
+                            Apartment = new BaseViewModel
+                            {
+                                Id = a.Id,
+                                Name = a.Name
+                            },
+                            Flats = a.Flats.Select(f => new BaseViewModel
+                            {
+                                Id = f.Id,
+                                Name = f.Number
+                            }).ToList()
+                        }).ToList()
+                    }).ToList()
+                };
+                filterItems.Add(item);
+            }
+            return filterItems;
+        }
+
     }
 }

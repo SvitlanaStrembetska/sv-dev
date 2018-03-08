@@ -181,14 +181,16 @@
         var cityIds = getCheckedCityIds();
         var streetIds = getCheckedStreetIds();
         var apartmentIds = getCheckedApartmentIds();
+        var flatIds = getCheckedFlatIds();
 
         var filter = {
             districtIds: districtIds,
             cityIds: cityIds,
             streetIds: streetIds,
-            apartmentIds: apartmentIds
+            apartmentIds: apartmentIds,
+            flatIds: flatIds
         };
-        //var json = JSON.stringify({filter: data});
+
         $.ajax({
             url: urlAction,
             type: 'Post',
@@ -209,12 +211,6 @@
         });
         return districtIds;
     }
-
-    //function subscribeOnClickDistrict() {
-    //    $("#districts input").change(() => {
-    //        getStreets();
-    //    });
-    //}
 
     function getCitiesPartialView() {
         var urlAction = "@Url.Action("FilterCities")";
@@ -323,20 +319,6 @@
         return streetIds;
     }
 
-    @*function getFlats() {
-        var apartmentIds = getCheckedApartmentIds();
-        var urlAction = "@Url.Action("FilterFlatsByApartmentIds")";
-        $.ajax({
-            url: urlAction,
-            type: 'Get',
-            traditional: true,
-            data: { apartmentIds: apartmentIds },
-            async: false
-        }).done((data) => {
-            $("#flats").html(data);
-        });
-    }*@
-
     function getCheckedApartmentIds() {
         var apartmentIds = [];
         $("#apartments input:checked").each((index, element) => {
@@ -346,6 +328,17 @@
             }
         });
         return apartmentIds;
+    }
+
+    function getCheckedFlatIds() {
+        var flatIds = [];
+        $("#flats input:checked").each((index, element) => {
+            if (!isNaN($(element).val())) {
+                var id = Number($(element).val());
+                flatIds.push(id);
+            }
+        });
+        return flatIds;
     }
 
     function checkStreetsByCheckedCities() {
@@ -437,8 +430,13 @@
         if (!streetIds)
             return;
         streetIds.forEach((x) => {
-            $(".apartment_" + x + " input").prop("checked", true);
+            var target = $(".apartment_" + x + " input");
+            $(target).prop("checked", true);
+            if (!$(target).parent().hasClass("highlighted-filter-item")) {
+                changeHighlightedStatus($(target).parent());
+            }
         });
+        getFlats();
     }
 
     function uncheckAllApartments() {
@@ -454,15 +452,63 @@
                 var isHighlighted = $(target)
                     .parent().hasClass("highlighted-filter-item");
                 if (isChecked && !isHighlighted) {
-                    //changeHighlightedStatus($(target).parent());
-                    //getApartments();
+                    changeHighlightedStatus($(target).parent());
+                    getFlats()
                 } else {
-                    //checkApartmentsByCheckedStreets();
+                    checkFlatsByCheckedApartments();
                 }
             } else {
-                //changeHighlightedStatus(target);
-                //getApartments();
+                changeHighlightedStatus(target);
+                getFlats()
             }
+        });
+    }
+
+    function checkFlatsByCheckedApartments() {
+        uncheckAllFlats();
+        var apartmentIds = getCheckedApartmentIds();
+        if (!apartmentIds)
+            return;
+        apartmentIds.forEach((x) => {
+            $(".flat_" + x + " input").prop("checked", true);
+        });
+    }
+
+    function uncheckAllFlats() {
+        $("#flats input").prop("checked", false);
+    }
+
+    function getFlats() {
+        var apartmentIds = getActiveApartmentIds();
+        var filter = {
+            apartmentIds: apartmentIds
+        }
+        getFlatsPartialViewByApartmentIds(filter);
+    }
+
+
+    function getActiveApartmentIds() {
+        var apartmentIds = [];
+        $("#apartments").find(".highlighted-filter-item input").each((index, element) => {
+            if (!isNaN($(element).val())) {
+                var id = Number($(element).val());
+                apartmentIds.push(id);
+            }
+        });
+        return apartmentIds;
+    }
+
+    function getFlatsPartialViewByApartmentIds(filter) {
+        var urlAction = "@Url.Action("FilterFlatsByApartmentIds")";
+        $.ajax({
+            url: urlAction,
+            type: 'Get',
+            traditional: true,
+            data: filter,
+            async: false
+        }).done((data) => {
+            $("#flats").html(data);
+            checkFlatsByCheckedApartments();
         });
     }
 

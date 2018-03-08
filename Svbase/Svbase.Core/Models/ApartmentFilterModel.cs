@@ -10,5 +10,5 @@ namespace Svbase.Core.Models
     {
         public BaseViewModel City { get; set; }
         public List<ItemFilterModel> Streets { get; set; }
-    }
+    }   
 }
