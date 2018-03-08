@@ -403,6 +403,7 @@
     <Content Include="Views\Shared\FilterItemPartial.cshtml" />
     <Content Include="Views\Shared\_FilterCityPartial.cshtml" />
     <Content Include="Views\Shared\_FilterApartmentPartial.cshtml" />
+    <Content Include="Views\Shared\_PersonEdit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

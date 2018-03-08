@@ -83,39 +83,12 @@
                         <div class="col-md-12 block-container">
                             @Html.LabelFor(model => model.Gender, htmlAttributes: new { @class = "control-label col-md-2" })
                             <div class="col-md-10 padding-top-7">
-                                @*<input value="1" name="product" class="product-list" type="checkbox">Product 1
-                                    <input value="2" name="product" class="product-list" type="checkbox">Product 2*@
-                                @*<div class="col-md-2 col-sm-12 radio" type="checkbox" value="1">
-                                        @Html.EditorFor(model => model.Gender)
-                                        @Html.ValidationMessageFor(model => model.Gender, "", new { @class = "text-danger inline-block" })
-                                        <div class="inline-block">Жінка</div>
-                                    </div>
-                                    <div class="col-md-2 col-sm-12 radio" type="checkbox" value="2">
-                                        @Html.EditorFor(model => model.Gender)
-                                        @Html.ValidationMessageFor(model => model.Gender, "", new { @class = "text-danger inline-block" })
-                                        <div class="inline-block">Чоловік</div>
-                                    </div>*@
+                          
                                 @Html.RadioButtonFor(m => m.Gender, true) @Html.Label("Чоловік")
                                 <span class="padding-left"></span>
                                 @Html.RadioButtonFor(m => m.Gender, false) @Html.Label("Жінка")
                             </div>
                         </div>
-                        @*<div class="col-md-12 block-container">
-                                <div class="col-md-6 ignore-padding">
-                                    @Html.LabelFor(model => model.Position, htmlAttributes: new { @class = "col-md-12" })
-                                    <div class="col-md-12">
-                                        @Html.EditorFor(model => model.Position, new { htmlAttributes = new { @class = "form-control" } })
-                                        @Html.ValidationMessageFor(model => model.Position, "", new { @class = "text-danger" })
-                                    </div>
-                                </div>
-                                <div class="col-md-6 ignore-padding">
-                                    @Html.LabelFor(model => model.PartionType, htmlAttributes: new { @class = "col-md-12" })
-                                    <div class="col-md-12">
-                                        @Html.EditorFor(model => model.PartionType, new { htmlAttributes = new { @class = "form-control" } })
-                                        @Html.ValidationMessageFor(model => model.PartionType, "", new { @class = "text-danger" })
-                                    </div>
-                                </div>
-                            </div>*@
                         <div class="col-md-12 block-container">
                             <div class="col-sm-6">
                                 <div class="col-sm-12 ignore-padding">
@@ -161,29 +134,6 @@
                                 </div>
                             </div>
                         </div>
-                        @*<div class="form-group">
-                                @Html.LabelFor(model => model.BeneficiaryId, htmlAttributes: new { @class = "control-label col-md-2" })
-                                <div class="col-md-10">
-                                    @Html.EditorFor(model => model.BeneficiaryId, new { htmlAttributes = new { @class = "form-control" } })
-                                    @Html.ValidationMessageFor(model => model.BeneficiaryId, "", new { @class = "text-danger" })
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                @Html.LabelFor(model => model.DistrictId, htmlAttributes: new { @class = "control-label col-md-2" })
-                                <div class="col-md-10">
-                                    @Html.EditorFor(model => model.DistrictId, new { htmlAttributes = new { @class = "form-control" } })
-                                    @Html.ValidationMessageFor(model => model.DistrictId, "", new { @class = "text-danger" })
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                @Html.LabelFor(model => model.FlatId, htmlAttributes: new { @class = "control-label col-md-2" })
-                                <div class="col-md-10">
-                                    @Html.EditorFor(model => model.FlatId, new { htmlAttributes = new { @class = "form-control" } })
-                                    @Html.ValidationMessageFor(model => model.FlatId, "", new { @class = "text-danger" })
-                                </div>
-                            </div>*@
                     </div>
                     <div class="col-md-3">
                         <div class="col-md-12 ignore-padding margin-top-30">
@@ -219,11 +169,6 @@
                         </div>
                     </div>
                 </div>
-                @*<div class="col-md-12">
-                        <div class="col-md-12 ignore-padding">
-                            <input type="submit" value="Створити" class="btn btn-default pull-right btn-svb" />
-                        </div>
-                    </div>*@
             </div>
         </div>
     }

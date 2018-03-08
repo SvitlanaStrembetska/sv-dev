@@ -61,33 +61,45 @@ namespace Svbase.Controllers
                 ? RedirectToAction("Create")
                 : RedirectToAction("Index");
         }
-
-        public ActionResult Edit(int id)
-        {
-            var beneficiaries = _beneficiaryService.GetBeneficiariesForSelecting().ToList();
-            var person = _personService.GetPersonById(id);
-
-            return View("Create",new PersonViewModel { Beneficiaries = beneficiaries });
-        }
-
         [Authorize(Roles = RoleConsts.Admin)]
         [HttpPost]
         public ActionResult Edit(PersonViewModel model)
         {
-            var isCreated = _personService.CreatePersonByModel(model);
-            return !isCreated
-                ? RedirectToAction("Create")
-                : RedirectToAction("Index");
+            if (model == null)
+            {
+                return Json(new { status = "error" });
+            }
+
+            var person = _personService.FindById(model.Id);
+            if (person == null)
+            {
+                return Json(new { status = "error" });
+            }
+            person.FirstName = model.FirstName;
+            person.LastName = model.LastName;
+            person.MiddleName = person.MiddleName;
+            person.Gender = person.Gender;
+            person.Email = person.Email;
+            person.MobileTelephoneFirst = person.MobileTelephoneFirst;
+            person.MobileTelephoneSecond = person.MobileTelephoneSecond;
+            person.BirthdayDate = person.BirthdayDate;
+            person.StationaryPhone = person.StationaryPhone;
+            person.PartionType = person.PartionType;
+            person.Position = person.Position;
+            person.Beneficiaries = person.Beneficiaries;
+            person.Flats = person.Flats;
+
+            _personService.Update(person);
+
+            return Json(new { status = "success" });
         }
 
+        [Authorize(Roles = RoleConsts.Admin)]
+        [HttpGet]
         public ActionResult Delete(int id)
         {
-            var person = _personService.FindById(id);
-            if (person != null)
-            {
-                _personService.Delete(person);
-            }
-            return RedirectToAction("Index");
+            _personService.DeleteById(id);
+            return null;
         }
 
         [Authorize(Roles = RoleConsts.Admin)]
@@ -148,8 +160,8 @@ namespace Svbase.Controllers
         [HttpGet]
         public ActionResult FilterApartmentsByStreetIds(IList<int> streetIds)
         {
-            var apartments = _streetService.GetFilterApartmentsByStreetIds(streetIds);
-            return PartialView("_FilterApartmentPartial", apartments);
+            var filterApartments = _streetService.GetFilterApartmentsByStreetIds(streetIds);
+            return PartialView("_FilterApartmentPartial", filterApartments.ToList());
         }
 
         [HttpGet]

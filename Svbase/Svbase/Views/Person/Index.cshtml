@@ -77,11 +77,9 @@
                     <h2 class="page-header">Вибірка</h2>
                 </div>
                 <div class="col-md-6 ignore-padding">
-
                     <button class="btn btn-primary pull-right page-header">
                         <a class="white-color" href="@Url.Action("Create", "Person")">Додати людину</a>
                     </button>
-
                     <button id="export" class="btn btn-default pull-right page-header margin-right">
                         <a href="@Url.Action("Import", "Person")">Завантажити список</a>
                     </button>
@@ -96,17 +94,22 @@
                                id="dataTables-example">
                             <thead>
                                 <tr>
+                                   
+                                    <th id="lastNameHidden">Прізвище</th>
                                     <th>Ім'я</th>
                                     <th>По батькові</th>
-                                    <th id="lastNameHidden">Прізвище</th>
+                                    <th>Місто</th>
+                                    <th>Вулиця</th>
+                                    <th>Будинок</th>
+                                    <th>Квартира</th>
+                                    <th>Моб. тел. 1</th>
+                                    <th>Моб. тел. 2</th>
+                                    <th>Дом. тел.</th>
+                                    <th>Категорія</th>
                                     <th>Емейл</th>
-                                    <th>Категорії</th>
-                                    <th>Мобільний телефон 1</th>
-                                    <th>Мобільний телефон 2</th>
-                                    <th>Домашній телефон</th>
-                                    <th>Позиція</th>
-                                    <th>Партійний тип</th>
-                                    <th>Дата народження</th>
+                                    @*<th>Позиція</th>*@
+                                    @*<th>Партійний тип</th>*@
+                                    <th>Дата<br> народження</th>
                                 </tr>
                             </thead>
                             <tbody id="selectionBody">
@@ -119,7 +122,24 @@
         </div>
     </div>
 </div>
+@Html.Partial("_PersonEdit")
+
 <script>
+    $('[data-action="edit"]').click(function() {
+
+        var id = $(this).data('itemId');
+        $('#EditId').val(id);
+        $('#personEditModal').modal();
+    });
+
+    $('[data-action="delete"]').click(function() {
+        var that = this;
+        var id = $(this).data('itemId');
+        $.get('@Url.Action("Delete","Person")', { id })
+            .done(() => {
+                $(that).parent().parent().remove();
+            });
+    });
 
     function toggleInById(itemId) {
         $("#" + itemId).toggle('in');
@@ -129,7 +149,6 @@
         subscribeEvents();
         getDistrictPartialView();
         getCitiesPartialView();
-        //getStreetsPartialView();
     });
 
     function subscribeEvents() {
@@ -350,10 +369,10 @@
 
     function changeHighlightedStatus(target) {
         var active = $(target).hasClass("highlighted-filter-item");
-        if(active){
+        if (active) {
             $(target).removeClass("highlighted-filter-item");
             $(target).children().prop("checked", false);
-        }else{
+        } else {
             $(target).addClass("highlighted-filter-item");
         }
     }
