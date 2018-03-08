@@ -2,28 +2,35 @@
 
 @foreach (var filterItem in @Model)
 {
-    <li style="padding-left: 20px;">
-        <b>
-            @filterItem.City.Name
-        </b>
-    </li>
-    foreach (var street in filterItem.Streets)
+    if (filterItem.Streets.Any() && filterItem.Streets.Any(x => x.Items.Any()))
     {
-        <li style="padding-left: 30px;">
-            <span>
-                @street.ParentName
-            </span>
+        <li style="padding-left: 20px;">
+            <b>
+                @filterItem.City.Name
+            </b>
         </li>
-        foreach (var apartment in street.Items)
+        foreach (var street in filterItem.Streets)
         {
-            <li class="@("apartment_"+street.ParentId) main-filter-raw-header">
-                <a>
-                    <input onchange="onChangeApartment(@street.ParentId, @filterItem.City.Id)"
-                           type="checkbox"
-                           value="@apartment.Id">
-                    @apartment.Name
-                </a>
-            </li>
+            if (street.Items.Any())
+            {
+                <li style="padding-left: 30px;">
+                    <span>
+                        @street.ParentName
+                    </span>
+                </li>
+                foreach (var apartment in street.Items)
+                {
+                    <li class="@("apartment_"+street.ParentId) main-filter-raw-header">
+                        <a>
+                            <input onchange="onChangeApartment(@street.ParentId, @filterItem.City.Id)"
+                                   id="apartment_@apartment.Id"
+                                   type="checkbox"
+                                   value="@apartment.Id">
+                            @apartment.Name
+                        </a>
+                    </li>
+                }
+            }
         }
     }
 }

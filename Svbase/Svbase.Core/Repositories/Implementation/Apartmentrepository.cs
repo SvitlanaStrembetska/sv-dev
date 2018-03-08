@@ -109,8 +109,12 @@ namespace Svbase.Core.Repositories.Implementation
                 .Where(x => apartmentIds.Contains(x.Id));
 
             var streetsDb = apartmentsDb
+                .Include(x => x.Street.City)
                 .Select(x => x.Street)
                 .Distinct();
+
+            streetsDb = streetsDb
+                .Include(x => x.City);
 
             var cityIds = streetsDb.Select(x => x.CityId).Distinct().ToList();
             var streetList = new List<List<Street>>();

@@ -33,6 +33,27 @@ namespace Svbase.Core.Repositories.Implementation
             return flat;
         }
 
+        public IEnumerable<int> GetPersonIdsByFlatIds(List<int> flatIds)
+        {
+            if (flatIds == null || !flatIds.Any())
+                return new List<int>();
+
+            var flats = DbSet
+                .Where(x => flatIds.Contains(x.Id));
+
+            if (!flats.Any())
+                return new List<int>();
+
+            var flatPersons = flats.Select(x => x.Persons);
+            var persons = new List<Person>();
+            foreach (var flatPerson in flatPersons)
+            {
+                persons.AddRange(flatPerson);
+            }
+            var personsIds = persons.Select(p => p.Id);
+            return personsIds;
+        }
+
         //public IEnumerable<ApartmentFilterModel> GetFilterFlatsByApartmentIds(IList<int> apartmentIds)
         //{
         //    if (apartmentIds == null || !apartmentIds.Any())
