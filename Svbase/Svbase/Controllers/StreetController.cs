@@ -33,7 +33,7 @@ namespace Svbase.Controllers
 
             var newStreetItem = model.Update(new Street());
             newStreetItem = _streetService.Add(newStreetItem);
-            return RedirectToAction("Details", new { id = newStreetItem.Id });
+            return RedirectToAction("Details", "City", new { id = model.CityId });
         }
 
         [Authorize(Roles = RoleConsts.Admin)]

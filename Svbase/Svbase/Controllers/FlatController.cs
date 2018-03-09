@@ -47,7 +47,7 @@ namespace Svbase.Controllers
 
             var newFlatItem = model.Update(new Flat());
             newFlatItem = _flatService.Add(newFlatItem);
-            return RedirectToAction("Details", new { id = newFlatItem.Id });
+            return RedirectToAction("Details", "Apartment", new { id = model.ApartmentId });
         }
 
         [Authorize(Roles = RoleConsts.Admin)]

@@ -41,7 +41,7 @@ namespace Svbase.Controllers
                     status = "success"
                 });
             }
-            return RedirectToAction("Details", new {id = newCityItem.Id});
+            return RedirectToAction("List");
         }
 
         [Authorize(Roles = RoleConsts.Admin)]

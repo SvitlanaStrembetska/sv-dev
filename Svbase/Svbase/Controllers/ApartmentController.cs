@@ -34,7 +34,7 @@ namespace Svbase.Controllers
 
             var newApartmentItem = model.Update(new Apartment());
             newApartmentItem = _apartmentService.Add(newApartmentItem);
-            return RedirectToAction("Details", new { id = newApartmentItem.Id });
+            return RedirectToAction("Details", "Street", new { id = model.StreetId });
         }
 
         [Authorize(Roles = RoleConsts.Admin)]
