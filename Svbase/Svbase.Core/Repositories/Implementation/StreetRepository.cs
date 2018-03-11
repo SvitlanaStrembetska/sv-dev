@@ -16,7 +16,7 @@ namespace Svbase.Core.Repositories.Implementation
 
         public StreetViewModel GetStreetById(int id)
         {
-            var street = DbSet.Select(x => new StreetViewModel
+            var street = DbSet.OrderBy(y => y.Name).Select(x => new StreetViewModel
             {
                 Id = x.Id,
                 Name = x.Name,
@@ -33,7 +33,7 @@ namespace Svbase.Core.Repositories.Implementation
 
         public IEnumerable<StreetSelectModel> GetStreetsForSelecting()
         {
-            var streets = DbSet.Select(x => new StreetSelectModel
+            var streets = DbSet.OrderBy(y => y.Name).Select(x => new StreetSelectModel
             {
                 Id = x.Id,
                 Name = x.Name,
@@ -151,7 +151,7 @@ namespace Svbase.Core.Repositories.Implementation
                         Id = streets.FirstOrDefault()?.CityId ?? 0,
                         Name = streets.FirstOrDefault()?.City?.Name
                     },
-                    Streets = streets.Select(x => new ItemFilterModel
+                    Streets = streets.OrderBy(y => y.Name).Select(x => new ItemFilterModel
                     {
                         ParentId = x.Id,
                         ParentName = x.Name,
