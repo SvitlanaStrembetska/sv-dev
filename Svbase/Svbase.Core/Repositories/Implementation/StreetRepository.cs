@@ -20,6 +20,7 @@ namespace Svbase.Core.Repositories.Implementation
             {
                 Id = x.Id,
                 Name = x.Name,
+                CityId = x.CityId,
                 CanDelete = !x.Apartments.Any(),
                 Apartments = x.Apartments.Select(a => new ApartmentCreateModel
                 {

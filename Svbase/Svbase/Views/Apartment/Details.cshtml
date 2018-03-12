@@ -3,7 +3,14 @@
 <div class="container body-content margin-top">
     <div class="row">
         <div class="col-sm-12">
-            <h2 style="margin-top: 0">@Model.Name</h2>
+            <div class="col-md-6 col-xs-12">
+                <h2 style="margin-top: 0">@Model.Name</h2>
+            </div>
+            <div class="col-md-6 col-xs-12">
+                <a href="@Url.Action("Details", "Street", new {id = Model.StreetId})" class="pull-right padding-top-10">
+                    Назад
+                </a>
+            </div>
         </div>
     </div>
     <div class="panel panel-default">

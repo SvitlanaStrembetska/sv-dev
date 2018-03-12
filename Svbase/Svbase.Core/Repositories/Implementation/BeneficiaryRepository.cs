@@ -75,7 +75,7 @@ namespace Svbase.Core.Repositories.Implementation
                 {
                     Id = b.Id,
                     Name = b.Name
-                }).ToList()
+                }).ToList(),
             }).ToList();
             return personModels;
         }

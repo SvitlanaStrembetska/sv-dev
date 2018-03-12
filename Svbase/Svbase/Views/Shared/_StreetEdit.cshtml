@@ -35,7 +35,9 @@
 
 <script>
     $("#submitStreetEdit").click(function () {
-        var streetName = $('#EditName').val();
+
+        var streetName = getElementById("EditName").name;
+        //var streetName = $('#EditName').val();
         var id = $('#EditId').val();
         $('#streetEditModal').modal();
         $.post('@Url.Action("Edit","Street")', { Id: id, Name: streetName })
