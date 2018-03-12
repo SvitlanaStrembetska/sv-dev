@@ -49,6 +49,11 @@ namespace Svbase.Controllers
         public ActionResult Create()
         {
             var beneficiaries = _beneficiaryService.GetBeneficiariesForSelecting().ToList();
+            var cities = _cityService.GetCities().ToList();
+            var streets = _streetService.GetStreetsForSelecting().ToList();
+            //flat, apartment
+
+            //return View(new PersonViewModel {Beneficiaries = beneficiaries, Cities = cities, Streets = streets});
             return View(new PersonViewModel {Beneficiaries = beneficiaries});
         }
 

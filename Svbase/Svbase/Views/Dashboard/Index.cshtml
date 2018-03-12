@@ -107,23 +107,26 @@
                             <div class="panel-body">
                                 @foreach (var item in Model.CityViewModels)
                                 {
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <a class="text-center"
-                                       href="@Url.Action("Details","City", new {id = item.Id})">
-                                        <input type="checkbox">
-                                        @item.Name
-                                        <i style="color: red; cursor: pointer"
-                                           class="pull-right glyphicon glyphicon-trash"
-                                           data-action="delete"
-                                           data-item-id="@item.Id"></i>
-                                        <i style="color: gray; margin-right: 5px; cursor: pointer"
-                                           class="pull-right glyphicon glyphicon-pencil"
-                                           data-action="edit"
-                                           data-item-id="@item.Id"></i>
-                                    </a>
-                                </div>
-                            </div>
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <a class="text-center"
+                                               href="@Url.Action("Details","City", new {id = item.Id})">
+                                                <input type="checkbox">
+                                                @item.Name
+                                      
+                                            </a>
+                                            <i style="color: red; cursor: pointer"
+                                               class="pull-right glyphicon glyphicon-trash"
+                                               data-action="delete"
+                                               data-item-id="@item.Id"></i>
+                                            <i style="color: gray; margin-right: 5px; cursor: pointer"
+                                               class="pull-right glyphicon glyphicon-pencil"
+                                               data-action="edit"
+                                               data-item-id="@item.Id"></i>
+                                        </div>
+                                    </div>
+
+                                    @Html.Partial("_StreetCreatePartial", new StreetCreateModel { CityId = item.Id })
                                 }
                             </div>
                         }
@@ -152,15 +155,16 @@
                                        href="@Url.Action("Details","Street", new {id = item.Id})">
                                         <input type="checkbox">
                                         @item.Name
-                                        <i style="color: red; cursor: pointer"
-                                           class="pull-right glyphicon glyphicon-trash"
-                                           data-action="delete"
-                                           data-item-id="@item.Id"></i>
-                                        <i style="color: gray; margin-right: 5px; cursor: pointer"
-                                           class="pull-right glyphicon glyphicon-pencil"
-                                           data-action="edit"
-                                           data-item-id="@item.Id"></i>
+                                       
                                     </a>
+                                    <i style="color: red; cursor: pointer"
+                                       class="pull-right glyphicon glyphicon-trash"
+                                       data-action="delete"
+                                       data-item-id="@item.Id"></i>
+                                    <i style="color: gray; margin-right: 5px; cursor: pointer"
+                                       class="pull-right glyphicon glyphicon-pencil"
+                                       data-action="edit"
+                                       data-item-id="@item.Id"></i>
                                 </div>
                             </div>
                                 }
@@ -256,6 +260,26 @@
 @Html.Partial("_BeneficiaryCreate", new BeneficiaryCreateModel())
 @Html.Partial("_DistrictCreate", new DistrictCreateModel())
 @Html.Partial("_CityCreate", new CityCreateModel())
-@Html.Partial("_StreetCreatePartial", new StreetCreateModel())
+@*@Html.Partial("_StreetCreatePartial", new StreetCreateModel())*@
 @Html.Partial("_ApartmentCreate", new ApartmentCreateModel())
 @Html.Partial("_FlatCreate", new FlatCreateModel())
+
+@Html.Partial("_StreetEdit")
+<script>
+    $('[data-action="edit"]').click(function () {
+        var street = $(this).parent().find("a")[0].text;
+        var id = $(this).data('itemId');
+        $('#EditName').val(street);
+        $('#EditId').val(id);
+        $('#streetEditModal').modal();
+    });
+
+    $('[data-action="delete"]').click(function () {
+        var that = this;
+        var id = $(this).data('itemId');
+        $.get('@Url.Action("Delete","Street")', { id })
+            .done(() => {
+                $(that).parent().parent().remove();
+            });
+    });
+</script>
