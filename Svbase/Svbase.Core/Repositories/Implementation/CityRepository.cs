@@ -15,7 +15,7 @@ namespace Svbase.Core.Repositories.Implementation
 
         public IEnumerable<CityCreateModel> GetCities()
         {
-            var cities = DbSet.Select(x => new CityCreateModel
+            var cities = DbSet.OrderBy(y => y.Name).Select(x => new CityCreateModel
             {
                 Id = x.Id,
                 Name = x.Name,
@@ -25,7 +25,7 @@ namespace Svbase.Core.Repositories.Implementation
         }
         public IEnumerable<CityViewModel> GetAllCities()
         {
-            var cities = DbSet.Select(x => new CityViewModel
+            var cities = DbSet.OrderBy(y => y.Name).Select(x => new CityViewModel
             {
                 Id = x.Id,
                 Name = x.Name,
@@ -35,11 +35,11 @@ namespace Svbase.Core.Repositories.Implementation
 
         public CityViewModel GetCityById(int id)
         {
-            var city = DbSet.Select(x => new CityViewModel
+            var city = DbSet.OrderBy(y => y.Name).Select(x => new CityViewModel
             {
                 Id = x.Id,
                 Name = x.Name,
-                Streets = x.Streets.Select(s => new StreetCreateModel
+                Streets = x.Streets.OrderBy(y => y.Name).Select(s => new StreetCreateModel
                 {
                     Id = s.Id,
                     Name = s.Name,
@@ -53,9 +53,9 @@ namespace Svbase.Core.Repositories.Implementation
         public IEnumerable<BaseViewModel> GetStretsBaseModelByCityIds(IList<int> cityIds)
         {
             if(cityIds == null) return new List<BaseViewModel>();
-            var cities = DbSet.Where(x => cityIds.Contains(x.Id));
+            var cities = DbSet.OrderBy(y => y.Name).Where(x => cityIds.Contains(x.Id));
             if (!cities.Any()) return new List<BaseViewModel>();
-            var streetsLists = cities
+            var streetsLists = cities.OrderBy(y => y.Name)
                 .Select(x => x.Streets
                     .Select(s => new BaseViewModel
                     {
@@ -66,7 +66,7 @@ namespace Svbase.Core.Repositories.Implementation
             var streets = new List<BaseViewModel>();
             streets = streetsLists
                 .Aggregate(streets, (current, items) => current.Union(items).ToList());//Union arrays
-            streets = streets.GroupBy(x => x.Id).Select(x => x.FirstOrDefault()).ToList();//Distinct by field
+            streets = streets.OrderBy(y => y.Name).GroupBy(x => x.Id).Select(x => x.FirstOrDefault()).ToList();//Distinct by field
             return streets;
         }
 
@@ -74,7 +74,7 @@ namespace Svbase.Core.Repositories.Implementation
         {
             var city = DbSet.FirstOrDefault(x => x.Id == id);
             if(city == null) return new List<BaseViewModel>();
-            var streets = city.Streets.Select(x => new BaseViewModel
+            var streets = city.Streets.OrderBy(y => y.Name).Select(x => new BaseViewModel
             {
                 Id = x.Id,
                 Name = x.Name
