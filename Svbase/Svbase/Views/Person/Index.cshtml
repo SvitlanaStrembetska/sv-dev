@@ -94,7 +94,6 @@
                                id="dataTables-example">
                             <thead>
                                 <tr>
-                                   
                                     <th id="lastNameHidden">Прізвище</th>
                                     <th>Ім'я</th>
                                     <th>По батькові</th>
@@ -122,7 +121,7 @@
         </div>
     </div>
 </div>
-@Html.Partial("_PersonEdit")
+@Html.Partial("_ConfirmDelete")
 
 <script>
     $('[data-action="edit"]').click(function() {
@@ -132,14 +131,13 @@
         $('#personEditModal').modal();
     });
 
-    $('[data-action="delete"]').click(function() {
-        var that = this;
+    $('[data-action="delete"]').click(function () {
+
         var id = $(this).data('itemId');
-        $.get('@Url.Action("Delete","Person")', { id })
-            .done(() => {
-                $(that).parent().parent().remove();
-            });
+        $('#EditId').val(id);
+        $('#confirmDeleteModal').modal();
     });
+
 
     function toggleInById(itemId) {
         $("#" + itemId).toggle('in');

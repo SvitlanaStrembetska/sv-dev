@@ -1,5 +1,6 @@
-﻿<div class="modal fade" id="personEditModal" role="dialog">
-    <div class="modal-dialog">
+﻿@model Svbase.Core.Models.PersonViewModel
+<div class="modal fade" id="personEditModal" role="dialog">
+    <div class="modal-dialog" style="max-width: 800px; width: 100% !important;">
 
         <div class="modal-content">
             <div class="modal-header">
@@ -7,7 +8,7 @@
                 <h4 class="modal-title">Редагувати персону</h4>
             </div>
             <div class="modal-body">
-                <form action="@Url.Action("Edit", "Person")" method="post" id="editForm">
+                @*<form action="@Url.Action("Edit", "Person")" method="post" id="editForm">
                     <input type="hidden" id="EditId" />
 
                     <div class="form-horizontal">
@@ -25,7 +26,181 @@
                         <button type="button" class="btn btn-default" data-dismiss="modal">Відмінити</button>
                         <button type="button" class="btn btn-primary" id="submitPersonEdit">Редагувати</button>
                     </div>
-                </form>
+                </form>*@
+                
+                @using (Html.BeginForm("Edit", "Person"))
+                {
+                    @Html.AntiForgeryToken()
+
+                    <div class="body-content margin-top">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="col-md-6"> <h4>Створити персону</h4></div>
+                                <div class="col-md-6">
+                                    <button class="btn btn-primary pull-right" type="submit">
+                                        <a class="white-color" id="submitPersonEdit">Зберегти</a>
+                                    </button>
+                                </div>
+                            </div>
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            <div class="col-md-12 margin-top">
+                                <div class="col-md-9 ignore-padding">
+                                    <div class="col-md-12 block-container">
+                                        <div class="col-md-4 ignore-padding">
+                                            @Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "col-md-12" })
+                                            <div class="col-md-12">
+                                                @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                                                @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 ignore-padding">
+                                            @Html.LabelFor(model => model.FirstName, htmlAttributes: new { @class = "col-md-12" })
+                                            <div class="col-md-12">
+                                                @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                                                @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 ignore-padding">
+                                            @Html.LabelFor(model => model.MiddleName, htmlAttributes: new { @class = "col-md-12" })
+                                            <div class="col-md-12">
+                                                @Html.EditorFor(model => model.MiddleName, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                                                @Html.ValidationMessageFor(model => model.MiddleName, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 block-container">
+                                        <div class="col-md-4 ignore-padding">
+                                            @Html.LabelFor(model => model.FirthtMobilePhone, htmlAttributes: new { @class = "col-md-12" })
+                                            <div class="col-md-12">
+                                                @Html.EditorFor(model => model.FirthtMobilePhone, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.ValidationMessageFor(model => model.FirthtMobilePhone, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 ignore-padding">
+                                            @Html.LabelFor(model => model.SecondMobilePhone, htmlAttributes: new { @class = "col-md-12" })
+                                            <div class="col-md-12">
+                                                @Html.EditorFor(model => model.SecondMobilePhone, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.ValidationMessageFor(model => model.SecondMobilePhone, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 ignore-padding">
+                                            @Html.LabelFor(model => model.HomePhone, htmlAttributes: new { @class = "col-md-12" })
+                                            <div class="col-md-12">
+                                                @Html.EditorFor(model => model.HomePhone, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.ValidationMessageFor(model => model.HomePhone, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 block-container">
+                                        <div class="col-md-6 ignore-padding">
+                                            @Html.LabelFor(model => model.DateBirth, htmlAttributes: new { @class = "col-md-12" })
+                                            <div class="col-md-12">
+                                                @Html.EditorFor(model => model.DateBirth, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.ValidationMessageFor(model => model.DateBirth, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 ignore-padding">
+                                            @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "col-md-12" })
+                                            <div class="col-md-12">
+                                                @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 block-container">
+                                        @Html.LabelFor(model => model.Gender, htmlAttributes: new { @class = "control-label col-md-2" })
+                                        <div class="col-md-10 padding-top-7">
+
+                                            @Html.RadioButtonFor(m => m.Gender, true) @Html.Label("Чоловік")
+                                            <span class="padding-left"></span>
+                                            @Html.RadioButtonFor(m => m.Gender, false) @Html.Label("Жінка")
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 block-container">
+                                        <div class="col-sm-6">
+                                            <div class="col-sm-12 ignore-padding">
+                                                <label for="cities" style="width: 100% !important;">
+                                                    Місто
+                                                </label>
+                                                <select class="form-control" id="cities"></select>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="col-sm-12 ignore-padding">
+                                                <label for="streets" style="width: 100% !important;">
+                                                    Вулиця
+                                                    <i class="fa fa-plus-square fa-lg pull-right" style="color: #428bca; text-align: right; float: right"
+                                                       data-toggle="modal"
+                                                       data-target="#streetCreateModal"></i>
+                                                </label>
+                                                <select class="form-control" id="streets"></select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 block-container">
+                                        <div class="col-sm-6">
+                                            <div class="col-sm-12 ignore-padding">
+                                                <label for="apartments" style="width: 100% !important;">
+                                                    Будинок
+                                                    <i class="fa fa-plus-square fa-lg" style="color: #428bca; text-align: right; float: right"
+                                                       data-toggle="modal"
+                                                       data-target="#apartmentCreateModal"></i>
+                                                </label>
+                                                <select class="form-control" id="apartments"></select>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="col-sm-12 ignore-padding">
+                                                <label for="flats" style="width: 100% !important;">
+                                                    Квартира
+                                                    <i class="fa fa-plus-square fa-lg" style="color: #428bca; text-align: right; float: right"
+                                                       data-toggle="modal"
+                                                       data-target="#flatCreateModal"></i>
+                                                </label>
+                                                <select required class="form-control" id="flats" name="FlatId"></select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="col-md-12 ignore-padding margin-top-30">
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading">
+                                                <div class="row">
+                                                    <div class="col-xs-12">
+                                                        Категорії
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="panel-body">
+                                                <div class="row">
+                                                    <div class="col-xs-12">
+                                                        @if (Model.Beneficiaries != null)
+                                                        {
+                                                            for (var i = 0; i < Model.Beneficiaries.Count(); i++)
+                                                             {
+                                                                 <div class="row">
+                                                                     <div class="col-md-2">
+                                                                         <div class="checkbox">
+                                                                             @Html.HiddenFor(model => model.Beneficiaries[i].Id)
+                                                                             @Html.EditorFor(model => Model.Beneficiaries[i].IsChecked)
+                                                                             @Html.ValidationMessageFor(model => Model.Beneficiaries[i].IsChecked, "", new {@class = "text-danger"})
+                                                                         </div>
+                                                                     </div>
+                                                                     <div class="col-xs-10 padding-top-7">@Model.Beneficiaries[i].Name</div>
+                                                                 </div>
+                                                             }
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
             </div>
         </div>
     </div>
@@ -43,5 +218,371 @@
                 }
             });
     })
+    $(document).ready(() => {
+        subscribeEvents();
+        getDistrictPartialView();
+        getCitiesPartialView();
+    });
+
+    function subscribeEvents() {
+        onClickSearch();
+    }
+
+    function onClickSearch() {
+        $("#search").click(() => {
+            search();
+        });
+    }
+
+    function getDistrictPartialView() {
+        var urlAction = "@Url.Action("FilterDistricts", "Person")";
+        $.ajax({
+            url: urlAction,
+            type: 'Get',
+            data: {},
+            async: false
+        }).done((data) => {
+            if (data) {
+                $("#districts").html(data);
+            }
+        });
+    }
+
+    function search() {
+        var urlAction = "@Url.Action("SearchPersonsByFilter", "Person")";
+        var districtIds = getCheckedDistrictIds();
+        var cityIds = getCheckedCityIds();
+        var streetIds = getCheckedStreetIds();
+        var apartmentIds = getCheckedApartmentIds();
+        var flatIds = getCheckedFlatIds();
+
+        var filter = {
+            districtIds: districtIds,
+            cityIds: cityIds,
+            streetIds: streetIds,
+            apartmentIds: apartmentIds,
+            flatIds: flatIds
+        };
+
+        $.ajax({
+            url: urlAction,
+            type: 'Post',
+            data: { filter: filter },
+            async: false
+        }).done((data) => {
+            $("#selectionBody").html(data);
+        });
+    }
+
+    function getCheckedDistrictIds() {
+        var districtIds = [];
+        $("#districts input:checked").each((index, element) => {
+            if (!isNaN($(element).val())) {
+                var id = Number($(element).val());
+                districtIds.push(id);
+            }
+        });
+        return districtIds;
+    }
+
+    function getCitiesPartialView() {
+        var urlAction = "@Url.Action("FilterCities", "Person")";
+        $.ajax({
+            url: urlAction,
+            type: 'Get',
+            data: {},
+            async: false
+        }).done((data) => {
+            if (data) {
+                $("#cities").html(data);
+            }
+            subscribeOnClickCity();
+        });
+    }
+
+    function subscribeOnClickCity() {
+        $("#cities > li > a").click((event) => {
+            var target = event.target;
+            if (target instanceof HTMLInputElement) {
+                var isChecked = $(target).prop("checked");
+                var isHighlighted = $(target)
+                    .parent().hasClass("highlighted-filter-item");
+                if (isChecked && !isHighlighted) {
+                    changeHighlightedStatus($(target).parent());
+                    getStreets();
+                } else {
+                    checkStreetsByCheckedCities();
+                }
+            } else {
+                changeHighlightedStatus(target);
+                getStreets();
+            }
+        });
+    }
+
+    function getStreets() {
+        var cityIds = getActiveCityIds();
+        var filter = {
+            cityIds: cityIds
+        }
+        getStreetsPartialViewByCityIds(filter);
+    }
+
+
+    function getActiveCityIds() {
+        var cityIds = [];
+        $("#cities").find(".highlighted-filter-item input").each((index, element) => {
+            if (!isNaN($(element).val())) {
+                var id = Number($(element).val());
+                cityIds.push(id);
+            }
+        });
+        return cityIds;
+    }
+
+
+    function getCheckedCityIds() {
+        var cityIds = [];
+        $("#cities input:checked").each((index, element) => {
+            if (!isNaN($(element).val())) {
+                var id = Number($(element).val());
+                cityIds.push(id);
+            }
+        });
+        return cityIds;
+    }
+
+    function getStreetsPartialViewByCityIds(filter) {
+        var urlAction = "@Url.Action("FilterStreetsByCityIds", "Person")";
+        $.ajax({
+            url: urlAction,
+            type: 'Get',
+            traditional: true,
+            data: filter,
+            async: false
+        }).done((data) => {
+            $("#streets").html(data);
+            checkStreetsByCheckedCities();
+            subscribeOnClickStreet();
+            getApartments();
+        });
+    }
+
+    function getCheckedDistrictIds() {
+        var districtIds = [];
+        $("#districts input:checked").each((index, element) => {
+            if (!isNaN($(element).val())) {
+                var id = Number($(element).val());
+                districtIds.push(id);
+            }
+        });
+        return districtIds;
+    }
+
+
+
+    function getCheckedStreetIds() {
+        var streetIds = [];
+        $("#streets input:checked").each((index, element) => {
+            if (!isNaN($(element).val())) {
+                var id = Number($(element).val());
+                streetIds.push(id);
+            }
+        });
+        return streetIds;
+    }
+
+    function getCheckedApartmentIds() {
+        var apartmentIds = [];
+        $("#apartments input:checked").each((index, element) => {
+            if (!isNaN($(element).val())) {
+                var id = Number($(element).val());
+                apartmentIds.push(id);
+            }
+        });
+        return apartmentIds;
+    }
+
+    function getCheckedFlatIds() {
+        var flatIds = [];
+        $("#flats input:checked").each((index, element) => {
+            if (!isNaN($(element).val())) {
+                var id = Number($(element).val());
+                flatIds.push(id);
+            }
+        });
+        return flatIds;
+    }
+
+    function checkStreetsByCheckedCities() {
+        uncheckAllStreets();
+        var cityIds = getCheckedCityIds();
+        if (!cityIds)
+            return;
+        cityIds.forEach((x) => {
+            var target = $(".street_" + x + " input");
+            $(target).prop("checked", true);
+            if (!$(target).parent().hasClass("highlighted-filter-item")) {
+                changeHighlightedStatus($(target).parent());
+            }
+            getApartments();
+        });
+    }
+
+    function uncheckAllStreets() {
+        $("#streets input").prop("checked", false);
+    }
+
+    function changeHighlightedStatus(target) {
+        var active = $(target).hasClass("highlighted-filter-item");
+        if (active) {
+            $(target).removeClass("highlighted-filter-item");
+            $(target).children().prop("checked", false);
+        } else {
+            $(target).addClass("highlighted-filter-item");
+        }
+    }
+
+    function subscribeOnClickStreet() {
+        $("#streets > li > a").click((event) => {
+            var target = event.target;
+            if (target instanceof HTMLInputElement) {
+                var isChecked = $(target).prop("checked");
+                var isHighlighted = $(target)
+                    .parent().hasClass("highlighted-filter-item");
+                if (isChecked && !isHighlighted) {
+                    changeHighlightedStatus($(target).parent());
+                    getApartments();
+                } else {
+                    checkApartmentsByCheckedStreets();
+                }
+            } else {
+                changeHighlightedStatus(target);
+                getApartments();
+            }
+        });
+    }
+
+    function getApartments() {
+        var streetIds = getActiveStreetIds();
+        var filter = {
+            streetIds: streetIds
+        }
+        getApartmentsPartialViewByStreetIds(filter);
+    }
+
+    function getActiveStreetIds() {
+        var streetIds = [];
+        $("#streets").find(".highlighted-filter-item input").each((index, element) => {
+            if (!isNaN($(element).val())) {
+                var id = Number($(element).val());
+                streetIds.push(id);
+            }
+        });
+        return streetIds;
+    }
+
+    function getApartmentsPartialViewByStreetIds(filter) {
+        var urlAction = "@Url.Action("FilterApartmentsByStreetIds", "Person")";
+        $.ajax({
+            url: urlAction,
+            type: 'Get',
+            traditional: true,
+            data: filter,
+            async: false
+        }).done((data) => {
+            $("#apartments").html(data);
+            checkApartmentsByCheckedStreets();
+            subscribeOnClickApartment();
+        });
+    }
+
+    function checkApartmentsByCheckedStreets() {
+        uncheckAllApartments();
+        var streetIds = getCheckedStreetIds();
+        if (!streetIds)
+            return;
+        streetIds.forEach((x) => {
+            var target = $(".apartment_" + x + " input");
+            $(target).prop("checked", true);
+            if (!$(target).parent().hasClass("highlighted-filter-item")) {
+                changeHighlightedStatus($(target).parent());
+            }
+        });
+        getFlats();
+    }
+
+    function uncheckAllApartments() {
+        $("#apartments input").prop("checked", false);
+    }
+
+
+    function subscribeOnClickApartment() {
+        $("#apartments > li > a").click((event) => {
+            var target = event.target;
+            if (target instanceof HTMLInputElement) {
+                var isChecked = $(target).prop("checked");
+                var isHighlighted = $(target)
+                    .parent().hasClass("highlighted-filter-item");
+                if (isChecked && !isHighlighted) {
+                    changeHighlightedStatus($(target).parent());
+                    getFlats()
+                } else {
+                    checkFlatsByCheckedApartments();
+                }
+            } else {
+                changeHighlightedStatus(target);
+                getFlats()
+            }
+        });
+    }
+
+    function checkFlatsByCheckedApartments() {
+        uncheckAllFlats();
+        var apartmentIds = getCheckedApartmentIds();
+        if (!apartmentIds)
+            return;
+        apartmentIds.forEach((x) => {
+            $(".flat_" + x + " input").prop("checked", true);
+        });
+    }
+
+    function uncheckAllFlats() {
+        $("#flats input").prop("checked", false);
+    }
+
+    function getFlats() {
+        var apartmentIds = getActiveApartmentIds();
+        var filter = {
+            apartmentIds: apartmentIds
+        }
+        getFlatsPartialViewByApartmentIds(filter);
+    }
+
+
+    function getActiveApartmentIds() {
+        var apartmentIds = [];
+        $("#apartments").find(".highlighted-filter-item input").each((index, element) => {
+            if (!isNaN($(element).val())) {
+                var id = Number($(element).val());
+                apartmentIds.push(id);
+            }
+        });
+        return apartmentIds;
+    }
+
+    function getFlatsPartialViewByApartmentIds(filter) {
+        var urlAction = "@Url.Action("FilterFlatsByApartmentIds", "Person")";
+        $.ajax({
+            url: urlAction,
+            type: 'Get',
+            traditional: true,
+            data: filter,
+            async: false
+        }).done((data) => {
+            $("#flats").html(data);
+            checkFlatsByCheckedApartments();
+        });
+    }
 </script>
 

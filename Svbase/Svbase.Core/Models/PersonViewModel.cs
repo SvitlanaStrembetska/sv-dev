@@ -27,7 +27,7 @@ namespace Svbase.Core.Models
         [Display(Name = "Мобільний телефон 2")]
         public string SecondMobilePhone { get; set; }
         [Phone]
-        [Display(Name = "Домашній телефон")]
+        [Display(Name = "Домашній номер телефону")]
         public string HomePhone { get; set; }
         [EmailAddress]
         [Display(Name = "Електронна пошта")]

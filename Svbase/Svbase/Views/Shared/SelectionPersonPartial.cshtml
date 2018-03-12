@@ -1,43 +1,53 @@
 ﻿@model IEnumerable<Svbase.Core.Models.PersonViewModel>
 @foreach (var person in Model)
 {
-    <tr class="odd gradeX">
-        <td id="lastNameHidd-@person.Id">@person.LastName</td>
-        <td>@person.FirstName</td>
-        <td>@person.MiddleName</td>
-        <td>Івано-Франківськ</td>
-        <td>Вулиця</td>
-        <td>Будинок</td>
-        <td>Квартира</td>
+   
+        <tr class="odd gradeX">
+            <td id="lastNameHidd-@person.Id">@person.LastName</td>
+            <td>@person.FirstName</td>
+            <td>@person.MiddleName</td>
+            <td>Івано-Франківськ</td>
+            <td>Вулиця</td>
+            <td>Будинок</td>
+            <td>Квартира</td>
 
-        <td>@person.FirthtMobilePhone</td>
-        <td>@person.SecondMobilePhone</td>
-        <td>@person.HomePhone</td>
-        <td>
-            @foreach (var item in person.Beneficiaries)
-            {
-                @($"{item.Name} ")
-            }
-        </td>
-        <td>@person.Email</td>
-        @*<td>@person.Position</td>*@
-        @*<td>@person.PartionType</td>*@
-        <td>@person.DateBirth</td>
-        <td>
-            <i style="color: red; cursor: pointer"
-               class="pull-right glyphicon glyphicon-trash"
-               data-action="delete"
-               data-item-id="@person.Id"></i>
-        </td>
-        <td>
-            <i style="color: gray; margin-right: 5px; cursor: pointer"
-               class="pull-right glyphicon glyphicon-pencil"
-               data-action="edit"
-               data-item-id="@person.Id"></i>
-        </td>
-    </tr>
+            <td>@person.FirthtMobilePhone</td>
+            <td>@person.SecondMobilePhone</td>
+            <td>@person.HomePhone</td>
+            <td>
+                @foreach (var item in person.Beneficiaries)
+                {
+                    @($"{item.Name} ")
+                }
+            </td>
+            <td>@person.Email</td>
+            @*<td>@person.Position</td>*@
+            @*<td>@person.PartionType</td>*@
+            <td>@person.DateBirth</td>
+            <td>
+                <a href="@Url.Action("Details", "Person", new {id = person.Id})">
+                <i style="color: gray; margin-right: 5px; cursor: pointer"
+                   class="pull-right glyphicon glyphicon-info-sign"></i>
+                </a>
+            </td>
+            <td>
+                <i style="color: gray; margin-right: 5px; cursor: pointer"
+                   class="pull-right glyphicon glyphicon-pencil"
+                   data-action="edit"
+                   data-item-id="@person.Id"></i>
+            </td>
+            <td>
+                <i style="color: red; cursor: pointer"
+                   class="pull-right glyphicon glyphicon-trash"
+                   data-action="delete"
+                   data-item-id="@person.Id"></i>
+            </td>
+           
+        </tr>
+
+    @Html.Partial("_PersonEdit", person)
+
 }
-@Html.Partial("_PersonEdit")
 <script>
     $('[data-action="edit"]').click(function () {
 

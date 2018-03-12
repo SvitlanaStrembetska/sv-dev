@@ -405,6 +405,7 @@
     <Content Include="Views\Shared\_FilterApartmentPartial.cshtml" />
     <Content Include="Views\Shared\_FilterFlatPartial.cshtml" />
     <Content Include="Views\Shared\_PersonEdit.cshtml" />
+    <Content Include="Views\Shared\_ConfirmDelete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
