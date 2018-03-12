@@ -20,6 +20,11 @@
                 <ul class="nav" id="side-menu">
                     <li>
                         <div class="col-xs-12 ignore-padding">
+                            <button id="getAll" style="width: 100%" type="button" class="btn btn-danger">Показати всі</button>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="col-xs-12 ignore-padding">
                             <button id="search" style="width: 100%" type="button" class="btn btn-primary">Пошук</button>
                         </div>
                     </li>
@@ -151,6 +156,25 @@
 
     function subscribeEvents() {
         onClickSearch();
+        onClickGetAll();
+    }
+
+    function onClickGetAll() {
+        $("#getAll").click(() => {
+            getAll();
+        });
+    }
+
+    function getAll() {
+        var urlAction = "@Url.Action("All")";
+        $.ajax({
+            url: urlAction,
+            type: 'Get',
+            data: {},
+            async: false
+        }).done((data) => {
+            $("#selectionBody").html(data);
+        });
     }
 
     function onClickSearch() {
