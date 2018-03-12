@@ -35,10 +35,17 @@ namespace Svbase.Controllers
 
         public ActionResult Index()
         {
+            //var persons = _personService.GetPersons();
+
+            return View(new List<PersonViewModel>());
+        }
+        [HttpGet]
+        public ActionResult All()
+        {
             var persons = _personService.GetPersons();
 
-            return View(persons);
-        }
+            return PartialView("SelectionPersonPartial", persons);
+        } 
 
         public ActionResult PersonsByBeneficiaryId(int id)
         {
