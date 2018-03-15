@@ -98,23 +98,24 @@
                         <table class="table table-striped table-bordered table-hover"
                                id="dataTables-example">
                             <thead>
-                                <tr>
-                                    <th id="lastNameHidden">Прізвище</th>
-                                    <th>Ім'я</th>
-                                    <th>По батькові</th>
-                                    <th>Місто</th>
-                                    <th>Вулиця</th>
-                                    <th>Будинок</th>
-                                    <th>Квартира</th>
-                                    <th>Моб. тел. 1</th>
-                                    <th>Моб. тел. 2</th>
-                                    <th>Дом. тел.</th>
-                                    <th>Категорія</th>
-                                    <th>Емейл</th>
-                                    @*<th>Позиція</th>*@
-                                    @*<th>Партійний тип</th>*@
-                                    <th>Дата<br> народження</th>
-                                </tr>
+                            <tr>
+                                <th>№</th>
+                                <th id="lastNameHidden">Прізвище</th>
+                                <th>Ім'я</th>
+                                <th>По батькові</th>
+                                <th>Місто</th>
+                                <th>Вулиця</th>
+                                <th>Будинок</th>
+                                <th>Квартира</th>
+                                <th>Моб. тел. 1</th>
+                                <th>Моб. тел. 2</th>
+                                <th>Дом. тел.</th>
+                                <th>Категорія</th>
+                                <th>Емейл</th>
+                                @*<th>Позиція</th>*@
+                                @*<th>Партійний тип</th>*@
+                                <th>Дата<br> народження</th>
+                            </tr>
                             </thead>
                             <tbody id="selectionBody">
                                 @Html.Partial("SelectionPersonPartial", Model)

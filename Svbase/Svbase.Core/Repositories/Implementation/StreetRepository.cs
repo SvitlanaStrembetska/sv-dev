@@ -27,7 +27,8 @@ namespace Svbase.Core.Repositories.Implementation
                     Id = a.Id,
                     Name = a.Name,
                     CanDelete = !a.Flats.Any()
-                })
+                }).OrderBy(y => y.Name.Length)
+                  .ThenBy(y => y.Name)
             }).FirstOrDefault(x => x.Id == id);
             return street;
         }

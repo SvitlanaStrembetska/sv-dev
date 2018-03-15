@@ -33,6 +33,7 @@ namespace Svbase.Core.Models
         [Display(Name = "Електронна пошта")]
         public string Email { get; set; }
         [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
         [Display(Name = "Дата народження")]
         public DateTime? DateBirth { get; set; }
         [Display(Name = "Посада")]

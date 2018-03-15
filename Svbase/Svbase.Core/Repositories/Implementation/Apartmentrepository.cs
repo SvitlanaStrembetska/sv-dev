@@ -27,7 +27,7 @@ namespace Svbase.Core.Repositories.Implementation
                     Name = f.Number,
                     ApartmentId = f.ApartmentId,
                     CanDelete = !f.Persons.Any()
-                })
+                }).OrderBy(y => y.Name)
             }).FirstOrDefault(x => x.Id == id);
             return apartment;
         }
