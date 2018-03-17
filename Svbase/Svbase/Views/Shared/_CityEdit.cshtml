@@ -43,7 +43,7 @@
         $.post('@Url.Action("Edit","City")', { Id: id, Name: cityName })
             .done((data) => {
                 if (data.status === "success") {
-                    window.location.href = "@Url.Action("Details","City")" + "?id="+id;
+                    window.location.href = "@Url.Action("List","City")";
                 }
             });
 

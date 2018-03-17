@@ -55,7 +55,8 @@
                                         <i style="color: gray; margin-right: 5px; cursor: pointer"
                                            class="pull-right glyphicon glyphicon-pencil"
                                            data-action="edit"
-                                           data-item-id="@flat.Id"></i>
+                                           data-item-id="@flat.Id"
+                                           data-apartment-id="@Model.Id"></i>
                                     </td>
                                 </tr>
                             }
@@ -73,8 +74,10 @@
     $('[data-action="edit"]').click(function () {
         var flat = $(this).parent().find("a")[0].text;
         var id = $(this).data('itemId');
+        var apartmentId = $(this).data('apartmentId');
         $('#EditName').val(flat);
         $('#EditId').val(id);
+        $('#ApartmentId').val(apartmentId);
         $('#flatEditModal').modal();
     });
 

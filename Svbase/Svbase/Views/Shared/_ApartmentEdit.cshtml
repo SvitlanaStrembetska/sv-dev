@@ -11,7 +11,7 @@
             <div class="modal-body">
                 <form action="@Url.Action("Edit", "Apartment")" method="post" id="editForm">
                     <input type="hidden" id="EditId" />
-
+                    <input type="hidden" id="StreetId"/>
                     <div class="form-horizontal">
                         <div class="form-horizontal">
                             <div class="form-group">
@@ -37,11 +37,12 @@
     $("#submitApartmentEdit").click(function () {
         var apartmentName = $('#EditName').val();
         var id = $('#EditId').val();
+        var streetId = $('#StreetId').val();
         $('#apartmentEditModal').modal();
         $.post('@Url.Action("Edit","Apartment")', { Id: id, Name: apartmentName })
             .done((data) => {
                 if (data.status === "success") {
-                    window.location.href = "@Url.Action("Details", "Apartment")" + "?id="+id;
+                    window.location.href = "@Url.Action("Details", "Street")" + "?id=" + streetId;
                 }
             });
     })

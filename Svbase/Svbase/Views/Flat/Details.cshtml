@@ -1,5 +1,5 @@
 ﻿@model Svbase.Core.Models.FlatViewModel
-<div class="padding-20">
+<div class="container body-content margin-top">
     <div class="row">
         <div class="col-sm-12">
             <h2 style="margin-top: 0">@Model.Name</h2>
@@ -34,13 +34,13 @@
                         </thead>
                         <tbody>
                             @foreach (var person in Model.Persons)
-                    {
-                        <tr>
-                            <td class="col-xs-12">
-                                <a>@person.FirstName @person.MiddleName @person.LastName</a>
-                            </td>
-                        </tr>
-                    }
+                            {
+                                <tr>
+                                    <td class="col-xs-12">
+                                        <a>@person.FirstName @person.MiddleName @person.LastName</a>
+                                    </td>
+                                </tr>
+                            }
                         </tbody>
                     </table>
                 </div>

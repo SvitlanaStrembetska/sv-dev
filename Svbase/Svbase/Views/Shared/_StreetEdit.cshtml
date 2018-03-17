@@ -1,8 +1,6 @@
 ﻿<div class="modal fade" id="streetEditModal" role="dialog">
     <div class="modal-dialog">
-
         <!-- Modal content-->
-
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -11,7 +9,7 @@
             <div class="modal-body">
                 <form action="@Url.Action("Edit", "Street")" method="post" id="editForm">
                     <input type="hidden" id="EditId" />
-
+                    <input type="hidden" id="CityId" />
                     <div class="form-horizontal">
                         <div class="form-horizontal">
                             <div class="form-group">
@@ -32,18 +30,23 @@
         </div>
     </div>
 </div>
-
 <script>
     $("#submitStreetEdit").click(function () {
 
-        var streetName = getElementById("EditName").name;
+        var streetName = $('#EditName').val()
         //var streetName = $('#EditName').val();
         var id = $('#EditId').val();
+        var cityId = $('#CityId').val();
         $('#streetEditModal').modal();
-        $.post('@Url.Action("Edit","Street")', { Id: id, Name: streetName })
+        var data = {
+            Id: id,
+            Name: streetName,
+            CityId: cityId
+        };
+        $.post('@Url.Action("Edit","Street")', data)
             .done((data) => {
                 if (data.status === "success") {
-                    window.location.href = "@Url.Action("Details","Street")" + "?id="+id;
+                    window.location.href = "@Url.Action("Details","City")" + "?id=" + cityId;
                 }
             });
     })
