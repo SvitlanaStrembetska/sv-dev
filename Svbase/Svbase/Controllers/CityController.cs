@@ -80,7 +80,8 @@ namespace Svbase.Controllers
         public ActionResult Delete(int id)
         {
             _cityService.DeleteById(id);
-            return null;
+
+            return Json(new { status = "success" });
         }
 
         [Authorize(Roles = RoleConsts.Admin)]

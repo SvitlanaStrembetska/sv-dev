@@ -13,7 +13,6 @@
             </div>
         </div>
     </div>
-
     <div class="panel panel-default">
         <div class="panel-heading">
             <div class="row">
@@ -21,7 +20,7 @@
                     <span>Вулиці</span>
                 </div>
                 <div class="col-xs-6">
-                    
+
                     <button class="btn btn-primary btn-xs pull-right"
                             data-toggle="modal"
                             data-target="#streetCreateModal">
@@ -69,11 +68,10 @@
         </div>
     </div>
 </div>
-
-    @Html.Partial("_StreetCreatePartial", new StreetCreateModel { CityId = Model.Id })
-    @Html.Partial("_StreetEdit")
-
-    <script>
+@Html.Partial("_StreetCreatePartial", new StreetCreateModel { CityId = Model.Id })
+@Html.Partial("_StreetEdit")
+@Html.Partial("_ConfirmDelete")
+<script>
     $('[data-action="edit"]').click(function () {
         var street = $(this).parent().find("a")[0].text;
         var id = $(this).data('itemId');
@@ -81,15 +79,26 @@
         $('#EditName').val(street);
         $('#EditId').val(id);
         $('#CityId').val(cityId);
-        $('#streetEditModal').modal();
+        $('#streetEditModal').modal('show');
     });
 
     $('[data-action="delete"]').click(function () {
+        var id = $(this).data('item-id');
+        console.log(id);
+        $('#confirmDeleteModal').modal('show');
+        $('#confirmDeleteModal')
+            .find("#submitDelete")
+            .data("item-id", id);
+    });
+
+    $("#submitDelete").click(function () {
         var that = this;
         var id = $(this).data('itemId');
         $.get('@Url.Action("Delete","Street")', { id })
             .done(() => {
                 $(that).parent().parent().remove();
             });
+        $('#confirmDeleteModal').modal('hide');
+
     });
-    </script>
+</script>

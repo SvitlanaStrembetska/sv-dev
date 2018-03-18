@@ -265,6 +265,7 @@
 @Html.Partial("_FlatCreate", new FlatCreateModel())
 
 @Html.Partial("_StreetEdit")
+@Html.Partial("_ConfirmDelete")
 <script>
     $('[data-action="edit"]').click(function () {
         var street = $(this).parent().find("a")[0].text;
@@ -275,11 +276,22 @@
     });
 
     $('[data-action="delete"]').click(function () {
-        var that = this;
-        var id = $(this).data('itemId');
-        $.get('@Url.Action("Delete","Street")', { id })
+        var id = $(this).data('item-id');
+        console.log(id);
+        $('#confirmDeleteModal').modal('show');
+        $('#confirmDeleteModal')
+            .find("#submitDelete")
+            .data("item-id", id);
+    });
+
+    $("#submitDelete").click(function () {
+        var id = $(this).data('item-id');
+        $.get('@Url.Action("Delete", "Street")', { id })
             .done(() => {
-                $(that).parent().parent().remove();
+                $(this).parent().parent().remove();
             });
+
+        $('#confirmDeleteModal').modal('hide');
+
     });
 </script>

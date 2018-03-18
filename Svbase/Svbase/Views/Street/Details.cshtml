@@ -13,7 +13,6 @@
             </div>
         </div>
     </div>
-
     <div class="panel panel-default">
         <div class="panel-heading">
             <div class="row">
@@ -42,25 +41,25 @@
                         </thead>
                         <tbody>
                             @foreach (var apartment in Model.Apartments)
-                    {
-                        <tr>
-                            <td class="col-xs-12">
-                                <a href="@Url.Action("Details","Apartment", new {id = apartment.Id})">@apartment.Name</a>
-                                @if (apartment.CanDelete)
-                                {
-                                <i style="color: red; cursor: pointer"
-                                   class="pull-right glyphicon glyphicon-trash"
-                                   data-action="delete"
-                                   data-item-id="@apartment.Id"></i>
-                                }
-                                <i style="color: gray; margin-right: 5px; cursor: pointer"
-                                   class="pull-right glyphicon glyphicon-pencil"
-                                   data-action="edit"
-                                   data-item-id="@apartment.Id"
-                                   data-street-id="@Model.Id"></i>
-                            </td>
-                        </tr>
-                    }
+                            {
+                                <tr>
+                                    <td class="col-xs-12">
+                                        <a href="@Url.Action("Details","Apartment", new {id = apartment.Id})">@apartment.Name</a>
+                                        @if (apartment.CanDelete)
+                                        {
+                                            <i style="color: red; cursor: pointer"
+                                               class="pull-right glyphicon glyphicon-trash"
+                                               data-action="delete"
+                                               data-item-id="@apartment.Id"></i>
+                                        }
+                                        <i style="color: gray; margin-right: 5px; cursor: pointer"
+                                           class="pull-right glyphicon glyphicon-pencil"
+                                           data-action="edit"
+                                           data-item-id="@apartment.Id"
+                                           data-street-id="@Model.Id"></i>
+                                    </td>
+                                </tr>
+                            }
                         </tbody>
                     </table>
                 </div>
@@ -68,8 +67,9 @@
         </div>
     </div>
 </div>
-@Html.Partial("_ApartmentCreate", new ApartmentCreateModel { StreetId = Model.Id });
-@Html.Partial("_ApartmentEdit");
+@Html.Partial("_ApartmentCreate", new ApartmentCreateModel { StreetId = Model.Id })
+@Html.Partial("_ApartmentEdit")
+@Html.Partial("_ConfirmDelete")
 <script>
     $('[data-action="edit"]').click(function () {
         var apartment = $(this).parent().find("a")[0].text;
@@ -78,15 +78,27 @@
         $('#EditName').val(apartment);
         $('#EditId').val(id);
         $('#StreetId').val(streetId);
-        $('#apartmentEditModal').modal();
+        $('#apartmentEditModal').modal('show');
     });
 
     $('[data-action="delete"]').click(function () {
+        var id = $(this).data('item-id');
+        console.log(id);
+        $('#confirmDeleteModal').modal('show');
+        $('#confirmDeleteModal')
+            .find("#submitDelete")
+            .data("item-id", id);
+    });
+
+    $("#submitDelete").click(function () {
         var that = this;
         var id = $(this).data('itemId');
         $.get('@Url.Action("Delete","Apartment")', { id })
             .done(() => {
                 $(that).parent().parent().remove();
             });
+
+        $('#confirmDeleteModal').modal('hide');
+
     });
 </script>

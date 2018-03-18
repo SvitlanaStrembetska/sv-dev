@@ -74,7 +74,8 @@ namespace Svbase.Controllers
         public ActionResult Delete(int id)
         {
             _flatService.DeleteById(id);
-            return null;
+
+            return Json(new { status = "success" });
         }
     }
 }

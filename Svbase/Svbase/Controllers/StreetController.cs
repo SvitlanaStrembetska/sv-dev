@@ -72,7 +72,8 @@ namespace Svbase.Controllers
         public ActionResult Delete(int id)
         {
             _streetService.DeleteById(id);
-            return null;
+
+            return Json(new { status = "success" });
         }
     }
 }

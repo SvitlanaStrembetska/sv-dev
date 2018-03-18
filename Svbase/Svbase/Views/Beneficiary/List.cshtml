@@ -56,8 +56,9 @@
         </div>
     </div>
 </div>
-@Html.Partial("_BeneficiaryCreate", new BeneficiaryCreateModel());
-@Html.Partial("_BeneficiaryEdit");
+@Html.Partial("_BeneficiaryCreate", new BeneficiaryCreateModel())
+@Html.Partial("_BeneficiaryEdit")
+@Html.Partial("_ConfirmDelete")
 
 <script>
     $('[data-action="edit"]').click(function () {
@@ -69,11 +70,23 @@
     });
 
     $('[data-action="delete"]').click(function () {
+        var id = $(this).data('item-id');
+        console.log(id);
+        $('#confirmDeleteModal').modal('show');
+        $('#confirmDeleteModal')
+            .find("#submitDelete")
+            .data("item-id", id);
+    });
+
+    $("#submitDelete").click(function () {
         var that = this;
-        var id = $(this).data('itemId');
-        $.get('@Url.Action("Delete","Beneficiary")', { id })
-            .done(() => {
-                $(that).parent().parent().remove();
-            });
+        var id = $(this).data('item-id');
+        $.get('@Url.Action("Delete", "Beneficiary")', { id })
+             {
+                 $(that).parent().parent().remove();
+            };
+
+        $('#confirmDeleteModal').modal('hide');
+
     });
 </script>

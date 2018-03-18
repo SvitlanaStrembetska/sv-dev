@@ -62,7 +62,6 @@
                                     </td>
                                 </tr>
                             }
-
                         </tbody>
                     </table>
                 </div>
@@ -72,23 +71,34 @@
 </div>
 @Html.Partial("_CityCreate", new CityCreateModel())
 @Html.Partial("_CityEdit")
-
-
+@Html.Partial("_ConfirmDelete")
 <script>
     $('[data-action="edit"]').click(function () {
         var city = $(this).parent().find("a")[0].text;
         var id = $(this).data('itemId');
         $('#EditName').val(city);
         $('#EditId').val(id);
-        $('#cityEditModal').modal();
+        $('#cityEditModal').modal('show');
     });
 
     $('[data-action="delete"]').click(function () {
+        var id = $(this).data('item-id');
+        console.log(id);
+        $('#confirmDeleteModal').modal('show');
+        $('#confirmDeleteModal')
+            .find("#submitDelete")
+            .data("item-id", id);
+    });
+
+    $("#submitDelete").click(function () {
         var that = this;
         var id = $(this).data('itemId');
         $.get('@Url.Action("Delete")', { id })
             .done(() => {
                 $(that).parent().parent().remove();
             });
+
+        $('#confirmDeleteModal').modal('hide');
+
     });
 </script>

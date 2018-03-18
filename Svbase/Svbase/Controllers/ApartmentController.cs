@@ -73,7 +73,8 @@ namespace Svbase.Controllers
         public ActionResult Delete(int id)
         {
             _apartmentService.DeleteById(id);
-            return null;
+
+            return Json(new { status = "success" });
         }
     }
 }

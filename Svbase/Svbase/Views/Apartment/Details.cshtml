@@ -1,5 +1,5 @@
 ﻿@using Svbase.Core.Models
-@model Svbase.Core.Models.ApartmentViewModel
+@model ApartmentViewModel
 <div class="container body-content margin-top">
     <div class="row">
         <div class="col-sm-12">
@@ -23,7 +23,7 @@
                     <button class="btn btn-primary btn-xs pull-right"
                             data-toggle="modal"
                             data-target="#flatCreateModal">
-                       Додати квартиру
+                        Додати квартиру
                     </button>
                 </div>
             </div>
@@ -67,9 +67,9 @@
         </div>
     </div>
 </div>
-@Html.Partial("_FlatCreate", new FlatCreateModel { ApartmentId = Model.Id });
-@Html.Partial("_FlatEdit");
-
+@Html.Partial("_FlatCreate", new FlatCreateModel { ApartmentId = Model.Id })
+@Html.Partial("_FlatEdit")
+@Html.Partial("_ConfirmDelete")
 <script>
     $('[data-action="edit"]').click(function () {
         var flat = $(this).parent().find("a")[0].text;
@@ -82,11 +82,22 @@
     });
 
     $('[data-action="delete"]').click(function () {
+        var id = $(this).data('item-id');
+        console.log(id);
+        $('#confirmDeleteModal').modal('show');
+        $('#confirmDeleteModal')
+            .find("#submitDelete")
+            .data("item-id", id);
+    });
+
+    $("#submitDelete").click(function () {
         var that = this;
         var id = $(this).data('itemId');
         $.get('@Url.Action("Delete","Flat")', { id })
             .done(() => {
                 $(that).parent().parent().remove();
             });
+        $('#confirmDeleteModal').modal('hide');
+
     });
 </script>

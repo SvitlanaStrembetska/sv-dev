@@ -82,7 +82,7 @@
     $('[data-action="delete"]').click(function () {
         var id = $(this).data('item-id');
         console.log(id);
-        $('#confirmDeleteModal').modal();
+        $('#confirmDeleteModal').modal('show');
         $('#confirmDeleteModal')
             .find("#submitDelete")
             .data("item-id", id);
@@ -95,7 +95,7 @@
                 $(this).parent().parent().remove();
             });
 
-        $('#confirmDeleteModal').hide();
+        $('#confirmDeleteModal').modal('hide');
 
     });
 
