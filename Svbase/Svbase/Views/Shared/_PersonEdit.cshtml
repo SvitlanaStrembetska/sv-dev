@@ -1,5 +1,4 @@
-﻿@model Svbase.Core.Models.PersonViewModel
-<div class="modal fade" id="personEditModal" role="dialog">
+﻿<div class="modal fade" id="personEditModal" role="dialog">
     <div class="modal-dialog" style="max-width: 800px; width: 100% !important;">
 
         <div class="modal-content">
@@ -8,26 +7,6 @@
                 <h4 class="modal-title">Редагувати персону</h4>
             </div>
             <div class="modal-body">
-                @*<form action="@Url.Action("Edit", "Person")" method="post" id="editForm">
-                    <input type="hidden" id="EditId" />
-
-                    <div class="form-horizontal">
-                        <div class="form-horizontal">
-                            <div class="form-group">
-                                <label class="control-label col-md-2" for="EditName">Назва</label>
-                                <div class="col-md-10">
-                                    <input class="form-control" id="EditName" name="Назва" type="text" value="">
-                                    <span class="field-validation-valid text-danger" data-valmsg-for="EditName" data-valmsg-replace="true"></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Відмінити</button>
-                        <button type="button" class="btn btn-primary" id="submitPersonEdit">Редагувати</button>
-                    </div>
-                </form>*@
-                
                 @using (Html.BeginForm("Edit", "Person"))
                 {
                     @Html.AntiForgeryToken()

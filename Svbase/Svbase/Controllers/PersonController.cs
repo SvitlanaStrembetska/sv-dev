@@ -111,7 +111,8 @@ namespace Svbase.Controllers
         public ActionResult Delete(int id)
         {
             _personService.DeleteById(id);
-            return null;
+
+            return Json(new { status = "success" });
         }
 
         [Authorize(Roles = RoleConsts.Admin)]

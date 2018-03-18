@@ -11,7 +11,6 @@
         <td>Вулиця</td>
         <td>Будинок</td>
         <td>Квартира</td>
-
         <td>@person.FirthtMobilePhone</td>
         <td>@person.SecondMobilePhone</td>
         <td>@person.HomePhone</td>
@@ -47,26 +46,36 @@
                data-item-id="@person.Id"></i>
         </td>
     </tr>
-
-    @Html.Partial("_PersonEdit", person)
     i++;
 }
+@Html.Partial("_ConfirmDelete")
 
+@*@Html.Partial("_PersonEdit")*@
 <script>
     $('[data-action="edit"]').click(function () {
-
-        var id = $(this).data('itemId');
-
+        var id = (this).data('data-item-id');
         $('#EditId').val(id);
         $('#personEditModal').modal();
     });
 
     $('[data-action="delete"]').click(function () {
-        var that = this;
-        var id = $(this).data('itemId');
+        var id = $(this).data('item-id');
+        console.log(id);
+        $('#confirmDeleteModal').modal();
+        $('#confirmDeleteModal')
+            .find("#submitDelete")
+            .data("item-id", id);
+    });
+
+    $("#submitDelete").click(function () {
+        var id = $(this).data('item-id');
         $.get('@Url.Action("Delete","Person")', { id })
             .done(() => {
-                $(that).parent().parent().remove();
+                $(this).parent().parent().remove();
             });
+
+        $('#confirmDeleteModal').hide();
+
     });
+
 </script>

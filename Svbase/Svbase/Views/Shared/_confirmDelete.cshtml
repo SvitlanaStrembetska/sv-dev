@@ -1,8 +1,5 @@
 ﻿<div class="modal fade" id="confirmDeleteModal" role="dialog">
     <div class="modal-dialog">
-
-        <!-- Modal content-->
-
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -12,37 +9,11 @@
                 <h4 class="modal-title center">Ви справді хочете видалити?</h4>
             </div>
             <div class="modal-body">
-                <form action="@Url.Action("Delete", "Person")" method="post" id="editForm">
-                    <input type="hidden" id="EditId" />
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Відмінити</button>
-                        <button type="button" class="btn btn-primary" id="submitDelete">Видалити</button>
-                    </div>
-                </form>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Відмінити</button>
+                    <button type="button" class="btn btn-primary" id="submitDelete" item-id="">Видалити</button>
+                </div>
             </div>
         </div>
     </div>
 </div>
-
-<script>
-    $('#submitDelete').click(function () {
-        var that = this;
-        var id = $(this).data('itemId');
-        $.get('@Url.Action("Delete","Person")', { id })
-            .done(() => {
-                $(that).parent().parent().remove();
-            });
-    });
-
-    $("#submitApartmentEdit").click(function () {
-        var apartmentName = $('#EditName').val();
-        var id = $('#EditId').val();
-        $('#apartmentEditModal').modal();
-        $.post('@Url.Action("Edit","Apartment")', { Id: id, Name: apartmentName })
-            .done((data) => {
-                if (data.status === "success") {
-                    window.location.href = "@Url.Action("Details", "Apartment")" + "?id=" + id;
-                }
-            });
-    })
-</script>

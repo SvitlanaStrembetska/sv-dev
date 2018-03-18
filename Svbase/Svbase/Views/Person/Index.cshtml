@@ -112,9 +112,19 @@
                                 <th>Дом. тел.</th>
                                 <th>Категорія</th>
                                 <th>Емейл</th>
-                                @*<th>Позиція</th>*@
-                                @*<th>Партійний тип</th>*@
                                 <th>Дата<br> народження</th>
+                                <th>
+                                    <i title="Детальніше" style="color: gray; margin-right: 5px; cursor: pointer"
+                                       class="pull-right glyphicon glyphicon-info-sign"></i>
+                                </th>
+                                <th>
+                                    <i title="Редагувати" style="color: gray; margin-right: 5px; cursor: pointer"
+                                       class="pull-right glyphicon glyphicon-pencil"></i>
+                                </th>
+                                <th>
+                                    <i title="Видалити" style="color: red; cursor: pointer"
+                                       class="pull-right glyphicon glyphicon-trash"></i>
+                                </th>
                             </tr>
                             </thead>
                             <tbody id="selectionBody">
@@ -127,23 +137,8 @@
         </div>
     </div>
 </div>
-@Html.Partial("_ConfirmDelete")
 
 <script>
-    $('[data-action="edit"]').click(function() {
-
-        var id = $(this).data('itemId');
-        $('#EditId').val(id);
-        $('#personEditModal').modal();
-    });
-
-    $('[data-action="delete"]').click(function () {
-
-        var id = $(this).data('itemId');
-        $('#EditId').val(id);
-        $('#confirmDeleteModal').modal();
-    });
-
 
     function toggleInById(itemId) {
         $("#" + itemId).toggle('in');
