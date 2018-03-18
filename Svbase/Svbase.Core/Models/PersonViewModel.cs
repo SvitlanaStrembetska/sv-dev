@@ -45,9 +45,6 @@ namespace Svbase.Core.Models
         [Display(Name = "Квартира")]
         public int FlatId { get; set; }
         public IList<CheckboxItemModel> Beneficiaries { get; set; }
-        public IList<CityCreateModel> Cities { get; set; }
-        public IList<StreetSelectModel> Streets { get; set; }
-
 
         public PersonViewModel()
         {
@@ -104,5 +101,13 @@ namespace Svbase.Core.Models
         //public int BeneficiaryId { get; set; }
         //public int DistrictId { get; set; }
         //public int FlatId { get; set; }
+    }
+
+    public class PersonSelectionModel : PersonViewModel
+    {
+        public BaseViewModel City { get; set; }
+        public BaseViewModel Street { get; set; }
+        public BaseViewModel Apartment { get; set; }
+        public BaseViewModel Flat { get; set; }
     }
 }

@@ -18,7 +18,7 @@ namespace Svbase.Service.Implementation
 
         }
 
-        public IEnumerable<PersonViewModel> GetPersons()
+        public IEnumerable<PersonSelectionModel> GetPersons()
         {
             var persons = RepositoryManager.Persons.GetPersons();
             return persons;
