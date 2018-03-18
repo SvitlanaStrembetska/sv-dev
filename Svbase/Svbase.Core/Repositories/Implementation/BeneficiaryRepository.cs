@@ -47,7 +47,7 @@ namespace Svbase.Core.Repositories.Implementation
             return beneficiaries;
         }
 
-        public IEnumerable<PersonViewModel> GetPersonsByBeneficiariesId(int beneficiaryId)
+        public IEnumerable<PersonSelectionModel> GetPersonsByBeneficiariesId(int beneficiaryId)
         {
             var persons = DbSet
                 .Where(x => x.Id == beneficiaryId)
@@ -55,9 +55,9 @@ namespace Svbase.Core.Repositories.Implementation
                 .FirstOrDefault();
 
             if (persons == null)
-                return new List<PersonViewModel>();
+                return new List<PersonSelectionModel>();
 
-            var personModels = persons.Select(x => new PersonViewModel
+            var personModels = persons.Select(x => new PersonSelectionModel()
             {
                 Id = x.Id,
                 FirstName = x.FirstName,
@@ -76,6 +76,26 @@ namespace Svbase.Core.Repositories.Implementation
                     Id = b.Id,
                     Name = b.Name
                 }).ToList(),
+                City = x.Flats.Select(f => new BaseViewModel
+                {
+                    Id = f.Apartment.Street.City.Id,
+                    Name = f.Apartment.Street.City.Name,
+                }).FirstOrDefault(),
+                Street = x.Flats.Select(f => new BaseViewModel
+                {
+                    Id = f.Apartment.Street.Id,
+                    Name = f.Apartment.Street.Name,
+                }).FirstOrDefault(),
+                Apartment = x.Flats.Select(f => new BaseViewModel
+                {
+                    Id = f.Apartment.Id,
+                    Name = f.Apartment.Name,
+                }).FirstOrDefault(),
+                Flat = x.Flats.Select(f => new BaseViewModel
+                {
+                    Id = f.Id,
+                    Name = f.Number,
+                }).FirstOrDefault(),
             }).ToList();
             return personModels;
         }
