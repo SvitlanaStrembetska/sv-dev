@@ -7,8 +7,8 @@ namespace Svbase.Service.Interfaces
 {
     public interface IPersonService : IEntityService<Person>
     {
-        IEnumerable<PersonViewModel> GetPersons();
-        IEnumerable<PersonViewModel> GetPersonsByBeneficiariesId(int beneficiaryId);
+        IEnumerable<PersonSelectionModel> GetPersons();
+        IEnumerable<PersonSelectionModel> GetPersonsByBeneficiariesId(int beneficiaryId);
         PersonViewModel GetPersonById(int id);
 
         IList<BaseViewModel> GetDistrictsForFilter();
@@ -18,7 +18,7 @@ namespace Svbase.Service.Interfaces
         IEnumerable<BaseViewModel> GetApartmentsBaseModelByStreetIds(IList<int> streetIds);
         IEnumerable<BaseViewModel> GetFlatsBaseModelByApatrmentIds(IList<int> apartmentIds);
         bool CreatePersonByModel(PersonViewModel model);
-        List<PersonViewModel> SearchPersonsByFilter(FilterSearchModel filter);
+        List<PersonSelectionModel> SearchPersonsByFilter(FilterSearchModel filter);
         IEnumerable<ItemFilterModel> GetFilterStreetsByCityIds(IList<int> cityIds);
     }
 }

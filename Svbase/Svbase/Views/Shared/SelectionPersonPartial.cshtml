@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Svbase.Core.Models.PersonViewModel>
+﻿@model IEnumerable<Svbase.Core.Models.PersonSelectionModel>
 @{int i = 1;}
 @foreach (var person in Model)
 {
@@ -7,10 +7,31 @@
         <td id="lastNameHidd-@person.Id">@person.LastName</td>
         <td>@person.FirstName</td>
         <td>@person.MiddleName</td>
-        <td>Івано-Франківськ</td>
-        <td>Вулиця</td>
-        <td>Будинок</td>
-        <td>Квартира</td>
+        <td>
+            @if (person.City != null)
+            {
+                @person.City.Name
+            }
+        </td>
+        <td>
+            @if (person.Street != null)
+            {
+                @person.Street.Name
+            }
+        </td>
+        <td>
+            @if (person.Apartment != null)
+            {
+                @person.Apartment.Name
+            }
+        </td>
+        <td>
+            @if (person.Flat != null)
+            {
+                @person.Flat.Name
+            }
+        </td>
+
         <td>@person.FirthtMobilePhone</td>
         <td>@person.SecondMobilePhone</td>
         <td>@person.HomePhone</td>

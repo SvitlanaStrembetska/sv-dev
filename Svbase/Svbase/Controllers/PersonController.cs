@@ -37,7 +37,7 @@ namespace Svbase.Controllers
         {
             //var persons = _personService.GetPersons();
 
-            return View(new List<PersonViewModel>());
+            return View(new List<PersonSelectionModel>());
         }
         [HttpGet]
         public ActionResult All()

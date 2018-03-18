@@ -7,9 +7,8 @@ namespace Svbase.Core.Repositories.Interfaces
 {
     public interface IPersonRepository : IGenericRepository<Person>
     {
-        IEnumerable<PersonViewModel> GetPersons();
+        IEnumerable<PersonSelectionModel> GetPersons();
         PersonViewModel GetPersonById(int id);
-        IEnumerable<PersonViewModel> GetPersonsByBeneficiariesId(int beneficiaryId);
-        IEnumerable<PersonViewModel> GetPersonsByIds(IEnumerable<int> ids);
+        IEnumerable<PersonSelectionModel> GetPersonsByIds(IEnumerable<int> ids);
     }
 }

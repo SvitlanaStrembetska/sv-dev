@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using Svbase.Core.Data;
 using Svbase.Core.Data.Entities;
@@ -13,29 +14,50 @@ namespace Svbase.Core.Repositories.Implementation
         public PersonRepository(ApplicationDbContext context)
             : base(context) { }
 
-        public IEnumerable<PersonViewModel> GetPersons()
+        public IEnumerable<PersonSelectionModel> GetPersons()
         {
-            var persons = DbSet.Select(x => new PersonViewModel()
-            {
-                Id = x.Id,
-                FirstName = x.FirstName,
-                MiddleName = x.MiddleName,
-                LastName = x.LastName,
-                Position = x.Position,
-                Gender = x.Gender,
-                Email = x.Email,
-                FirthtMobilePhone = x.MobileTelephoneFirst,
-                SecondMobilePhone = x.MobileTelephoneSecond,
-                HomePhone = x.StationaryPhone,
-                PartionType = x.PartionType,
-                DateBirth = x.BirthdayDate,
-                Beneficiaries = x.Beneficiaries.Select(b => new CheckboxItemModel
+            var persons = DbSet
+                .Select(x => new PersonSelectionModel()
                 {
-                    Id = b.Id,
-                    Name = b.Name
-                }).ToList()
-            });
-            return persons;
+                    Id = x.Id,
+                    FirstName = x.FirstName,
+                    MiddleName = x.MiddleName,
+                    LastName = x.LastName,
+                    Position = x.Position,
+                    Gender = x.Gender,
+                    Email = x.Email,
+                    FirthtMobilePhone = x.MobileTelephoneFirst,
+                    SecondMobilePhone = x.MobileTelephoneSecond,
+                    HomePhone = x.StationaryPhone,
+                    PartionType = x.PartionType,
+                    DateBirth = x.BirthdayDate,
+                    Beneficiaries = x.Beneficiaries.Select(b => new CheckboxItemModel
+                    {
+                        Id = b.Id,
+                        Name = b.Name
+                    }).ToList(),
+                    City = x.Flats.Select(f => new BaseViewModel
+                    {
+                        Id = f.Apartment.Street.City.Id,
+                        Name = f.Apartment.Street.City.Name,
+                    }).FirstOrDefault(),
+                    Street = x.Flats.Select(f => new BaseViewModel
+                    {
+                        Id = f.Apartment.Street.Id,
+                        Name = f.Apartment.Street.Name,
+                    }).FirstOrDefault(),
+                    Apartment = x.Flats.Select(f => new BaseViewModel
+                    {
+                        Id = f.Apartment.Id,
+                        Name = f.Apartment.Name,
+                    }).FirstOrDefault(),
+                    Flat = x.Flats.Select(f => new BaseViewModel
+                    {
+                        Id = f.Id,
+                        Name = f.Number,
+                    }).FirstOrDefault(),
+                });
+            return persons.ToList();
         }
 
         public PersonViewModel GetPersonById(int id)
@@ -65,35 +87,12 @@ namespace Svbase.Core.Repositories.Implementation
             return person;
         }
 
-        public IEnumerable<PersonViewModel> GetPersonsByBeneficiariesId(int beneficiaryId)
+        public IEnumerable<PersonSelectionModel> GetPersonsByIds(IEnumerable<int> ids)
         {
-            var persons = DbSet.Select(x => x.Beneficiaries.Select(b => b.Id)).ToList()
-                //    .Select(x => new PersonViewModel
-                //    {
-                //        Id = x.Id,
-                //        FirstName = x.FirstName,
-                //        LastName = x.LastName,
-                //        MiddleName = x.MiddleName,
-                //        DateBirth = x.BirthdayDate,
-                //        Email = x.Email,
-                //        FirthtMobilePhone = x.MobileTelephoneFirst,
-                //        SecondMobilePhone = x.MobileTelephoneSecond,
-                //        HomePhone = x.StationaryPhone,
-                //        PartionType = x.PartionType,
-                //        Gender = x.Gender,
-                //        Position = x.Position
-                //    });
-                //return persons;
-                ;
-            return new List<PersonViewModel>();
-        }
-
-        public IEnumerable<PersonViewModel> GetPersonsByIds(IEnumerable<int> ids)
-        {
-            if (ids == null) return new List<PersonViewModel>();
+            if (ids == null) return new List<PersonSelectionModel>();
             var persons = DbSet
                 .Where(x => ids.ToList().Contains(x.Id))
-                .Select(x => new PersonViewModel
+                .Select(x => new PersonSelectionModel
                 {
                     Id = x.Id,
                     FirstName = x.FirstName,
@@ -111,7 +110,28 @@ namespace Svbase.Core.Repositories.Implementation
                     {
                         Id = b.Id,
                         Name = b.Name
-                    }).ToList()
+                    }).ToList(),
+                    City = x.Flats.Select(f => new BaseViewModel
+                    {
+                        Id = f.Apartment.Street.City.Id,
+                        Name = f.Apartment.Street.City.Name,
+                    }).FirstOrDefault(),
+                    Street = x.Flats.Select(f => new BaseViewModel
+                    {
+                        Id = f.Apartment.Street.Id,
+                        Name = f.Apartment.Street.Name,
+                    }).FirstOrDefault(),
+                    Apartment = x.Flats.Select(f => new BaseViewModel
+                    {
+                        Id = f.Apartment.Id,
+                        Name = f.Apartment.Name,
+                    }).FirstOrDefault(),
+                    Flat = x.Flats.Select(f => new BaseViewModel
+                    {
+                        Id = f.Id,
+                        Name = f.Number,
+                    }).FirstOrDefault(),
+
                 })
                 .ToList();
             return persons;
