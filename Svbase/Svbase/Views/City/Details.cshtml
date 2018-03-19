@@ -35,7 +35,7 @@
                     <table class="table table-hover table-striped">
                         <thead>
                             <tr>
-                                <th>
+                                <th class="border-bottom-none">
                                     <span>Назва</span>
                                 </th>
                             </tr>
@@ -43,7 +43,7 @@
                         <tbody>
                             @foreach (var street in Model.Streets)
                             {
-                                <tr>
+                                <tr data-id="@street.Id">
                                     <td class="col-xs-12">
                                         <a href="@Url.Action("Details","Street", new {id = street .Id})">@street.Name</a>
                                         @if (street.CanDelete)
@@ -84,7 +84,6 @@
 
     $('[data-action="delete"]').click(function () {
         var id = $(this).data('item-id');
-        console.log(id);
         $('#confirmDeleteModal').modal('show');
         $('#confirmDeleteModal')
             .find("#submitDelete")
@@ -92,11 +91,11 @@
     });
 
     $("#submitDelete").click(function () {
-        var that = this;
         var id = $(this).data('itemId');
         $.get('@Url.Action("Delete","Street")', { id })
             .done(() => {
-                $(that).parent().parent().remove();
+                var item = $(".table-striped > tbody").find("[data-id=" + id + "]");
+                $(item).remove();
             });
         $('#confirmDeleteModal').modal('hide');
 

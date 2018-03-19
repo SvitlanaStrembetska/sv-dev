@@ -124,6 +124,7 @@ button a.white-color:focus {
 .padding-top-7 {
     padding-top: 7px;
 }
+
 .padding-top-10 {
     padding-top: 10px;
 }
@@ -166,5 +167,9 @@ button a.white-color:focus {
 
 .highlighted-filter-item {
     background-color: #cde1f3 !important;
-    color:black;
+    color: black;
+}
+
+.border-bottom-none {
+    border-bottom: none;
 }

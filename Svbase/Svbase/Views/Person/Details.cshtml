@@ -34,14 +34,14 @@
                                 {
                                     <td>По батькові</td>
                                 }
-                                @if (Model.Cities != null)
+                                @*@if (Model.Cities != null)
                                 {
                                     <td>Місто</td>
                                 }
                                 @if (Model.Streets != null)
                                 {
                                     <td>Вулиця</td>
-                                }
+                                }*@
                                 @if (Model.FlatId != null)
                                 {
                                     <tD>Будинок</tD>
@@ -87,14 +87,14 @@
                                 {
                                     <th>@Model.MiddleName</th>
                                 }
-                                @if (Model.Cities != null)
+                                @*@if (Model.Cities != null)
                                 {
                                     <th>Івано-Франківськ</th>
                                 }
                                 @if (Model.Streets != null)
                                 {
                                     <th>Вулиця</th>
-                                }
+                                }*@
                                 @if (Model.FlatId != null)
                                 {
                                     <th>Будинок</th>
@@ -138,10 +138,9 @@
         </div>
     </div>
 </div>
-@Html.Partial("_PersonEdit")
+@*@Html.Partial("_PersonEdit", Model)*@
 <script>
     $('[data-action="edit"]').click(function () {
-
         var id = $(this).data('itemId');
         $('#EditId').val(id);
         $('#personEditModal').modal();

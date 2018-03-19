@@ -2,7 +2,7 @@
 @{int i = 1;}
 @foreach (var person in Model)
 {
-    <tr class="odd gradeX">
+    <tr class="odd gradeX" data-id="@person.Id">
         <td>@i</td>
         <td id="lastNameHidd-@person.Id">@person.LastName</td>
         <td>@person.FirstName</td>
@@ -81,7 +81,6 @@
 
     $('[data-action="delete"]').click(function () {
         var id = $(this).data('item-id');
-        console.log(id);
         $('#confirmDeleteModal').modal('show');
         $('#confirmDeleteModal')
             .find("#submitDelete")
@@ -91,9 +90,10 @@
     $("#submitDelete").click(function () {
         var id = $(this).data('item-id');
         $.get('@Url.Action("Delete","Person")', { id })
-            .done(() => {
-                $(this).parent().parent().remove();
-            });
+            {
+                var item = $("#selectionBody").find("[data-id=" + id + "]");
+                $(item).remove();
+            };
 
         $('#confirmDeleteModal').modal('hide');
 
