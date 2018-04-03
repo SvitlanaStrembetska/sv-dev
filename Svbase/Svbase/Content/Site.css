@@ -173,3 +173,81 @@ button a.white-color:focus {
 .border-bottom-none {
     border-bottom: none;
 }
+
+.stripped {
+    background-image: -webkit-repeating-linear-gradient(135deg, rgba(0,0,0,.3), rgba(0,0,0,.3) 1px, transparent 2px, transparent 2px, rgba(0,0,0,.3) 3px);
+    background-image: -moz-repeating-linear-gradient(135deg, rgba(0,0,0,.3), rgba(0,0,0,.3) 1px, transparent 2px, transparent 2px, rgba(0,0,0,.3) 3px);
+    background-image: -o-repeating-linear-gradient(135deg, rgba(0,0,0,.3), rgba(0,0,0,.3) 1px, transparent 2px, transparent 2px, rgba(0,0,0,.3) 3px);
+    background-image: repeating-linear-gradient(135deg, rgba(0,0,0,.3), rgba(0,0,0,.3) 1px, transparent 2px, transparent 2px, rgba(0,0,0,.3) 3px);
+    background-size: 4px 4px;
+}
+
+.select-files {
+    background-color: buttonface;
+    border-radius: 5px;
+}
+
+.select-files-container {
+    padding: 20px;
+}
+
+#contentStages .modal-footer {
+    padding: 15px 20px 15px;
+    margin-top: 0;
+}
+
+.close-modal {
+    position: absolute;
+    right: 10px;
+    top: 7px;
+}
+
+#viewFiles .row {
+    padding: 20px;
+}
+
+.table-header {
+    text-align: center;
+}
+
+.modal-lg {
+    width: 90%;
+}
+
+#filesDescription div {
+    text-align: initial;
+}
+#filesDescription label {
+    margin-right: 10px;
+}
+
+.errors-list {
+    text-align: left;
+    color: red;
+}
+
+.success-list {
+    text-align: left;
+    color: green;
+}
+
+.spinner {
+  display: inline-block;
+  opacity: 0;
+  max-width: 0;
+  -webkit-transition: opacity 0.25s, max-width 0.45s;
+  -moz-transition: opacity 0.25s, max-width 0.45s;
+  -o-transition: opacity 0.25s, max-width 0.45s;
+  transition: opacity 0.25s, max-width 0.45s;
+  /* Duration fixed since we animate additional hidden width */
+}
+
+.has-spinner.active {
+  cursor: progress;
+}
+
+.has-spinner.active .spinner {
+  opacity: 1;
+  max-width: 50px;
+  /* More than it will ever come, notice that this affects on animation duration */
+}

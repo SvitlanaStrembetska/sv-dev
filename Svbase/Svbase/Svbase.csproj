@@ -227,9 +227,13 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\ConvertDataHelper.cs" />
+    <Compile Include="Helpers\FilesDataValidationHelper.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\FileValidationModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\UploadFilesModel.cs" />
     <Compile Include="Modules\RepositoryModule.cs" />
     <Compile Include="Modules\ServiceModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -259,6 +263,7 @@
     <Content Include="Content\datatables\jquery.dataTables_themeroller.css" />
     <Content Include="Content\font-awesome\font-awesome.css" />
     <Content Include="Content\font-awesome\font-awesome.min.css" />
+    <Content Include="Content\fontawesome.min.css" />
     <Content Include="Content\metisMenu.css" />
     <Content Include="Content\metisMenu.min.css" />
     <Content Include="Content\morris.css" />
@@ -284,7 +289,6 @@
     <Content Include="Images\test2.xlsx" />
     <Content Include="Images\test2.csv" />
     <None Include="Properties\PublishProfiles\SDolinovska.pubxml" />
-    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\dataTables.bootstrap.css" />
     <Content Include="Scripts\dataTables.bootstrap.js" />
     <Content Include="Scripts\dataTables.bootstrap.min.js" />
@@ -330,9 +334,12 @@
     <Content Include="Scripts\flot\jquery.flot.threshold.js" />
     <Content Include="Scripts\flot\jquery.flot.time.js" />
     <Content Include="Scripts\flot\jquery.js" />
+    <Content Include="Scripts\jquery-1.10.2.min.map" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
-    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery-3.2.1.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
@@ -342,12 +349,14 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\morris.js" />
     <Content Include="Scripts\morris.min.js" />
+    <Content Include="Scripts\pz-plugins.js" />
     <Content Include="Scripts\raphael.js" />
     <Content Include="Scripts\raphael.min.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\sb-admin-2.js" />
     <Content Include="Scripts\sb-admin-2.min.js" />
+    <Content Include="Scripts\tmpl.min.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -406,6 +415,8 @@
     <Content Include="Views\Shared\_FilterFlatPartial.cshtml" />
     <Content Include="Views\Shared\_PersonEdit.cshtml" />
     <Content Include="Views\Shared\_ConfirmDelete.cshtml" />
+    <Content Include="Views\Upload\ImportExcel.cshtml" />
+    <Content Include="Views\Shared\_UploadFile.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -418,7 +429,6 @@
       <SubType>Designer</SubType>
     </Content>
     <None Include="Project_Readme.html" />
-    <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
