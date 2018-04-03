@@ -58,7 +58,7 @@ namespace Svbase.Controllers
             return RedirectToAction("UploadDocument");
         }
 
-        
+
 
         [Authorize]
         [ActionName("Importexcel")]
@@ -87,9 +87,10 @@ namespace Svbase.Controllers
 
                     //check file extension
                     var extension = Path.GetExtension(file.FileName).ToLower();
-                    string[] validFileTypes = {".xls", ".xlsx", ".csv"};
-                    if (!validFileTypes.Contains(extension)) { 
-                        errorsList.Add("Невірне розширення файлу '" + file.FileName + "'! Файл повинен бути в .xls, .xlsx або .csv форматі");
+                    string[] validFileTypes = { ".xls", ".xlsx" };
+                    if (!validFileTypes.Contains(extension))
+                    {
+                        errorsList.Add("Невірне розширення файлу '" + file.FileName + "'! Файл повинен бути в .xls або .xlsx форматі");
                         continue;
                     }
 
@@ -137,7 +138,7 @@ namespace Svbase.Controllers
                     });
                 }
 
-                if(errorsList.Any())
+                if (errorsList.Any())
                     foreach (var pathToExcelFile in multipleFiles.Select(file => string.Format("{0}/{1}", Server.MapPath("~/Content/Uploads"), file.FileName)).Where(pathToExcelFile => System.IO.File.Exists(pathToExcelFile)))
                     {
                         System.IO.File.Delete(pathToExcelFile);
@@ -199,29 +200,26 @@ namespace Svbase.Controllers
 
         private DataTable ParseFile(string extension, string pathToExcelFile, int showTableRowsCount)
         {
-            var dataTable = new DataTable();
-            if (extension.Trim() == ".csv")
-                dataTable = ConvertDataHelper.ConvertCsVtoDataTable(pathToExcelFile, showTableRowsCount);
-            else
+            DataTable dataTable = null;
+            string connString;
+
+            if (extension.Trim() == ".xls")
             {
-                string connString;
-                if (extension.Trim() == ".xls")
-                {
-                    connString =
-                        string.Format(
-                            "Provider=Microsoft.Jet.OLEDB.4.0; data source={0}; Extended Properties=Excel 8.0;",
-                            pathToExcelFile);
-                    dataTable = ConvertDataHelper.ConvertXslXtoDataTable(pathToExcelFile, connString, showTableRowsCount);
-                }
-                else if (extension.Trim() == ".xlsx")
-                {
-                    connString =
-                        string.Format(
-                            "Provider=Microsoft.ACE.OLEDB.12.0;Data Source={0};Extended Properties=\"Excel 12.0 Xml;HDR=YES;IMEX=1\";",
-                            pathToExcelFile);
-                    dataTable = ConvertDataHelper.ConvertXslXtoDataTable(pathToExcelFile, connString, showTableRowsCount);
-                }
+                connString =
+                    string.Format(
+                        "Provider=Microsoft.Jet.OLEDB.4.0; data source={0}; Extended Properties=Excel 8.0;",
+                        pathToExcelFile);
+                dataTable = ConvertDataHelper.ConvertXslXtoDataTable(pathToExcelFile, connString, showTableRowsCount);
             }
+            else if (extension.Trim() == ".xlsx")
+            {
+                connString =
+                    string.Format(
+                        "Provider=Microsoft.ACE.OLEDB.12.0;Data Source={0};Extended Properties=\"Excel 12.0 Xml;HDR=YES;IMEX=1\";",
+                        pathToExcelFile);
+                dataTable = ConvertDataHelper.ConvertXslXtoDataTable(pathToExcelFile, connString, showTableRowsCount);
+            }
+
             return dataTable;
         }
 
