@@ -3,7 +3,7 @@
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title" id="DownloadFilelLabel">Import Excel</h3>
+                <h3 class="modal-title" id="DownloadFilelLabel">Імпортувати Excel файл</h3>
                 <button type="button" class="close close-modal" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -21,14 +21,14 @@
                         </div>
                         <div id="selectFiles" class="select-files">
                             <div class="select-files-container">
-                                <h3>DragAndDrop</h3>
+                                <h3>Перетягніть сюди файл</h3>
                                 <p style="margin-top: 30px; margin-bottom: 10px;">
-                                    Or
+                                    або
                                 </p>
                                 <div class="row">
                                     <div class="col-md-offset-4 col-md-4">
                                         <div class="btn-fileupload">
-                                            <input type="file" id="selectFile" accept=".xls, .xlsx, .csv" name="multipleFiles" multiple>
+                                            <input type="file" id="selectFile" accept=".xls, .xlsx" name="multipleFiles" multiple>
                                         </div>
                                     </div>
                                 </div>
@@ -146,7 +146,7 @@
                                     $("#viewFiles").css("display", "none");
                                     $("#selectFiles").css("display", "block");
                                     $("#viewFiles .fa-spinner").css("display", "inline-block");
-                                    $("#selectFiles .btn-fileupload").append('<input type="file" id="selectFile" accept=".xls, .xlsx, .csv" name="multipleFiles" multiple>');
+                                    $("#selectFiles .btn-fileupload").append('<input type="file" id="selectFile" accept=".xls, .xlsx" name="multipleFiles" multiple>');
                                     console.log("FileUpload - error");
                                 }
                             });
@@ -170,7 +170,7 @@
                                 $("#selectFiles").css("display", "block");
                                 $("#viewFiles").css("display", "none");
                                 $("#viewFiles .fa-spinner").css("display", "inline-block");
-                                $("#selectFiles .btn-fileupload").append('<input type="file" id="selectFile" accept=".xls, .xlsx, .csv" name="multipleFiles" multiple>');
+                                $("#selectFiles .btn-fileupload").append('<input type="file" id="selectFile" accept=".xls, .xlsx" name="multipleFiles" multiple>');
                             }
                         }
 
@@ -206,7 +206,7 @@
                             $("#viewFiles").css("display", "none");
                             $("#selectFiles").css("display", "block");
                             $("#viewFiles .fa-spinner").css("display", "inline-block");
-                            $("#selectFiles .btn-fileupload").append('<input type="file" id="selectFile" accept=".xls, .xlsx, .csv" name="multipleFiles" multiple>');
+                            $("#selectFiles .btn-fileupload").append('<input type="file" id="selectFile" accept=".xls, .xlsx" name="multipleFiles" multiple>');
                         });
 
                         $(document).on('click', '.remove-attached-file', function () {
