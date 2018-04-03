@@ -1,0 +1,287 @@
+﻿@using Svbase.Core.Consts
+<div class="modal fade bd-example-modal-lg" id="DownloadFile" tabindex="-1" role="dialog" aria-labelledby="DownloadFile" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="DownloadFilelLabel">Import Excel</h3>
+                <button type="button" class="close close-modal" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div id="contentStages">
+                @using (Html.BeginForm("SaveFilesDataToDb", "Upload", new { area = "" }, FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    <div class="modal-body">
+                        <div class="panel-white text-center" id="viewFiles" style="display: none">
+                            <div class="row" id="fileInfo">
+                                <i class="fa fa-spinner fa-pulse fa-3x fa-fw" style="margin-top: 20px"></i>
+                                <div id="appendedFiles" class="btn-fileupload"></div>
+                                <div id="filesDescription" class="row" style="padding: 5px"></div>
+                            </div>
+                        </div>
+                        <div id="selectFiles" class="select-files">
+                            <div class="select-files-container">
+                                <h3>DragAndDrop</h3>
+                                <p style="margin-top: 30px; margin-bottom: 10px;">
+                                    Or
+                                </p>
+                                <div class="row">
+                                    <div class="col-md-offset-4 col-md-4">
+                                        <div class="btn-fileupload">
+                                            <input type="file" id="selectFile" accept=".xls, .xlsx, .csv" name="multipleFiles" multiple>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрити вікно</button>
+                        <button type="button" id="saveFilesData" class="btn btn-primary has-spinner">
+                            Зберегти дані
+                            <span class="spinner"><i class="fas fa-spinner fa-spin"></i></span>
+                        </button>
+                    </div>
+                    <script type="text/x-tmpl" id="tmpl-userFile">
+                        <div class="multipleFiles" data-fileid="{%=o.fileId%}">
+                            <label>{%=o.name%}</label><i class="fa fa-times remove-attached-file" aria-hidden="true" fileform="{%=o.index%}"></i>
+                            <input type="hidden" tmplFile name="Files[{%=o.index%}].FileId" value="{%=o.fileId%}" fileform="{%=o.index%}" />
+                            <div id="filesData" style="overflow: hidden;overflow-x: auto;">
+                                <table class="table table-bordered"><thead></thead><tbody></tbody></table>
+                            </div>
+                        </div>
+                    </script>
+                    @Scripts.Render("~/bundles/fileUpload")
+                    <script>
+                        $(document).ready(function ($) {
+                            $("#selectFiles").dragAndDropPZ({
+                                fileInputId: "#selectFile"
+                            });
+                        });
+
+                        var isSaveFilesDataButtonClick = false;
+                        var viewFiles = "#viewFiles";
+                        var selectFiles = "#selectFiles";
+
+                        function showViewFiles() {
+                            $(selectFiles).hide();
+                            $(viewFiles).show();
+                        }
+
+                        var index = 0;
+
+                        function appendAttachedFiles(data) {
+                            for (var i = 0; i < data.length; i++) {
+                                $(viewFiles).find('#filesDescription').append(tmpl("tmpl-userFile", { fileId: data[i].FileName, name: data[i].FileName, index: index }));
+
+                                var dataList = data[i].DataList;
+
+                                var isRowHeaderNotExist = true;
+                                var rowValue = '';
+
+                                for (var d = 0; d < dataList.length; d++) {
+
+                                    var column = dataList[d];
+                                    rowValue += "<tr>";
+
+                                    if (isRowHeaderNotExist) {
+                                        var header = '<tr>';
+                                        $.each(column, function (key, val) {
+                                            header += '<th scope="col" class="table-header">' + key + '</th>';
+                                            rowValue += '<td>' + val + '</td>';
+                                        });
+                                        header += "</tr>";
+                                        $(viewFiles).find('#filesData thead').last().append(header);
+                                    } else {
+                                        $.each(column, function (key, val) {
+                                            rowValue += '<td>' + val + '</td>';
+                                        });
+                                    }
+
+                                    rowValue += "</tr>";
+                                    isRowHeaderNotExist = false;
+                                }
+                                $(viewFiles).find('#filesData tbody').last().append(rowValue);
+                                index++;
+                            }
+                            index = 0;
+                        }
+
+                        function removeSpinner() {
+                            $("#viewFiles .fa-spinner").css("display", "none");
+                        }
+
+                        function uploadMultipleStageFiles() {
+                            var formData = new FormData($("#contentStages form")[0]);
+                            $.ajax({
+                                url: "@Url.Action("Importexcel", "Upload")",
+                                data: formData,
+                                type: "POST",
+                                dataType: 'json',
+                                processData: false,
+                                contentType: false,
+                                success: function (data) {
+                                    if (data.status === '@GeneralConsts.StatusSuccess') {
+                                        removeSpinner();
+                                        appendAttachedFiles(data.files);
+                                        return true;
+                                    } else if (data.status === '@GeneralConsts.StatusError') {
+                                        removeSpinner();
+                                        var errorsList = '<div class="errors-block"><h4>Знайдено наступні помилки:</h4><ul class="errors-list">';
+                                        if (data.message != undefined)
+                                            errorsList += "<li>" + data.message + "</li>";
+                                        if (data.errorsList != undefined) {
+                                            for (var i = 0; i < data.errorsList.length; i++) {
+                                                errorsList += "<li>" + data.errorsList[i] + "</li>";
+                                            }
+                                        }
+                                        $("#fileInfo").prepend(errorsList + "</ul></div>");
+                                        $("#fileInfo").append('<button type="button" id="endWorkWithFile" class="btn btn-primary"> Завершити роботу з файлами </button>');
+                                        return false;
+                                    }
+                                    return false;
+                                },
+                                error: function () {
+                                    removeSpinner();
+                                    $("#viewFiles").css("display", "none");
+                                    $("#selectFiles").css("display", "block");
+                                    $("#viewFiles .fa-spinner").css("display", "inline-block");
+                                    $("#selectFiles .btn-fileupload").append('<input type="file" id="selectFile" accept=".xls, .xlsx, .csv" name="multipleFiles" multiple>');
+                                    console.log("FileUpload - error");
+                                }
+                            });
+                        }
+
+                        $(document).on('change', '#selectFile', function () {
+                            showViewFiles();
+                            uploadMultipleStageFiles();
+                            $("#selectFile").remove();
+                        });
+
+                        function updateStageFileIndexes() {
+                            index = 0;
+
+                            $("[tmplFile]").each(function (i) {
+                                $(this).attr('name', 'Files[' + i + '].FileId');
+                                index++;
+                            });
+
+                            if ($("[tmplFile]").length === 0) {
+                                $("#selectFiles").css("display", "block");
+                                $("#viewFiles").css("display", "none");
+                                $("#viewFiles .fa-spinner").css("display", "inline-block");
+                                $("#selectFiles .btn-fileupload").append('<input type="file" id="selectFile" accept=".xls, .xlsx, .csv" name="multipleFiles" multiple>');
+                            }
+                        }
+
+                        function deleteFiles(fileName, $fileBlock) {
+                            $.ajax({
+                                url: "@Url.Action("DeleteStageFile", "Upload")",
+                                data: { fileName: fileName },
+                                type: 'post',
+                                async: false,
+                                success: function (data) {
+                                    if (data.status === "success") {
+                                        console.log("FileUpload - success");
+                                        $fileBlock.remove();
+                                        updateStageFileIndexes();
+                                        return true;
+                                    } else if (data.status === "error") {
+                                        alert(data.message);
+                                        return false;
+                                    }
+                                    return false;
+                                },
+                                error: function () {
+                                    console.log("Delete upload file - error");
+                                }
+                            });
+                        }
+
+                        $(document).on('click', '#endWorkWithFile', function () {
+                            isSaveFilesDataButtonClick = false;
+                            $(".errors-block").remove();
+                            $(".success-block").remove();
+                            $("#endWorkWithFile").remove();
+                            $("#viewFiles").css("display", "none");
+                            $("#selectFiles").css("display", "block");
+                            $("#viewFiles .fa-spinner").css("display", "inline-block");
+                            $("#selectFiles .btn-fileupload").append('<input type="file" id="selectFile" accept=".xls, .xlsx, .csv" name="multipleFiles" multiple>');
+                        });
+
+                        $(document).on('click', '.remove-attached-file', function () {
+                            var $fileBlock = $(this).closest("[data-fileid]");
+                            var fileName = $fileBlock.attr("data-fileid");
+                            deleteFiles(fileName, $fileBlock);
+                        });
+
+                        $(document).on('click', '#saveFilesData', function () {
+                            if (isSaveFilesDataButtonClick)
+                                return false;
+                            $('#saveFilesData').toggleClass('active');
+                            isSaveFilesDataButtonClick = true;
+                            var namesList = [];
+                            $(".multipleFiles").each(function () {
+                                var fileName = $(this)[0].getAttribute("data-fileid");
+                                namesList.push(fileName.trim());
+                            });
+
+                            if (namesList.length == 0) {
+                                $('#saveFilesData').toggleClass('active');
+                                isSaveFilesDataButtonClick = false;
+                                return false;
+                            }
+
+                            $.ajax({
+                                url: "@Url.Action("SaveFilesDataToDb", "Upload")",
+                                data: { filesName: namesList },
+                                type: 'post',
+                                success: function (data) {
+                                    $("[data-fileid]").remove();
+                                    var successList = '<div class="success-block"><h4>Результати успішних операцій:</h4><ul class="success-list">';
+                                    if (data.status === "success") {
+                                        for (var i = 0; i < data.successList.length; i++) {
+                                            successList += "<li>" + data.successList[i] + "</li>";
+                                        }
+                                        $("#fileInfo").prepend(successList + "</ul></div>");
+                                        $("#fileInfo").append('<button type="button" id="endWorkWithFile" class="btn btn-primary"> Завершити роботу з файлами </button>');
+                                        $('#saveFilesData').toggleClass('active');
+                                        return true;
+
+                                    } else if (data.status === "error") {
+                                        var errorsList = '<div class="errors-block"><h4>Знайдено наступні помилки:</h4><ul class="errors-list">';
+                                        if (data.message != undefined)
+                                            errorsList += "<li>" + data.message + "</li>";
+
+                                        if (data.errorsList != undefined) {
+                                            for (var i = 0; i < data.errorsList.length; i++) {
+                                                errorsList += "<li>" + data.errorsList[i] + "</li>";
+                                            }
+                                            $("#fileInfo").prepend(errorsList + "</ul></div>");
+                                        }
+                                        if (data.successList != undefined && data.successList.length > 0) {
+                                            for (var i = 0; i < data.successList.length; i++) {
+                                                successList += "<li>" + data.successList[i] + "</li>";
+                                            }
+                                            $("#fileInfo").prepend(successList + "</ul></div>");
+                                        }
+                                        $("#fileInfo").append('<button type="button" id="endWorkWithFile" class="btn btn-primary"> Завершити роботу з файлами </button>');
+                                        $('#saveFilesData').toggleClass('active');
+                                        return false;
+                                    }
+                                    $('#saveFilesData').toggleClass('active');
+                                    return false;
+                                },
+                                error: function () {
+                                    $('#saveFilesData').toggleClass('active');
+                                    console.log("save files data - error");
+                                }
+                            });
+                            return false;
+                        });
+                    </script>
+                }
+            </div>
+        </div>
+    </div>
+</div>

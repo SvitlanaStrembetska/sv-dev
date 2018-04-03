@@ -23,9 +23,15 @@ namespace Svbase
                       "~/Scripts/bootstrap.js",
                       "~/Scripts/respond.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/fileUpload").Include(
+                      "~/Scripts/pz-plugins.js",
+                      "~/Scripts/tmpl.min.js"));
+
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
-                      "~/Content/Site.css"));
+                      "~/Content/Site.css",
+                      "~/Content/fontawesome.min.css"));
+
         }
     }
 }
