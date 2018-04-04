@@ -43,6 +43,7 @@ namespace Svbase.Core.Repositories.Implementation
                 {
                     Id = s.Id,
                     Name = s.Name,
+                    Pseudonym = s.Pseudonym,
                     CanDelete = !s.Apartments.Any()
                 })
             })

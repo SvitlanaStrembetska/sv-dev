@@ -117,6 +117,10 @@
     <Compile Include="Migrations\201801131820121_ApartmentDistrictTable.Designer.cs">
       <DependentUpon>201801131820121_ApartmentDistrictTable.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201804031859182_AddPseudonymToStreet.cs" />
+    <Compile Include="Migrations\201804031859182_AddPseudonymToStreet.Designer.cs">
+      <DependentUpon>201804031859182_AddPseudonymToStreet.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Migrations\DbInitializer\CreateIfNotExistWithSeed.cs" />
     <Compile Include="Models\ApartmentFilterModel.cs" />
@@ -190,6 +194,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201801131820121_ApartmentDistrictTable.resx">
       <DependentUpon>201801131820121_ApartmentDistrictTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804031859182_AddPseudonymToStreet.resx">
+      <DependentUpon>201804031859182_AddPseudonymToStreet.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

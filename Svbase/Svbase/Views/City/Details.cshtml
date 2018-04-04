@@ -45,7 +45,19 @@
                             {
                                 <tr data-id="@street.Id">
                                     <td class="col-xs-12">
-                                        <a href="@Url.Action("Details","Street", new {id = street .Id})">@street.Name</a>
+                                        <a class="streetName" href="@Url.Action("Details", "Street", new {id = street.Id})">
+                                            @street.Name
+                                        </a>
+                                        @if (!string.IsNullOrEmpty(street.Pseudonym))
+                                        {
+                                            <span>&nbsp;</span>
+                                            <span class="pseudonym-color">(</span>
+                                            <span class="streetPseudonym pseudonym-color">
+                                                @street.Pseudonym
+                                            </span>
+                                            <span class="pseudonym-color">)</span>
+                                        }
+
                                         @if (street.CanDelete)
                                         {
                                             <i style="color: red; cursor: pointer"
@@ -73,10 +85,16 @@
 @Html.Partial("_ConfirmDelete")
 <script>
     $('[data-action="edit"]').click(function () {
-        var street = $(this).parent().find("a")[0].text;
+        var street = $(this).parent().find(".streetName")[0].text.trim();
+        var pseudonymEl = $(this).parent().find(".streetPseudonym")[0];
+        var pseudonym = "";
+        if (pseudonymEl) {
+            pseudonym = $(this).parent().find(".streetPseudonym")[0].innerText.trim();
+        }
         var id = $(this).data('itemId');
         var cityId = $(this).data('cityId');
         $('#EditName').val(street);
+        $('#EditPseudonym').val(pseudonym);
         $('#EditId').val(id);
         $('#CityId').val(cityId);
         $('#streetEditModal').modal('show');

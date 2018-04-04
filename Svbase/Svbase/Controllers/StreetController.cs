@@ -51,6 +51,7 @@ namespace Svbase.Controllers
                 return Json(new { status = "error" });
             }
             street.Name = model.Name;
+            street.Pseudonym = model.Pseudonym;
             _streetService.Update(street);
             return Json(new { status = "success" });
         }

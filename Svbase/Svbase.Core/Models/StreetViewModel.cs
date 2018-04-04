@@ -1,16 +1,26 @@
 ﻿using Svbase.Core.Data.Entities;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Svbase.Core.Models
 {
-    public class StreetCreateModel : BaseViewModel
+
+    public class StreetBaseViewModel : BaseViewModel
     {
+        public string Pseudonym { get; set; }
+    }
+
+    public class StreetCreateModel : StreetBaseViewModel
+    {
+        [Display(Name = "Псевдонім")]
+       
         public bool CanDelete { get; set; }
         public int CityId { get; set; }
         public Street Update(Street street)
         {
             street.Id = Id;
             street.Name = Name;
+            street.Pseudonym = Pseudonym;
             street.CityId = CityId;
             return street;
         }
@@ -21,7 +31,7 @@ namespace Svbase.Core.Models
         public IEnumerable<ApartmentCreateModel> Apartments { get; set; }
     }
 
-    public class StreetSelectModel : BaseViewModel
+    public class StreetSelectModel : StreetBaseViewModel
     {
         public bool IsChecked { get; set; }
         public string CityName { get; set; }

@@ -17,6 +17,11 @@
                        value="@item.Id">
                 @item.Name
             </a>
+            @if (!string.IsNullOrEmpty(@item.Pseudonym))
+            {
+                <span>&nbsp;</span>
+                <span class="pseudonym-color">(@item.Pseudonym)</span>
+            }
         </li>
     }
 }

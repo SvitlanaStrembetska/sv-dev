@@ -20,6 +20,7 @@ namespace Svbase.Core.Repositories.Implementation
             {
                 Id = x.Id,
                 Name = x.Name,
+                Pseudonym = x.Pseudonym,
                 CityId = x.CityId,
                 CanDelete = !x.Apartments.Any(),
                 Apartments = x.Apartments.Select(a => new ApartmentCreateModel
@@ -39,6 +40,7 @@ namespace Svbase.Core.Repositories.Implementation
             {
                 Id = x.Id,
                 Name = x.Name,
+                Pseudonym = x.Pseudonym,
                 CityName = x.City.Name,
                 IsChecked = false
             });
@@ -110,10 +112,11 @@ namespace Svbase.Core.Repositories.Implementation
                 {
                     ParentId = streets.FirstOrDefault()?.CityId ?? 0,
                     ParentName = streets.FirstOrDefault()?.City?.Name,
-                    Items = streets.Select(x => new BaseViewModel
+                    Items = streets.Select(x => new StreetBaseViewModel
                         {
                             Id = x.Id,
-                            Name = x.Name
+                            Name = x.Name,
+                            Pseudonym = x.Pseudonym
                         })
                         .ToList()
                 };
@@ -157,7 +160,7 @@ namespace Svbase.Core.Repositories.Implementation
                     {
                         ParentId = x.Id,
                         ParentName = x.Name,
-                        Items = x.Apartments.Select(a => new BaseViewModel
+                        Items = x.Apartments.Select(a => new StreetBaseViewModel
                         {
                             Id = a.Id,
                             Name = a.Name

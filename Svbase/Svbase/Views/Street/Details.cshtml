@@ -4,7 +4,14 @@
     <div class="row">
         <div class="col-sm-12">
             <div class="col-md-6 col-xs-12">
-                <h2 style="margin-top: 0">@Model.Name</h2>
+                <h2 style="margin-top: 0">
+                    <span>@Model.Name</span>
+                    @if (!string.IsNullOrEmpty(@Model.Pseudonym))
+                    {
+                        <span>&nbsp;</span>
+                        <span class="pseudonym-color">(@Model.Pseudonym)</span>
+                    }
+                </h2>
             </div>
             <div class="col-md-6 col-xs-12">
                 <a href="@Url.Action("Details", "City", new {id = Model.CityId})" class="pull-right padding-top-10">

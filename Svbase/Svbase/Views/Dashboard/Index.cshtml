@@ -155,8 +155,12 @@
                                        href="@Url.Action("Details","Street", new {id = item.Id})">
                                         <input type="checkbox">
                                         @item.Name
-                                       
                                     </a>
+                                    @if (!string.IsNullOrEmpty(@item.Pseudonym))
+                                    {
+                                        <span>&nbsp;</span>
+                                        <span class="pseudonym-color">(@item.Pseudonym)</span>
+                                    }
                                     <i style="color: red; cursor: pointer"
                                        class="pull-right glyphicon glyphicon-trash"
                                        data-action="delete"

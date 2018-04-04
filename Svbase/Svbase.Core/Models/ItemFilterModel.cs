@@ -6,6 +6,6 @@ namespace Svbase.Core.Models
     {
         public int ParentId { get; set; }
         public string ParentName { get; set; }
-        public List<BaseViewModel> Items { get; set; }
+        public List<StreetBaseViewModel> Items { get; set; }
     }
 }

@@ -251,3 +251,7 @@ button a.white-color:focus {
   max-width: 50px;
   /* More than it will ever come, notice that this affects on animation duration */
 }
+
+.pseudonym-color {
+    color: #95a5b3;
+}

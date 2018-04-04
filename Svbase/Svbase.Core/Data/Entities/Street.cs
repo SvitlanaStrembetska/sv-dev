@@ -6,6 +6,7 @@ namespace Svbase.Core.Data.Entities
     public class Street : Entity<int>
     {
         public string Name { get; set; }
+        public string Pseudonym { get; set; }
         public int CityId { get; set; }
         public virtual City City { get; set; }
 
