@@ -255,3 +255,22 @@ button a.white-color:focus {
 .pseudonym-color {
     color: #95a5b3;
 }
+
+.thumbtack {
+    right: 10px;
+    position: absolute;
+    margin-top: -32px;
+    font-size: 18px;
+    color: darkred;
+}
+
+#wrapper .sidebar {
+    margin-top: 0;
+    padding-top: 51px;
+}
+
+@media (max-width: 768px) {
+  #page-wrapper {
+      margin: 0 !important;
+  }
+}

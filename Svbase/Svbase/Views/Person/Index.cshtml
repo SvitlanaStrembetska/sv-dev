@@ -16,14 +16,15 @@
 <div id="wrapper">
     <nav role="navigation">
         <div class="navbar-default sidebar" role="navigation">
+            <i class="fas fa-thumbtack thumbtack" thumbtack="true"></i>
             <div class="sidebar-nav navbar-collapse">
                 <ul class="nav" id="side-menu">
-                    <li style="border-bottom: none;">
+                    <li class="li-button" style="border-bottom: none;">
                         <div class="col-xs-12">
                             <button id="getAll" style="width: 100%; margin-bottom: 15px" type="button" class="btn btn-danger">Показати всі</button>
                         </div>
                     </li>
-                    <li>
+                    <li class="li-button">
                         <div class="col-xs-12">
                             <button id="search" style="width: 100%; margin-bottom: 15px" type="button" class="btn btn-primary">Пошук</button>
                         </div>
@@ -32,7 +33,7 @@
                         <a id="districts-header"
                            class="main-filter-raw-header"
                            onclick="toggleInById('districts')">
-                            <i class="fa fa-history fa-fw"></i>Округи
+                            <i class="fa fa-history fa-fw"></i> Округи
                         </a>
                         <ul id="districts" class="panel-collapse collapse nav nav-second-level">
                             @Html.Partial("_FilterCheckBoxPartial", new List<BaseViewModel>())
@@ -51,12 +52,12 @@
                         <a id="street-header"
                            class="main-filter-raw-header"
                            onclick="toggleInById('streets')">
-                            <i class="fa fa-book fa-fw"></i> Вулиця<span class="fa arrow"></span>
+                            <i class="fa fa-book fa-fw"></i> Вулиця
                         </a>
                         <ul id="streets" class="panel-collapse collapse nav nav-second-level"></ul>
                     </li>
                     <li>
-                        <a class="main-filter-raw-header"
+                        <a id="apartment-header" class="main-filter-raw-header"
                            onclick="toggleInById('apartments')">
                             <i class="fa fa-table fa-fw"></i> Будинки
                         </a>
@@ -64,9 +65,9 @@
                             class="panel-collapse collapse nav nav-second-level"></ul>
                     </li>
                     <li>
-                        <a class="main-filter-raw-header"
+                        <a id="flat-header" class="main-filter-raw-header"
                            onclick="toggleInById('flats')">
-                            <i class="fa fa-wrench fa-fw"></i> Номер квартири<span class="fa arrow"></span>
+                            <i class="fa fa-wrench fa-fw"></i> Номер квартири
                         </a>
                         <ul id="flats"
                             class="panel-collapse collapse nav nav-second-level"></ul>
@@ -158,9 +159,11 @@
 </div>
 
 <script>
+    var isSidebarToogled = false;
 
     function toggleInById(itemId) {
         $("#" + itemId).toggle('in');
+        isSidebarToogled = true;
     }
 
     $(document).ready(() => {
@@ -592,6 +595,96 @@
 
             return origVal;
         });
+    });
+
+    var isThumbtackActive = true;
+
+    $(document).on('click', '.thumbtack', function () {
+        var currentVal = $(this).attr('thumbtack');
+        if (currentVal === "true") {
+            $(this).attr('thumbtack', "false");
+            $(this).css("color", "black");
+            isThumbtackActive = false;
+        } else {
+            $(this).attr('thumbtack', "true");
+            $(this).css("color", "darkred");
+            isThumbtackActive = true;
+        }
+    });
+
+    var isDistrictsHidden = true;
+    var isCitiesHidden = true;
+    var isStreetsHidden = true;
+    var isApartmentsHidden = true;
+    var isFlatsHidden = true;
+    function checkSidebarProperties() {
+        if ($("#districts").css("display") === "none") isDistrictsHidden = true;
+        else isDistrictsHidden = false;
+
+        if ($("#cities").css("display") === "none") isCitiesHidden = true;
+        else isCitiesHidden = false;
+
+        if ($("#streets").css("display") === "none") isStreetsHidden = true;
+        else isStreetsHidden = false;
+
+        if ($("#apartments").css("display") === "none") isApartmentsHidden = true;
+        else isApartmentsHidden = false;
+
+        if ($("#flats").css("display") === "none") isFlatsHidden = true;
+        else isFlatsHidden = false;
+
+        isSidebarToogled = false;
+    }
+
+    var isMouseOver = true;
+    $("#wrapper .sidebar").mouseover(function () {
+        if (!isThumbtackActive && isMouseOver) {
+
+            if (isSidebarToogled) checkSidebarProperties();
+
+            if (!isDistrictsHidden) $("#districts").css("display", "block");
+            if (!isCitiesHidden) $("#cities").css("display", "block");
+            if (!isStreetsHidden) $("#streets").css("display", "block");
+            if (!isApartmentsHidden) $("#apartments").css("display", "block");
+            if (!isFlatsHidden) $("#flats").css("display", "block");
+            
+            $(".sidebar").css("width", "250px");
+            $("#page-wrapper").css("margin", "0 0 0 250px");
+            $("#side-menu .li-button").css("display", "block");
+
+            $("#districts-header").html('<i class="fa fa-history fa-fw"></i> Округи');
+            $("#cities-header").html('<i class="fa fa-table fa-fw"></i> Місто, район');
+            $("#street-header").html('<i class="fa fa-book fa-fw"></i> Вулиця');
+            $("#apartment-header").html('<i class="fa fa-table fa-fw"></i> Будинки');
+            $("#flat-header").html('<i class="fa fa-wrench fa-fw"></i> Номер квартири');
+
+            isMouseOver = false;
+        }
+    });
+
+    $("#wrapper .sidebar").mouseleave(function () {
+        if (!isThumbtackActive && !isMouseOver) {
+
+            if (isSidebarToogled) checkSidebarProperties();
+
+            if (!isDistrictsHidden) $("#districts").css("display", "none");
+            if (!isCitiesHidden) $("#cities").css("display", "none");
+            if (!isStreetsHidden) $("#streets").css("display", "none");
+            if (!isApartmentsHidden) $("#apartments").css("display", "none");
+            if (!isFlatsHidden) $("#flats").css("display", "none");
+
+            $(".sidebar").css("width", "50px");
+            $("#page-wrapper").css("margin", "0 0 0 50px");
+            $("#side-menu .li-button").css("display", "none");
+
+            $("#districts-header").html('<i class="fa fa-history fa-fw"></i>');
+            $("#cities-header").html('<i class="fa fa-table fa-fw"></i>');
+            $("#street-header").html('<i class="fa fa-book fa-fw"></i>');
+            $("#apartment-header").html('<i class="fa fa-table fa-fw"></i>');
+            $("#flat-header").html('<i class="fa fa-wrench fa-fw"></i>');
+
+            isMouseOver = true;
+        }
     });
 
 </script>
