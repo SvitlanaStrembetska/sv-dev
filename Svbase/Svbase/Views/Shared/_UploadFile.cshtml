@@ -219,6 +219,7 @@
                             if (isSaveFilesDataButtonClick)
                                 return false;
                             $('#saveFilesData').toggleClass('active');
+                            $('.spinner').css('display', 'inline-block');
                             isSaveFilesDataButtonClick = true;
                             var namesList = [];
                             $(".multipleFiles").each(function () {
@@ -228,6 +229,7 @@
 
                             if (namesList.length == 0) {
                                 $('#saveFilesData').toggleClass('active');
+                                $('.spinner').css('display', 'none');
                                 isSaveFilesDataButtonClick = false;
                                 return false;
                             }
@@ -246,6 +248,7 @@
                                         $("#fileInfo").prepend(successList + "</ul></div>");
                                         $("#fileInfo").append('<button type="button" id="endWorkWithFile" class="btn btn-primary"> Завершити роботу з файлами </button>');
                                         $('#saveFilesData').toggleClass('active');
+                                        $('.spinner').css('display', 'none');
                                         return true;
 
                                     } else if (data.status === "error") {
@@ -267,13 +270,16 @@
                                         }
                                         $("#fileInfo").append('<button type="button" id="endWorkWithFile" class="btn btn-primary"> Завершити роботу з файлами </button>');
                                         $('#saveFilesData').toggleClass('active');
+                                        $('.spinner').css('display', 'none');
                                         return false;
                                     }
                                     $('#saveFilesData').toggleClass('active');
+                                    $('.spinner').css('display', 'none');
                                     return false;
                                 },
                                 error: function () {
                                     $('#saveFilesData').toggleClass('active');
+                                    $('.spinner').css('display', 'none');
                                     console.log("save files data - error");
                                 }
                             });
