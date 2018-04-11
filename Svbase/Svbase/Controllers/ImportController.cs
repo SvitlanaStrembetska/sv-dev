@@ -17,7 +17,7 @@ using Svbase.Service.Interfaces;
 namespace Svbase.Controllers
 {
     [Authorize]
-    public class UploadController : GeneralController
+    public class ImportController : GeneralController
     {
         private readonly IPersonService _personService;
         private readonly IFlatService _flatService;
@@ -25,7 +25,7 @@ namespace Svbase.Controllers
         private readonly IStreetService _streetService;
         private readonly ICityService _cityService;
 
-        public UploadController(IServiceManager serviceManager)
+        public ImportController(IServiceManager serviceManager)
             : base(serviceManager)
         {
             _personService = ServiceManager.PersonService;
@@ -109,7 +109,7 @@ namespace Svbase.Controllers
                     var dataTable = ParseFile(extension, pathToExcelFile, GeneralConsts.ShowTableRowsCount);
                     if (dataTable == null)
                     {
-                        errorsList.Add("Не вдалося отримати дані із файлу '" + file.FileName + "'! Спробуйте перезавантажити сторінку та знову завантажити даний файл.");
+                        errorsList.Add("Не вдалося отримати дані із файлу '" + file.FileName + "'! Спробуйте зберегти файл вказавши тип файлу 'Книга Excel' або 'Книга Excel 97-2003' та знову його завантажити.");
                         continue;
                     }
 
@@ -252,7 +252,7 @@ namespace Svbase.Controllers
                 var dataTable = ParseFile(extension, pathToExcelFile, GeneralConsts.ShowAllTableRowsCount);
                 if (dataTable == null)
                 {
-                    errorsList.Add("Не вдалося отримати дані із файлу '" + fileName + "'! Спробуйте перезавантажити сторінку та знову завантажити даний файл.");
+                    errorsList.Add("Не вдалося отримати дані із файлу '" + fileName + "'! Спробуйте зберегти файл вказавши тип файлу 'Книга Excel' або 'Книга Excel 97-2003' та знову його завантажити.");
                     continue;
                 }
 
@@ -332,7 +332,7 @@ namespace Svbase.Controllers
 
                 var apartment = new Apartment
                 {
-                    Name = validatedModel.ApartmentSide != "" ? validatedModel.ApartmentNumber + validatedModel.ApartmentLetter + "корпус" + validatedModel.ApartmentSide : validatedModel.ApartmentNumber + validatedModel.ApartmentLetter,
+                    Name = validatedModel.ApartmentSide != "" ? validatedModel.ApartmentNumber + " " + validatedModel.ApartmentLetter + " корпус:" + validatedModel.ApartmentSide : validatedModel.ApartmentNumber + " " + validatedModel.ApartmentLetter,
                     Street = street
                 };
                 if (!(apartments.Any(x => x.Name.ToUpper() == apartment.Name.ToUpper()

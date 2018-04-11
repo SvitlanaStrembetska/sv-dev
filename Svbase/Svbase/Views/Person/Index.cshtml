@@ -85,9 +85,28 @@
                     <button class="btn btn-primary pull-right page-header">
                         <a class="white-color" href="@Url.Action("Create", "Person")">Додати людину</a>
                     </button>
-                    <button id="export" class="btn btn-default pull-right page-header margin-right">
-                        <a href="@Url.Action("Import", "Person")">Завантажити список</a>
+                    <button id="exportFile" class="btn btn-default pull-right page-header margin-right">
+                        <a data-toggle="modal" data-target="#ExportFile"><i class="fa fa-download fa-fw"></i> Експортувати дані</a>
                     </button>
+                    <div class="modal fade bd-example-modal-lg" id="ExportFile" tabindex="-1" role="dialog" aria-labelledby="ExportFile" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h3 class="modal-title" id="DownloadFilelLabel">Експорт даних</h3>
+                                    <button type="button" class="close close-modal" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <h3>Ви впевнені що хочете експортувати список у Excel файлі?</h3>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрити вікно</button>
+                                    @Html.ActionLink("Експортувати дані", "ExportExcel" , "Export", null, new {@class = "btn btn-primary" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -98,34 +117,34 @@
                         <table class="table table-striped table-bordered table-hover"
                                id="dataTables-example">
                             <thead>
-                            <tr>
-                                <th>№</th>
-                                <th id="lastNameHidden">Прізвище</th>
-                                <th>Ім'я</th>
-                                <th>По батькові</th>
-                                <th>Місто</th>
-                                <th>Вулиця</th>
-                                <th>Будинок</th>
-                                <th>Квартира</th>
-                                <th>Моб. тел. 1</th>
-                                <th>Моб. тел. 2</th>
-                                <th>Дом. тел.</th>
-                                <th>Категорія</th>
-                                <th>Емейл</th>
-                                <th>Дата<br> народження</th>
-                                <th>
-                                    <i title="Детальніше" style="color: gray; margin-right: 5px; cursor: pointer"
-                                       class="pull-right glyphicon glyphicon-info-sign"></i>
-                                </th>
-                                <th>
-                                    <i title="Редагувати" style="color: gray; margin-right: 5px; cursor: pointer"
-                                       class="pull-right glyphicon glyphicon-pencil"></i>
-                                </th>
-                                <th>
-                                    <i title="Видалити" style="color: red; cursor: pointer"
-                                       class="pull-right glyphicon glyphicon-trash"></i>
-                                </th>
-                            </tr>
+                                <tr>
+                                    <th>№</th>
+                                    <th id="lastNameHidden">Прізвище</th>
+                                    <th id="firstNameHidden">Ім'я</th>
+                                    <th id="middleNameHidden">По батькові</th>
+                                    <th id="cityNameHidden">Місто</th>
+                                    <th id="streetNameHidden">Вулиця</th>
+                                    <th id="houseNameHidden">Будинок</th>
+                                    <th id="flatNameHidden">Квартира</th>
+                                    <th id="phone1Hidden">Моб. тел. 1</th>
+                                    <th id="phone2Hidden">Моб. тел. 2</th>
+                                    <th id="homeNumberHidden">Дом. тел.</th>
+                                    <th id="categoryNameHidden">Категорія</th>
+                                    <th id="emailNameHidden">Емейл</th>
+                                    <th id="birthDateHidden">Дата<br> народження</th>
+                                    <th>
+                                        <i title="Детальніше" style="color: gray; margin-right: 5px; cursor: pointer"
+                                           class="pull-right glyphicon glyphicon-info-sign"></i>
+                                    </th>
+                                    <th>
+                                        <i title="Редагувати" style="color: gray; margin-right: 5px; cursor: pointer"
+                                           class="pull-right glyphicon glyphicon-pencil"></i>
+                                    </th>
+                                    <th>
+                                        <i title="Видалити" style="color: red; cursor: pointer"
+                                           class="pull-right glyphicon glyphicon-trash"></i>
+                                    </th>
+                                </tr>
                             </thead>
                             <tbody id="selectionBody">
                                 @Html.Partial("SelectionPersonPartial", Model)
@@ -529,5 +548,50 @@
             checkFlatsByCheckedApartments();
         });
     }
+
+    function getCheckedFields() {
+        var fields = [];
+        $("#hello input:checked").each((index, element) => {
+            var fieldName = $(element).closest('a')[0].innerText.trim();
+            if (fieldName !== "") {
+                fields.push(fieldName);
+            }
+        });
+        return fields;
+    }
+
+    $(document).on('click', '#exportFile', function () {
+        var districtIds = getCheckedDistrictIds();
+        var cityIds = getCheckedCityIds();
+        var streetIds = getCheckedStreetIds();
+        var apartmentIds = getCheckedApartmentIds();
+        var flatIds = getCheckedFlatIds();
+        var fieldIds = getCheckedFields();
+
+        $("#ExportFile a").attr("href", function (i, origVal) {
+            origVal += "?";
+            var k;
+            for (k = 0; k < districtIds.length; k++) {
+                origVal += "DistrictIds=" + districtIds[k] + "&";
+            }
+            for (k = 0; k < cityIds.length; k++) {
+                origVal += "CityIds=" + cityIds[k] + "&";
+            }
+            for (k = 0; k < streetIds.length; k++) {
+                origVal += "StreetIds=" + streetIds[k] + "&";
+            }
+            for (k = 0; k < apartmentIds.length; k++) {
+                origVal += "ApartmentIds=" + apartmentIds[k] + "&";
+            }
+            for (k = 0; k < flatIds.length; k++) {
+                origVal += "FlatIds=" + flatIds[k] + "&";
+            }
+            for (k = 0; k < fieldIds.length; k++) {
+                origVal += "ColumnsName=" + fieldIds[k] + "&";
+            }
+
+            return origVal;
+        });
+    });
 
 </script>

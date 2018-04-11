@@ -22,7 +22,7 @@ namespace Svbase.Core.Models
     {
         [Phone]
         [Display(Name = "Мобільний телефон 1")]
-        public string FirthtMobilePhone { get; set; }
+        public string FirstMobilePhone { get; set; }
         [Phone]
         [Display(Name = "Мобільний телефон 2")]
         public string SecondMobilePhone { get; set; }
@@ -59,7 +59,7 @@ namespace Svbase.Core.Models
             DateBirth = person.BirthdayDate;
             Gender = person.Gender;
             Position = person.Position;
-            FirthtMobilePhone = person.MobileTelephoneFirst;
+            FirstMobilePhone = person.MobileTelephoneFirst;
             SecondMobilePhone = person.MobileTelephoneSecond;
             HomePhone = person.StationaryPhone;
             Email = person.Email;
@@ -74,7 +74,7 @@ namespace Svbase.Core.Models
             person.BirthdayDate = DateBirth;
             person.Gender = Gender;
             person.Position = Position;
-            person.MobileTelephoneFirst = FirthtMobilePhone;
+            person.MobileTelephoneFirst = FirstMobilePhone;
             person.MobileTelephoneSecond = SecondMobilePhone;
             person.StationaryPhone = HomePhone;
             person.Email = Email;
@@ -93,7 +93,7 @@ namespace Svbase.Core.Models
             Gender = entity.Gender;
             Position = entity.Position;
             PartionType = entity.PartionType;
-            FirthtMobilePhone = entity.MobileTelephoneFirst;
+            FirstMobilePhone = entity.MobileTelephoneFirst;
             SecondMobilePhone = entity.MobileTelephoneSecond;
             HomePhone = entity.StationaryPhone;
 

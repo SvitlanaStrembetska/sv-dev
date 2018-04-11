@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Svbase.Core.Data.Entities;
 using Svbase.Core.Models;
 using Svbase.Service.Abstract;
@@ -7,7 +8,7 @@ namespace Svbase.Service.Interfaces
 {
     public interface IPersonService : IEntityService<Person>
     {
-        IEnumerable<PersonSelectionModel> GetPersons();
+        IQueryable<PersonSelectionModel> GetPersons(int page);
         IEnumerable<PersonSelectionModel> GetPersonsByBeneficiariesId(int beneficiaryId);
         PersonViewModel GetPersonById(int id);
 
@@ -18,7 +19,7 @@ namespace Svbase.Service.Interfaces
         IEnumerable<BaseViewModel> GetApartmentsBaseModelByStreetIds(IList<int> streetIds);
         IEnumerable<BaseViewModel> GetFlatsBaseModelByApatrmentIds(IList<int> apartmentIds);
         bool CreatePersonByModel(PersonViewModel model);
-        List<PersonSelectionModel> SearchPersonsByFilter(FilterSearchModel filter);
+        IQueryable<PersonSelectionModel> SearchPersonsByFilter(FilterSearchModel filter);
         IEnumerable<ItemFilterModel> GetFilterStreetsByCityIds(IList<int> cityIds);
     }
 }

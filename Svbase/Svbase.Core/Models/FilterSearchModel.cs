@@ -13,4 +13,9 @@ namespace Svbase.Core.Models
         public IEnumerable<int> ApartmentIds { get; set; }
         public IEnumerable<int> BeneficiaryIds { get; set; }
     }
+
+    public class FilterFileImportModel : FilterSearchModel
+    {
+        public IEnumerable<string> ColumnsName { get; set; } 
+    }
 }

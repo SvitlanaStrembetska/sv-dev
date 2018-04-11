@@ -65,7 +65,7 @@ namespace Svbase.Core.Repositories.Implementation
                 MiddleName = x.MiddleName,
                 DateBirth = x.BirthdayDate,
                 Email = x.Email,
-                FirthtMobilePhone = x.MobileTelephoneFirst,
+                FirstMobilePhone = x.MobileTelephoneFirst,
                 SecondMobilePhone = x.MobileTelephoneSecond,
                 HomePhone = x.StationaryPhone,
                 PartionType = x.PartionType,

@@ -211,7 +211,7 @@ button a.white-color:focus {
 }
 
 .modal-lg {
-    width: 90%;
+    width: 90% !important;
 }
 
 #filesDescription div {

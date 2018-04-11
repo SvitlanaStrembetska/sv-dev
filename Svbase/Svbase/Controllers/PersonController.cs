@@ -33,16 +33,16 @@ namespace Svbase.Controllers
             _beneficiaryService = ServiceManager.BeneficiaryService;
         }
 
-        public ActionResult Index()
+        public ActionResult Index(int page = 0)
         {
-            //var persons = _personService.GetPersons();
-
-            return View(new List<PersonSelectionModel>());
+            var personsList = _personService.GetPersons(page);
+            return View(personsList);
         }
+
         [HttpGet]
-        public ActionResult All()
+        public ActionResult All(int page = 0)
         {
-            var persons = _personService.GetPersons();
+            var persons = _personService.GetPersons(page);
 
             return PartialView("SelectionPersonPartial", persons);
         } 
