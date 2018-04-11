@@ -57,9 +57,9 @@ namespace Svbase.Controllers
 
             return RedirectToAction("UploadDocument");
         }
-
-
-
+      
+        
+          
         [Authorize]
         [ActionName("Importexcel")]
         [HttpPost]
@@ -176,7 +176,7 @@ namespace Svbase.Controllers
                 var row = new Dictionary<string, object>();
                 foreach (DataColumn col in dataTable.Columns)
                 {
-                    if (col.ColumnName.ToUpper() == "ДАТА НАРОДЖЕННЯ" && dr[col] != null)
+                    if (col.ColumnName.ToUpper() == "ДАТА НАРОДЖЕННЯ" && validatedModel.BirthdayDate != null) 
                         row.Add(col.ColumnName, validatedModel.BirthdayDate.ToString().Trim().Substring(0, 10));
                     else
                         row.Add(col.ColumnName, dr[col]);
