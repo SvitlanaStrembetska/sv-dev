@@ -1,5 +1,5 @@
 ﻿@using Svbase.Core.Consts
-<div class="modal fade bd-example-modal-lg" id="DownloadFile" tabindex="-1" role="dialog" aria-labelledby="DownloadFile" aria-hidden="true">
+<div class="modal fade bd-example-modal-lg" id="ImportFile" tabindex="-1" role="dialog" aria-labelledby="ImportFile" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -9,7 +9,7 @@
                 </button>
             </div>
             <div id="contentStages">
-                @using (Html.BeginForm("SaveFilesDataToDb", "Upload", new { area = "" }, FormMethod.Post, new { enctype = "multipart/form-data" }))
+                @using (Html.BeginForm("SaveFilesDataToDb", "Import", new { area = "" }, FormMethod.Post, new { enctype = "multipart/form-data" }))
                 {
                     <div class="modal-body">
                         <div class="panel-white text-center" id="viewFiles" style="display: none">
@@ -114,7 +114,7 @@
                         function uploadMultipleStageFiles() {
                             var formData = new FormData($("#contentStages form")[0]);
                             $.ajax({
-                                url: "@Url.Action("Importexcel", "Upload")",
+                                url: "@Url.Action("Importexcel", "Import")",
                                 data: formData,
                                 type: "POST",
                                 dataType: 'json',
@@ -176,7 +176,7 @@
 
                         function deleteFiles(fileName, $fileBlock) {
                             $.ajax({
-                                url: "@Url.Action("DeleteStageFile", "Upload")",
+                                url: "@Url.Action("DeleteStageFile", "Import")",
                                 data: { fileName: fileName },
                                 type: 'post',
                                 async: false,
@@ -233,7 +233,7 @@
                             }
 
                             $.ajax({
-                                url: "@Url.Action("SaveFilesDataToDb", "Upload")",
+                                url: "@Url.Action("SaveFilesDataToDb", "Import")",
                                 data: { filesName: namesList },
                                 type: 'post',
                                 success: function (data) {

@@ -18,10 +18,9 @@ namespace Svbase.Service.Implementation
 
         }
 
-        public IEnumerable<PersonSelectionModel> GetPersons()
+        public IQueryable<PersonSelectionModel> GetPersons(int page)
         {
-            var persons = RepositoryManager.Persons.GetPersons();
-            return persons;
+            return RepositoryManager.Persons.GetPersons(page);
         }
         public IEnumerable<PersonSelectionModel> GetPersonsByBeneficiariesId(int beneficiaryId)
         {
@@ -129,7 +128,7 @@ namespace Svbase.Service.Implementation
             return true;
         }
 
-        public List<PersonSelectionModel> SearchPersonsByFilter(FilterSearchModel filter)
+        public IQueryable<PersonSelectionModel> SearchPersonsByFilter(FilterSearchModel filter)
         {
             var personsIds = new List<int>();
 
@@ -170,7 +169,8 @@ namespace Svbase.Service.Implementation
 
             personsIds = personsIds.Distinct().ToList();
             var persons = RepositoryManager.Persons.GetPersonsByIds(personsIds);
-            return persons.ToList();
+            return persons;
         }
+
     }
 }

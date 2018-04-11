@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
+using Svbase.Core.Consts;
 using Svbase.Core.Data;
 using Svbase.Core.Data.Entities;
 using Svbase.Core.Models;
@@ -14,8 +14,9 @@ namespace Svbase.Core.Repositories.Implementation
         public PersonRepository(ApplicationDbContext context)
             : base(context) { }
 
-        public IEnumerable<PersonSelectionModel> GetPersons()
+        public IQueryable<PersonSelectionModel> GetPersons(int page)
         {
+            var skip = page * GeneralConsts.ShowRecordsPerPage;
             var persons = DbSet
                 .Select(x => new PersonSelectionModel()
                 {
@@ -26,7 +27,7 @@ namespace Svbase.Core.Repositories.Implementation
                     Position = x.Position,
                     Gender = x.Gender,
                     Email = x.Email,
-                    FirthtMobilePhone = x.MobileTelephoneFirst,
+                    FirstMobilePhone = x.MobileTelephoneFirst,
                     SecondMobilePhone = x.MobileTelephoneSecond,
                     HomePhone = x.StationaryPhone,
                     PartionType = x.PartionType,
@@ -56,8 +57,8 @@ namespace Svbase.Core.Repositories.Implementation
                         Id = f.Id,
                         Name = f.Number,
                     }).FirstOrDefault(),
-                });
-            return persons.ToList();
+                }).OrderBy(x=>x.Id).Skip(skip).Take(GeneralConsts.ShowRecordsPerPage);
+            return persons;
         }
 
         public PersonViewModel GetPersonById(int id)
@@ -71,7 +72,7 @@ namespace Svbase.Core.Repositories.Implementation
                 //Position = x.Position,
                 //Gender = x.Gender,
                 //Email = x.Email,
-                //FirthtMobilePhone = x.MobileTelephoneFirst,
+                //FirstMobilePhone = x.MobileTelephoneFirst,
                 //SecondMobilePhone = x.MobileTelephoneSecond,
                 //HomePhone = x.HomePhone,
                 //PartionType = x.PartionType,
@@ -87,9 +88,9 @@ namespace Svbase.Core.Repositories.Implementation
             return person;
         }
 
-        public IEnumerable<PersonSelectionModel> GetPersonsByIds(IEnumerable<int> ids)
+        public IQueryable<PersonSelectionModel> GetPersonsByIds(IEnumerable<int> ids)
         {
-            if (ids == null) return new List<PersonSelectionModel>();
+            if (ids == null) return null;
             var persons = DbSet
                 .Where(x => ids.ToList().Contains(x.Id))
                 .Select(x => new PersonSelectionModel
@@ -101,7 +102,7 @@ namespace Svbase.Core.Repositories.Implementation
                     DateBirth = x.BirthdayDate,
                     Gender = x.Gender,
                     Position = x.Position,
-                    FirthtMobilePhone = x.MobileTelephoneFirst,
+                    FirstMobilePhone = x.MobileTelephoneFirst,
                     SecondMobilePhone = x.MobileTelephoneSecond,
                     HomePhone = x.StationaryPhone,
                     Email = x.Email,
@@ -132,8 +133,7 @@ namespace Svbase.Core.Repositories.Implementation
                         Name = f.Number,
                     }).FirstOrDefault(),
 
-                })
-                .ToList();
+                });
             return persons;
         }
     }

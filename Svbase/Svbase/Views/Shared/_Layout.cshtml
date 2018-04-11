@@ -11,96 +11,96 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
-<div class="navbar navbar-fixed-top navbar-default navbar-static-top padding-lr" role="navigation">
+    <div class="navbar navbar-fixed-top navbar-default navbar-static-top padding-lr" role="navigation">
 
-    <div class="navbar-header">
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand" href="@Url.Action("Details", "Dashboard")">SV Base</a>
-    </div>
-    <div class="navbar-collapse collapse" style="height: 1px;">
-        <ul class="nav navbar-nav navbar-top-links navbar-right padding-top-5">
-            @{
-                string path = HttpContext.Current.Request.Url.AbsolutePath;
-            }
-            @if (Request.IsAuthenticated)
-            {
-                <li>
-                    <a href="@Url.Action("Index", "Person")"><i class="fa fa-user fa-fw"></i> Усі люди</a>
-                </li>
-                <li>
-                    <a href="@Url.Action("Import", "Person")"><i class="fa fa-upload fa-fw"></i> Завантажити(.csv)</a>
-                </li>
-                <li>
-                    <a data-toggle="modal" data-target="#DownloadFile"><i class="fa fa-upload fa-fw"></i> Завантажити</a>
-                </li>
-                <li>
-                    <a href="@Url.Action("List", "Beneficiary")"><i class="fa fa-columns fa-fw"></i> Категорії</a>
-                </li>
-                <li>
-                    <a href="@Url.Action("Index", "Dashboard")"><i class="fa fa-database fa-fw"></i> Округи</a>
-                </li>
-                <li>
-                    <a href="@Url.Action("List", "City")"><i class="fa fa-book fa-fw"></i> Адреси</a>
-                </li>
-
-                if (path == "/Person/Index")
-                {
-                    <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown">
-                            <i class="fa fa-tasks fa-fw"></i> <i class="fa fa-caret-down"></i>
-                        </a>
-                        <ul class="dropdown-menu dropdown-tasks" id="hello">
-                            <li>
-                                <a id="lastNameDisplay"> <input type="checkbox"> Прізвище </a>
-                            </li>
-                            <li>
-                                <a id="firstNameDisplay"> <input type="checkbox"> Ім'я </a>
-                            </li>
-                            <li>
-                                <a id="middleNameDisplay"><input type="checkbox"> По батькові</a>
-                            </li>
-                            <li>
-                                <a id="addressDisplay"><input type="checkbox"> Адреса</a>
-                            </li>
-                            <li>
-                                <a id="phoneFirthtDisplay"><input type="checkbox"> Телефон 1</a>
-                            </li>
-                            <li>
-                                <a id="positionDisplay"><input type="checkbox"> Посада</a>
-                            </li>
-                            <li>
-                                <a id="genderDisplay"><input type="checkbox"> Стать</a>
-                            </li>
-                            <li>
-                                <a id="typePartionDisplay"><input type="checkbox"> Тип партії</a>
-                            </li>
-                            <li class="divider"></li>
-                            <li>
-                                <a class="text-center" id="showAllDisplay">
-                                    <strong>Показати всіх</strong>
-                                    <i class="fa fa-angle-right"></i>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="@Url.Action("Details", "Dashboard")">SV Base</a>
+        </div>
+        <div class="navbar-collapse collapse" style="height: 1px;">
+            <ul class="nav navbar-nav navbar-top-links navbar-right padding-top-5">
+                @{
+                    string path = HttpContext.Current.Request.Url.AbsolutePath;
                 }
-            }
-            <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown">
-                    <i class="fa fa-caret-down"></i>
-                </a>
-                <ul class="dropdown-menu">
-                    @Html.Partial("_LoginPartial")
-                </ul>
-            </li>
-        </ul>
+                @if (Request.IsAuthenticated)
+            {
+                    <li>
+                        <a href="@Url.Action("Index", "Person")"><i class="fa fa-user fa-fw"></i> Усі люди</a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("Import", "Person")"><i class="fa fa-upload fa-fw"></i> Завантажити(.csv)</a>
+                    </li>
+                    <li>
+                        <a data-toggle="modal" data-target="#ImportFile"><i class="fa fa-upload fa-fw"></i> Імпортувати дані</a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("List", "Beneficiary")"><i class="fa fa-columns fa-fw"></i> Категорії</a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("Index", "Dashboard")"><i class="fa fa-database fa-fw"></i> Округи</a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("List", "City")"><i class="fa fa-book fa-fw"></i> Адреси</a>
+                    </li>
+
+                    if (path == "/Person/Index")
+                    {
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown">
+                                <i class="fa fa-tasks fa-fw"></i> <i class="fa fa-caret-down"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-tasks" id="hello">
+                                <li>
+                                    <a id="lastNameDisplay"> <input type="checkbox" checked>Прізвище</a>
+                                </li>
+                                <li>
+                                    <a id="firstNameDisplay"> <input type="checkbox" checked>Ім'я</a>
+                                </li>
+                                <li>
+                                    <a id="middleNameDisplay"><input type="checkbox" checked>По батькові</a>
+                                </li>
+                                <li>
+                                    <a id="addressDisplay"><input type="checkbox" checked>Адреса</a>
+                                </li>
+                                <li>
+                                    <a id="phoneFirstDisplay"><input type="checkbox" checked>Телефон 1</a>
+                                </li>
+                                <li>
+                                    <a id="positionDisplay"><input type="checkbox" checked>Посада</a>
+                                </li>
+                                <li>
+                                    <a id="genderDisplay"><input type="checkbox" checked>Стать</a>
+                                </li>
+                                <li>
+                                    <a id="typePartionDisplay"><input type="checkbox" checked>Тип партії</a>
+                                </li>
+                                <li class="divider"></li>
+                                <li>
+                                    <a class="text-center" id="showAllDisplay">
+                                        <strong>Показати всіх</strong>
+                                        <i class="fa fa-angle-right"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    }
+                }
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown">
+                        <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu">
+                        @Html.Partial("_LoginPartial")
+                    </ul>
+                </li>
+            </ul>
+        </div>
     </div>
-</div>
     @Html.Partial("_UploadFile")
     <div>
         @RenderBody()
@@ -128,8 +128,114 @@
         e.stopPropagation();
     });
 
+    $("#lastNameDisplay input").click(function (e) {
+        e.stopPropagation();
+        fieldDisplay($("#lastNameDisplay input").is(":checked"), false, "#lastNameDisplay input", "tr #lastNameHidden");
+    });
     $("#lastNameDisplay").click(function () {
-        $("#lastNameHidden").hide();
-        $("#lastNameHidd").hide();
+        fieldDisplay(!$("#lastNameDisplay input").is(":checked"), true, "#lastNameDisplay input", "tr #lastNameHidden");
+    });
+
+    $("#firstNameDisplay input").click(function (e) {
+        e.stopPropagation();
+        fieldDisplay($("#firstNameDisplay input").is(":checked"), false, "#firstNameDisplay input", "tr #firstNameHidden");
+    });
+    $("#firstNameDisplay").click(function () {
+        fieldDisplay(!$("#firstNameDisplay input").is(":checked"), true, "#firstNameDisplay input", "tr #firstNameHidden");
+    });
+
+    $("#middleNameDisplay input").click(function (e) {
+        e.stopPropagation();
+        fieldDisplay($("#middleNameDisplay input").is(":checked"), false, "#middleNameDisplay input", "tr #middleNameHidden");
+    });
+    $("#middleNameDisplay").click(function () {
+        fieldDisplay(!$("#middleNameDisplay input").is(":checked"), true, "#middleNameDisplay input", "tr #middleNameHidden");
+    });
+
+    $("#phoneFirstDisplay input").click(function (e) {
+        e.stopPropagation();
+        fieldDisplay($("#phoneFirstDisplay input").is(":checked"), false, "#phoneFirstDisplay input", "tr #phone1Hidden");
+    });
+    $("#phoneFirstDisplay").click(function () {
+        fieldDisplay(!$("#phoneFirstDisplay input").is(":checked"), true, "#phoneFirstDisplay input", "tr #phone1Hidden");
+    });
+
+    function fieldDisplay(isChecked, isNotInput, selector, hideField) {
+        if (isNotInput) {
+            if (isChecked) {
+                $(selector).prop('checked', true);
+            } else {
+                $(selector).prop('checked', false);
+            }
+        }
+        if (isChecked) {
+            $(hideField).show();
+        } else {
+            $(hideField).hide();
+        }
+    }
+
+    $("#addressDisplay input").click(function (e) {
+        e.stopPropagation();
+        addressDisplay($("#addressDisplay input").is(":checked"));
+    });
+
+    $("#addressDisplay").click(function () {
+        var isChecked = $("#addressDisplay input").is(":checked");
+        if (isChecked)
+            $("#addressDisplay input").prop('checked', false);
+        else
+            $("#addressDisplay input").prop('checked', true);
+        addressDisplay(!isChecked);
+    });
+
+    function addressDisplay(isChecked) {
+        if (isChecked) {
+            $("tr #cityNameHidden").show();
+            $("tr #streetNameHidden").show();
+            $("tr #houseNameHidden").show();
+            $("tr #flatNameHidden").show();
+        } else {
+            $("tr #cityNameHidden").hide();
+            $("tr #streetNameHidden").hide();
+            $("tr #houseNameHidden").hide();
+            $("tr #flatNameHidden").hide();
+        }
+    }
+
+    $("#showAllDisplay").click(function () {
+        var lastNameDisplay = $("#lastNameDisplay input").is(":checked");
+        var firstNameDisplay = $("#firstNameDisplay input").is(":checked");
+        var middleNameDisplay = $("#middleNameDisplay input").is(":checked");
+        var phoneFirstDisplay = $("#phoneFirstDisplay input").is(":checked");
+        var addressDisplay = $("#addressDisplay input").is(":checked");
+
+        if (!lastNameDisplay) {
+            $("tr #lastNameHidden").show();
+            $("#lastNameDisplay input").prop('checked', true);
+        }
+        
+        if (!firstNameDisplay) {
+            $("tr #firstNameHidden").show();
+            $("#firstNameDisplay input").prop('checked', true);
+        }
+
+        if (!middleNameDisplay) {
+            $("tr #middleNameHidden").show();
+            $("#middleNameDisplay input").prop('checked', true);
+        }
+
+        if (!phoneFirstDisplay) {
+            $("tr #phone1Hidden").show();
+            $("#phoneFirstDisplay input").prop('checked', true);
+        }
+
+        if (!addressDisplay) {
+            $("tr #cityNameHidden").show();
+            $("tr #streetNameHidden").show();
+            $("tr #houseNameHidden").show();
+            $("tr #flatNameHidden").show();
+            $("#addressDisplay input").prop('checked', true);
+        }
     });
 </script>
