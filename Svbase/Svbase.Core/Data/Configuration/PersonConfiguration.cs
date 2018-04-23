@@ -21,6 +21,21 @@ namespace Svbase.Core.Data.Configuration
                 .Map(t => t.MapLeftKey("PersonId")
                     .MapRightKey("BeneficiaryId")
                     .ToTable("PersonBeneficiary"));
+
+            HasOptional(x => x.City)
+                .WithMany(x => x.Persons)
+                .HasForeignKey(x => x.CityId)
+                .WillCascadeOnDelete(false);
+
+            HasOptional(x => x.Street)
+                .WithMany(x => x.Persons)
+                .HasForeignKey(x => x.StreetId)
+                .WillCascadeOnDelete(false);
+
+            HasOptional(x => x.Apartment)
+                .WithMany(x => x.Persons)
+                .HasForeignKey(x => x.ApartmentId)
+                .WillCascadeOnDelete(false);
         }
     }
 }

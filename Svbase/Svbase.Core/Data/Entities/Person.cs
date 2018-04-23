@@ -19,6 +19,12 @@ namespace Svbase.Core.Data.Entities
         public string PartionType { get; set; }
         public bool Gender { get; set; }
 
+        public int? CityId { get; set; }
+        public virtual City City{ get; set; }
+        public int? StreetId { get; set; }
+        public virtual Street Street { get; set; }
+        public int? ApartmentId { get; set; }
+        public virtual Apartment Apartment { get; set; }
         public virtual ICollection<Flat> Flats { get; set; }
         public virtual ICollection<Beneficiary> Beneficiaries { get; set; }
 

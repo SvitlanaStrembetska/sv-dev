@@ -121,6 +121,10 @@
     <Compile Include="Migrations\201804031859182_AddPseudonymToStreet.Designer.cs">
       <DependentUpon>201804031859182_AddPseudonymToStreet.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201804231835225_addRelationsBetweenPersonAndCityStreetApartment.cs" />
+    <Compile Include="Migrations\201804231835225_addRelationsBetweenPersonAndCityStreetApartment.Designer.cs">
+      <DependentUpon>201804231835225_addRelationsBetweenPersonAndCityStreetApartment.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Migrations\DbInitializer\CreateIfNotExistWithSeed.cs" />
     <Compile Include="Models\ApartmentFilterModel.cs" />
@@ -197,6 +201,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201804031859182_AddPseudonymToStreet.resx">
       <DependentUpon>201804031859182_AddPseudonymToStreet.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804231835225_addRelationsBetweenPersonAndCityStreetApartment.resx">
+      <DependentUpon>201804231835225_addRelationsBetweenPersonAndCityStreetApartment.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

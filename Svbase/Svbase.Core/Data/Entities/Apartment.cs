@@ -10,5 +10,6 @@ namespace Svbase.Core.Data.Entities
         public virtual Street Street { get; set; }
         public virtual ICollection<Flat> Flats { get; set; }
         public virtual ICollection<District> Districts { get; set; }
+        public virtual ICollection<Person> Persons { get; set; }
     }
 }

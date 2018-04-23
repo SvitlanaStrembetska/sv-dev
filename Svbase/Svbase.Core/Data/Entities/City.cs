@@ -7,6 +7,6 @@ namespace Svbase.Core.Data.Entities
     {
         public string Name { get; set; }
         public virtual ICollection<Street> Streets { get; set; }
-
+        public virtual ICollection<Person> Persons { get; set; }
     }
 }
