@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Data;
+﻿using System.Data;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -26,7 +25,7 @@ namespace Svbase.Controllers
         public void ExportExcel(FilterFileImportModel filter)
         {
             IQueryable<PersonSelectionModel> persons; 
-            if (filter == null || (filter.DistrictIds == null && filter.CityIds == null)) { 
+            if (filter == null || (filter.DistrictIds == null && filter.CityIds == null && filter.StreetIds == null && filter.ApartmentIds == null && filter.FlatIds == null)) { 
                 var pers = _personService.GetAll();
                 persons = from person in pers
                     let personFlat = person.Flats.FirstOrDefault()
@@ -144,8 +143,8 @@ namespace Svbase.Controllers
             Response.Buffer = true;
             Response.ContentType = "application/vnd.ms-excel";
             Response.AddHeader("content-disposition", "attachment; filename=Product.xls");
-            Response.Charset = "";
-            Response.ContentEncoding = Encoding.GetEncoding("Windows-1251");
+            Response.Charset = "UTF-8";
+            Response.ContentEncoding = Encoding.GetEncoding("UTF-8");
             var sw = new StringWriter();
             var htmlTextWriter = new HtmlTextWriter(sw);
 
