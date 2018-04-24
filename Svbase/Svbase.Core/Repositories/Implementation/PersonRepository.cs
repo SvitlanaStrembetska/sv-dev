@@ -14,9 +14,8 @@ namespace Svbase.Core.Repositories.Implementation
         public PersonRepository(ApplicationDbContext context)
             : base(context) { }
 
-        public IQueryable<PersonSelectionModel> GetPersons(int page)
+        public IQueryable<PersonSelectionModel> GetPersons()
         {
-            var skip = page * GeneralConsts.ShowRecordsPerPage;
             var persons = DbSet
                 .Select(x => new PersonSelectionModel()
                 {
@@ -57,7 +56,7 @@ namespace Svbase.Core.Repositories.Implementation
                         Id = f.Id,
                         Name = f.Number,
                     }).FirstOrDefault(),
-                }).OrderBy(x=>x.Id).Skip(skip).Take(GeneralConsts.ShowRecordsPerPage);
+                }).OrderBy(x => x.Id);
             return persons;
         }
 
@@ -133,7 +132,7 @@ namespace Svbase.Core.Repositories.Implementation
                         Name = f.Number,
                     }).FirstOrDefault(),
 
-                });
+                }).OrderBy(x => x.Id);
             return persons;
         }
     }

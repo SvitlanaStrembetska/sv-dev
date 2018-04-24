@@ -106,7 +106,7 @@ namespace Svbase.Controllers
                     DeleteOldFiles(Server.MapPath("~/Content/Uploads"));
 
                     //parse file
-                    var dataTable = ParseFile(extension, pathToExcelFile, GeneralConsts.ShowTableRowsCount);
+                    var dataTable = ParseFile(extension, pathToExcelFile, GeneralConsts.ShowTableRowsCount, ref errorsList);
                     if (dataTable == null)
                     {
                         errorsList.Add("Не вдалося отримати дані із файлу '" + file.FileName + "'! Спробуйте зберегти файл вказавши тип файлу 'Книга Excel' або 'Книга Excel 97-2003' та знову його завантажити.");
@@ -198,7 +198,7 @@ namespace Svbase.Controllers
             }
         }
 
-        private DataTable ParseFile(string extension, string pathToExcelFile, int showTableRowsCount)
+        private DataTable ParseFile(string extension, string pathToExcelFile, int showTableRowsCount, ref List<string> errorsList)
         {
             DataTable dataTable = null;
             string connString;
@@ -209,7 +209,7 @@ namespace Svbase.Controllers
                     string.Format(
                         "Provider=Microsoft.Jet.OLEDB.4.0; data source={0}; Extended Properties=Excel 8.0;",
                         pathToExcelFile);
-                dataTable = ConvertDataHelper.ConvertXslXtoDataTable(pathToExcelFile, connString, showTableRowsCount);
+                dataTable = ConvertDataHelper.ConvertXslXtoDataTable(pathToExcelFile, connString, showTableRowsCount, ref errorsList);
             }
             else if (extension.Trim() == ".xlsx")
             {
@@ -217,7 +217,7 @@ namespace Svbase.Controllers
                     string.Format(
                         "Provider=Microsoft.ACE.OLEDB.12.0;Data Source={0};Extended Properties=\"Excel 12.0 Xml;HDR=YES;IMEX=1\";",
                         pathToExcelFile);
-                dataTable = ConvertDataHelper.ConvertXslXtoDataTable(pathToExcelFile, connString, showTableRowsCount);
+                dataTable = ConvertDataHelper.ConvertXslXtoDataTable(pathToExcelFile, connString, showTableRowsCount, ref errorsList);
             }
 
             return dataTable;
@@ -249,7 +249,7 @@ namespace Svbase.Controllers
 
                 //parse file
                 var extension = Path.GetExtension(fileName).ToLower();
-                var dataTable = ParseFile(extension, pathToExcelFile, GeneralConsts.ShowAllTableRowsCount);
+                var dataTable = ParseFile(extension, pathToExcelFile, GeneralConsts.ShowAllTableRowsCount, ref errorsList);
                 if (dataTable == null)
                 {
                     errorsList.Add("Не вдалося отримати дані із файлу '" + fileName + "'! Спробуйте зберегти файл вказавши тип файлу 'Книга Excel' або 'Книга Excel 97-2003' та знову його завантажити.");

@@ -18,9 +18,9 @@ namespace Svbase.Service.Implementation
 
         }
 
-        public IQueryable<PersonSelectionModel> GetPersons(int page)
+        public IQueryable<PersonSelectionModel> GetPersons()
         {
-            return RepositoryManager.Persons.GetPersons(page);
+            return RepositoryManager.Persons.GetPersons();
         }
         public IEnumerable<PersonSelectionModel> GetPersonsByBeneficiariesId(int beneficiaryId)
         {

@@ -1,16 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
-using System.IO;
 
 namespace Svbase.Helpers
 {
     public static class ConvertDataHelper
     {
-        public static DataTable ConvertXslXtoDataTable(string strFilePath,string connString, int showTableRowsCount)  
+        public static DataTable ConvertXslXtoDataTable(string strFilePath,string connString, int showTableRowsCount, ref List<string> errorsList)  
         {
             var oleDbConnection = new OleDbConnection(connString);
-            var dataTable = new DataTable();  
+            var dataTable = new DataTable();
 
             try
             {
@@ -22,19 +22,27 @@ namespace Svbase.Helpers
                 string getRowsCount;
                 if (showTableRowsCount == -1)
                     getRowsCount = " * ";
-                else getRowsCount = " TOP " + showTableRowsCount + " * ";  
+                else getRowsCount = " TOP " + showTableRowsCount + " * ";
 
-                using (var oleDbCommand = new OleDbCommand("SELECT" + getRowsCount + "From [" + sheetName + "]", oleDbConnection))  
+                using (
+                    var oleDbCommand = new OleDbCommand("SELECT" + getRowsCount + "From [" + sheetName + "]",
+                        oleDbConnection))
                 {
                     var oleDbDataAdapter = new OleDbDataAdapter {SelectCommand = oleDbCommand};
                     var dataSet = new DataSet();
                     oleDbDataAdapter.Fill(dataSet);
 
-                    dataTable = dataSet.Tables[0];  
+                    dataTable = dataSet.Tables[0];
                 }
-            }  
-            catch (OleDbException)
+            }
+            catch (OleDbException exception)
             {
+                errorsList.Add(exception.Message);
+                return null;
+            }
+            catch (InvalidOperationException exception)
+            {
+                errorsList.Add(exception.Message);
                 return null;
             }  
             finally  
