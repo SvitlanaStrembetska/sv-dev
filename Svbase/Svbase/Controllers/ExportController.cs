@@ -26,7 +26,7 @@ namespace Svbase.Controllers
         public void ExportExcel(FilterFileImportModel filter)
         {
             IQueryable<PersonSelectionModel> persons; 
-            if (filter.DistrictIds == null && filter.CityIds == null) { 
+            if (filter == null || (filter.DistrictIds == null && filter.CityIds == null)) { 
                 var pers = _personService.GetAll();
                 persons = from person in pers
                     let personFlat = person.Flats.FirstOrDefault()

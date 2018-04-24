@@ -9,6 +9,7 @@ using Svbase.Core.Data.Entities;
 using Svbase.Core.Models;
 using Svbase.Service.Factory;
 using Svbase.Service.Interfaces;
+using PagedList;
 
 namespace Svbase.Controllers
 {
@@ -33,24 +34,39 @@ namespace Svbase.Controllers
             _beneficiaryService = ServiceManager.BeneficiaryService;
         }
 
-        public ActionResult Index(int page = 0)
+        public ActionResult Index(FilterFileImportModel filter, int page = 1)
         {
-            var personsList = _personService.GetPersons(page);
-            return View(personsList);
+            IQueryable<PersonSelectionModel> persons;
+            if (Request.IsAjaxRequest())
+            {
+                if (filter.DistrictIds != null || filter.CityIds != null || filter.StreetIds != null || filter.ApartmentIds != null || filter.FlatIds != null)
+                {
+                    persons = _personService.SearchPersonsByFilter(filter);
+                }
+                else
+                {
+                    persons = _personService.GetPersons();
+                }
+                return PartialView("_PersonsTablePartial", persons.ToPagedList(page, GeneralConsts.ShowRecordsPerPage));
+            }
+
+            persons = _personService.GetPersons();
+            
+            return View(persons.ToPagedList(page, GeneralConsts.ShowRecordsPerPage));
         }
 
         [HttpGet]
-        public ActionResult All(int page = 0)
+        public ActionResult All(int page = 1)
         {
-            var persons = _personService.GetPersons(page);
+            var persons = _personService.GetPersons();
 
             return PartialView("SelectionPersonPartial", persons);
-        } 
+        }
 
-        public ActionResult PersonsByBeneficiaryId(int id)
+        public ActionResult PersonsByBeneficiaryId(int id, int page = 1)
         {
             var persons = _personService.GetPersonsByBeneficiariesId(id);
-            return View("Index", persons);
+            return View("Index", persons.ToPagedList(page, GeneralConsts.ShowRecordsPerPage));
         }
 
         public ActionResult Create()
@@ -61,7 +77,7 @@ namespace Svbase.Controllers
             //flat, apartment
 
             //return View(new PersonViewModel {Beneficiaries = beneficiaries, Cities = cities, Streets = streets});
-            return View(new PersonViewModel {Beneficiaries = beneficiaries});
+            return View(new PersonViewModel { Beneficiaries = beneficiaries });
         }
 
         [Authorize(Roles = RoleConsts.Admin)]
@@ -212,7 +228,7 @@ namespace Svbase.Controllers
             return PartialView("_OptionSelectBasePartial", flats);
         }
 
-      
+
         //public ActionResult SearcResult()
         //{
         //    return PartialView();

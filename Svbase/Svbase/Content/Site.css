@@ -274,3 +274,7 @@ button a.white-color:focus {
       margin: 0 !important;
   }
 }
+
+.pagination{
+    margin: 10px 0 7px 0 !important;
+}
