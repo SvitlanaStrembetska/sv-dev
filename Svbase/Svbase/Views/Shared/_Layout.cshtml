@@ -3,7 +3,8 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - SVBase Application</title>
+    <link rel="icon" href="@Url.Content("~/Images/icon-sv.png")" />
+    <title>@ViewBag.Title SVBase Application</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
@@ -20,7 +21,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="@Url.Action("Details", "Dashboard")">SV Base</a>
+            <a class="navbar-brand color-svb" href="@Url.Action("Details", "Dashboard")">SV Base</a>
         </div>
         <div class="navbar-collapse collapse" style="height: 1px;">
             <ul class="nav navbar-nav navbar-top-links navbar-right padding-top-5">
@@ -31,9 +32,6 @@
             {
                     <li>
                         <a href="@Url.Action("Index", "Person")"><i class="fa fa-user fa-fw"></i> Усі люди</a>
-                    </li>
-                    <li>
-                        <a href="@Url.Action("Import", "Person")"><i class="fa fa-upload fa-fw"></i> Завантажити(.csv)</a>
                     </li>
                     <li>
                         <a data-toggle="modal" data-target="#ImportFile"><i class="fa fa-upload fa-fw"></i> Імпортувати дані</a>

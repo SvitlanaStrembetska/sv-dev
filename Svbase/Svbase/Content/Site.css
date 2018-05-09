@@ -88,6 +88,21 @@ li.dropdown {
     background-color: #428bca;
 }
 
+.factor-item :hover {
+    background-color: #428bca;
+    color: #ffffff;
+    cursor: pointer;
+}
+
+.btn-secondary.active {
+    background-color: #428bca !important;
+    color: #ffffff;
+}
+
+.color-svb {
+    color: #428bca !important;
+}
+
 .nav > li {
     position: relative;
     display: inline-block;
@@ -121,6 +136,9 @@ button a.white-color:focus {
     padding-top: 5px;
 }
 
+.padding-5 {
+    padding: 5px 0;
+}
 .padding-top-7 {
     padding-top: 7px;
 }
@@ -128,6 +146,11 @@ button a.white-color:focus {
 .padding-top-10 {
     padding-top: 10px;
 }
+
+.padding-bottom-15 {
+    padding-bottom: 15px;
+}
+
 
 .padding-lr {
     padding: 0 20px;

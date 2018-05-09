@@ -42,6 +42,8 @@
                 </tbody>
             </table>
         </div>
-        @Html.PagedListPager(Model, page => Url.Action("Index","Person", new { page }))
+        <div class="col-md-12">
+            @Html.PagedListPager(Model, page => Url.Action("Index", "Person", new { page }))
+        </div>
     </div>
 </div>

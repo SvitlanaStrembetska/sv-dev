@@ -3,15 +3,13 @@
 <div class="modal fade" id="beneficiaryCreateModal" role="dialog">
     <div class="modal-dialog">
 
-        <!-- Modal content-->
-
         @Html.BeginForm("Create", "Beneficiary")
         {
         @Html.AntiForgeryToken()
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Додати тап округа</h4>
+                <h4 class="modal-title">Додати категорію</h4>
             </div>
             <div class="modal-body">
                 <div class="form-horizontal">
@@ -34,4 +32,3 @@
         }
     </div>
 </div>
-

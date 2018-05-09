@@ -30,5 +30,10 @@ namespace Svbase.Controllers
         {
             return RedirectToAction("PersonsByBeneficiaryId", "Person", new { id });
         }
+
+        public ActionResult Save()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

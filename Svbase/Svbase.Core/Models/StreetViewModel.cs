@@ -7,6 +7,7 @@ namespace Svbase.Core.Models
 
     public class StreetBaseViewModel : BaseViewModel
     {
+        [Display(Name = "Псевдонім")]
         public string Pseudonym { get; set; }
     }
 
