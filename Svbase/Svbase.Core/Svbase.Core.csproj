@@ -79,6 +79,7 @@
     <Compile Include="Data\Entities\Flat.cs" />
     <Compile Include="Data\Entities\Person.cs" />
     <Compile Include="Data\Entities\Street.cs" />
+    <Compile Include="Enums\DistrictPanelBodyItemType.cs" />
     <Compile Include="Enums\DistrictType.cs" />
     <Compile Include="Enums\SystemRole.cs" />
     <Compile Include="Migrations\201712041839150_FirstMigration.cs" />
