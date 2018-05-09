@@ -101,6 +101,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.IdentityModel" />
     <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Numerics" />
     <Reference Include="System.Runtime.Serialization" />
@@ -430,6 +431,7 @@
     <Content Include="Views\Import\ImportExcel.cshtml" />
     <Content Include="Views\Shared\_UploadFile.cshtml" />
     <Content Include="Views\Shared\_PersonsTablePartial.cshtml" />
+    <Content Include="Views\Shared\_DistrictsPanelBody.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

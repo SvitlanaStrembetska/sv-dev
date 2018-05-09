@@ -121,6 +121,19 @@ namespace Svbase.Core.Repositories.Implementation
             return personsIds;
         }
 
+        public IEnumerable<DistrictPanelBodyItemModel> GetPanelBodyDistrictsBy(DistrictType districtType)
+        {
+            var districts = DbSet
+                .Where(x => x.DistrictType == districtType)
+                .Select(x => new DistrictPanelBodyItemModel
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    DistrictPanelBodyItemType = DistrictPanelBodyItemType.District
+                });
+            return districts;
+        }
+
         //public DistrictCreateModel GetDistrictById(int id)
         //{
         //    var district = DbSet.Select(x => new DistrictCreateModel

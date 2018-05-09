@@ -1,7 +1,9 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 using Svbase.Controllers.Abstract;
 using Svbase.Core.Consts;
+using Svbase.Core.Enums;
 using Svbase.Core.Models;
 using Svbase.Service.Factory;
 using Svbase.Service.Interfaces;
@@ -30,11 +32,33 @@ namespace Svbase.Controllers
         }
 
         [Authorize(Roles = RoleConsts.Admin)]
-        [HttpGet]
-        public ActionResult Create()
+        [HttpPost]
+        public ActionResult Create(DistrictListModel model)
         {
-            var streets = _streetService.GetStreetsForSelecting().ToList();
-            return View(new DistrictCreateModel { Streets = streets });
+            var result = _districtService.CreateDistrictBy(model);
+            return result 
+                ? DistrictsBy(model.DistrictType) 
+                : RedirectToAction("Index","Dashboard");
+        }
+
+        [Authorize(Roles = RoleConsts.Admin)]
+        [HttpGet]
+        public ActionResult DistrictsBy(DistrictType districtType)
+        {
+            var districts = _districtService.GetPanelBodyDistrictsBy(districtType);
+            return PartialView("_DistrictsPanelBody", districts);
+
+        }
+
+        [Authorize(Roles = RoleConsts.Admin)]
+        [HttpPost]
+        public ActionResult Delete(DistrictListModel model)
+        {
+            var result = _districtService.DeleteById(model.Id);
+            return result != null
+                ? DistrictsBy(model.DistrictType)
+                : RedirectToAction("Index", "Dashboard");
+
         }
 
         //[Authorize(Roles = RoleConsts.Admin)]

@@ -7,6 +7,18 @@ namespace Svbase.Core.Models
     public class DistrictListModel : BaseViewModel
     {
         public DistrictType DistrictType { get; set; }
+
+        public District Update(District district)
+        {
+            district.Name = Name;
+            district.DistrictType = DistrictType;
+            return district;
+        }
+    }
+
+    public class DistrictPanelBodyItemModel : BaseViewModel
+    {
+        public DistrictPanelBodyItemType DistrictPanelBodyItemType { get; set; }
     }
 
     public class DistrictCreateModel : DistrictListModel

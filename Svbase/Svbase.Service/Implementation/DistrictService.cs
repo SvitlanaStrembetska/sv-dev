@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Svbase.Core.Data.Entities;
+using Svbase.Core.Enums;
 using Svbase.Core.Models;
 using Svbase.Core.Repositories.Abstract;
 using Svbase.Core.Repositories.Factory;
@@ -20,6 +21,24 @@ namespace Svbase.Service.Implementation
         public IEnumerable<DistrictListModel> GetAllDistricts()
         {
             return RepositoryManager.Districts.GetAllDistricts();
+        }
+
+        public bool CreateDistrictBy(DistrictListModel model)
+        {
+            if (string.IsNullOrEmpty(model?.Name))
+                return false;
+            if (model.DistrictType == 0)
+                return false;
+
+            var district = model.Update(new District());
+            Add(district);
+            return true;
+        }
+
+        public IEnumerable<DistrictPanelBodyItemModel> GetPanelBodyDistrictsBy(DistrictType districtType)
+        {
+            var districts = RepositoryManager.Districts.GetPanelBodyDistrictsBy(districtType);
+            return districts;
         }
 
         //public bool CreateDistrictByModel(DistrictCreateModel model)
