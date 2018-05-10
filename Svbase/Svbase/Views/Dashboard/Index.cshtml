@@ -18,8 +18,8 @@
                             <label class="btn btn-secondary  active"
                                    onclick="getDistrictsBy(@((int)DistrictType.Сonstituency))">
                                 <input type="radio"
-                                       name="options" 
-                                       id="constituency-districts" 
+                                       name="options"
+                                       id="constituency-districts"
                                        autocomplete="off"
                                        checked> Партійний
                             </label>
@@ -47,11 +47,10 @@
                                 <div class="panel panel-default">
                                     <div class="panel-heading" style="font-weight: bold">
                                         Округи
-                                        <i class="fa fa-plus-square fa-lg" 
+                                        <i class="fa fa-plus-square fa-lg"
                                            onclick="openCreateDistrictModal()"
                                            id="add-district-icon"
-                                           style="color: #428bca; text-align: right; float: right"
-                                           ></i>
+                                           style="color: #428bca; text-align: right; float: right"></i>
                                     </div>
                                     <div class="panel-body" id="districts-panel-body">
                                         @Html.Partial("_DistrictsPanelBody", new List<DistrictPanelBodyItemModel>())
@@ -70,28 +69,9 @@
                                            data-toggle="modal"
                                            data-target="#cityCreateModal"></i>
                                     </div>
-                                    @if (Model.CityViewModels != null && Model.CityViewModels.Any())
-                                    {
-                                        <div class="panel-body">
-                                            @foreach (var item in Model.CityViewModels)
-                                            {
-                                                <div class="row factor-item">
-                                                    <div class="col-sm-12">
-                                                        <div class="padding-5">
-                                                            <div class="text-left inline-block">@item.Name</div>
-                                                            <div class="pull-right inline-block">
-                                                                <i style="color: red; cursor: pointer"
-                                                                   class="pull-right glyphicon glyphicon-trash"
-                                                                   data-action="delete"
-                                                                   data-item-id="@item.Id"></i>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                @*@Html.Partial("_StreetCreatePartial", new StreetCreateModel { CityId = item.Id })*@
-                                            }
-                                        </div>
-                                    }
+                                    <div class="panel-body" id="cities-panel-body">
+                                        @Html.Partial("_DistrictsPanelBody", new List<DistrictPanelBodyItemModel>())
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -147,7 +127,7 @@
                                                 <div class="row">
                                                     @if (Model.FlatViewModels != null && Model.FlatViewModels.Any())
                                                     {
-                                                     
+
                                                         <div class="col-sm-12">
                                                             @foreach (var item in Model.FlatViewModels)
                                                             {
@@ -183,25 +163,23 @@
 @*@Html.Partial("_BeneficiaryCreate", new BeneficiaryCreateModel())*@
 @Html.Partial("_DistrictCreate", new DistrictListModel())
 @*@Html.Partial("_CityCreate", new CityCreateModel())
-@Html.Partial("_ApartmentCreate", new ApartmentCreateModel())
-@Html.Partial("_FlatCreate", new FlatCreateModel())
+    @Html.Partial("_ApartmentCreate", new ApartmentCreateModel())
+    @Html.Partial("_FlatCreate", new FlatCreateModel())
 
-@Html.Partial("_StreetEdit")
-@Html.Partial("_ConfirmDelete")*@
+    @Html.Partial("_StreetEdit")
+    @Html.Partial("_ConfirmDelete")*@
 <script>
 
     $(document).ready(() => {
         getInitDistricts();
     });
 
-    function getInitDistricts()
-    {
+    function getInitDistricts() {
         var districtType = getDistrictType();
         getDistrictsBy(districtType);
     }
 
-    function openCreateDistrictModal()
-    {
+    function openCreateDistrictModal() {
         $('#districtCreateModal').modal('show');
     }
 

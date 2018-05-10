@@ -134,6 +134,23 @@ namespace Svbase.Core.Repositories.Implementation
             return districts;
         }
 
+
+        public IEnumerable<DistrictPanelBodyItemModel> GetPanelBodyCitiesBy(int districtId)
+        {
+            var district = DbSet.FirstOrDefault(x => x.Id == districtId);
+            if (district == null)
+                return new List<DistrictPanelBodyItemModel>();
+            var cities = district.Apartments.Select(x => x.Street.City).Distinct().ToList();
+            var districtPanelBodyCities = cities.Select(x => new DistrictPanelBodyItemModel
+            {
+                Id = x.Id,
+                Name = x.Name,
+                DistrictPanelBodyItemType = DistrictPanelBodyItemType.City
+            });
+            return districtPanelBodyCities;
+        }
+
+
         //public DistrictCreateModel GetDistrictById(int id)
         //{
         //    var district = DbSet.Select(x => new DistrictCreateModel

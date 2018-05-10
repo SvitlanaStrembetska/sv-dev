@@ -41,6 +41,12 @@ namespace Svbase.Service.Implementation
             return districts;
         }
 
+        public IEnumerable<DistrictPanelBodyItemModel> GetPanelBodyCitiesBy(int districtId)
+        {
+            var cities = RepositoryManager.Districts.GetPanelBodyCitiesBy(districtId);
+            return cities;
+        }
+
         //public bool CreateDistrictByModel(DistrictCreateModel model)
         //{
         //    if (model == null)

@@ -51,6 +51,15 @@ namespace Svbase.Controllers
         }
 
         [Authorize(Roles = RoleConsts.Admin)]
+        [HttpGet]
+        public ActionResult CitiesBy(int districtId)
+        {
+            var cities = _districtService.GetPanelBodyCitiesBy(districtId);
+            return PartialView("_DistrictsPanelBody", cities);
+
+        }
+
+        [Authorize(Roles = RoleConsts.Admin)]
         [HttpPost]
         public ActionResult Delete(DistrictListModel model)
         {

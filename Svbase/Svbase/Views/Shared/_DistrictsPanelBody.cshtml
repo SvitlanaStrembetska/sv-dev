@@ -3,7 +3,7 @@
 {
     foreach (var item in Model)
     {
-        <div class="row factor-item">
+        <div class="row factor-item" onclick="onClickDistrictPanelBodyItem(@item.Id,@((int)item.DistrictPanelBodyItemType))">
             <div class="col-sm-12">
                 <div class="padding-5">
                     <div class="text-left inline-block">@item.Name</div>
@@ -21,8 +21,26 @@
 }
 
 <script>
-    function deleteItemBy(itemId, itemType)
+
+    function onClickDistrictPanelBodyItem(itemId, itemType)
     {
+        if (itemType === 1) {
+            getCitiesBy(itemId);
+        }
+    }
+
+    function getCitiesBy(districtId)
+    {
+        var data = {
+            districtId: districtId
+        };
+        $.get('@Url.Action("CitiesBy","District")', data)
+            .done((result) => {
+                $("#cities-panel-body").html(result);
+            });
+    }
+
+    function deleteItemBy(itemId, itemType) {
         if (itemType === 1) {
             deleteDistrictBy(itemId);
         }
