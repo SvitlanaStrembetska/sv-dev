@@ -2,7 +2,7 @@
 @model CityViewModel
 <div class="container body-content margin-top">
     <div class="row">
-        <div class="col-sm-12">
+        <div class="col-sm-12 ignore-padding">
             <div class="col-md-6 col-xs-12">
                 <h2 style="margin-top: 0">@Model.Name</h2>
             </div>
@@ -17,11 +17,11 @@
         <div class="panel-heading">
             <div class="row">
                 <div class="col-xs-6">
-                    <span>Вулиці</span>
+                    <div class="margin-top-5">Вулиці</div>
                 </div>
                 <div class="col-xs-6">
 
-                    <button class="btn btn-primary btn-xs pull-right"
+                    <button class="btn btn-primary pull-right"
                             data-toggle="modal"
                             data-target="#streetCreateModal">
                         Додати вулицю

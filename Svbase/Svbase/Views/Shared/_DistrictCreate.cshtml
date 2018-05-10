@@ -53,6 +53,7 @@
             .done((result) => {
                 $("#districts-panel-body").html(result);
                 $('#districtCreateModal').modal('hide');
+                $('#create-district-name').val("");
             });
     }
 
