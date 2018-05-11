@@ -106,7 +106,7 @@ namespace Svbase.Controllers
                     DeleteOldFiles(Server.MapPath("~/Content/Uploads"));
 
                     //parse file
-                    var dataTable = ParseFile(extension, pathToExcelFile, GeneralConsts.ShowTableRowsCount, ref errorsList);
+                    var dataTable = ParseFile(extension, pathToExcelFile, Consts.ShowTableRowsCount, ref errorsList);
                     if (dataTable == null)
                     {
                         errorsList.Add("Не вдалося отримати дані із файлу '" + file.FileName + "'! Спробуйте зберегти файл вказавши тип файлу 'Книга Excel' або 'Книга Excel 97-2003' та знову його завантажити.");
@@ -144,9 +144,9 @@ namespace Svbase.Controllers
                         System.IO.File.Delete(pathToExcelFile);
                     }
 
-                return errorsList.Any() ? Json(new { status = GeneralConsts.StatusError, errorsList }, JsonRequestBehavior.AllowGet) : Json(new { status = GeneralConsts.StatusSuccess, files }, JsonRequestBehavior.AllowGet);
+                return errorsList.Any() ? Json(new { status = Consts.StatusError, errorsList }, JsonRequestBehavior.AllowGet) : Json(new { status = Consts.StatusSuccess, files }, JsonRequestBehavior.AllowGet);
             }
-            return Json(new { status = GeneralConsts.StatusError, errorsList }, JsonRequestBehavior.AllowGet);
+            return Json(new { status = Consts.StatusError, errorsList }, JsonRequestBehavior.AllowGet);
         }
 
         [Authorize]
@@ -156,10 +156,10 @@ namespace Svbase.Controllers
             var pathToExcelFile = string.Format("{0}/{1}", Server.MapPath("~/Content/Uploads"), fileName);
 
             if (!System.IO.File.Exists(pathToExcelFile))
-                return Json(new { status = GeneralConsts.StatusError, message = "Не вдалося видалити файл '" + fileName + "'" });
+                return Json(new { status = Consts.StatusError, message = "Не вдалося видалити файл '" + fileName + "'" });
 
             System.IO.File.Delete(pathToExcelFile);
-            return Json(new { status = GeneralConsts.StatusSuccess }, JsonRequestBehavior.AllowGet);
+            return Json(new { status = Consts.StatusSuccess }, JsonRequestBehavior.AllowGet);
         }
 
         private List<Dictionary<string, object>> ConvertDataTableToDictionary(DataTable dataTable, string fileName, ref List<string> errorList)
@@ -227,7 +227,7 @@ namespace Svbase.Controllers
         [HttpPost]
         public JsonResult SaveFilesDataToDb(IList<string> filesName)
         {
-            if (filesName == null) return Json(new { status = GeneralConsts.StatusError, message = "Жоден файл не прикріплено!" });
+            if (filesName == null) return Json(new { status = Consts.StatusError, message = "Жоден файл не прикріплено!" });
 
             var errorsList = new List<string>();
             var successList = new List<string>();
@@ -249,7 +249,7 @@ namespace Svbase.Controllers
 
                 //parse file
                 var extension = Path.GetExtension(fileName).ToLower();
-                var dataTable = ParseFile(extension, pathToExcelFile, GeneralConsts.ShowAllTableRowsCount, ref errorsList);
+                var dataTable = ParseFile(extension, pathToExcelFile, Consts.ShowAllTableRowsCount, ref errorsList);
                 if (dataTable == null)
                 {
                     errorsList.Add("Не вдалося отримати дані із файлу '" + fileName + "'! Спробуйте зберегти файл вказавши тип файлу 'Книга Excel' або 'Книга Excel 97-2003' та знову його завантажити.");
@@ -284,7 +284,7 @@ namespace Svbase.Controllers
                 System.IO.File.Delete(pathToExcelFile);
             }
 
-            return errorsList.Any() ? Json(new { status = GeneralConsts.StatusError, errorsList, successList }, JsonRequestBehavior.AllowGet) : Json(new { status = GeneralConsts.StatusSuccess, successList }, JsonRequestBehavior.AllowGet);
+            return errorsList.Any() ? Json(new { status = Consts.StatusError, errorsList, successList }, JsonRequestBehavior.AllowGet) : Json(new { status = Consts.StatusSuccess, successList }, JsonRequestBehavior.AllowGet);
         }
 
         private IEnumerable<Person> ConverDataRowsToPersonList(DataTable dataTable, string fileName, ref List<string> generalFileRowsErrorList)

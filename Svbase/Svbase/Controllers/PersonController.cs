@@ -47,12 +47,12 @@ namespace Svbase.Controllers
                 {
                     persons = _personService.GetPersons();
                 }
-                return PartialView("_PersonsTablePartial", persons.ToPagedList(page, GeneralConsts.ShowRecordsPerPage));
+                return PartialView("_PersonsTablePartial", persons.ToPagedList(page, Consts.ShowRecordsPerPage));
             }
 
             persons = _personService.GetPersons();
             
-            return View(persons.ToPagedList(page, GeneralConsts.ShowRecordsPerPage));
+            return View(persons.ToPagedList(page, Consts.ShowRecordsPerPage));
         }
 
         [HttpGet]
@@ -66,7 +66,7 @@ namespace Svbase.Controllers
         public ActionResult PersonsByBeneficiaryId(int id, int page = 1)
         {
             var persons = _personService.GetPersonsByBeneficiariesId(id);
-            return View("Index", persons.ToPagedList(page, GeneralConsts.ShowRecordsPerPage));
+            return View("Index", persons.ToPagedList(page, Consts.ShowRecordsPerPage));
         }
 
         public ActionResult Create()

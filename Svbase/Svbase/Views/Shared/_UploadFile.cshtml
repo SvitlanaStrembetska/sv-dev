@@ -121,11 +121,11 @@
                                 processData: false,
                                 contentType: false,
                                 success: function (data) {
-                                    if (data.status === '@GeneralConsts.StatusSuccess') {
+                                    if (data.status === '@Consts.StatusSuccess') {
                                         removeSpinner();
                                         appendAttachedFiles(data.files);
                                         return true;
-                                    } else if (data.status === '@GeneralConsts.StatusError') {
+                                    } else if (data.status === '@Consts.StatusError') {
                                         removeSpinner();
                                         var errorsList = '<div class="errors-block"><h4>Знайдено наступні помилки:</h4><ul class="errors-list">';
                                         if (data.message != undefined)

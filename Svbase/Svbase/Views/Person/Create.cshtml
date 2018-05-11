@@ -6,11 +6,13 @@
         @Html.AntiForgeryToken()
 
         <div class="body-content margin-top">
-            <div class="row">
+            <div class="container">
                 <div class="col-md-12">
-                    <div class="col-md-6"> <h4>Створити персону</h4></div>
                     <div class="col-md-6">
-                        <button class="btn btn-primary pull-right" type="submit">
+                        <h3 class="page-header">Створити персону</h3>
+                    </div>
+                    <div class="col-md-6">
+                        <button class="btn btn-primary pull-right margin-top-30" type="submit">
                             <a class="white-color">Зберегти</a>
                         </button>
                     </div>
@@ -83,7 +85,7 @@
                         <div class="col-md-12 block-container">
                             @Html.LabelFor(model => model.Gender, htmlAttributes: new { @class = "control-label col-md-2" })
                             <div class="col-md-10 padding-top-7">
-                          
+
                                 @Html.RadioButtonFor(m => m.Gender, true) @Html.Label("Чоловік")
                                 <span class="padding-left"></span>
                                 @Html.RadioButtonFor(m => m.Gender, false) @Html.Label("Жінка")
@@ -169,11 +171,12 @@
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
     }
-    <div>
-        @Html.ActionLink("Повернутися", "Index")
+    <div class="container margin-top-30">
+        <i class="fa fa-arrow-left color-svb"></i> @Html.ActionLink("Повернутися", "Index")
     </div>
 </div>
 @Html.Partial("_CityCreate", new CityCreateModel())

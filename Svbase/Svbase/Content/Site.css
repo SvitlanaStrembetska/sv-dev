@@ -85,7 +85,9 @@ li.dropdown {
     background-color: #428bca;
 }
 
-.factor-item :hover {
+.factor-item :hover,
+.factor-item :focus,
+.factor-item :active {
     background-color: #428bca;
     color: #ffffff;
     cursor: pointer;
@@ -136,6 +138,7 @@ button a.white-color:focus {
 .padding-5 {
     padding: 5px 0;
 }
+
 .padding-top-7 {
     padding-top: 7px;
 }
@@ -237,6 +240,7 @@ button a.white-color:focus {
 #filesDescription div {
     text-align: initial;
 }
+
 #filesDescription label {
     margin-right: 10px;
 }
@@ -252,25 +256,25 @@ button a.white-color:focus {
 }
 
 .spinner {
-  display: inline-block;
-  opacity: 0;
-  max-width: 0;
-  -webkit-transition: opacity 0.25s, max-width 0.45s;
-  -moz-transition: opacity 0.25s, max-width 0.45s;
-  -o-transition: opacity 0.25s, max-width 0.45s;
-  transition: opacity 0.25s, max-width 0.45s;
-  /* Duration fixed since we animate additional hidden width */
+    display: inline-block;
+    opacity: 0;
+    max-width: 0;
+    -webkit-transition: opacity 0.25s, max-width 0.45s;
+    -moz-transition: opacity 0.25s, max-width 0.45s;
+    -o-transition: opacity 0.25s, max-width 0.45s;
+    transition: opacity 0.25s, max-width 0.45s;
+    /* Duration fixed since we animate additional hidden width */
 }
 
 .has-spinner.active {
-  cursor: progress;
+    cursor: progress;
 }
 
-.has-spinner.active .spinner {
-  opacity: 1;
-  max-width: 50px;
-  /* More than it will ever come, notice that this affects on animation duration */
-}
+    .has-spinner.active .spinner {
+        opacity: 1;
+        max-width: 50px;
+        /* More than it will ever come, notice that this affects on animation duration */
+    }
 
 .pseudonym-color {
     color: #95a5b3;
@@ -290,11 +294,11 @@ button a.white-color:focus {
 }
 
 @media (max-width: 768px) {
-  #page-wrapper {
-      margin: 0 !important;
-  }
+    #page-wrapper {
+        margin: 0 !important;
+    }
 }
 
-.pagination{
+.pagination {
     margin: 10px 0 7px 0 !important;
 }

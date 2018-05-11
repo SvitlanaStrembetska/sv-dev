@@ -3,7 +3,7 @@
 {
     foreach (var item in Model)
     {
-        <div class="row factor-item" onclick="onClickDistrictPanelBodyItem(@item.Id,@((int)item.DistrictPanelBodyItemType))">
+        <div class="row factor-item" onclick="onClickDistrictPanelBodyItem(@item.Id,@((int)item.DistrictPanelBodyItemType))" data-item="@item.Id">
             <div class="col-sm-12">
                 <div class="padding-5">
                     <div class="text-left inline-block">@item.Name</div>
@@ -21,7 +21,6 @@
 }
 
 <script>
-
     function onClickDistrictPanelBodyItem(itemId, itemType)
     {
         if (itemType === 1) {
@@ -68,5 +67,4 @@
         }
         return districtType;
     }
-
 </script>
