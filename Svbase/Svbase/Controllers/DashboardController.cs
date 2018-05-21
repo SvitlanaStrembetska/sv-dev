@@ -15,11 +15,7 @@ namespace Svbase.Controllers
         {
             _dashboardService = ServiceManager.DashboardService;
         }
-        public ActionResult Index()
-        {
-            var dashboardViewModel = _dashboardService.GetDashboardModel();
-            return View(dashboardViewModel);
-        }
+      
         public ActionResult Details()
         {
             var dashboardViewModel = _dashboardService.GetDashboardViewModel();

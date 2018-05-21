@@ -3,6 +3,7 @@ using System.Linq;
 using System.Data.Entity;
 using Svbase.Core.Data;
 using Svbase.Core.Data.Entities;
+using Svbase.Core.Enums;
 using Svbase.Core.Models;
 using Svbase.Core.Repositories.Abstract;
 using Svbase.Core.Repositories.Interfaces;
@@ -163,5 +164,18 @@ namespace Svbase.Core.Repositories.Implementation
             return filterItems;
         }
 
+        public IEnumerable<DistrictPanelBodyApartmentModel> GetPanelBodyApartmentsBy(DistrictViewApartmentSearchFilter filter)
+        {
+            var apartments = DbSet
+                .Where(x => x.StreetId == filter.StreetId)
+                .Select(x => new DistrictPanelBodyApartmentModel
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    DistrictPanelBodyItemType = DistrictPanelBodyItemType.Apartment,
+                    IsChecked = x.Districts.Select(d => d.Id).Contains(filter.DistrictId)
+                });
+            return apartments;
+        }
     }
 }

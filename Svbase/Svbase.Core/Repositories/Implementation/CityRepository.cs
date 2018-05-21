@@ -2,6 +2,7 @@
 using System.Linq;
 using Svbase.Core.Data;
 using Svbase.Core.Data.Entities;
+using Svbase.Core.Enums;
 using Svbase.Core.Models;
 using Svbase.Core.Repositories.Abstract;
 using Svbase.Core.Repositories.Interfaces;
@@ -140,6 +141,17 @@ namespace Svbase.Core.Repositories.Implementation
             }
             var personsIds = persons.Select(p => p.Id);
             return personsIds;
+        }
+
+        public IEnumerable<DistrictPanelBodyItemModel> GetPanelBodyCities()
+        {
+            var cities = DbSet.Select(x => new DistrictPanelBodyItemModel
+            {
+                Id = x.Id,
+                Name = x.Name,
+                DistrictPanelBodyItemType = DistrictPanelBodyItemType.City
+            });
+            return cities;
         }
     }
 }

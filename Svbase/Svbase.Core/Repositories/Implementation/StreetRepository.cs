@@ -3,6 +3,7 @@ using System.Data.Entity;
 using System.Linq;
 using Svbase.Core.Data;
 using Svbase.Core.Data.Entities;
+using Svbase.Core.Enums;
 using Svbase.Core.Models;
 using Svbase.Core.Repositories.Abstract;
 using Svbase.Core.Repositories.Interfaces;
@@ -169,36 +170,20 @@ namespace Svbase.Core.Repositories.Implementation
                 };
                 filterItems.Add(item);
             }
-
-
-            //var streets = streetsDb.Select(x => new ItemFilterModel
-            //{
-            //    ParentId = x.CityId,
-            //    ParentName = x.City.Name,
-            //    Items = x.Apartments.Select(a => new BaseViewModel
-            //    {
-            //        Id = a.Id,
-            //        Name = a.Name
-            //    }).ToList()
-            //}).ToList();
-
-            //var cityIds = streets.Select(x => x.ParentId).Distinct();
-            //var filterItems = new List<ApartmentFilterModel>();
-            //foreach(var cityId in cityIds)
-            //{
-            //    var cityStreets = streets.Where(x => x.ParentId == cityId).ToList();
-            //    var filterItem = new ApartmentFilterModel
-            //    {
-            //        City = new BaseViewModel
-            //        {
-            //            Id = cityStreets.FirstOrDefault()?.ParentId??0,
-            //            Name = cityStreets.FirstOrDefault()?.ParentName
-            //        },
-            //        Streets = cityStreets
-            //    };
-            //    filterItems.Add(filterItem);
-            //}
             return filterItems;
+        }
+
+        public IEnumerable<DistrictPanelBodyItemModel> GetPanelBodyStreetsBy(int cityId)
+        {
+            var streets = DbSet
+                .Where(x => x.CityId == cityId)
+                .Select(x => new DistrictPanelBodyItemModel
+            {
+                Id = x.Id,
+                Name = x.Name,
+                DistrictPanelBodyItemType = DistrictPanelBodyItemType.Street
+            });
+            return streets;
         }
 
         public IEnumerable<int> GetPersonsIdsByStreetIds(List<int> streetIds)

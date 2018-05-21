@@ -1,0 +1,142 @@
+﻿@using Svbase.Core.Enums
+@using Svbase.Core.Models
+@model DistrictViewInitDataModel
+
+<div class="body-content">
+    <div class="row">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h3 class="page-header">Управління округами</h3>
+                </div>
+            </div>
+
+            <div class="row padding-bottom-15">
+                <div class="col-md-12 ignore-padding">
+                    <div class="col-md-6">
+                        <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                            <label class="btn btn-secondary  active"
+                                   onclick="getDistrictsBy(@((int)DistrictType.Сonstituency))">
+                                <input type="radio"
+                                       name="options"
+                                       id="constituency-districts"
+                                       autocomplete="off"
+                                       checked> Партійний
+                            </label>
+                            <label class="btn btn-secondary"
+                                   onclick="getDistrictsBy(@((int)DistrictType.Custom))">
+                                <input type="radio"
+                                       name="options"
+                                       id="custom-districts"
+                                       autocomplete="off"> Виборчий
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <button class="btn btn-primary pull-right">
+                            <a class="white-color" href="@Url.Action("Save", "Dashboard")">Зберегти</a>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="col-sm-3 padding-item">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading" style="font-weight: bold">
+                                        Округи
+                                        <i class="fa fa-plus-square fa-lg cursor-pointer"
+                                           onclick="openCreateDistrictModal()"
+                                           id="add-district-icon"
+                                           style="color: #428bca; text-align: right; float: right"></i>
+                                    </div>
+                                    <div class="panel-body" id="districts-panel-body">
+                                        @Html.Partial("_DistrictsPanelBody", @Model.Districts)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 padding-item">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading" style="font-weight: bold">
+                                        Населений пункт
+                                        @*<i class="fa fa-plus-square fa-lg" style="color: #428bca; text-align: right; float: right"
+                                           data-toggle="modal"
+                                           data-target="#cityCreateModal"></i>*@
+                                    </div>
+                                    <div class="panel-body" id="cities-panel-body">
+                                        @Html.Partial("_DistrictsPanelBody", @Model.Cities)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 padding-item">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading" style="font-weight: bold">
+                                        Вулиця
+                                        @*<i class="fa fa-plus-square fa-lg" style="color: #428bca; text-align: right; float: right"
+                                           data-toggle="modal"
+                                           data-target="#streetCreateModal"></i>*@
+                                    </div>
+                                    <div class="panel-body" id="streets-panel-body">
+                                        @Html.Partial("_DistrictsPanelBody", new List<DistrictPanelBodyItemModel>())
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 padding-item">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading" style="font-weight: bold">
+                                        № Буд
+                                        @*<i class="fa fa-plus-square fa-lg" style="color: #428bca; text-align: right; float: right"
+                                           data-toggle="modal"
+                                           data-target="#apartmentCreateModal"></i>*@
+                                    </div>
+                                    <div class="panel-body" id="apartments-panel-body">
+                                        @Html.Partial("_DistrictsPanelBody", new List<DistrictPanelBodyItemModel>())
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@*@Html.Partial("_BeneficiaryCreate", new BeneficiaryCreateModel())*@
+@Html.Partial("_DistrictCreate", new DistrictListModel())
+@*@Html.Partial("_CityCreate", new CityCreateModel())
+    @Html.Partial("_ApartmentCreate", new ApartmentCreateModel())
+    @Html.Partial("_FlatCreate", new FlatCreateModel())
+
+    @Html.Partial("_StreetEdit")
+    @Html.Partial("_ConfirmDelete")*@
+<script>
+  
+    function getDistrictsBy(districtType) {
+        var data = {
+            DistrictType: districtType
+        };
+        $.get('@Url.Action("DistrictsBy","District")', data)
+            .done((result) => {
+                $("#districts-panel-body").html(result);
+            });
+    }
+
+    function openCreateDistrictModal() {
+        $('#districtCreateModal').modal('show');
+    }
+
+</script>

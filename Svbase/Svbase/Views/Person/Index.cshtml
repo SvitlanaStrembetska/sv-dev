@@ -451,13 +451,13 @@
                     .parent().hasClass("highlighted-filter-item");
                 if (isChecked && !isHighlighted) {
                     changeHighlightedStatus($(target).parent());
-                    getFlats()
+                    getFlats();
                 } else {
                     checkFlatsByCheckedApartments();
                 }
             } else {
                 changeHighlightedStatus(target);
-                getFlats()
+                getFlats();
             }
         });
     }

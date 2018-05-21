@@ -25,6 +25,14 @@ namespace Svbase.Controllers
 
         [Authorize(Roles = RoleConsts.Admin)]
         [HttpGet]
+        public ActionResult Index()
+        {
+            var model = _districtService.GetDistrictViewInitDataModel(DistrictType.Сonstituency);
+            return View(model);
+        }
+
+        [Authorize(Roles = RoleConsts.Admin)]
+        [HttpGet]
         public ActionResult List()
         {
             var items = _districtService.GetAllDistricts();
@@ -38,7 +46,7 @@ namespace Svbase.Controllers
             var result = _districtService.CreateDistrictBy(model);
             return result 
                 ? DistrictsBy(model.DistrictType) 
-                : RedirectToAction("Index","Dashboard");
+                : RedirectToAction("Index");
         }
 
         [Authorize(Roles = RoleConsts.Admin)]
@@ -52,10 +60,19 @@ namespace Svbase.Controllers
 
         [Authorize(Roles = RoleConsts.Admin)]
         [HttpGet]
-        public ActionResult CitiesBy(int districtId)
+        public ActionResult StreetsBy(int cityId)
         {
-            var cities = _districtService.GetPanelBodyCitiesBy(districtId);
-            return PartialView("_DistrictsPanelBody", cities);
+            var streets = _districtService.GetPanelBodyStreetsBy(cityId);
+            return PartialView("_DistrictsPanelBody", streets);
+
+        }
+
+        [Authorize(Roles = RoleConsts.Admin)]
+        [HttpGet]
+        public ActionResult ApartmentsBy(DistrictViewApartmentSearchFilter filter)
+        {
+            var apartments = _districtService.GetPanelBodyApartmentsBy(filter);
+            return PartialView("_DistrictsPanelBody", apartments);
 
         }
 
@@ -66,37 +83,8 @@ namespace Svbase.Controllers
             var result = _districtService.DeleteById(model.Id);
             return result != null
                 ? DistrictsBy(model.DistrictType)
-                : RedirectToAction("Index", "Dashboard");
+                : RedirectToAction("Index");
 
         }
-
-        //[Authorize(Roles = RoleConsts.Admin)]
-        //[HttpPost]
-        //public ActionResult Create(DistrictCreateModel model)//Todo 
-        //{
-        //    var isCreated = _districtService.CreateDistrictByModel(model);
-        //    return !isCreated
-        //        ? RedirectToAction("Create")
-        //        : RedirectToAction("List");
-        //}
-
-        //[Authorize(Roles = RoleConsts.Admin)]
-        //[HttpGet]
-        //public ActionResult Details(int id)
-        //{
-        //    var district = _districtService.GetDistrictModelById(id);
-        //    return View(district);
-        //}
-
-        //[Authorize(Roles = RoleConsts.Admin)]
-        //[HttpPost]
-        //public ActionResult Edit(DistrictCreateModel model)
-        //{
-        //    var isEdited = _districtService.EditDistrictByModel(model);
-
-        //    return !isEdited 
-        //        ? RedirectToAction("Details", new {id = model.Id}) 
-        //        : RedirectToAction("List");
-        //}
     }
 }

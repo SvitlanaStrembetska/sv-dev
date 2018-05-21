@@ -302,3 +302,7 @@ button a.white-color:focus {
 .pagination {
     margin: 10px 0 7px 0 !important;
 }
+
+.cursor-pointer {
+    cursor: pointer;
+}

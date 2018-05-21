@@ -34,4 +34,21 @@ namespace Svbase.Core.Models
             return district;
         }
     }
+
+    public class DistrictViewInitDataModel
+    {
+        public IEnumerable<DistrictPanelBodyItemModel> Cities { get; set; }
+        public IEnumerable<DistrictPanelBodyItemModel> Districts { get; set; }
+    }
+
+    public class DistrictViewApartmentSearchFilter
+    {
+        public int DistrictId { get; set; }
+        public int StreetId { get; set; }
+    }
+
+    public class DistrictPanelBodyApartmentModel : DistrictPanelBodyItemModel
+    {
+        public bool IsChecked { get; set; }
+    }
 }

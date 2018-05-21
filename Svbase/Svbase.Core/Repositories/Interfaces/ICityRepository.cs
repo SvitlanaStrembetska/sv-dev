@@ -13,5 +13,6 @@ namespace Svbase.Core.Repositories.Interfaces
         IEnumerable<BaseViewModel> GetStretsBaseModelByCityIds(IList<int> cityIds);
         IEnumerable<BaseViewModel> GetStreetsBaseModelByCityId(int id);
         IEnumerable<int> GetPersonsIdsByCityIds(List<int> cityIds);
+        IEnumerable<DistrictPanelBodyItemModel> GetPanelBodyCities();
     }
 }
