@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Svbase.Core.Data.Entities;
 using Svbase.Models;
 
 namespace Svbase.Helpers
 {
     public class FilesDataValidationHelper
     {
-        public bool ValidateFileColumns(DataTable dataTable, string fileName, ref List<string> errorModel)
+        public bool ValidateFileColumns(DataTable dataTable, string fileName, IQueryable<Beneficiary> beneficaries, ref List<string> errorModel)
         {
             var columnsName = dataTable.Columns;
 
@@ -52,10 +53,16 @@ namespace Svbase.Helpers
             if (!columnsName.Contains("Корпус"))
                 errorModel.Add("Таблиця " + fileName + " не містить стовбець 'Корпус'");
 
+            foreach (var beneficary in beneficaries)
+            {
+                if (!columnsName.Contains(beneficary.Name))
+                    errorModel.Add("Таблиця " + fileName + " не містить стовбець '" + beneficary.Name + "'");
+            }
+
             return errorModel.Any();
         }
 
-        public FileValidationModel ValidateTableRows(DataRow row, int rowIndex, string fileName, ref List<string> errorList)
+        public FileValidationModel ValidateTableRows(DataRow row, int rowIndex, string fileName, IQueryable<Beneficiary> beneficaries, ref List<string> errorList)
         {
             var firstName = row["Ім'я"].ToString().Trim();
             var lastName = row["Прізвище"].ToString().Trim();
@@ -70,6 +77,12 @@ namespace Svbase.Helpers
             var streetName = row["Вулиця"].ToString().Trim();
             var cityName = row["Населений пункт"].ToString().Trim();
             var getDate = row["Дата народження"].ToString().Trim();
+            var beneficariesList = new Dictionary<string, bool>();
+
+            foreach (var beneficary in beneficaries)
+            {
+                beneficariesList.Add(beneficary.Name, row[beneficary.Name].ToString().ToUpper() == "TRUE");
+            }
 
             if (firstName.Length == 0 && lastName.Length == 0)
             {
@@ -81,13 +94,13 @@ namespace Svbase.Helpers
                 errorList.Add("Назва міста у " + (rowIndex + 2) + " рядку таблиці '" + fileName + "' повинна містити хоча б одну літеру!");
             }
 
-            var cityValidation = new Regex("[^\\sА-Яа-я'-]");
+            var cityValidation = new Regex("[^\\sА-Ща-щЬьЮюЯяЇїІіЄєҐґ'-]");
             if (cityValidation.Matches(cityName).Count != 0)
             {
                 errorList.Add("Назва міста у " + (rowIndex + 2) + " рядку таблиці '" + fileName + "' містить заборонені символи!");
             }
 
-            var streetValidation = new Regex("[^\\s0-9А-Яа-я'-]");
+            var streetValidation = new Regex("[^\\s0-9А-Ща-щЬьЮюЯяЇїІіЄєҐґ'-]");
             if (streetValidation.Matches(streetName).Count != 0)
             {
                 errorList.Add("Назва вулиці у " + (rowIndex + 2) + " рядку таблиці '" + fileName + "' містить заборонені символи!");
@@ -114,7 +127,8 @@ namespace Svbase.Helpers
                     ApartmentSide = apartmentSide,
                     StreetName = streetName,
                     CityName = cityName,
-                    BirthdayDate = null
+                    BirthdayDate = null,
+                    Beneficaries = beneficariesList
                 };
 
             DateTime? birthdayDate = null;
@@ -158,7 +172,8 @@ namespace Svbase.Helpers
                 ApartmentSide = apartmentSide,
                 StreetName = streetName,
                 CityName = cityName,
-                BirthdayDate = birthdayDate
+                BirthdayDate = birthdayDate,
+                Beneficaries = beneficariesList
             };
         }
     }

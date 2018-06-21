@@ -24,6 +24,7 @@ namespace Svbase.Controllers
         private readonly IApartmentService _apartmentService;
         private readonly IStreetService _streetService;
         private readonly ICityService _cityService;
+        private readonly IBeneficiaryService _beneficiaryService;
 
         public ImportController(IServiceManager serviceManager)
             : base(serviceManager)
@@ -33,6 +34,7 @@ namespace Svbase.Controllers
             _apartmentService = ServiceManager.ApartmentService;
             _streetService = ServiceManager.StreetService;
             _cityService = ServiceManager.CityService;
+            _beneficiaryService = ServiceManager.BeneficiaryService;
         }
 
         public ActionResult UploadDocument()
@@ -67,6 +69,7 @@ namespace Svbase.Controllers
         {
             var files = new List<UploadFilesModel>();
             var errorsList = new List<string>();
+            var beneficaries = _beneficiaryService.GetAll();
 
             if (!multipleFiles.Any())
                 errorsList.Add("Жоден файл не прикріплено!");
@@ -115,7 +118,7 @@ namespace Svbase.Controllers
 
                     //validate file columns
                     var errorModel = new List<string>();
-                    var isFileColumnsNotValid = new FilesDataValidationHelper().ValidateFileColumns(dataTable, file.FileName, ref errorModel);
+                    var isFileColumnsNotValid = new FilesDataValidationHelper().ValidateFileColumns(dataTable, file.FileName, beneficaries, ref errorModel);
                     if (isFileColumnsNotValid)
                     {
                         errorsList.AddRange(errorModel);
@@ -124,7 +127,7 @@ namespace Svbase.Controllers
 
                     // generate results
                     var filePreviewErrors = new List<string>();
-                    var datalist = ConvertDataTableToDictionary(dataTable, file.FileName, ref filePreviewErrors);
+                    var datalist = ConvertDataTableToDictionary(dataTable, file.FileName, beneficaries, ref filePreviewErrors);
                     if (filePreviewErrors.Any())
                     {
                         errorsList.AddRange(filePreviewErrors);
@@ -162,14 +165,14 @@ namespace Svbase.Controllers
             return Json(new { status = Consts.StatusSuccess }, JsonRequestBehavior.AllowGet);
         }
 
-        private List<Dictionary<string, object>> ConvertDataTableToDictionary(DataTable dataTable, string fileName, ref List<string> errorList)
+        private List<Dictionary<string, object>> ConvertDataTableToDictionary(DataTable dataTable, string fileName, IQueryable<Beneficiary> beneficaries, ref List<string> errorList)
         {
             var rows = new List<Dictionary<string, object>>();
             var validationHelper = new FilesDataValidationHelper();
 
             foreach (DataRow dr in dataTable.Rows)
             {
-                var validatedModel = validationHelper.ValidateTableRows(dr, dataTable.Rows.IndexOf(dr), fileName, ref errorList);
+                var validatedModel = validationHelper.ValidateTableRows(dr, dataTable.Rows.IndexOf(dr), fileName, beneficaries, ref errorList);
                 if (errorList.Any())
                     continue;
 
@@ -178,6 +181,8 @@ namespace Svbase.Controllers
                 {
                     if (col.ColumnName.ToUpper() == "ДАТА НАРОДЖЕННЯ" && validatedModel.BirthdayDate != null) 
                         row.Add(col.ColumnName, validatedModel.BirthdayDate.ToString().Trim().Substring(0, 10));
+                    else if (beneficaries.Any(x => x.Name == col.ColumnName))
+                        row.Add(col.ColumnName, dr[col].ToString().ToUpper() == "TRUE");
                     else
                         row.Add(col.ColumnName, dr[col]);
                 }
@@ -229,6 +234,7 @@ namespace Svbase.Controllers
         {
             if (filesName == null) return Json(new { status = Consts.StatusError, message = "Жоден файл не прикріплено!" });
 
+            var beneficaries = _beneficiaryService.GetAll();
             var errorsList = new List<string>();
             var successList = new List<string>();
 
@@ -258,7 +264,7 @@ namespace Svbase.Controllers
 
                 //validate file columns
                 var errorModel = new List<string>();
-                var isFileColumnsNotValid = new FilesDataValidationHelper().ValidateFileColumns(dataTable, fileName, ref errorModel);
+                var isFileColumnsNotValid = new FilesDataValidationHelper().ValidateFileColumns(dataTable, fileName, beneficaries, ref errorModel);
                 if (isFileColumnsNotValid)
                 {
                     errorsList.AddRange(errorModel);
@@ -267,7 +273,7 @@ namespace Svbase.Controllers
 
                 //convert data rows to persons list
                 var generalFileRowsErrorList = new List<string>();
-                var personList = ConverDataRowsToPersonList(dataTable, fileName, ref generalFileRowsErrorList);
+                var personList = ConverDataRowsToPersonList(dataTable, fileName, beneficaries, ref generalFileRowsErrorList);
                 if (generalFileRowsErrorList.Any())
                 {
                     errorsList.AddRange(generalFileRowsErrorList);
@@ -287,7 +293,7 @@ namespace Svbase.Controllers
             return errorsList.Any() ? Json(new { status = Consts.StatusError, errorsList, successList }, JsonRequestBehavior.AllowGet) : Json(new { status = Consts.StatusSuccess, successList }, JsonRequestBehavior.AllowGet);
         }
 
-        private IEnumerable<Person> ConverDataRowsToPersonList(DataTable dataTable, string fileName, ref List<string> generalFileRowsErrorList)
+        private IEnumerable<Person> ConverDataRowsToPersonList(DataTable dataTable, string fileName, IQueryable<Beneficiary> beneficaries, ref List<string> generalFileRowsErrorList)
         {
             var personList = new List<Person>();
             var cityList = new List<City>();
@@ -304,7 +310,7 @@ namespace Svbase.Controllers
             foreach (DataRow row in dataTable.Rows)
             {
                 var newErrorList = new List<string>();
-                var validatedModel = new FilesDataValidationHelper().ValidateTableRows(row, dataTable.Rows.IndexOf(row), fileName, ref newErrorList);
+                var validatedModel = new FilesDataValidationHelper().ValidateTableRows(row, dataTable.Rows.IndexOf(row), fileName, beneficaries, ref newErrorList);
                 if (newErrorList.Any())
                 {
                     generalFileRowsErrorList.AddRange(newErrorList);
@@ -395,6 +401,14 @@ namespace Svbase.Controllers
 
                 var isPersonAlreadyExistsInList = false;
                 var isPersonAlreadyExistsInDb = false;
+
+                var beneficariesList = new List<Beneficiary>();
+                foreach (var beneficary in beneficaries)
+                {
+                    if (validatedModel.Beneficaries[beneficary.Name].ToString().ToUpper() == "TRUE")
+                        beneficariesList.Add(beneficary);
+                }
+
                 var person = new Person()
                 {
                     FirstName = validatedModel.FirstName,
@@ -407,7 +421,8 @@ namespace Svbase.Controllers
                     Flats = new List<Flat>
                         {
                             flat
-                        }
+                        },
+                    Beneficiaries = beneficariesList
                 };
 
                 if (!persons.Any())

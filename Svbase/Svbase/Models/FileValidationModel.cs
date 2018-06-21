@@ -1,5 +1,5 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
 
 namespace Svbase.Models
 {
@@ -18,5 +18,6 @@ namespace Svbase.Models
         public string ApartmentSide { get; set; }
         public string StreetName { get; set; }
         public string CityName { get; set; }
+        public Dictionary<string, bool> Beneficaries { get; set; }
     }
 }
