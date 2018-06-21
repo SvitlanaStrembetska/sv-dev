@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Svbase.Models;
 
 namespace Svbase.Helpers
@@ -70,34 +71,32 @@ namespace Svbase.Helpers
             var cityName = row["Населений пункт"].ToString().Trim();
             var getDate = row["Дата народження"].ToString().Trim();
 
-            if (firstName.Length <= 1)
+            if (firstName.Length == 0 && lastName.Length == 0)
             {
-                errorList.Add("Надто коротке ім'я у " + (rowIndex + 2) + " рядку таблиці '" + fileName + "'!");
-            }
-
-            if (lastName.Length <= 1)
-            {
-                errorList.Add("Надто коротке прізвище у " + (rowIndex + 2) + " рядку таблиці '" + fileName + "'!");
-            }
-
-            if (middleName.Length <= 1)
-            {
-                errorList.Add("Надто коротке по батькові у " + (rowIndex + 2) + " рядку таблиці '" + fileName + "'!");
-            }
-
-            if (apartmentNumber.Length == 0)
-            {
-                errorList.Add("Необхідно вказати номер будинку у " + (rowIndex + 2) + " рядку таблиці '" + fileName + "'!");
-            }
-
-            if (streetName.Length <= 1)
-            {
-                errorList.Add("Назва вулиці у " + (rowIndex + 2) + " рядку таблиці '" + fileName + "' повинна містити хоча б одну літеру!");
+                errorList.Add("Ім'я або прізвище у " + (rowIndex + 2) + " рядку таблиці '" + fileName + "' не повинно бути порожнім!");
             }
 
             if (cityName.Length <= 1)
             {
                 errorList.Add("Назва міста у " + (rowIndex + 2) + " рядку таблиці '" + fileName + "' повинна містити хоча б одну літеру!");
+            }
+
+            var cityValidation = new Regex("[^\\sА-Яа-я'-]");
+            if (cityValidation.Matches(cityName).Count != 0)
+            {
+                errorList.Add("Назва міста у " + (rowIndex + 2) + " рядку таблиці '" + fileName + "' містить заборонені символи!");
+            }
+
+            var streetValidation = new Regex("[^\\s0-9А-Яа-я'-]");
+            if (streetValidation.Matches(streetName).Count != 0)
+            {
+                errorList.Add("Назва вулиці у " + (rowIndex + 2) + " рядку таблиці '" + fileName + "' містить заборонені символи!");
+            }
+
+            var apartmentValidation = new Regex("[^0-9]");
+            if (apartmentValidation.Matches(apartmentNumber).Count != 0)
+            {
+                errorList.Add("Номер будинку у " + (rowIndex + 2) + " рядку таблиці '" + fileName + "' повинен містити лише цифри!");
             }
 
             if (getDate.Length == 0)
