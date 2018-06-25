@@ -77,6 +77,7 @@ namespace Svbase.Helpers
             var streetName = row["Вулиця"].ToString().Trim();
             var cityName = row["Населений пункт"].ToString().Trim();
             var getDate = row["Дата народження"].ToString().Trim();
+            var workName = row["Місце роботи"].ToString().Trim();
             var beneficariesList = new Dictionary<string, bool>();
 
             foreach (var beneficary in beneficaries)
@@ -126,7 +127,8 @@ namespace Svbase.Helpers
                     StreetName = streetName,
                     CityName = cityName,
                     BirthdayDate = null,
-                    Beneficaries = beneficariesList
+                    Beneficaries = beneficariesList,
+                    WorkName = workName
                 };
 
             DateTime? birthdayDate = null;
@@ -171,7 +173,8 @@ namespace Svbase.Helpers
                 StreetName = streetName,
                 CityName = cityName,
                 BirthdayDate = birthdayDate,
-                Beneficaries = beneficariesList
+                Beneficaries = beneficariesList,
+                WorkName = workName
             };
         }
     }

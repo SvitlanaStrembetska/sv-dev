@@ -15,6 +15,6 @@
         public const int ShowTableRowsCount = 5;
         public const int ShowAllTableRowsCount = -1;
 
-        public const int ShowRecordsPerPage = 10;
+        public const int ShowRecordsPerPage = 25;
     }
 }

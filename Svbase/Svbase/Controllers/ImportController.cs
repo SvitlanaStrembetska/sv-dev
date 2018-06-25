@@ -25,6 +25,7 @@ namespace Svbase.Controllers
         private readonly IStreetService _streetService;
         private readonly ICityService _cityService;
         private readonly IBeneficiaryService _beneficiaryService;
+        private readonly IWorkService _workService;
 
         public ImportController(IServiceManager serviceManager)
             : base(serviceManager)
@@ -35,6 +36,7 @@ namespace Svbase.Controllers
             _streetService = ServiceManager.StreetService;
             _cityService = ServiceManager.CityService;
             _beneficiaryService = ServiceManager.BeneficiaryService;
+            _workService = ServiceManager.WorkService;
         }
 
         public ActionResult UploadDocument()
@@ -306,6 +308,7 @@ namespace Svbase.Controllers
             var apartments = _apartmentService.GetAll();
             var flats = _flatService.GetAll();
             var persons = _personService.GetAll();
+            var works = _workService.GetAll();
 
             foreach (DataRow row in dataTable.Rows)
             {
@@ -409,7 +412,11 @@ namespace Svbase.Controllers
                         beneficariesList.Add(beneficary);
                 }
 
-                var person = new Person()
+                var workingPlace = new Work {Name = validatedModel.WorkName};
+                if (works.Any(x => x.Name.ToUpper() == validatedModel.WorkName))
+                    workingPlace = works.FirstOrDefault(x => x.Name.ToUpper() == validatedModel.WorkName);
+
+                var person = new Person
                 {
                     FirstName = validatedModel.FirstName,
                     LastName = validatedModel.LastName,
@@ -422,7 +429,8 @@ namespace Svbase.Controllers
                         {
                             flat
                         },
-                    Beneficiaries = beneficariesList
+                    Beneficiaries = beneficariesList,
+                    Work = workingPlace
                 };
 
                 if (!persons.Any())

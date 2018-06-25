@@ -56,6 +56,7 @@ namespace Svbase.Core.Repositories.Implementation
                         Id = f.Id,
                         Name = f.Number,
                     }).FirstOrDefault(),
+                    Work =  x.Work
                 }).OrderBy(x => x.Id);
             return persons;
         }
@@ -131,7 +132,7 @@ namespace Svbase.Core.Repositories.Implementation
                         Id = f.Id,
                         Name = f.Number,
                     }).FirstOrDefault(),
-
+                    Work = x.Work
                 }).OrderBy(x => x.Id);
             return persons;
         }
