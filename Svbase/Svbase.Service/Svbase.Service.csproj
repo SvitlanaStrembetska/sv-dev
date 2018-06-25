@@ -63,6 +63,7 @@
     <Compile Include="Factory\ServiceManager.cs" />
     <Compile Include="Implementation\ApartmentService.cs" />
     <Compile Include="Implementation\ApplicationUserService.cs" />
+    <Compile Include="Implementation\WorkService.cs" />
     <Compile Include="Implementation\BeneficiaryService.cs" />
     <Compile Include="Implementation\CityService.cs" />
     <Compile Include="Implementation\DashboardService.cs" />
@@ -73,6 +74,7 @@
     <Compile Include="Implementation\StreetService.cs" />
     <Compile Include="Interfaces\IApartmentService.cs" />
     <Compile Include="Interfaces\IApplicationUserService.cs" />
+    <Compile Include="Interfaces\IWorkService.cs" />
     <Compile Include="Interfaces\IBeneficiaryService.cs" />
     <Compile Include="Interfaces\ICityService.cs" />
     <Compile Include="Interfaces\IDashboardService.cs" />

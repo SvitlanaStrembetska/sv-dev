@@ -18,6 +18,7 @@ namespace Svbase.Core.Repositories.Factory
         private IFlatRepository _flatRepository;
         private IPersonRepository _personRepository;
         private IStreetRepository _streetRepository;
+        private IWorkRepository _workRepository;
 
         #endregion
 
@@ -49,5 +50,8 @@ namespace Svbase.Core.Repositories.Factory
 
         public IStreetRepository Streets =>
             _streetRepository ?? (_streetRepository = new StreetRepository(_context));
+
+        public IWorkRepository Works =>
+            _workRepository ?? (_workRepository = new WorkRepository(_context));
     }
 }
