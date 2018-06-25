@@ -11,7 +11,6 @@ namespace Svbase.Core.Data.Entities
         public string LastName { get; set; }
         public string MobileTelephoneFirst { get; set; }
         public string MobileTelephoneSecond { get; set; }
-        //public string HomePhone { get; set; }
         public string Email { get; set; }
         public string StationaryPhone { get; set; }
         public DateTime? BirthdayDate { get; set; }

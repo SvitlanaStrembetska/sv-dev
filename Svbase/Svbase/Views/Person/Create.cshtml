@@ -24,23 +24,26 @@
                             <div class="col-md-4 ignore-padding">
                                 @Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "col-md-12" })
                                 <div class="col-md-12">
-                                    @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                                    @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control" } })
                                     @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
                                 </div>
                             </div>
                             <div class="col-md-4 ignore-padding">
                                 @Html.LabelFor(model => model.FirstName, htmlAttributes: new { @class = "col-md-12" })
                                 <div class="col-md-12">
-                                    @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                                    @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control" } })
                                     @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
                                 </div>
                             </div>
                             <div class="col-md-4 ignore-padding">
                                 @Html.LabelFor(model => model.MiddleName, htmlAttributes: new { @class = "col-md-12" })
                                 <div class="col-md-12">
-                                    @Html.EditorFor(model => model.MiddleName, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                                    @Html.EditorFor(model => model.MiddleName, new { htmlAttributes = new { @class = "form-control" } })
                                     @Html.ValidationMessageFor(model => model.MiddleName, "", new { @class = "text-danger" })
                                 </div>
+                            </div>
+                            <div id="validName" class="col-md-4 ignore-padding" style="display:none;">
+                                * Будь ласка введіть ім'я або прізвище
                             </div>
                         </div>
                         <div class="col-md-12 block-container">
@@ -193,7 +196,18 @@
         subscribeOnSelectCity();
         subscribeOnSelectStreet();
         subscribeOnSelectApartment();
+        validationName();
     });
+
+    var fName = document.getElementById("FirstName").value;
+    var lName = document.getElementById("LastName").value;
+
+
+    var validationName = function () {
+        if (fName.trim() == '' && lName.trim() == '') {
+            $("#validName").show();
+        }
+    }
 
     function getOptionSelectCityPartial() {
         var urlAction = "@Url.Action("OptionSelectCitiesPartial")";
