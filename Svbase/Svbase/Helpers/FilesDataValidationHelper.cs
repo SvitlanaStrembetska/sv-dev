@@ -89,15 +89,13 @@ namespace Svbase.Helpers
                 errorList.Add("Ім'я або прізвище у " + (rowIndex + 2) + " рядку таблиці '" + fileName + "' не повинно бути порожнім!");
             }
 
-            if (cityName.Length <= 1)
+            if (cityName.Length > 0)
             {
-                errorList.Add("Назва міста у " + (rowIndex + 2) + " рядку таблиці '" + fileName + "' повинна містити хоча б одну літеру!");
-            }
-
-            var cityValidation = new Regex("[^\\sА-Ща-щЬьЮюЯяЇїІіЄєҐґ'-]");
-            if (cityValidation.Matches(cityName).Count != 0)
-            {
-                errorList.Add("Назва міста у " + (rowIndex + 2) + " рядку таблиці '" + fileName + "' містить заборонені символи!");
+                var cityValidation = new Regex("[^\\sА-Ща-щЬьЮюЯяЇїІіЄєҐґ'-]");
+                if (cityValidation.Matches(cityName).Count != 0)
+                {
+                    errorList.Add("Назва міста у " + (rowIndex + 2) + " рядку таблиці '" + fileName + "' містить заборонені символи!");
+                }
             }
 
             var streetValidation = new Regex("[^\\s0-9А-Ща-щЬьЮюЯяЇїІіЄєҐґ'-]");
