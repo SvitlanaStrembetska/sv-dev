@@ -84,6 +84,9 @@ namespace Svbase.Controllers
         [HttpPost]
         public ActionResult Create(PersonViewModel model)
         {
+            if (model.LastName == null && model.FirstName == null)
+                return RedirectToAction("Create");
+
             var isCreated = _personService.CreatePersonByModel(model);
             return !isCreated
                 ? RedirectToAction("Create")
