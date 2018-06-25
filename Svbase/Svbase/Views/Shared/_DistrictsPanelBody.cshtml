@@ -55,15 +55,27 @@
     function onClickDistrictPanelBodyItem(itemId, itemType)
     {
         if ((itemType === @((int)DistrictPanelBodyItemType.City))) {
+            removeCitySelectClasses();
+            addCitySelecClassToCityRowById(itemId);
             getStreetsBy(itemId);
             return;
         }
+
         if ((itemType === @((int)DistrictPanelBodyItemType.Street))) {
+            removeStreetSelectClasses();
+            addStreetSelecClassToCityRowById(itemId);
             getApartmentsBy(itemId);
             return;
         }
+
         if ((itemType === @((int)DistrictPanelBodyItemType.Apartment))) {
             checkApartmentById(itemId);
+            return;
+        }
+
+        if ((itemType === @((int)DistrictPanelBodyItemType.District))) {
+            removeDistrictSelectClasses();
+            addDistrictSelecClassToCityRowById(itemId);
             return;
         }
     }
@@ -129,4 +141,48 @@
         }
         return districtType;
     }
+
+   //#region highlight rows
+    function removeCitySelectClasses() {
+        var cityRows = $("#cities-panel-body > .row");
+        cityRows.removeClass("factor-item-active");
+    }
+
+    function addCitySelecClassToCityRowById(cityId) {
+        var cityRow = $("#cities-panel-body > .row[data-item='" + cityId + "']");
+        cityRow.addClass("factor-item-active");
+    }
+
+    function removeStreetSelectClasses() {
+        var streetRows = $("#streets-panel-body > .row");
+        streetRows.removeClass("factor-item-active");
+    }
+
+    function addStreetSelecClassToCityRowById(streetId) {
+        var streetRow = $("#streets-panel-body > .row[data-item='" + streetId + "']");
+        streetRow.addClass("factor-item-active");
+    }
+
+    function removeDistrictSelectClasses() {
+        var districtRows = $("#districts-panel-body > .row");
+        districtRows.removeClass("factor-item-active");
+    }
+
+    function addDistrictSelecClassToCityRowById(districtId) {
+        var districtRow = $("#districts-panel-body > .row[data-item='" + districtId + "']");
+        districtRow.addClass("factor-item-active");
+    }
+
+    function removeDistrictSelectClasses() {
+        var districtRows = $("#districts-panel-body > .row");
+        districtRows.removeClass("factor-item-active");
+    }
+
+    function addDistrictSelecClassToCityRowById(districtId) {
+        var districtRow = $("#districts-panel-body > .row[data-item='" + districtId + "']");
+        districtRow.addClass("factor-item-active");
+    }
+
+    //#endregion highlight rows
+
 </script>
