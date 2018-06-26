@@ -12,5 +12,6 @@ namespace Svbase.Core.Repositories.Factory
         IFlatRepository Flats { get; }
         IPersonRepository Persons { get; }
         IStreetRepository Streets { get; }
+        IWorkRepository Works { get; }
     }
 }

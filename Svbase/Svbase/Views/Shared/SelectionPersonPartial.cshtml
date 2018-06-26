@@ -49,6 +49,11 @@
             }
         </td>
         <td>
+            @if (person.Work?.Name != null){
+                @person.Work.Name
+            }
+        </td>
+        <td>
             <a href="@Url.Action("Details", "Person", new {id = person.Id})">
                 <i style="color: gray; margin-right: 5px; cursor: pointer"
                    class="pull-right glyphicon glyphicon-info-sign"></i>

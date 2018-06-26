@@ -18,6 +18,7 @@ namespace Svbase.Models
         public string ApartmentSide { get; set; }
         public string StreetName { get; set; }
         public string CityName { get; set; }
+        public string WorkName { get; set; }
         public Dictionary<string, bool> Beneficaries { get; set; }
     }
 }

@@ -73,6 +73,7 @@
     <Compile Include="Data\Configuration\StreetConfiguration.cs" />
     <Compile Include="Data\Entities\Apartment.cs" />
     <Compile Include="Data\Entities\ApplicationUser.cs" />
+    <Compile Include="Data\Entities\Work.cs" />
     <Compile Include="Data\Entities\Beneficiary.cs" />
     <Compile Include="Data\Entities\City.cs" />
     <Compile Include="Data\Entities\District.cs" />
@@ -130,6 +131,7 @@
     <Compile Include="Migrations\DbInitializer\CreateIfNotExistWithSeed.cs" />
     <Compile Include="Models\ApartmentFilterModel.cs" />
     <Compile Include="Models\ApartmentViewModel.cs" />
+    <Compile Include="Models\WorkViewModel.cs" />
     <Compile Include="Models\BeneficiaryViewModel.cs" />
     <Compile Include="Models\CheckboxItemModel.cs" />
     <Compile Include="Models\CityViewModel.cs" />
@@ -152,6 +154,7 @@
     <Compile Include="Repositories\Factory\RepositoryManager.cs" />
     <Compile Include="Repositories\Implementation\ApartmentRepository.cs" />
     <Compile Include="Repositories\Implementation\ApplicationUserRepository.cs" />
+    <Compile Include="Repositories\Implementation\WorkRepository.cs" />
     <Compile Include="Repositories\Implementation\BeneficiaryRepository.cs" />
     <Compile Include="Repositories\Implementation\CityRepository.cs" />
     <Compile Include="Repositories\Implementation\DistrictRepository.cs" />
@@ -160,6 +163,7 @@
     <Compile Include="Repositories\Implementation\StreetRepository.cs" />
     <Compile Include="Repositories\Interfaces\IApartmentRepository.cs" />
     <Compile Include="Repositories\Interfaces\IApplicationUserRepository.cs" />
+    <Compile Include="Repositories\Interfaces\IWorkRepository.cs" />
     <Compile Include="Repositories\Interfaces\IBeneficiaryRepository.cs" />
     <Compile Include="Repositories\Interfaces\ICityRepository.cs" />
     <Compile Include="Repositories\Interfaces\IDistrictRepository.cs" />

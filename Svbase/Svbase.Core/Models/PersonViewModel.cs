@@ -44,6 +44,8 @@ namespace Svbase.Core.Models
         public bool Gender { get; set; }
         [Display(Name = "Квартира")]
         public int FlatId { get; set; }
+        [Display(Name = "Місце роботи")]
+        public Work Work { get; set; }
         public IList<CheckboxItemModel> Beneficiaries { get; set; }
 
         public PersonViewModel()

@@ -26,6 +26,8 @@ namespace Svbase.Core.Data.Entities
         public virtual Apartment Apartment { get; set; }
         public virtual ICollection<Flat> Flats { get; set; }
         public virtual ICollection<Beneficiary> Beneficiaries { get; set; }
+        public int? WorkId { get; set; }
+        public virtual Work Work { get; set; }
 
     }
 }

@@ -93,6 +93,12 @@ li.dropdown {
     cursor: pointer;
 }
 
+.factor-item-active {
+    background-color: #428bca;
+    color: #ffffff;
+    cursor: pointer;
+}
+
 .btn-secondary.active {
     background-color: #428bca !important;
     color: #ffffff;

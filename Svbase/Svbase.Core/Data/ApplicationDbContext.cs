@@ -16,6 +16,7 @@ namespace Svbase.Core.Data
         public virtual DbSet<Flat> Flats { get; set; }
         public virtual DbSet<Person> Persons { get; set; }
         public virtual DbSet<Street> Streets { get; set; }
+        public virtual DbSet<Work> Works { get; set; }
         #endregion
 
         public ApplicationDbContext()
