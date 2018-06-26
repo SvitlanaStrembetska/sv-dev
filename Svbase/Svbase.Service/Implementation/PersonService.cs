@@ -119,12 +119,13 @@ namespace Svbase.Service.Implementation
                     Id = model.FlatId
                 }
             };
-            foreach (var flat in flats)
+            foreach (var flat in flats)   
             {
                 RepositoryManager.Flats.Attach(flat);
             }
             newPerson.Flats = flats;
             Add(newPerson);
+
             return true;
         }
 

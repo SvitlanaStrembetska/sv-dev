@@ -105,7 +105,6 @@ namespace Svbase.Core.Models
 
     public class PersonSelectionModel : PersonViewModel
     {
-        [Required]
         public BaseViewModel City { get; set; }
         public BaseViewModel Street { get; set; }
         public BaseViewModel Apartment { get; set; }
