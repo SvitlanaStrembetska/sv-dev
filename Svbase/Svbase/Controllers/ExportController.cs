@@ -142,7 +142,7 @@ namespace Svbase.Controllers
             Response.ClearHeaders();
             Response.Buffer = true;
             Response.ContentType = "application/vnd.ms-excel";
-            Response.AddHeader("content-disposition", "attachment; filename=Product.xls");
+            Response.AddHeader("content-disposition", "attachment; filename=Persons.xls");
             Response.Charset = "UTF-8";
             Response.ContentEncoding = Encoding.GetEncoding("UTF-8");
             var sw = new StringWriter();
