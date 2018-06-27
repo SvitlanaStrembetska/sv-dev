@@ -127,6 +127,10 @@
     <Compile Include="Migrations\201804231835225_addRelationsBetweenPersonAndCityStreetApartment.Designer.cs">
       <DependentUpon>201804231835225_addRelationsBetweenPersonAndCityStreetApartment.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201806271651153_migration_27062018.cs" />
+    <Compile Include="Migrations\201806271651153_migration_27062018.Designer.cs">
+      <DependentUpon>201806271651153_migration_27062018.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Migrations\DbInitializer\CreateIfNotExistWithSeed.cs" />
     <Compile Include="Models\ApartmentFilterModel.cs" />
@@ -209,6 +213,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201804231835225_addRelationsBetweenPersonAndCityStreetApartment.resx">
       <DependentUpon>201804231835225_addRelationsBetweenPersonAndCityStreetApartment.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806271651153_migration_27062018.resx">
+      <DependentUpon>201806271651153_migration_27062018.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
