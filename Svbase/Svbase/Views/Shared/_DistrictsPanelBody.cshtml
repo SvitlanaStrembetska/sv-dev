@@ -64,12 +64,11 @@
         if ((itemType === @((int)DistrictPanelBodyItemType.Street))) {
             removeStreetSelectClasses();
             addStreetSelecClassToCityRowById(itemId);
-            getApartmentsBy(itemId);
-            return;
-        }
 
-        if ((itemType === @((int)DistrictPanelBodyItemType.Apartment))) {
-            checkApartmentById(itemId);
+            var activeDistrict = $("#districts-panel-body > .row.factor-item-active");
+            var activeDistrictId = Number(activeDistrict.attr("data-item"));
+
+            getApartmentsBy(itemId,activeDistrictId);
             return;
         }
 
@@ -91,10 +90,11 @@
             });
     }
 
-    function getApartmentsBy(streetId)
+    function getApartmentsBy(streetId, activeDistrictId)
     {
         var data = {
-            streetId: streetId
+            streetId: streetId,
+            districtId: activeDistrictId
         };
         $.get('@Url.Action("ApartmentsBy","District")', data)
             .done((result) => {
@@ -102,16 +102,7 @@
             });
     }
 
-    function checkApartmentById(apartmentId)
-    {
-        var target = $("#apartment_" + apartmentId);
-        var isChecked =  $(target).prop("checked");
-        if (isChecked) {
-            $(target).prop("checked", false);
-        } else {
-            $(target).prop("checked", true);
-        }
-    }
+   
 
     function deleteItemBy(itemId, itemType) {
         if (itemType === 1) {

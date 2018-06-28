@@ -431,6 +431,7 @@
     <Content Include="Views\Shared\_PersonsTablePartial.cshtml" />
     <Content Include="Views\Shared\_DistrictsPanelBody.cshtml" />
     <Content Include="Views\District\Index.cshtml" />
+    <Content Include="Views\Shared\_DistrictApartmentPanelBody.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

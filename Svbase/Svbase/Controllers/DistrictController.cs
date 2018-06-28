@@ -72,7 +72,7 @@ namespace Svbase.Controllers
         public ActionResult ApartmentsBy(DistrictViewApartmentSearchFilter filter)
         {
             var apartments = _districtService.GetPanelBodyApartmentsBy(filter);
-            return PartialView("_DistrictsPanelBody", apartments);
+            return PartialView("_DistrictApartmentPanelBody", apartments);
 
         }
 
