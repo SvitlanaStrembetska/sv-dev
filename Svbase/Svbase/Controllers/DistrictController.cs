@@ -86,5 +86,13 @@ namespace Svbase.Controllers
                 : RedirectToAction("Index");
 
         }
+
+        [Authorize(Roles = RoleConsts.Admin)]
+        [HttpPost]
+        public ActionResult SaveDistrict(SaveDistrictModel model)
+        {
+            var result = _districtService.SaveDistrictBy(model);
+            return RedirectToAction("Index");
+        }
     }
 }

@@ -13,5 +13,6 @@ namespace Svbase.Core.Repositories.Interfaces
         IEnumerable<int> GetPersonsIdsByApartmentIds(List<int> apartmentIds);
         IEnumerable<CityFlatFilterModel> GetFilterFlatsByApartmentIds(IList<int> apartmentIds);
         IEnumerable<DistrictPanelBodyApartmentModel> GetPanelBodyApartmentsBy(DistrictViewApartmentSearchFilter filter);
+        IEnumerable<Apartment> GetByIds(List<int> ids);
     }
 }

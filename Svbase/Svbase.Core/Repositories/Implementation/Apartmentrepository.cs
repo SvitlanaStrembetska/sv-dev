@@ -145,18 +145,18 @@ namespace Svbase.Core.Repositories.Implementation
                         Apartments = x.Apartments
                             .Where(a => apartmentIds.Contains(a.Id))
                             .Select(a => new ApartmentFlatModel
-                        {
-                            Apartment = new BaseViewModel
                             {
-                                Id = a.Id,
-                                Name = a.Name
-                            },
-                            Flats = a.Flats.Select(f => new BaseViewModel
-                            {
-                                Id = f.Id,
-                                Name = f.Number
+                                Apartment = new BaseViewModel
+                                {
+                                    Id = a.Id,
+                                    Name = a.Name
+                                },
+                                Flats = a.Flats.Select(f => new BaseViewModel
+                                {
+                                    Id = f.Id,
+                                    Name = f.Number
+                                }).ToList()
                             }).ToList()
-                        }).ToList()
                     }).ToList()
                 };
                 filterItems.Add(item);
@@ -175,6 +175,12 @@ namespace Svbase.Core.Repositories.Implementation
                     DistrictPanelBodyItemType = DistrictPanelBodyItemType.Apartment,
                     IsChecked = x.Districts.Select(d => d.Id).Contains(filter.DistrictId)
                 });
+            return apartments;
+        }
+
+        public IEnumerable<Apartment> GetByIds(List<int> ids)
+        {
+            var apartments = DbSet.Where(x => ids.Contains(x.Id));
             return apartments;
         }
     }

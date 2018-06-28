@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Svbase.Core.Data.Entities;
 using Svbase.Core.Enums;
 using Svbase.Core.Models;
@@ -69,6 +70,53 @@ namespace Svbase.Service.Implementation
         {
             var apartments = RepositoryManager.Apartments.GetPanelBodyApartmentsBy(filter);
             return apartments;
+        }
+
+        public bool SaveDistrictBy(SaveDistrictModel model)
+        {
+            if (!IsValid(model))
+                return false;
+            var district = FindById(model.DistrictId);
+            if (district == null)
+                return false;
+            if (model.ApartmentIds == null)
+            {
+                model.ApartmentIds = new List<int>();
+            }
+            var oldStreetApartmentIds = district.Apartments
+                .Where(x => x.StreetId == model.StreetId)
+                .Select(x => x.Id)
+                .ToList();
+
+            var needToRemoveApartmentIds = oldStreetApartmentIds
+                .Where(apartmentId => !model.ApartmentIds.Contains(apartmentId))
+                .ToList();
+
+            var needToAddApartmentIds = model.ApartmentIds
+                .Where(apartmentId => !oldStreetApartmentIds.Contains(apartmentId))
+                .ToList();
+            var needToAddApartments = RepositoryManager.Apartments.GetByIds(needToAddApartmentIds).ToList();
+
+            foreach (var needToRemoveApartmentId in needToRemoveApartmentIds)
+            {
+                var apartment = district.Apartments.FirstOrDefault(x => x.Id == needToRemoveApartmentId);
+                district.Apartments.Remove(apartment);
+            }
+
+            foreach (var needToAddApartment in needToAddApartments)
+            {
+                district.Apartments.Add(needToAddApartment);
+            }
+
+            Update(district);
+            return true;
+        }
+
+        private bool IsValid(SaveDistrictModel model)
+        {
+            if (model == null)
+                return false;
+            return true;
         }
     }
 }

@@ -33,8 +33,8 @@
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <button class="btn btn-primary pull-right">
-                            <a class="white-color" href="@Url.Action("Save", "Dashboard")">Зберегти</a>
+                        <button class="btn btn-primary pull-right" onclick="saveDistrict()">
+                            <a class="white-color">Зберегти</a>
                         </button>
                     </div>
                 </div>
@@ -137,6 +137,40 @@
 
     function openCreateDistrictModal() {
         $('#districtCreateModal').modal('show');
+    }
+
+    function saveDistrict() {
+        var activeDistrict = $("#districts-panel-body > .row.factor-item-active");
+        var activeDistrictId = Number(activeDistrict.attr("data-item"));
+        var activeStreet = $("#streets-panel-body > .row.factor-item-active");
+        var activeStreetId = Number(activeStreet.attr("data-item"));
+        var apartmentIds = getCheckedApartmentIds();
+        var urlAction = "@Url.Action("SaveDistrict")";
+        var model = {
+            districtId: activeDistrictId,
+            streetId: activeStreetId,
+            apartmentIds: apartmentIds
+        };
+
+        $.ajax({
+            url: urlAction,
+            type: 'Post',
+            data: { model: model },
+            async: false
+        }).done((data) => {
+            console.log("done");
+        });
+    }
+
+    function getCheckedApartmentIds() {
+        var apartmentIds = [];
+        $(".row.factor-item input:checked").each((index, element) => {
+            if (!isNaN($(element).val())) {
+                var id = Number($(element).val());
+                apartmentIds.push(id);
+            }
+        });
+        return apartmentIds;
     }
 
 </script>

@@ -51,4 +51,12 @@ namespace Svbase.Core.Models
     {
         public bool IsChecked { get; set; }
     }
+
+    public class SaveDistrictModel
+    {
+        public int DistrictId { get; set; }
+        public int StreetId { get; set; }
+        public IEnumerable<int> ApartmentIds { get; set; }
+    }
+
 }
