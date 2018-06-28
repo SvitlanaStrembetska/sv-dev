@@ -158,7 +158,9 @@
             data: { model: model },
             async: false
         }).done((data) => {
-            console.log("done");
+            $("#apartments-panel-body").html(null);
+            var streetRows = $("#streets-panel-body > .row");
+            streetRows.removeClass("factor-item-active");
         });
     }
 

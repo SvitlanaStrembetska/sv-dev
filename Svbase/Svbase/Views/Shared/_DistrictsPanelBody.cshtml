@@ -55,9 +55,11 @@
     function onClickDistrictPanelBodyItem(itemId, itemType)
     {
         if ((itemType === @((int)DistrictPanelBodyItemType.City))) {
+
             removeCitySelectClasses();
             addCitySelecClassToCityRowById(itemId);
             getStreetsBy(itemId);
+            clearApartments();
             return;
         }
 
@@ -65,18 +67,25 @@
             removeStreetSelectClasses();
             addStreetSelecClassToCityRowById(itemId);
 
-            var activeDistrict = $("#districts-panel-body > .row.factor-item-active");
-            var activeDistrictId = Number(activeDistrict.attr("data-item"));
-
-            getApartmentsBy(itemId,activeDistrictId);
+            getApartmentsBy(itemId, getActiveDistrictId());
             return;
         }
 
         if ((itemType === @((int)DistrictPanelBodyItemType.District))) {
+            if (getActiveDistrictId() !== itemId) {
+                clearApartments();
+                removeStreetSelectClasses();
+            }
             removeDistrictSelectClasses();
             addDistrictSelecClassToCityRowById(itemId);
             return;
         }
+    }
+
+    function getActiveDistrictId() {
+        var activeDistrict = $("#districts-panel-body > .row.factor-item-active");
+        var activeDistrictId = Number(activeDistrict.attr("data-item"));
+        return activeDistrictId;
     }
 
     function getStreetsBy(cityId)
@@ -100,6 +109,10 @@
             .done((result) => {
                 $("#apartments-panel-body").html(result);
             });
+    }
+
+    function clearApartments() {
+        $("#apartments-panel-body").html(null);
     }
 
    
