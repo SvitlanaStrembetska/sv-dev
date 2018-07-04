@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Net;
 using System.Web.Mvc;
 using Svbase.Controllers.Abstract;
 using Svbase.Core.Consts;
@@ -13,14 +12,12 @@ namespace Svbase.Controllers
     public class DistrictController : GeneralController
     {
         private readonly IDistrictService _districtService;
-        private readonly IStreetService _streetService;
 
 
         public DistrictController(IServiceManager serviceManager)
             : base(serviceManager)
         {
             _districtService = ServiceManager.DistrictService;
-            _streetService = ServiceManager.StreetService;
         }
 
         [Authorize(Roles = RoleConsts.Admin)]
@@ -92,7 +89,13 @@ namespace Svbase.Controllers
         public ActionResult SaveDistrict(SaveDistrictModel model)
         {
             var result = _districtService.SaveDistrictBy(model);
-            return RedirectToAction("Index");
+            if (result)
+            {
+                return RedirectToAction("Index");
+            }
+            Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            return Json(new {});
+
         }
     }
 }

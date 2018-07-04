@@ -5,6 +5,19 @@
 <div class="body-content">
     <div class="row">
         <div class="container">
+            <div id="district-alert-success" class="row" style="position: relative">
+                <div class="alert alert-success district-alert display-none">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    Збережено.
+                </div>
+            </div>
+            <div id="district-alert-danger" class="row" style="position: relative">
+                <div class="alert alert-danger district-alert display-none">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    Виберіть округ і вулиці.
+                </div>
+            </div>
+            
             <div class="row">
                 <div class="col-md-12">
                     <h3 class="page-header">Управління округами</h3>
@@ -16,7 +29,7 @@
                     <div class="col-md-6">
                         <div class="btn-group btn-group-toggle" data-toggle="buttons">
                             <label class="btn btn-secondary  active"
-                                   onclick="getDistrictsBy(@((int)DistrictType.Сonstituency))">
+                                   onclick="getDistrictsBy(@((int) DistrictType.Сonstituency))">
                                 <input type="radio"
                                        name="options"
                                        id="constituency-districts"
@@ -24,7 +37,7 @@
                                        checked> Партійний
                             </label>
                             <label class="btn btn-secondary"
-                                   onclick="getDistrictsBy(@((int)DistrictType.Custom))">
+                                   onclick="getDistrictsBy(@((int) DistrictType.Custom))">
                                 <input type="radio"
                                        name="options"
                                        id="custom-districts"
@@ -124,7 +137,11 @@
     @Html.Partial("_StreetEdit")
     @Html.Partial("_ConfirmDelete")*@
 <script>
-  
+
+    $(document).ready(() => {
+        //$(".district-alert-success").hide();
+    });
+
     function getDistrictsBy(districtType) {
         var data = {
             DistrictType: districtType
@@ -158,10 +175,34 @@
             data: { model: model },
             async: false
         }).done((data) => {
+            showDistrictAlertSuccess();
             $("#apartments-panel-body").html(null);
             var streetRows = $("#streets-panel-body > .row");
             streetRows.removeClass("factor-item-active");
+        }).fail((resp) => {
+            showDistrictAlertDanger();
         });
+    }
+
+    function showDistrictAlertSuccess() {
+        if ($("#district-alert-success > div").hasClass("display-none")) {
+            $("#district-alert-success > div").removeClass("display-none");
+        }
+        $("#district-alert-success").fadeIn("slow");
+        window.setTimeout(function () {
+            $("#district-alert-success").fadeOut("slow");
+        }, 3000);
+    }
+
+    function showDistrictAlertDanger() {
+        if ($("#district-alert-danger > div").hasClass("display-none")) {
+            $("#district-alert-danger > div").removeClass("display-none");
+        }
+
+        $("#district-alert-danger").fadeIn("slow");
+        window.setTimeout(function () {
+            $("#district-alert-danger").fadeOut("slow");
+        }, 3000);
     }
 
     function getCheckedApartmentIds() {

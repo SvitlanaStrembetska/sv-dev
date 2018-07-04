@@ -116,6 +116,8 @@ namespace Svbase.Service.Implementation
         {
             if (model == null)
                 return false;
+            if (model.StreetId == 0)
+                return false;
             return true;
         }
     }
