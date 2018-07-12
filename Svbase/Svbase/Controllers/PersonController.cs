@@ -37,6 +37,15 @@ namespace Svbase.Controllers
         public ActionResult Index(FilterFileImportModel filter, int page = 1)
         {
             IQueryable<PersonSelectionModel> persons;
+
+            var beneficariesList = new List<string>();
+            foreach (var beneficary in _beneficiaryService.GetAll())
+            {
+                beneficariesList.Add(beneficary.Name);
+            }
+
+            ViewBag.Beneficaries = beneficariesList;
+
             if (Request.IsAjaxRequest())
             {
                 if (filter.DistrictIds != null || filter.CityIds != null || filter.StreetIds != null || filter.ApartmentIds != null || filter.FlatIds != null)

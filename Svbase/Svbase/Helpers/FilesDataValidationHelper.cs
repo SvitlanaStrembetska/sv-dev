@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Svbase.Core.Data.Entities;
 using Svbase.Models;
+using Svbase.Core.Consts;
 
 namespace Svbase.Helpers
 {
@@ -53,6 +54,12 @@ namespace Svbase.Helpers
             if (!columnsName.Contains("Корпус"))
                 errorModel.Add("Таблиця " + fileName + " не містить стовбець 'Корпус'");
 
+            if (!columnsName.Contains("Місце роботи"))
+                errorModel.Add("Таблиця " + fileName + " не містить стовбець 'Місце роботи'");
+
+            if (!columnsName.Contains("Емейл"))
+                errorModel.Add("Таблиця " + fileName + " не містить стовбець 'Емейл'");
+
             foreach (var beneficary in beneficaries)
             {
                 if (!columnsName.Contains(beneficary.Name))
@@ -78,6 +85,7 @@ namespace Svbase.Helpers
             var cityName = row["Населений пункт"].ToString().Trim();
             var getDate = row["Дата народження"].ToString().Trim();
             var workName = row["Місце роботи"].ToString().Trim();
+            var email = row["Емейл"].ToString().Trim();
             var beneficariesList = new Dictionary<string, bool>();
 
             foreach (var beneficary in beneficaries)
@@ -90,25 +98,24 @@ namespace Svbase.Helpers
                 errorList.Add("Ім'я або прізвище у " + (rowIndex + 2) + " рядку таблиці '" + fileName + "' не повинно бути порожнім!");
             }
 
-            if (cityName.Length > 0)
+            if (cityName.Length > 0 && Consts.CityRegex.Matches(cityName).Count != 0)
             {
-                var cityValidation = new Regex("[^\\sА-Ща-щЬьЮюЯяЇїІіЄєҐґ'-]");
-                if (cityValidation.Matches(cityName).Count != 0)
-                {
-                    errorList.Add("Назва міста у " + (rowIndex + 2) + " рядку таблиці '" + fileName + "' містить заборонені символи!");
-                }
+                errorList.Add("Назва міста у " + (rowIndex + 2) + " рядку таблиці '" + fileName + "' містить заборонені символи!");
             }
 
-            var streetValidation = new Regex("[^\\s0-9А-Ща-щЬьЮюЯяЇїІіЄєҐґ'-]");
-            if (streetValidation.Matches(streetName).Count != 0)
+            if (streetName.Length > 0 && Consts.StreetRegex.Matches(streetName).Count != 0)
             {
                 errorList.Add("Назва вулиці у " + (rowIndex + 2) + " рядку таблиці '" + fileName + "' містить заборонені символи!");
             }
-
-            var apartmentValidation = new Regex("[^0-9]");
-            if (apartmentValidation.Matches(apartmentNumber).Count != 0)
+            
+            if (apartmentNumber.Length > 0 && Consts.ApartmentRegex.Matches(apartmentNumber).Count != 0)
             {
                 errorList.Add("Номер будинку у " + (rowIndex + 2) + " рядку таблиці '" + fileName + "' повинен містити лише цифри!");
+            }
+
+            if (email.Length > 0 && Consts.EmailRegex.Matches(email).Count != 0)
+            {
+                errorList.Add("Невірний формат емейлу в " + (rowIndex + 2) + " рядку таблиці '" + fileName + "'!");
             }
 
             if (getDate.Length == 0)
@@ -128,7 +135,8 @@ namespace Svbase.Helpers
                     CityName = cityName,
                     BirthdayDate = null,
                     Beneficaries = beneficariesList,
-                    WorkName = workName
+                    WorkName = workName,
+                    Email = email
                 };
 
             DateTime? birthdayDate = null;
@@ -174,7 +182,8 @@ namespace Svbase.Helpers
                 CityName = cityName,
                 BirthdayDate = birthdayDate,
                 Beneficaries = beneficariesList,
-                WorkName = workName
+                WorkName = workName,
+                Email = email
             };
         }
     }
