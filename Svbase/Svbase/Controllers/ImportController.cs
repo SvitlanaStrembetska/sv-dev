@@ -302,18 +302,18 @@ namespace Svbase.Controllers
             var streetList = new List<Street>();
             var apartmentList = new List<Apartment>();
             var flatList = new List<Flat>();
+            var workList = new List<Work>();
 
-            var cities = _cityService.GetAll();
-            var streets = _streetService.GetAll();
-            var apartments = _apartmentService.GetAll();
-            var flats = _flatService.GetAll();
-            var persons = _personService.GetAll();
-            var works = _workService.GetAll();
+            var dbCities = _cityService.GetAll();
+            var dbWorks = _workService.GetAll();
+            
+            var fileDataValidationHelper = new FilesDataValidationHelper();
 
             foreach (DataRow row in dataTable.Rows)
             {
                 var newErrorList = new List<string>();
-                var validatedModel = new FilesDataValidationHelper().ValidateTableRows(row, dataTable.Rows.IndexOf(row), fileName, beneficaries, ref newErrorList);
+
+                var validatedModel = fileDataValidationHelper.ValidateTableRows(row, dataTable.Rows.IndexOf(row), fileName, beneficaries, ref newErrorList);
                 if (newErrorList.Any())
                 {
                     generalFileRowsErrorList.AddRange(newErrorList);
@@ -322,88 +322,82 @@ namespace Svbase.Controllers
                 if (generalFileRowsErrorList.Any())
                     continue;
 
-                var city = new City { Name = validatedModel.CityName };
-                if (!(cities.Any(x => x.Name.ToUpper() == validatedModel.CityName.ToUpper()) || cityList.FindIndex(x => x.Name.ToUpper() == validatedModel.CityName.ToUpper()) >= 0))
-                    cityList.Add(city);
-                else if (cities.Any(x => x.Name.ToUpper() == validatedModel.CityName.ToUpper()))
-                    city = cities.FirstOrDefault(x => x.Name.ToUpper() == validatedModel.CityName.ToUpper());
-                else if (cityList.FindIndex(x => x.Name.ToUpper() == validatedModel.CityName.ToUpper()) >= 0)
+                var city = new City();
+                var cityFromDb = new City();
+                var street = new Street();
+                var streetFromDb = new Street();
+                var apartment = new Apartment();
+                var apartmentFromDb = new Apartment();
+                var flat = new Flat();
+                var flatFromDb = new Flat();
+                
+                // city
+                if (dbCities.Any(x => x.Name.ToUpper() == validatedModel.CityName.ToUpper()))
+                    cityFromDb = dbCities.FirstOrDefault(x => x.Name.ToUpper() == validatedModel.CityName.ToUpper());
+                else if (cityList.Any(x => x.Name.ToUpper() == validatedModel.CityName.ToUpper()))
                     city = cityList.FirstOrDefault(x => x.Name.ToUpper() == validatedModel.CityName.ToUpper());
-
-                var street = new Street { Name = validatedModel.StreetName, City = city };
-                if (!(streets.Any(x => x.Name.ToUpper() == validatedModel.StreetName.ToUpper() && x.City.Name.ToUpper() == validatedModel.CityName.ToUpper())
-                        || streetList.FindIndex(x => x.Name.ToUpper() == validatedModel.StreetName.ToUpper() && x.City.Name.ToUpper() == validatedModel.CityName.ToUpper()) >= 0))
-                    streetList.Add(street);
-                else if (streets.Any(x => x.Name.ToUpper() == validatedModel.StreetName.ToUpper() && x.City.Name.ToUpper() == validatedModel.CityName.ToUpper()))
-                    street = streets.FirstOrDefault(x => x.Name.ToUpper() == validatedModel.StreetName.ToUpper() && x.City.Name.ToUpper() == validatedModel.CityName.ToUpper());
-                else if (streetList.FindIndex(x => x.Name.ToUpper() == validatedModel.StreetName.ToUpper() && x.City.Name.ToUpper() == validatedModel.CityName.ToUpper()) >= 0)
-                    street = streetList.FirstOrDefault(x => x.Name.ToUpper() == validatedModel.StreetName.ToUpper() && x.City.Name.ToUpper() == validatedModel.CityName.ToUpper());
-
-                var apartment = new Apartment
+                else
                 {
-                    Name = validatedModel.ApartmentSide != "" ? validatedModel.ApartmentNumber + " " + validatedModel.ApartmentLetter + " корпус:" + validatedModel.ApartmentSide : validatedModel.ApartmentNumber + " " + validatedModel.ApartmentLetter,
-                    Street = street
-                };
-                if (!(apartments.Any(x => x.Name.ToUpper() == apartment.Name.ToUpper()
-                    && x.Street.Name.ToUpper() == apartment.Street.Name.ToUpper()
-                    && x.Street.City.Name.ToUpper() == apartment.Street.City.Name.ToUpper()) ||
-                    apartmentList.FindIndex(x => x.Name.ToUpper() == apartment.Name.ToUpper()
-                    && x.Street.Name.ToUpper() == apartment.Street.Name.ToUpper()
-                    && x.Street.City.Name.ToUpper() == apartment.Street.City.Name.ToUpper()) >= 0))
+                    city = new City {Name = validatedModel.CityName};
+                    cityList.Add(city);
+                }
+
+                // street
+                if (cityFromDb != null && cityFromDb.Id != 0 && cityFromDb.Streets.Any(x => x.Name.ToUpper() == validatedModel.StreetName.ToUpper()))
+                    streetFromDb = cityFromDb.Streets.FirstOrDefault(x => x.Name.ToUpper() == validatedModel.StreetName.ToUpper());
+                else if (streetList.Any(x => x.Name.ToUpper() == validatedModel.StreetName.ToUpper() && x.City.Name.ToUpper() == validatedModel.CityName.ToUpper()))
+                    street = streetList.FirstOrDefault(x => x.Name.ToUpper() == validatedModel.StreetName.ToUpper() && x.City.Name.ToUpper() == validatedModel.CityName.ToUpper());
+                else
+                {
+                    street = cityFromDb != null && cityFromDb.Id != 0 ? new Street {Name = validatedModel.StreetName, City = cityFromDb} : new Street { Name = validatedModel.StreetName, City = city };
+                    streetList.Add(street);
+                }
+
+                var apartmentName = validatedModel.ApartmentSide != "" 
+                    ? validatedModel.ApartmentNumber + " " + validatedModel.ApartmentLetter + " корпус:" + validatedModel.ApartmentSide
+                    : validatedModel.ApartmentNumber + " " + validatedModel.ApartmentLetter;
+                // apartment
+                if (streetFromDb != null && streetFromDb.Id != 0 && streetFromDb.Apartments.Any(x => x.Name.ToUpper() == apartmentName.ToUpper()))
+                    apartmentFromDb = streetFromDb.Apartments.FirstOrDefault(x => x.Name.ToUpper() == apartmentName.ToUpper());
+                else if (apartmentList.Any(x => x.Name.ToUpper() == apartmentName.ToUpper() 
+                                        && x.Street.Name.ToUpper() == validatedModel.StreetName.ToUpper()
+                                        && x.Street.City.Name.ToUpper() == validatedModel.CityName.ToUpper()))
+                    apartment = apartmentList.FirstOrDefault(x => x.Name.ToUpper() == apartmentName.ToUpper()
+                                        && x.Street.Name.ToUpper() == validatedModel.StreetName.ToUpper()
+                                        && x.Street.City.Name.ToUpper() == validatedModel.CityName.ToUpper());
+                else
+                {
+                    apartment = streetFromDb != null && streetFromDb.Id != 0
+                        ? new Apartment
+                        {
+                            Name = apartmentName,
+                            Street = streetFromDb
+                        }
+                        : new Apartment
+                        {
+                            Name = apartmentName,
+                            Street = street
+                        };
                     apartmentList.Add(apartment);
-                else if (apartments.Any(x => x.Name.ToUpper() == apartment.Name.ToUpper()
-                        && x.Street.Name.ToUpper() == apartment.Street.Name.ToUpper()
-                        && x.Street.City.Name.ToUpper() == apartment.Street.City.Name.ToUpper()))
-                    apartment = apartments.FirstOrDefault(x => x.Name.ToUpper() == apartment.Name.ToUpper()
-                                                               && x.Street.Name.ToUpper() == apartment.Street.Name.ToUpper()
-                                                               && x.Street.City.Name.ToUpper() == apartment.Street.City.Name.ToUpper());
-                else if (apartmentList.FindIndex(x => x.Name.ToUpper() == apartment.Name.ToUpper()
-                         && x.Street.Name.ToUpper() == apartment.Street.Name.ToUpper()
-                         && x.Street.City.Name.ToUpper() == apartment.Street.City.Name.ToUpper()) >= 0)
-                    apartment = apartmentList.FirstOrDefault(x => x.Name.ToUpper() == apartment.Name.ToUpper()
-                                                               && x.Street.Name.ToUpper() == apartment.Street.Name.ToUpper()
-                                                               && x.Street.City.Name.ToUpper() == apartment.Street.City.Name.ToUpper());
+                }
 
-                var flat = new Flat { Number = validatedModel.FlatNumber, Apartment = apartment };
-                if (!(flats.Any(x => x.Number.ToUpper() == validatedModel.FlatNumber.ToUpper() &&
-                        x.Apartment.Name.ToUpper() == apartment.Name.ToUpper()
-                        && x.Apartment.Street.Name.ToUpper() == apartment.Street.Name.ToUpper()
-                        && x.Apartment.Street.City.Name.ToUpper() == apartment.Street.City.Name.ToUpper()) ||
-                        flatList.FindIndex(x => x.Number.ToUpper() == validatedModel.FlatNumber.ToUpper() &&
-                        x.Apartment.Name.ToUpper() == apartment.Name.ToUpper()
-                        && x.Apartment.Street.Name.ToUpper() == apartment.Street.Name.ToUpper()
-                        && x.Apartment.Street.City.Name.ToUpper() == apartment.Street.City.Name.ToUpper()) >= 0))
+                // flat
+                if (apartmentFromDb != null && apartmentFromDb.Id != 0 && apartmentFromDb.Flats.Any(x => x.Number.ToUpper() == validatedModel.FlatNumber.ToUpper()))
+                    flatFromDb = apartmentFromDb.Flats.FirstOrDefault(x => x.Number.ToUpper() == validatedModel.FlatNumber.ToUpper());
+                else if (flatList.Any(x => x.Number.ToUpper() == validatedModel.FlatNumber.ToUpper()
+                                           && x.Apartment.Name.ToUpper() == apartmentName.ToUpper()
+                                           && x.Apartment.Street.Name.ToUpper() == validatedModel.StreetName.ToUpper()
+                                           &&
+                                           x.Apartment.Street.City.Name.ToUpper() == validatedModel.CityName.ToUpper()))
+                    flat = flatList.FirstOrDefault(x => x.Number.ToUpper() == validatedModel.FlatNumber.ToUpper()
+                                                        && x.Apartment.Name.ToUpper() == apartmentName.ToUpper()
+                                                        && x.Apartment.Street.Name.ToUpper() == validatedModel.StreetName.ToUpper()
+                                                        && x.Apartment.Street.City.Name.ToUpper() == validatedModel.CityName.ToUpper());
+                else
+                {
+                    flat = apartmentFromDb != null && apartmentFromDb.Id != 0 ? new Flat { Number = validatedModel.FlatNumber, Apartment = apartmentFromDb } : new Flat { Number = validatedModel.FlatNumber, Apartment = apartment };
                     flatList.Add(flat);
-                else if (flats.Any(x => x.Number.ToUpper() == validatedModel.FlatNumber.ToUpper() &&
-                                        x.Apartment.Name.ToUpper() == apartment.Name.ToUpper()
-                                        && x.Apartment.Street.Name.ToUpper() == apartment.Street.Name.ToUpper()
-                                        &&
-                                        x.Apartment.Street.City.Name.ToUpper() ==
-                                        apartment.Street.City.Name.ToUpper()))
-                    flat = flats.FirstOrDefault(x => x.Number.ToUpper() == validatedModel.FlatNumber.ToUpper() &&
-                                                     x.Apartment.Name.ToUpper() == apartment.Name.ToUpper()
-                                                     &&
-                                                     x.Apartment.Street.Name.ToUpper() ==
-                                                     apartment.Street.Name.ToUpper()
-                                                     &&
-                                                     x.Apartment.Street.City.Name.ToUpper() ==
-                                                     apartment.Street.City.Name.ToUpper());
-                else if (flatList.FindIndex(x => x.Number.ToUpper() == validatedModel.FlatNumber.ToUpper() &&
-                         x.Apartment.Name.ToUpper() == apartment.Name.ToUpper()
-                         && x.Apartment.Street.Name.ToUpper() == apartment.Street.Name.ToUpper()
-                         && x.Apartment.Street.City.Name.ToUpper() == apartment.Street.City.Name.ToUpper()) >= 0)
-                    flat = flatList.FirstOrDefault(x => x.Number.ToUpper() == validatedModel.FlatNumber.ToUpper() &&
-                                                     x.Apartment.Name.ToUpper() == apartment.Name.ToUpper()
-                                                     &&
-                                                     x.Apartment.Street.Name.ToUpper() ==
-                                                     apartment.Street.Name.ToUpper()
-                                                     &&
-                                                     x.Apartment.Street.City.Name.ToUpper() ==
-                                                     apartment.Street.City.Name.ToUpper());
-
-
-                var isPersonAlreadyExistsInList = false;
-                var isPersonAlreadyExistsInDb = false;
+                }
 
                 var beneficariesList = new List<Beneficiary>();
                 foreach (var beneficary in beneficaries)
@@ -412,115 +406,39 @@ namespace Svbase.Controllers
                         beneficariesList.Add(beneficary);
                 }
 
-                var workingPlace = new Work {Name = validatedModel.WorkName};
-                if (works.Any(x => x.Name.ToUpper() == validatedModel.WorkName))
-                    workingPlace = works.FirstOrDefault(x => x.Name.ToUpper() == validatedModel.WorkName);
-
-                var person = new Person
-                {
-                    FirstName = validatedModel.FirstName,
-                    LastName = validatedModel.LastName,
-                    MiddleName = validatedModel.MiddleName,
-                    BirthdayDate = validatedModel.BirthdayDate,
-                    MobileTelephoneFirst = validatedModel.MobileTelephoneFirst,
-                    MobileTelephoneSecond = validatedModel.MobileTelephoneSecond,
-                    StationaryPhone = validatedModel.StationaryPhone,
-                    Flats = new List<Flat>
-                        {
-                            flat
-                        },
-                    Beneficiaries = beneficariesList,
-                    Work = workingPlace
-                };
-
-                if (!persons.Any())
-                {
-                    if (!(personList.Count > 0))
-                        personList.Add(person);
-                    else
-                    {
-                        var personFlat = person.Flats.FirstOrDefault();
-
-                        var personsList = new List<Person>();
-                        personsList.AddRange(personList);
-
-                        foreach (var personInList in personsList)
-                        {
-                            var personFlatInList = personInList.Flats.FirstOrDefault();
-                            if (personFlat != null && personFlatInList != null &&
-                                personInList.FirstName.ToUpper() == person.FirstName.ToUpper()
-                                && personInList.LastName.ToUpper() == person.LastName.ToUpper()
-                                && personInList.MiddleName.ToUpper() == person.MiddleName.ToUpper()
-                                && personInList.BirthdayDate == person.BirthdayDate
-                                && personFlatInList.Number.ToUpper() == personFlat.Number.ToUpper()
-                                && personFlatInList.Apartment.Name.ToUpper() == personFlat.Apartment.Name.ToUpper()
-                                &&
-                                personFlatInList.Apartment.Street.Name.ToUpper() ==
-                                personFlat.Apartment.Street.Name.ToUpper()
-                                &&
-                                personFlatInList.Apartment.Street.City.Name.ToUpper() ==
-                                personFlat.Apartment.Street.City.Name.ToUpper())
-                            {
-                                isPersonAlreadyExistsInList = true;
-                                break;
-                            }
-                        }
-                        if (!isPersonAlreadyExistsInList)
-                            personList.Add(person);
-                    }
-                }
+                Work workingPlace;
+                if (dbWorks.Any(x => x.Name.ToUpper() == validatedModel.WorkName))
+                    workingPlace = dbWorks.FirstOrDefault(x => x.Name.ToUpper() == validatedModel.WorkName);
+                else if (workList.Any(x => x.Name.ToUpper() == validatedModel.WorkName))
+                    workingPlace = workList.FirstOrDefault(x => x.Name.ToUpper() == validatedModel.WorkName);
                 else
                 {
-                    var personFlat = person.Flats.FirstOrDefault();
-                    var personsList = new List<Person>();
-                    personsList.AddRange(personList);
-
-                    foreach (var personInList in personsList)
-                    {
-                        var personFlatInList = personInList.Flats.FirstOrDefault();
-                        if (personFlat != null && personFlatInList != null &&
-                            personInList.FirstName.ToUpper() == person.FirstName.ToUpper()
-                            && personInList.LastName.ToUpper() == person.LastName.ToUpper()
-                            && personInList.MiddleName.ToUpper() == person.MiddleName.ToUpper()
-                            && personInList.BirthdayDate == person.BirthdayDate
-                            && personFlatInList.Number.ToUpper() == personFlat.Number.ToUpper()
-                            && personFlatInList.Apartment.Name.ToUpper() == personFlat.Apartment.Name.ToUpper()
-                            && personFlatInList.Apartment.Street.Name.ToUpper() ==
-                            personFlat.Apartment.Street.Name.ToUpper()
-                            && personFlatInList.Apartment.Street.City.Name.ToUpper() ==
-                            personFlat.Apartment.Street.City.Name.ToUpper())
-                        {
-                            isPersonAlreadyExistsInList = true;
-                            break;
-                        }
-                    }
-
-                    foreach (var dbPerson in persons.Include(x => x.Flats.Select(y => y.Apartment).Select(y => y.Street).Select(y => y.City)))
-                    {
-                        foreach (var dbPersonFlat in dbPerson.Flats)
-                        {
-                            if (personFlat != null &&
-                            dbPerson.FirstName.ToUpper() == person.FirstName.ToUpper()
-                            && dbPerson.LastName.ToUpper() == person.LastName.ToUpper()
-                            && dbPerson.MiddleName.ToUpper() == person.MiddleName.ToUpper()
-                            && dbPerson.BirthdayDate == person.BirthdayDate
-                            && dbPersonFlat.Number.ToUpper() == personFlat.Number.ToUpper()
-                            && dbPersonFlat.Apartment.Name.ToUpper() == personFlat.Apartment.Name.ToUpper()
-                            && dbPersonFlat.Apartment.Street.Name.ToUpper() ==
-                            personFlat.Apartment.Street.Name.ToUpper()
-                            && dbPersonFlat.Apartment.Street.City.Name.ToUpper() ==
-                            personFlat.Apartment.Street.City.Name.ToUpper())
-                            {
-                                isPersonAlreadyExistsInDb = true;
-                                break;
-                            }
-                        }
-                    }
-
-                    if (!isPersonAlreadyExistsInList && !isPersonAlreadyExistsInDb)
-                        personList.Add(person);
+                    workingPlace = new Work {Name = validatedModel.WorkName};
+                    workList.Add(workingPlace);
                 }
+                
+                var person = new Person
+                    {
+                        FirstName = validatedModel.FirstName,
+                        LastName = validatedModel.LastName,
+                        MiddleName = validatedModel.MiddleName,
+                        BirthdayDate = validatedModel.BirthdayDate,
+                        MobileTelephoneFirst = validatedModel.MobileTelephoneFirst,
+                        MobileTelephoneSecond = validatedModel.MobileTelephoneSecond,
+                        StationaryPhone = validatedModel.StationaryPhone,
+                        Flats = new List<Flat>
+                        {
+                            flatFromDb != null && flatFromDb.Id != 0 ? flatFromDb : flat
+                        },
+                        Beneficiaries = beneficariesList,
+                        Work = workingPlace,
+                        Email = validatedModel.Email
+                    };
+
+                personList.Add(person);
+
             }
+            
             return personList;
         }
     }

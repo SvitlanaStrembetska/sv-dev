@@ -31,6 +31,7 @@
                 <ul class="nav navbar-nav navbar-top-links navbar-right padding-top-5">
                     @{
                         string path = HttpContext.Current.Request.Url.AbsolutePath;
+                        List<string> beneficaries = ViewBag.Beneficaries;
                     }
                     @if (Request.IsAuthenticated)
                     {
@@ -81,6 +82,15 @@
                                     <li>
                                         <a id="typePartionDisplay"><input type="checkbox" checked>Тип партії</a>
                                     </li>
+                                    @foreach (var beneficary in beneficaries)
+                                    {
+                                        <li>
+                                            <a id="@beneficary"><input type="checkbox" checked>@beneficary</a>
+                                        </li>
+
+                                    }
+
+
                                     <li class="divider"></li>
                                     <li>
                                         <a class="text-center" id="showAllDisplay">

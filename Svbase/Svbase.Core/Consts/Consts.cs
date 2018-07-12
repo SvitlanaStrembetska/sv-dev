@@ -1,4 +1,6 @@
-﻿namespace Svbase.Core.Consts
+﻿using System.Text.RegularExpressions;
+
+namespace Svbase.Core.Consts
 {
     public class Consts
     {
@@ -16,5 +18,10 @@
         public const int ShowAllTableRowsCount = -1;
 
         public const int ShowRecordsPerPage = 25;
+
+        public static readonly Regex CityRegex = new Regex("[^\\sА-Ща-щЬьЮюЯяЇїІіЄєҐґ'’-]");
+        public static readonly Regex StreetRegex = new Regex("[^\\s0-9А-Ща-щЬьЮюЯяЇїІіЄєҐґ'’\\.-]");
+        public static readonly Regex ApartmentRegex = new Regex("[^0-9]");
+        public static readonly Regex EmailRegex = new Regex("^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$");
     }
 }
