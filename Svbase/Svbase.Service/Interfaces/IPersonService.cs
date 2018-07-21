@@ -19,7 +19,7 @@ namespace Svbase.Service.Interfaces
         IEnumerable<BaseViewModel> GetApartmentsBaseModelByStreetIds(IList<int> streetIds);
         IEnumerable<BaseViewModel> GetFlatsBaseModelByApatrmentIds(IList<int> apartmentIds);
         bool CreatePersonByModel(PersonViewModel model);
-        IQueryable<PersonSelectionModel> SearchPersonsByFilter(FilterSearchModel filter);
+        IQueryable<PersonSelectionModel> SearchPersonsByFilter(FilterFileImportModel filter);
         IEnumerable<ItemFilterModel> GetFilterStreetsByCityIds(IList<int> cityIds);
     }
 }

@@ -47,6 +47,7 @@ namespace Svbase.Core.Models
         [Display(Name = "Місце роботи")]
         public Work Work { get; set; }
         public IList<CheckboxItemModel> Beneficiaries { get; set; }
+        public IList<Beneficiary> BeneficariesList { get; set; }
 
         public PersonViewModel()
         {

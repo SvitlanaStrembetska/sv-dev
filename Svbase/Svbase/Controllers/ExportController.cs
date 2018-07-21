@@ -1,4 +1,6 @@
-﻿using System.Data;
+﻿using System.Collections.Generic;
+using System.Data;
+using System.Data.Entity;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -6,6 +8,7 @@ using System.Web.Mvc;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Svbase.Controllers.Abstract;
+using Svbase.Core.Data.Entities;
 using Svbase.Core.Models;
 using Svbase.Service.Factory;
 using Svbase.Service.Interfaces;
@@ -24,14 +27,16 @@ namespace Svbase.Controllers
         [Authorize]
         public void ExportExcel(FilterFileImportModel filter)
         {
-            IQueryable<PersonSelectionModel> persons; 
+            List<PersonSelectionModel> persons = new List<PersonSelectionModel>(); 
             if (filter == null || (filter.DistrictIds == null && filter.CityIds == null && filter.StreetIds == null && filter.ApartmentIds == null && filter.FlatIds == null)) { 
-                var pers = _personService.GetAll();
-                persons = from person in pers
-                    let personFlat = person.Flats.FirstOrDefault()
-                    select new PersonSelectionModel
+                var pers = _personService.GetAll().Include(x=>x.Beneficiaries).Include(x=>x.Flats.Select(y=>y.Apartment).Select(z=>x.Street).Select(k=>k.City)).Include(x=>x.Work).Include(x=>x.Apartment);
+                
+                foreach (var person in pers)
+                {
+                    var beneficaries = person.Beneficiaries.ToList();
+                    var personFlat = person.Flats.FirstOrDefault();
+                    var newPerson = new PersonSelectionModel
                     {
-
                         Id = person.Id,
                         FirstName = person.FirstName,
                         MiddleName = person.MiddleName,
@@ -44,6 +49,7 @@ namespace Svbase.Controllers
                         HomePhone = person.StationaryPhone,
                         Email = person.Email,
                         PartionType = person.PartionType,
+                        BeneficariesList = beneficaries,
                         City = new BaseViewModel
                         {
                             Name = personFlat.Apartment.Street.City.Name
@@ -59,19 +65,39 @@ namespace Svbase.Controllers
                         Flat = new BaseViewModel
                         {
                             Name = personFlat.Number
+                        },
+                        Work = new Work
+                        {
+                            Name = person.Work.Name
                         }
                     };
+                    persons.Add(newPerson);
+                }
             }
             else
-                persons = _personService.SearchPersonsByFilter(filter);
+                persons = _personService.SearchPersonsByFilter(filter).ToList();
 
-            if (!persons.Any()) return;
+            //if beneficaries exists 
+            var personsList = new List<PersonSelectionModel>();
+            if (filter?.BeneficariesUnchecked != null && filter.BeneficariesUnchecked.Any())
+            {
+                personsList.AddRange(persons.Where(person => !filter.BeneficariesUnchecked.Any(column => person.BeneficariesList != null && person.BeneficariesList.Any(x => x.Name.ToUpper() == column.ToUpper()))));
+            }
 
+            //if empty result
+            if ((filter?.BeneficariesUnchecked != null && filter.BeneficariesUnchecked.Any() && !personsList.Any()) || !persons.Any()) return;
+
+            //generate file header
             var isColumnLastNameExists = filter.ColumnsName.Contains("Прізвище");
             var isColumnFirstNameExists = filter.ColumnsName.Contains("Ім'я");
             var isColumnMiddleNameExists = filter.ColumnsName.Contains("По батькові");
+            var isColumnFirstMobilePhoneExists = filter.ColumnsName.Contains("Мобільний телефон 1");
+            var isColumnSecondMobilePhoneExists = filter.ColumnsName.Contains("Мобільний телефон 2");
+            var isColumnHomePhoneExists = filter.ColumnsName.Contains("Домашній номер телефону");
+            var isColumnDateBirthExists = filter.ColumnsName.Contains("Дата народження");
+            var isColumnEmailExists = filter.ColumnsName.Contains("Електронна пошта");
             var isColumnAdressExists = filter.ColumnsName.Contains("Адреса");
-            var isColumnFirstMobilePhoneExists = filter.ColumnsName.Contains("Телефон 1");
+            var isColumnWorkExists = filter.ColumnsName.Contains("Місце роботи");
             var dataTable = new DataTable();
 
             if (isColumnLastNameExists)
@@ -80,6 +106,16 @@ namespace Svbase.Controllers
                 dataTable.Columns.Add("Ім'я", typeof(string));
             if (isColumnMiddleNameExists)
                 dataTable.Columns.Add("По батькові", typeof(string));
+            if (isColumnFirstMobilePhoneExists)
+                dataTable.Columns.Add("Телефон 1", typeof(string));
+            if (isColumnSecondMobilePhoneExists)
+                dataTable.Columns.Add("Телефон 2", typeof(string));
+            if (isColumnHomePhoneExists)
+                dataTable.Columns.Add("Стаціонарний", typeof(string));
+            if (isColumnDateBirthExists)
+                dataTable.Columns.Add("Дата народження", typeof(string));
+            if (isColumnEmailExists)
+                dataTable.Columns.Add("Емейл", typeof(string));
             if (isColumnAdressExists)
             {
                 dataTable.Columns.Add("Населений пункт", typeof(string));
@@ -89,48 +125,39 @@ namespace Svbase.Controllers
                 dataTable.Columns.Add("Буква", typeof(string));
                 dataTable.Columns.Add("Корпус", typeof(string));
             }
-            if (isColumnFirstMobilePhoneExists)
-                dataTable.Columns.Add("Телефон 1", typeof(string));
+            if (isColumnWorkExists)
+                dataTable.Columns.Add("Місце роботи", typeof(string));
 
-            foreach (var person in persons)
+            //generate table header and body if filter contains beneficaries 
+            if (filter.BeneficariesUnchecked != null && filter.BeneficariesUnchecked.Any() && personsList.Any())
             {
-                var row = dataTable.NewRow();
-                if (isColumnLastNameExists)
-                    row["Прізвище"] = person.LastName;
-                if (isColumnFirstNameExists)
-                    row["Ім'я"] = person.FirstName;
-                if (isColumnMiddleNameExists)
-                    row["По батькові"] = person.MiddleName;
-                if (isColumnAdressExists)
+                foreach (var beneficaryName in filter.BeneficariesChecked)
+                    dataTable.Columns.Add(beneficaryName, typeof (string));
+
+                foreach (var person in personsList)
                 {
-                    row["Населений пункт"] = person.City.Name;
-                    row["Вулиця"] = person.Street.Name;
-                    row["Квартира"] = person.Flat.Name;
-
-                    var apartment = person.Apartment?.Name?.Split(' ') ?? new string[] {};
-                    switch (apartment.Length)
-                    {
-                        case 1:
-                            row["Будинок"] = apartment[0];
-                            row["Буква"] = "";
-                            row["Корпус"] = "";
-                            break;
-                        case 2:
-                            row["Будинок"] = apartment[0];
-                            row["Буква"] = apartment[1];
-                            row["Корпус"] = "";
-                            break;
-                        case 3:
-                            row["Будинок"] = apartment[0];
-                            row["Буква"] = apartment[1];
-                            row["Корпус"] = apartment[2].Split(':')[1];
-                            break;
-                    }
+                    var row = dataTable.NewRow();
+                    row = fillRow(row, person, isColumnLastNameExists, isColumnFirstNameExists, isColumnMiddleNameExists,
+                        isColumnFirstMobilePhoneExists, isColumnSecondMobilePhoneExists, isColumnHomePhoneExists,
+                        isColumnDateBirthExists, isColumnEmailExists, isColumnWorkExists, isColumnAdressExists);
+                    
+                    foreach (var beneficaryName in filter.BeneficariesChecked)
+                        row[beneficaryName] = person.Beneficiaries.Any(x => x.Name.ToUpper() == beneficaryName.ToUpper());
+                    
+                    dataTable.Rows.Add(row);
                 }
-                if (isColumnFirstMobilePhoneExists)
-                    row["Телефон 1"] = person.FirstMobilePhone;
+            }
+            else
+            {
+                foreach (var person in persons)
+                {
+                    var row = dataTable.NewRow();
+                    row = fillRow(row, person, isColumnLastNameExists, isColumnFirstNameExists, isColumnMiddleNameExists,
+                        isColumnFirstMobilePhoneExists, isColumnSecondMobilePhoneExists, isColumnHomePhoneExists,
+                        isColumnDateBirthExists, isColumnEmailExists, isColumnWorkExists, isColumnAdressExists);
 
-                dataTable.Rows.Add(row);
+                    dataTable.Rows.Add(row);
+                }
             }
 
             if (dataTable.Columns.Count == 0) return;
@@ -152,6 +179,59 @@ namespace Svbase.Controllers
 
             Response.Output.Write(sw.ToString());
             Response.End();
+        }
+
+        private DataRow fillRow(DataRow row, PersonSelectionModel person, bool isColumnLastNameExists, bool isColumnFirstNameExists,
+            bool isColumnMiddleNameExists, bool isColumnFirstMobilePhoneExists, bool isColumnSecondMobilePhoneExists,
+            bool isColumnHomePhoneExists, bool isColumnDateBirthExists, bool isColumnEmailExists, bool isColumnWorkExists,
+            bool isColumnAdressExists)
+        {
+            if (isColumnLastNameExists)
+                row["Прізвище"] = person.LastName;
+            if (isColumnFirstNameExists)
+                row["Ім'я"] = person.FirstName;
+            if (isColumnMiddleNameExists)
+                row["По батькові"] = person.MiddleName;
+            if (isColumnFirstMobilePhoneExists)
+                row["Телефон 1"] = person.FirstMobilePhone;
+            if (isColumnSecondMobilePhoneExists)
+                row["Телефон 2"] = person.SecondMobilePhone;
+            if (isColumnHomePhoneExists)
+                row["Стаціонарний"] = person.HomePhone;
+            if (isColumnDateBirthExists)
+                row["Дата народження"] = person.DateBirth;
+            if (isColumnEmailExists)
+                row["Емейл"] = person.Email;
+            if (isColumnWorkExists)
+                row["Місце роботи"] = person.Work.Name;
+
+            if (isColumnAdressExists)
+            {
+                row["Населений пункт"] = person.City.Name;
+                row["Вулиця"] = person.Street.Name;
+                row["Квартира"] = person.Flat.Name;
+
+                var apartment = person.Apartment?.Name?.Split(' ') ?? new string[] { };
+                switch (apartment.Length)
+                {
+                    case 1:
+                        row["Будинок"] = apartment[0];
+                        row["Буква"] = "";
+                        row["Корпус"] = "";
+                        break;
+                    case 2:
+                        row["Будинок"] = apartment[0];
+                        row["Буква"] = apartment[1];
+                        row["Корпус"] = "";
+                        break;
+                    case 3:
+                        row["Будинок"] = apartment[0];
+                        row["Буква"] = apartment[1];
+                        row["Корпус"] = apartment[2].Split(':')[1];
+                        break;
+                }
+            }
+            return row;
         }
     }
 }

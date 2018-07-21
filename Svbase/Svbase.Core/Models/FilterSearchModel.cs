@@ -11,11 +11,13 @@ namespace Svbase.Core.Models
         public DistrictType DistrictType { get; set; }
         public IEnumerable<int> FlatIds { get; set; }
         public IEnumerable<int> ApartmentIds { get; set; }
-        public IEnumerable<int> BeneficiaryIds { get; set; }
     }
 
     public class FilterFileImportModel : FilterSearchModel
     {
-        public IEnumerable<string> ColumnsName { get; set; } 
+        public IEnumerable<string> ColumnsName { get; set; }
+
+        public IEnumerable<string> BeneficariesUnchecked { get; set; }
+        public IEnumerable<string> BeneficariesChecked { get; set; }
     }
 }

@@ -129,7 +129,7 @@ namespace Svbase.Service.Implementation
             return true;
         }
 
-        public IQueryable<PersonSelectionModel> SearchPersonsByFilter(FilterSearchModel filter)
+        public IQueryable<PersonSelectionModel> SearchPersonsByFilter(FilterFileImportModel filter)
         {
             var personsIds = new List<int>();
 
