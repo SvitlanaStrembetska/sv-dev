@@ -38,14 +38,6 @@ namespace Svbase.Controllers
         {
             IQueryable<PersonSelectionModel> persons;
 
-            var beneficariesList = new List<string>();
-            foreach (var beneficary in _beneficiaryService.GetAll())
-            {
-                beneficariesList.Add(beneficary.Name);
-            }
-
-            ViewBag.Beneficaries = beneficariesList;
-
             if (Request.IsAjaxRequest())
             {
                 if (filter.DistrictIds != null || filter.CityIds != null || filter.StreetIds != null || filter.ApartmentIds != null || filter.FlatIds != null)
@@ -56,8 +48,25 @@ namespace Svbase.Controllers
                 {
                     persons = _personService.GetPersons();
                 }
-                return PartialView("_PersonsTablePartial", persons.ToPagedList(page, Consts.ShowRecordsPerPage));
+                if (filter.ColumnsName == null || !filter.ColumnsName.Any())
+                    return PartialView("_PersonsTablePartial", persons.ToPagedList(page, Consts.ShowRecordsPerPage));
+
+                var personsList = new List<PersonSelectionModel>();
+                foreach (var person in persons)
+                {
+                    var isPersonHasBeneficary = filter.ColumnsName.Any(column => person.Beneficiaries.Any(x => x.Name.ToUpper() == column.ToUpper()));
+                    if (!isPersonHasBeneficary)
+                        personsList.Add(person);
+                }
+                return PartialView("_PersonsTablePartial", personsList.ToPagedList(page, Consts.ShowRecordsPerPage));
             }
+
+            var beneficariesList = new List<string>();
+            foreach (var beneficary in _beneficiaryService.GetAll())
+            {
+                beneficariesList.Add(beneficary.Name);
+            }
+            ViewBag.Beneficaries = beneficariesList;
 
             persons = _personService.GetPersons();
             
@@ -179,7 +188,7 @@ namespace Svbase.Controllers
 
 
         [HttpPost]
-        public ActionResult SearchPersonsByFilter(FilterSearchModel filter)
+        public ActionResult SearchPersonsByFilter(FilterFileImportModel filter)
         {
             var persons = _personService.SearchPersonsByFilter(filter);
             return PartialView("SelectionPersonPartial", persons);

@@ -407,10 +407,10 @@ namespace Svbase.Controllers
                 }
 
                 Work workingPlace;
-                if (dbWorks.Any(x => x.Name.ToUpper() == validatedModel.WorkName))
-                    workingPlace = dbWorks.FirstOrDefault(x => x.Name.ToUpper() == validatedModel.WorkName);
-                else if (workList.Any(x => x.Name.ToUpper() == validatedModel.WorkName))
-                    workingPlace = workList.FirstOrDefault(x => x.Name.ToUpper() == validatedModel.WorkName);
+                if (dbWorks.Any(x => x.Name.ToUpper() == validatedModel.WorkName.ToUpper()))
+                    workingPlace = dbWorks.FirstOrDefault(x => x.Name.ToUpper() == validatedModel.WorkName.ToUpper());
+                else if (workList.Any(x => x.Name.ToUpper() == validatedModel.WorkName.ToUpper()))
+                    workingPlace = workList.FirstOrDefault(x => x.Name.ToUpper() == validatedModel.WorkName.ToUpper());
                 else
                 {
                     workingPlace = new Work {Name = validatedModel.WorkName};

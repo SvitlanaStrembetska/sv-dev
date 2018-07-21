@@ -93,7 +93,7 @@
     <div id="page-wrapper">
         <div class="row">
             <div class="col-lg-12 ignore-padding">
-                <div class="modal fade bd-example-modal-lg" id="ExportFile" tabindex="-1" role="dialog" aria-labelledby="ExportFile" aria-hidden="true">
+                <div class="modal fade bd-example-modal-lg export-file-modal" id="ExportFile" tabindex="-1" role="dialog" aria-labelledby="ExportFile" aria-hidden="true">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -106,8 +106,8 @@
                                 <h3>Ви впевнені що хочете експортувати дані у Excel файл?</h3>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрити вікно</button>
-                                @Html.ActionLink("Експортувати дані", "ExportExcel", "Export", null, new { @class = "btn btn-primary" })
+                                <button type="button" id="cencelExportBtn" class="btn btn-secondary" data-dismiss="modal">Закрити вікно</button>
+                                @Html.ActionLink("Експортувати дані", "ExportExcel", "Export", null, new { @class = "btn btn-primary", @id = "exportBtn" })
                             </div>
                         </div>
                     </div>
@@ -515,7 +515,18 @@
 
     function getCheckedFields() {
         var fields = [];
-        $("#hello input:checked").each((index, element) => {
+        $(".column-name input:checked").each((index, element) => {
+            var fieldName = $(element).closest('a')[0].getAttribute("id");
+            if (fieldName !== "") {
+                fields.push(fieldName);
+            }
+        });
+        return fields;
+    }
+
+    function getCheckedFieldsName() {
+        var fields = [];
+        $(".column-name input:checked").each((index, element) => {
             var fieldName = $(element).closest('a')[0].innerText.trim();
             if (fieldName !== "") {
                 fields.push(fieldName);
@@ -524,13 +535,36 @@
         return fields;
     }
 
+    function cencelExport() {
+        $("#ExportFile a").attr("href", function () {
+            return "@Url.Action("ExportExcel", "Export")";
+        });
+    }
+
+    $(document).on('click', '#cencelExportBtn', function() {
+        cencelExport();
+    });
+    $(document).on('click', '#exportBtn', function() {
+        cencelExport();
+    });
+
+    $(document).on('click', '.export-file-modal .modal-content', function (e) {
+        e.stopPropagation();
+    });
+
+    $(document).on('click', '.export-file-modal', function () {
+        cencelExport();
+    });
+
     $(document).on('click', '#exportFile', function () {
         var districtIds = getCheckedDistrictIds();
         var cityIds = getCheckedCityIds();
         var streetIds = getCheckedStreetIds();
         var apartmentIds = getCheckedApartmentIds();
         var flatIds = getCheckedFlatIds();
-        var fieldIds = getCheckedFields();
+        var fieldIds = getCheckedFieldsName();
+        var beneficariesUnchecked = getBeneficariesUnchecked();
+        var beneficariesChecked = getBeneficariesChecked();
 
         $("#ExportFile a").attr("href", function (i, origVal) {
             origVal += "?";
@@ -552,6 +586,12 @@
             }
             for (k = 0; k < fieldIds.length; k++) {
                 origVal += "ColumnsName=" + fieldIds[k] + "&";
+            }
+            for (k = 0; k < beneficariesUnchecked.length; k++) {
+                origVal += "BeneficariesUnchecked=" + beneficariesUnchecked[k] + "&";
+            }
+            for (k = 0; k < beneficariesChecked.length; k++) {
+                origVal += "BeneficariesChecked=" + beneficariesChecked[k] + "&";
             }
 
             return origVal;
@@ -648,6 +688,119 @@
         }
     });
 
+    function getBeneficariesUnchecked() {
+        var beneficaries = [];
+        $(".beneficary input").each((index, element) => {
+            var fieldName = $(element).closest('a')[0].innerText.trim();
+            if (fieldName !== "" && !$("#" + fieldName.split(' ')[0] + " input").is(":checked")) {
+                beneficaries.push(fieldName);
+            }
+        });
+        return beneficaries;
+    }
+
+    function getBeneficariesChecked() {
+        var beneficaries = [];
+        $(".beneficary input").each((index, element) => {
+            var fieldName = $(element).closest('a')[0].innerText.trim();
+            if (fieldName !== "" && $("#" + fieldName.split(' ')[0] + " input").is(":checked")) {
+                beneficaries.push(fieldName);
+            }
+        });
+        return beneficaries;
+    }
+
+    function hideFields(columnsName) {
+        var islastNameDisplay = false;
+        var isFirstNameDisplay = false;
+        var isMiddleNameDisplay = false;
+        var isPhoneFirstDisplay = false;
+        var isPhoneSecondDisplay = false;
+        var isHomePhoneDisplay = false;
+        var isDateBirthDisplay = false;
+        var isEmailDisplay = false;
+        var isAddressDisplay = false;
+        var isWorkPlaceDisplay = false;
+
+        for (var i = 0; i < columnsName.length; i++) {
+            if (columnsName[i] === "lastNameDisplay")
+                islastNameDisplay = true;
+            else if (columnsName[i] === "firstNameDisplay")
+                isFirstNameDisplay = true;
+            else if (columnsName[i] === "middleNameDisplay")
+                isMiddleNameDisplay = true;
+            else if (columnsName[i] === "phoneFirstDisplay")
+                isPhoneFirstDisplay = true;
+            else if (columnsName[i] === "phoneSecondDisplay")
+                isPhoneSecondDisplay = true;
+            else if (columnsName[i] === "phoneSecondDisplay")
+                isPhoneSecondDisplay = true;
+            else if (columnsName[i] === "homePhoneDisplay")
+                isHomePhoneDisplay = true;
+            else if (columnsName[i] === "dateBirthDisplay")
+                isDateBirthDisplay = true;
+            else if (columnsName[i] === "emailDisplay")
+                isEmailDisplay = true;
+            else if (columnsName[i] === "addressDisplay")
+                isAddressDisplay = true;
+            else if (columnsName[i] === "workPlaceDisplay")
+                isWorkPlaceDisplay = true;
+        }
+
+        if (!islastNameDisplay) {
+            $("tr #lastNameHidden").hide();
+            $("#lastNameDisplay input").prop('checked', false);
+        }
+
+        if (!isFirstNameDisplay) {
+            $("tr #firstNameHidden").hide();
+            $("#firstNameDisplay input").prop('checked', false);
+        }
+
+        if (!isMiddleNameDisplay) {
+            $("tr #middleNameHidden").hide();
+            $("#middleNameDisplay input").prop('checked', false);
+        }
+
+        if (!isPhoneFirstDisplay) {
+            $("tr #phone1Hidden").hide();
+            $("#phoneFirstDisplay input").prop('checked', false);
+        }
+
+        if (!isPhoneSecondDisplay) {
+            $("tr #phone2Hidden").hide();
+            $("#phoneSecondDisplay input").prop('checked', false);
+        }
+
+        if (!isHomePhoneDisplay) {
+            $("tr #homeNumberHidden").hide();
+            $("#homePhoneDisplay input").prop('checked', false);
+        }
+
+        if (!isDateBirthDisplay) {
+            $("tr #birthDateHidden").hide();
+            $("#dateBirthDisplay input").prop('checked', false);
+        }
+
+        if (!isEmailDisplay) {
+            $("tr #emailNameHidden").hide();
+            $("#emailDisplay input").prop('checked', false);
+        }
+
+        if (!isAddressDisplay) {
+            $("tr #cityNameHidden").hide();
+            $("tr #streetNameHidden").hide();
+            $("tr #houseNameHidden").hide();
+            $("tr #flatNameHidden").hide();
+            $("#addressDisplay input").prop('checked', false);
+        }
+
+        if (!isWorkPlaceDisplay) {
+            $("tr #workPlaceHidden").hide();
+            $("#workPlaceDisplay input").prop('checked', false);
+        }
+    };
+
     $(document).on('click', '.pagination a', function (e) {
         e.preventDefault();
         var page = $(this)[0].search.trim().substring(6);
@@ -660,16 +813,19 @@
         var streetIds = getCheckedStreetIds();
         var apartmentIds = getCheckedApartmentIds();
         var flatIds = getCheckedFlatIds();
-        var columnsName = getCheckedFields();
+        var beneficaries = getBeneficariesUnchecked();
+
+        var columnsId = getCheckedFields();
 
         $.ajax({
             url: "@Url.Action("Index")",
             type: 'Get',
             traditional: true,
-            data: { districtIds: districtIds, cityIds: cityIds, streetIds: streetIds, apartmentIds: apartmentIds, flatIds: flatIds, columnsName: columnsName, page: page },
+            data: { districtIds: districtIds, cityIds: cityIds, streetIds: streetIds, apartmentIds: apartmentIds, flatIds: flatIds, columnsName: beneficaries, page: page },
             async: false
         }).done((data) => {
             $("#personsTable").html(data);
+            hideFields(columnsId);
         });
     });
 

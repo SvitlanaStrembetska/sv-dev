@@ -57,48 +57,65 @@
                                 <a class="dropdown-toggle" data-toggle="dropdown">
                                     <i class="fa fa-tasks fa-fw"></i> <i class="fa fa-caret-down"></i>
                                 </a>
-                                <ul class="dropdown-menu dropdown-tasks" id="hello">
-                                    <li>
-                                        <a id="lastNameDisplay"> <input type="checkbox" checked>Прізвище</a>
-                                    </li>
-                                    <li>
-                                        <a id="firstNameDisplay"> <input type="checkbox" checked>Ім'я</a>
-                                    </li>
-                                    <li>
-                                        <a id="middleNameDisplay"><input type="checkbox" checked>По батькові</a>
-                                    </li>
-                                    <li>
-                                        <a id="addressDisplay"><input type="checkbox" checked>Адреса</a>
-                                    </li>
-                                    <li>
-                                        <a id="phoneFirstDisplay"><input type="checkbox" checked>Телефон 1</a>
-                                    </li>
-                                    <li>
-                                        <a id="positionDisplay"><input type="checkbox" checked>Посада</a>
-                                    </li>
-                                    <li>
-                                        <a id="genderDisplay"><input type="checkbox" checked>Стать</a>
-                                    </li>
-                                    <li>
-                                        <a id="typePartionDisplay"><input type="checkbox" checked>Тип партії</a>
-                                    </li>
-                                    @foreach (var beneficary in beneficaries)
-                                    {
-                                        <li>
-                                            <a id="@beneficary"><input type="checkbox" checked>@beneficary</a>
-                                        </li>
-
-                                    }
-
-
-                                    <li class="divider"></li>
-                                    <li>
-                                        <a class="text-center" id="showAllDisplay">
-                                            <strong>Показати всіх</strong>
-                                            <i class="fa fa-angle-right"></i>
-                                        </a>
-                                    </li>
-                                </ul>
+                                <div class="dropdown-menu dropdown-tasks" id="columnFilter">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <ul id="hello" style="padding-left: 0">
+                                                <li class="column-name">
+                                                    <a id="lastNameDisplay"> <input type="checkbox" checked>Прізвище</a>
+                                                </li>
+                                                <li class="column-name">
+                                                    <a id="firstNameDisplay"> <input type="checkbox" checked>Ім'я</a>
+                                                </li>
+                                                <li class="column-name">
+                                                    <a id="middleNameDisplay"><input type="checkbox" checked>По батькові</a>
+                                                </li>
+                                                <li class="column-name">
+                                                    <a id="phoneFirstDisplay"><input type="checkbox" checked>Мобільний телефон 1</a>
+                                                </li>
+                                                <li class="column-name">
+                                                    <a id="phoneSecondDisplay"><input type="checkbox" checked>Мобільний телефон 2</a>
+                                                </li>
+                                                <li class="column-name">
+                                                    <a id="homePhoneDisplay"><input type="checkbox" checked>Домашній номер телефону</a>
+                                                </li>
+                                                <li class="column-name">
+                                                    <a id="dateBirthDisplay"><input type="checkbox" checked>Дата народження</a>
+                                                </li>
+                                                <li class="column-name">
+                                                    <a id="emailDisplay"><input type="checkbox" checked>Електронна пошта</a>
+                                                </li>
+                                                <li class="column-name">
+                                                    <a id="addressDisplay"><input type="checkbox" checked>Адреса</a>
+                                                </li>
+                                                <li class="column-name">
+                                                    <a id="workPlaceDisplay"><input type="checkbox" checked>Місце роботи</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="col-md-6" style="padding: 0 0">
+                                            <ul style="padding-left: 0">
+                                                @foreach (var beneficary in beneficaries)
+                                                {
+                                                    <li class="beneficary">
+                                                        <a id="@beneficary.Split(' ')[0]"><input type="checkbox" checked>@beneficary</a>
+                                                    </li>
+                                                }
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <ul style="padding-left: 0">
+                                            <li class="divider"></li>
+                                            <li>
+                                                <a class="text-center" id="showAllDisplay">
+                                                    <strong>Показати всіх</strong>
+                                                    <i class="fa fa-angle-right"></i>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
                             </li>
                         }
                     }
@@ -136,10 +153,10 @@
 </html>
 <script>
     $(document).click(function () {
-        $("#hello").hide('slow');
+        $("#columnFilter").hide('slow');
     });
 
-    $("#hello").click(function (e) {
+    $("#columnFilter").click(function (e) {
         e.stopPropagation();
     });
 
@@ -174,6 +191,85 @@
     $("#phoneFirstDisplay").click(function () {
         fieldDisplay(!$("#phoneFirstDisplay input").is(":checked"), true, "#phoneFirstDisplay input", "tr #phone1Hidden");
     });
+
+    $("#phoneSecondDisplay input").click(function (e) {
+        e.stopPropagation();
+        fieldDisplay($("#phoneSecondDisplay input").is(":checked"), false, "#phoneSecondDisplay input", "tr #phone2Hidden");
+    });
+    $("#phoneSecondDisplay").click(function () {
+        fieldDisplay(!$("#phoneSecondDisplay input").is(":checked"), true, "#phoneSecondDisplay input", "tr #phone2Hidden");
+    });
+
+    $("#homePhoneDisplay input").click(function (e) {
+        e.stopPropagation();
+        fieldDisplay($("#homePhoneDisplay input").is(":checked"), false, "#homePhoneDisplay input", "tr #homeNumberHidden");
+    });
+    $("#homePhoneDisplay").click(function () {
+        fieldDisplay(!$("#homePhoneDisplay input").is(":checked"), true, "#homePhoneDisplay input", "tr #homeNumberHidden");
+    });
+
+    $("#dateBirthDisplay input").click(function (e) {
+        e.stopPropagation();
+        fieldDisplay($("#dateBirthDisplay input").is(":checked"), false, "#dateBirthDisplay input", "tr #birthDateHidden");
+    });
+    $("#dateBirthDisplay").click(function () {
+        fieldDisplay(!$("#dateBirthDisplay input").is(":checked"), true, "#dateBirthDisplay input", "tr #birthDateHidden");
+    });
+
+    $("#emailDisplay input").click(function (e) {
+        e.stopPropagation();
+        fieldDisplay($("#emailDisplay input").is(":checked"), false, "#emailDisplay input", "tr #emailNameHidden");
+    });
+    $("#emailDisplay").click(function () {
+        fieldDisplay(!$("#emailDisplay input").is(":checked"), true, "#emailDisplay input", "tr #emailNameHidden");
+    });
+
+    $("#workPlaceDisplay input").click(function (e) {
+        e.stopPropagation();
+        fieldDisplay($("#workPlaceDisplay input").is(":checked"), false, "#workPlaceDisplay input", "tr #workPlaceHidden");
+    });
+    $("#workPlaceDisplay").click(function () {
+        fieldDisplay(!$("#workPlaceDisplay input").is(":checked"), true, "#workPlaceDisplay input", "tr #workPlaceHidden");
+    });
+
+    $(".beneficary input").click(function (e) {
+        e.stopPropagation();
+        getPersonsWithNewBeneficaries();
+    });
+
+    $(".beneficary").click(function (e) {
+        e.stopPropagation();
+        var beneficaryName = this.firstElementChild.getAttribute("id");
+        var isbeneficaryNameChecked = !$("#" + beneficaryName + " input").is(":checked");
+        if (isbeneficaryNameChecked === false)
+            $("#" + beneficaryName + " input").prop('checked', false);
+        else
+            $("#" + beneficaryName + " input").prop('checked', true);
+
+        getPersonsWithNewBeneficaries();
+    });
+
+    function getPersonsWithNewBeneficaries() {
+        var districtIds = getCheckedDistrictIds();
+        var cityIds = getCheckedCityIds();
+        var streetIds = getCheckedStreetIds();
+        var apartmentIds = getCheckedApartmentIds();
+        var flatIds = getCheckedFlatIds();
+        var beneficaries = getBeneficariesUnchecked();
+
+        var columnsId = getCheckedFields();
+
+        $.ajax({
+            url: "@Url.Action("Index", "Person")",
+            type: 'Get',
+            traditional: true,
+            data: { districtIds: districtIds, cityIds: cityIds, streetIds: streetIds, apartmentIds: apartmentIds, flatIds: flatIds, columnsName: beneficaries },
+            async: false
+        }).done((data) => {
+            $("#personsTable").html(data);
+            hideFields(columnsId);
+        });
+    }
 
     function fieldDisplay(isChecked, isNotInput, selector, hideField) {
         if (isNotInput) {
@@ -223,7 +319,35 @@
         var firstNameDisplay = $("#firstNameDisplay input").is(":checked");
         var middleNameDisplay = $("#middleNameDisplay input").is(":checked");
         var phoneFirstDisplay = $("#phoneFirstDisplay input").is(":checked");
+        var phoneSecondDisplay = $("#phoneSecondDisplay input").is(":checked");
+        var homePhoneDisplay = $("#homePhoneDisplay input").is(":checked");
+        var dateBirthDisplay = $("#dateBirthDisplay input").is(":checked");
+        var emailDisplay = $("#emailDisplay input").is(":checked");
         var addressDisplay = $("#addressDisplay input").is(":checked");
+        var workPlaceDisplay = $("#workPlaceDisplay input").is(":checked");
+
+        var districtIds = getCheckedDistrictIds();
+        var cityIds = getCheckedCityIds();
+        var streetIds = getCheckedStreetIds();
+        var apartmentIds = getCheckedApartmentIds();
+        var flatIds = getCheckedFlatIds();
+
+        $.ajax({
+            url: "@Url.Action("Index", "Person")",
+            type: 'Get',
+            traditional: true,
+            data: { districtIds: districtIds, cityIds: cityIds, streetIds: streetIds, apartmentIds: apartmentIds, flatIds: flatIds },
+            async: false
+        }).done((data) => {
+            $("#personsTable").html(data);
+        });
+
+        $(".beneficary input").each((index, element) => {
+            var fieldName = $(element).closest('a')[0].innerText.trim();
+            if (fieldName !== "" && !$("#" + fieldName.split(' ')[0] + " input").is(":checked")) {
+                $("#" + fieldName.split(' ')[0] + " input").prop('checked', true);
+            }
+        });
 
         if (!lastNameDisplay) {
             $("tr #lastNameHidden").show();
@@ -245,12 +369,37 @@
             $("#phoneFirstDisplay input").prop('checked', true);
         }
 
+        if (!phoneSecondDisplay) {
+            $("tr #phone2Hidden").show();
+            $("#phoneSecondDisplay input").prop('checked', true);
+        }
+
+        if (!homePhoneDisplay) {
+            $("tr #homeNumberHidden").show();
+            $("#homePhoneDisplay input").prop('checked', true);
+        }
+
+        if (!dateBirthDisplay) {
+            $("tr #birthDateHidden").show();
+            $("#dateBirthDisplay input").prop('checked', true);
+        }
+
+        if (!emailDisplay) {
+            $("tr #emailNameHidden").show();
+            $("#emailDisplay input").prop('checked', true);
+        }
+
         if (!addressDisplay) {
             $("tr #cityNameHidden").show();
             $("tr #streetNameHidden").show();
             $("tr #houseNameHidden").show();
             $("tr #flatNameHidden").show();
             $("#addressDisplay input").prop('checked', true);
+        }
+
+        if (!workPlaceDisplay) {
+            $("tr #workPlaceHidden").show();
+            $("#workPlaceDisplay input").prop('checked', true);
         }
     });
 </script>

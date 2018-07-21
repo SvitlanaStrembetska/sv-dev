@@ -7,6 +7,16 @@
         <td id="lastNameHidden">@person.LastName</td>
         <td id="firstNameHidden">@person.FirstName</td>
         <td id="middleNameHidden">@person.MiddleName</td>
+        <td id="phone1Hidden">@person.FirstMobilePhone</td>
+        <td id="phone2Hidden">@person.SecondMobilePhone</td>
+        <td id="homeNumberHidden">@person.HomePhone</td>
+        <td id="birthDateHidden">
+            @if (person.DateBirth.HasValue)
+            {
+                @person.DateBirth.Value.ToString("d")
+            }
+        </td>
+        <td id="emailNameHidden">@person.Email</td>
         <td id="cityNameHidden">
             @if (person.City != null)
             {
@@ -31,26 +41,16 @@
                 @person.Flat.Name
             }
         </td>
-
-        <td id="phone1Hidden">@person.FirstMobilePhone</td>
-        <td>@person.SecondMobilePhone</td>
-        <td>@person.HomePhone</td>
+        <td id="workPlaceHidden">
+            @if (person.Work?.Name != null)
+            {
+                @person.Work.Name
+            }
+        </td>
         <td>
             @foreach (var item in person.Beneficiaries)
             {
                 @($"{item.Name} ")
-            }
-        </td>
-        <td>@person.Email</td>
-        <td>
-            @if (person.DateBirth.HasValue)
-            {
-                @person.DateBirth.Value.ToString("d")
-            }
-        </td>
-        <td>
-            @if (person.Work?.Name != null){
-                @person.Work.Name
             }
         </td>
         <td>
