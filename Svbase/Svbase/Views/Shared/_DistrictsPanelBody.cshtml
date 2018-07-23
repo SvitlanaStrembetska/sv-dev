@@ -54,6 +54,16 @@
 <script>
     function onClickDistrictPanelBodyItem(itemId, itemType)
     {
+        if (window.isDirty) {
+            var confirmResult = confirm("У вас є незбережені дані. Ви дійсно бажаєте переключитися?");
+            if (!confirmResult) {
+                return;
+            } else {
+                window.isDirty = false;
+            }
+
+        }
+
         if ((itemType === @((int)DistrictPanelBodyItemType.City))) {
 
             removeCitySelectClasses();

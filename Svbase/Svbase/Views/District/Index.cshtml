@@ -14,7 +14,7 @@
             <div id="district-alert-danger" class="row" style="position: relative">
                 <div class="alert alert-danger district-alert display-none">
                     <button type="button" class="close" data-dismiss="alert">&times;</button>
-                    Виберіть округ і вулиці.
+                    Виберіть округ і будинки.
                 </div>
             </div>
             
@@ -138,9 +138,11 @@
     @Html.Partial("_ConfirmDelete")*@
 <script>
 
+   
+
     $(document).ready(() => {
-        //$(".district-alert-success").hide();
-    });
+        window.isDirty = false;
+    });    
 
     function getDistrictsBy(districtType) {
         var data = {
@@ -176,6 +178,7 @@
             async: false
         }).done((data) => {
             showDistrictAlertSuccess();
+            window.isDirty = false;
             $("#apartments-panel-body").html(null);
             var streetRows = $("#streets-panel-body > .row");
             streetRows.removeClass("factor-item-active");
