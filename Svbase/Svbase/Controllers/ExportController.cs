@@ -27,8 +27,10 @@ namespace Svbase.Controllers
         [Authorize]
         public void ExportExcel(FilterFileImportModel filter)
         {
+            if(filter?.ColumnsName == null) return;
+
             List<PersonSelectionModel> persons = new List<PersonSelectionModel>(); 
-            if (filter == null || (filter.DistrictIds == null && filter.CityIds == null && filter.StreetIds == null && filter.ApartmentIds == null && filter.FlatIds == null)) { 
+            if ((filter.DistrictIds == null && filter.CityIds == null && filter.StreetIds == null && filter.ApartmentIds == null && filter.FlatIds == null)) { 
                 var pers = _personService.GetAll().Include(x=>x.Beneficiaries).Include(x=>x.Flats.Select(y=>y.Apartment).Select(z=>x.Street).Select(k=>k.City)).Include(x=>x.Work).Include(x=>x.Apartment);
                 
                 foreach (var person in pers)
@@ -79,13 +81,13 @@ namespace Svbase.Controllers
 
             //if beneficaries exists 
             var personsList = new List<PersonSelectionModel>();
-            if (filter?.BeneficariesUnchecked != null && filter.BeneficariesUnchecked.Any())
+            if (filter.BeneficariesUnchecked != null && filter.BeneficariesUnchecked.Any())
             {
                 personsList.AddRange(persons.Where(person => !filter.BeneficariesUnchecked.Any(column => person.BeneficariesList != null && person.BeneficariesList.Any(x => x.Name.ToUpper() == column.ToUpper()))));
             }
 
             //if empty result
-            if ((filter?.BeneficariesUnchecked != null && filter.BeneficariesUnchecked.Any() && !personsList.Any()) || !persons.Any()) return;
+            if ((filter.BeneficariesUnchecked != null && filter.BeneficariesUnchecked.Any() && !personsList.Any()) || !persons.Any()) return;
 
             //generate file header
             var isColumnLastNameExists = filter.ColumnsName.Contains("Прізвище");

@@ -535,28 +535,11 @@
         return fields;
     }
 
-    function cencelExport() {
+    $(document).on('click', '#exportFile', function () {
         $("#ExportFile a").attr("href", function () {
             return "@Url.Action("ExportExcel", "Export")";
         });
-    }
 
-    $(document).on('click', '#cencelExportBtn', function() {
-        cencelExport();
-    });
-    $(document).on('click', '#exportBtn', function() {
-        cencelExport();
-    });
-
-    $(document).on('click', '.export-file-modal .modal-content', function (e) {
-        e.stopPropagation();
-    });
-
-    $(document).on('click', '.export-file-modal', function () {
-        cencelExport();
-    });
-
-    $(document).on('click', '#exportFile', function () {
         var districtIds = getCheckedDistrictIds();
         var cityIds = getCheckedCityIds();
         var streetIds = getCheckedStreetIds();
