@@ -130,35 +130,26 @@ namespace Svbase.Controllers
             if (isColumnWorkExists)
                 dataTable.Columns.Add("Місце роботи", typeof(string));
 
+            foreach (var beneficaryName in filter.BeneficariesChecked)
+                dataTable.Columns.Add(beneficaryName, typeof(string));
+
             //generate table header and body if filter contains beneficaries 
             if (filter.BeneficariesUnchecked != null && filter.BeneficariesUnchecked.Any() && personsList.Any())
             {
-                foreach (var beneficaryName in filter.BeneficariesChecked)
-                    dataTable.Columns.Add(beneficaryName, typeof (string));
-
                 foreach (var person in personsList)
                 {
-                    var row = dataTable.NewRow();
-                    row = fillRow(row, person, isColumnLastNameExists, isColumnFirstNameExists, isColumnMiddleNameExists,
+                    dataTable.Rows.Add(fillRow(dataTable.NewRow(), person, isColumnLastNameExists, isColumnFirstNameExists, isColumnMiddleNameExists,
                         isColumnFirstMobilePhoneExists, isColumnSecondMobilePhoneExists, isColumnHomePhoneExists,
-                        isColumnDateBirthExists, isColumnEmailExists, isColumnWorkExists, isColumnAdressExists);
-                    
-                    foreach (var beneficaryName in filter.BeneficariesChecked)
-                        row[beneficaryName] = person.Beneficiaries.Any(x => x.Name.ToUpper() == beneficaryName.ToUpper());
-                    
-                    dataTable.Rows.Add(row);
+                        isColumnDateBirthExists, isColumnEmailExists, isColumnWorkExists, isColumnAdressExists, filter.BeneficariesChecked));
                 }
             }
             else
             {
                 foreach (var person in persons)
                 {
-                    var row = dataTable.NewRow();
-                    row = fillRow(row, person, isColumnLastNameExists, isColumnFirstNameExists, isColumnMiddleNameExists,
+                    dataTable.Rows.Add(fillRow(dataTable.NewRow(), person, isColumnLastNameExists, isColumnFirstNameExists, isColumnMiddleNameExists,
                         isColumnFirstMobilePhoneExists, isColumnSecondMobilePhoneExists, isColumnHomePhoneExists,
-                        isColumnDateBirthExists, isColumnEmailExists, isColumnWorkExists, isColumnAdressExists);
-
-                    dataTable.Rows.Add(row);
+                        isColumnDateBirthExists, isColumnEmailExists, isColumnWorkExists, isColumnAdressExists, filter.BeneficariesChecked));
                 }
             }
 
@@ -186,7 +177,7 @@ namespace Svbase.Controllers
         private DataRow fillRow(DataRow row, PersonSelectionModel person, bool isColumnLastNameExists, bool isColumnFirstNameExists,
             bool isColumnMiddleNameExists, bool isColumnFirstMobilePhoneExists, bool isColumnSecondMobilePhoneExists,
             bool isColumnHomePhoneExists, bool isColumnDateBirthExists, bool isColumnEmailExists, bool isColumnWorkExists,
-            bool isColumnAdressExists)
+            bool isColumnAdressExists, IEnumerable<string> beneficariesChecked)
         {
             if (isColumnLastNameExists)
                 row["Прізвище"] = person.LastName;
@@ -233,6 +224,10 @@ namespace Svbase.Controllers
                         break;
                 }
             }
+
+            foreach (var beneficaryName in beneficariesChecked)
+                row[beneficaryName] = person.BeneficariesList.Any(x => x.Name.ToUpper() == beneficaryName.ToUpper());
+
             return row;
         }
     }
