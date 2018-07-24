@@ -6,18 +6,18 @@
     <div class="row">
         <div class="container">
             <div id="district-alert-success" class="row" style="position: relative">
-                <div class="alert alert-success district-alert display-none">
+                <div class="alert alert-success district-alert display-none" style="font-weight: bold">
                     <button type="button" class="close" data-dismiss="alert">&times;</button>
                     Збережено.
                 </div>
             </div>
             <div id="district-alert-danger" class="row" style="position: relative">
-                <div class="alert alert-danger district-alert display-none">
+                <div class="alert alert-danger district-alert display-none" style="font-weight: bold">
                     <button type="button" class="close" data-dismiss="alert">&times;</button>
                     Виберіть округ і будинки.
                 </div>
             </div>
-            
+
             <div class="row">
                 <div class="col-md-12">
                     <h3 class="page-header">Управління округами</h3>
@@ -79,8 +79,8 @@
                                     <div class="panel-heading" style="font-weight: bold">
                                         Населений пункт
                                         @*<i class="fa fa-plus-square fa-lg" style="color: #428bca; text-align: right; float: right"
-                                           data-toggle="modal"
-                                           data-target="#cityCreateModal"></i>*@
+                                            data-toggle="modal"
+                                            data-target="#cityCreateModal"></i>*@
                                     </div>
                                     <div class="panel-body" id="cities-panel-body">
                                         @Html.Partial("_DistrictsPanelBody", @Model.Cities)
@@ -96,8 +96,8 @@
                                     <div class="panel-heading" style="font-weight: bold">
                                         Вулиця
                                         @*<i class="fa fa-plus-square fa-lg" style="color: #428bca; text-align: right; float: right"
-                                           data-toggle="modal"
-                                           data-target="#streetCreateModal"></i>*@
+                                            data-toggle="modal"
+                                            data-target="#streetCreateModal"></i>*@
                                     </div>
                                     <div class="panel-body" id="streets-panel-body">
                                         @Html.Partial("_DistrictsPanelBody", new List<DistrictPanelBodyItemModel>())
@@ -111,10 +111,18 @@
                             <div class="col-sm-12">
                                 <div class="panel panel-default">
                                     <div class="panel-heading" style="font-weight: bold">
-                                        № Буд
+                                        <div class="row">
+                                            <div class="col-xs-12">
+                                                <span class="pull-left">№ Буд</span>
+                                                <input onclick="checkAllApartments()" class="pull-right" type="checkbox" id="all-apartments"/>
+                                                <label class="pull-right cursor-pointer margin-right-xs" 
+                                                       style="font-weight: normal"
+                                                       for="all-apartments">Вибрати всі</label>
+                                            </div>
+                                        </div>
                                         @*<i class="fa fa-plus-square fa-lg" style="color: #428bca; text-align: right; float: right"
-                                           data-toggle="modal"
-                                           data-target="#apartmentCreateModal"></i>*@
+                                            data-toggle="modal"
+                                            data-target="#apartmentCreateModal"></i>*@
                                     </div>
                                     <div class="panel-body" id="apartments-panel-body">
                                         @Html.Partial("_DistrictApartmentPanelBody", new List<DistrictPanelBodyApartmentModel>())
@@ -138,11 +146,11 @@
     @Html.Partial("_ConfirmDelete")*@
 <script>
 
-   
+
 
     $(document).ready(() => {
         window.isDirty = false;
-    });    
+    });
 
     function getDistrictsBy(districtType) {
         var data = {
@@ -217,6 +225,21 @@
             }
         });
         return apartmentIds;
+    }
+
+
+    function checkAllApartments() {
+        var allApartments = $("#all-apartments");
+        var isChecked = $(allApartments).prop("checked");
+        var targets = $("#apartments-panel-body input");
+        if (!targets || targets.length === 0) return;
+
+        window.isDirty = true;
+        if (!isChecked) {
+            $(targets).prop("checked", false);
+        } else {
+            $(targets).prop("checked", true);
+        }
     }
 
 </script>

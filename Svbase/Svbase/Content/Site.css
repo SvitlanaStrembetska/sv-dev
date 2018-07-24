@@ -316,10 +316,14 @@ button a.white-color:focus {
     position: absolute;
     top: 5px;
     right: 15px;
-    width: 220px;
+    width: 230px;
     z-index: 9999;
 }
 
 .display-none {
     display: none;
+}
+
+.margin-right-xs {
+    margin-right: 5px;
 }

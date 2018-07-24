@@ -74,6 +74,9 @@
         }
 
         if ((itemType === @((int)DistrictPanelBodyItemType.Street))) {
+            var allApartments = $("#all-apartments");
+            $(allApartments).prop("checked", false);
+
             removeStreetSelectClasses();
             addStreetSelecClassToCityRowById(itemId);
 
