@@ -54,9 +54,13 @@ namespace Svbase.Controllers
                 var personsList = new List<PersonSelectionModel>();
                 foreach (var person in persons)
                 {
-                    var isPersonHasBeneficary = filter.ColumnsName.Any(column => person.Beneficiaries.Any(x => x.Name.ToUpper() == column.ToUpper()));
-                    if (!isPersonHasBeneficary)
+                    if (filter.ColumnsName.Any(column => person.Beneficiaries.Any(x => x.Name.ToUpper() == column.ToUpper()))) continue;
+
+                    if (filter.ColumnsName.Any(x=>x.Contains("Без категорії")) && person.Beneficiaries.Any())
                         personsList.Add(person);
+                    else if(!filter.ColumnsName.Any(x=>x.Contains("Без категорії")))
+                        personsList.Add(person);
+                    
                 }
                 return PartialView("_PersonsTablePartial", personsList.ToPagedList(page, Consts.ShowRecordsPerPage));
             }
