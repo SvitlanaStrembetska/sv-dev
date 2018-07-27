@@ -31,12 +31,14 @@ namespace Svbase.Controllers
 
             List<PersonSelectionModel> persons = new List<PersonSelectionModel>(); 
             if ((filter.DistrictIds == null && filter.CityIds == null && filter.StreetIds == null && filter.ApartmentIds == null && filter.FlatIds == null)) { 
-                var pers = _personService.GetAll().Include(x=>x.Beneficiaries).Include(x=>x.Flats.Select(y=>y.Apartment).Select(z=>x.Street).Select(k=>k.City)).Include(x=>x.Work).Include(x=>x.Apartment);
-                
+                var pers = _personService.GetAll().Include(x=>x.Beneficiaries)
+                .Include(x=>x.Flats.Select(y=>y.Apartment).Select(z=>x.Street).Select(k=>k.City)).Include(x=>x.Work).Include(x=>x.Apartment);
+
                 foreach (var person in pers)
                 {
-                    var beneficaries = person.Beneficiaries.ToList();
+                    var beneficaries = person.Beneficiaries.Select(b => new CheckboxItemModel { Id = b.Id, Name = b.Name }).ToList();
                     var personFlat = person.Flats.FirstOrDefault();
+
                     var newPerson = new PersonSelectionModel
                     {
                         Id = person.Id,
@@ -51,26 +53,26 @@ namespace Svbase.Controllers
                         HomePhone = person.StationaryPhone,
                         Email = person.Email,
                         PartionType = person.PartionType,
-                        BeneficariesList = beneficaries,
+                        Beneficiaries = beneficaries,
                         City = new BaseViewModel
                         {
-                            Name = personFlat.Apartment.Street.City.Name
+                            Name = personFlat?.Apartment?.Street?.City?.Name
                         },
                         Street = new BaseViewModel
                         {
-                            Name = personFlat.Apartment.Street.Name
+                            Name = personFlat?.Apartment?.Street?.Name
                         },
                         Apartment = new BaseViewModel
                         {
-                            Name = personFlat.Apartment.Name
+                            Name = personFlat?.Apartment?.Name
                         },
                         Flat = new BaseViewModel
                         {
-                            Name = personFlat.Number
+                            Name = personFlat?.Number
                         },
                         Work = new Work
                         {
-                            Name = person.Work.Name
+                            Name = person.Work?.Name
                         }
                     };
                     persons.Add(newPerson);
@@ -83,7 +85,7 @@ namespace Svbase.Controllers
             var personsList = new List<PersonSelectionModel>();
             if (filter.BeneficariesUnchecked != null && filter.BeneficariesUnchecked.Any())
             {
-                personsList.AddRange(persons.Where(person => !filter.BeneficariesUnchecked.Any(column => person.BeneficariesList != null && person.BeneficariesList.Any(x => x.Name.ToUpper() == column.ToUpper()))));
+                personsList.AddRange(persons.Where(person => !filter.BeneficariesUnchecked.Any(column => person.Beneficiaries != null && person.Beneficiaries.Any(x => x.Name.ToUpper() == column.ToUpper()))));
             }
 
             //if empty result
@@ -226,7 +228,7 @@ namespace Svbase.Controllers
             }
 
             foreach (var beneficaryName in beneficariesChecked)
-                row[beneficaryName] = person.BeneficariesList.Any(x => x.Name.ToUpper() == beneficaryName.ToUpper());
+                row[beneficaryName] = person.Beneficiaries.Any(x => x.Name.ToUpper() == beneficaryName.ToUpper());
 
             return row;
         }
