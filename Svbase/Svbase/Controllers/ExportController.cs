@@ -85,7 +85,15 @@ namespace Svbase.Controllers
             var personsList = new List<PersonSelectionModel>();
             if (filter.BeneficariesUnchecked != null && filter.BeneficariesUnchecked.Any())
             {
-                personsList.AddRange(persons.Where(person => !filter.BeneficariesUnchecked.Any(column => person.Beneficiaries != null && person.Beneficiaries.Any(x => x.Name.ToUpper() == column.ToUpper()))));
+                foreach (var person in persons)
+                {
+                    if (filter.BeneficariesUnchecked.Any(column => person.Beneficiaries != null && person.Beneficiaries.Any(x => x.Name.ToUpper() == column.ToUpper()))) continue;
+
+                    if (filter.BeneficariesUnchecked.Any(x => x.Contains("Без категорії")) && person.Beneficiaries.Any())
+                        personsList.Add(person);
+                    else if (!filter.BeneficariesUnchecked.Any(x => x.Contains("Без категорії")))
+                        personsList.Add(person);
+                }
             }
 
             //if empty result
@@ -198,7 +206,7 @@ namespace Svbase.Controllers
             if (isColumnEmailExists)
                 row["Емейл"] = person.Email;
             if (isColumnWorkExists)
-                row["Місце роботи"] = person.Work.Name;
+                row["Місце роботи"] = person.Work?.Name;
 
             if (isColumnAdressExists)
             {

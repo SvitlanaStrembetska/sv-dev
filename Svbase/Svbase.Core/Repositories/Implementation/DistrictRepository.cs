@@ -134,6 +134,18 @@ namespace Svbase.Core.Repositories.Implementation
             return districts;
         }
 
+        public IEnumerable<BaseViewModel> GetDistrictsByType(DistrictType districtType)
+        {
+            var districts = DbSet
+                .Where(x => x.DistrictType == districtType)
+                .Select(x => new BaseViewModel
+                {
+                    Id = x.Id,
+                    Name = x.Name
+                });
+            return districts;
+        }
+
 
         public IEnumerable<DistrictPanelBodyItemModel> GetPanelBodyCitiesBy(int districtId)
         {

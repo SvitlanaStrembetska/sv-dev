@@ -1,4 +1,6 @@
 ﻿@using Svbase.Core.Consts
+@using Svbase.Core.Enums
+@using Svbase.Core.Models
 <!DOCTYPE html>
 <html>
 <head>
@@ -58,65 +60,111 @@
                                     <i class="fa fa-tasks fa-fw"></i> <i class="fa fa-caret-down"></i>
                                 </a>
                                 <div class="dropdown-menu dropdown-tasks" id="columnFilter">
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <ul id="hello" style="padding-left: 0">
-                                                <li class="column-name">
-                                                    <a id="lastNameDisplay"> <input type="checkbox" checked>Прізвище</a>
-                                                </li>
-                                                <li class="column-name">
-                                                    <a id="firstNameDisplay"> <input type="checkbox" checked>Ім'я</a>
-                                                </li>
-                                                <li class="column-name">
-                                                    <a id="middleNameDisplay"><input type="checkbox" checked>По батькові</a>
-                                                </li>
-                                                <li class="column-name">
-                                                    <a id="phoneFirstDisplay"><input type="checkbox" checked>Мобільний телефон 1</a>
-                                                </li>
-                                                <li class="column-name">
-                                                    <a id="phoneSecondDisplay"><input type="checkbox" checked>Мобільний телефон 2</a>
-                                                </li>
-                                                <li class="column-name">
-                                                    <a id="homePhoneDisplay"><input type="checkbox" checked>Домашній номер телефону</a>
-                                                </li>
-                                                <li class="column-name">
-                                                    <a id="dateBirthDisplay"><input type="checkbox" checked>Дата народження</a>
-                                                </li>
-                                                <li class="column-name">
-                                                    <a id="emailDisplay"><input type="checkbox" checked>Електронна пошта</a>
-                                                </li>
-                                                <li class="column-name">
-                                                    <a id="addressDisplay"><input type="checkbox" checked>Адреса</a>
-                                                </li>
-                                                <li class="column-name">
-                                                    <a id="workPlaceDisplay"><input type="checkbox" checked>Місце роботи</a>
-                                                </li>
-                                            </ul>
+                                    <div class="row" style="margin: 0">
+                                        <div class="col-md-4" style="padding: 5px 5px 0 10px">
+                                            <div class="panel panel-primary new-panel-style" style="max-height: 250px; overflow-x: auto;">
+                                                <div class="panel-heading" style="margin-bottom: -10px;">
+                                                    <h5 class="panel-title" style="font-size: 14px">Поля</h5>
+                                                </div>
+                                                <div class="panel-body">
+                                                    <ul id="hello" style="padding-left: 0">
+                                                        <li class="column-name">
+                                                            <a id="lastNameDisplay"> <input type="checkbox" checked>Прізвище</a>
+                                                        </li>
+                                                        <li class="column-name">
+                                                            <a id="firstNameDisplay"> <input type="checkbox" checked>Ім'я</a>
+                                                        </li>
+                                                        <li class="column-name">
+                                                            <a id="middleNameDisplay"><input type="checkbox" checked>По батькові</a>
+                                                        </li>
+                                                        <li class="column-name">
+                                                            <a id="phoneFirstDisplay"><input type="checkbox" checked>Мобільний телефон 1</a>
+                                                        </li>
+                                                        <li class="column-name">
+                                                            <a id="phoneSecondDisplay"><input type="checkbox" checked>Мобільний телефон 2</a>
+                                                        </li>
+                                                        <li class="column-name">
+                                                            <a id="homePhoneDisplay"><input type="checkbox" checked>Домашній номер телефону</a>
+                                                        </li>
+                                                        <li class="column-name">
+                                                            <a id="dateBirthDisplay"><input type="checkbox" checked>Дата народження</a>
+                                                        </li>
+                                                        <li class="column-name">
+                                                            <a id="emailDisplay"><input type="checkbox" checked>Електронна пошта</a>
+                                                        </li>
+                                                        <li class="column-name">
+                                                            <a id="addressDisplay"><input type="checkbox" checked>Адреса</a>
+                                                        </li>
+                                                        <li class="column-name">
+                                                            <a id="workPlaceDisplay"><input type="checkbox" checked>Місце роботи</a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="col-md-6" style="padding: 0 0">
-                                            <ul style="padding-left: 0">
-                                                @foreach (var beneficary in beneficaries)
-                                                {
-                                                    <li class="beneficary">
-                                                        <a id="@beneficary.Split(' ')[0]"><input type="checkbox" checked>@beneficary</a>
-                                                    </li>
-                                                }
-                                                <li class="beneficary">
-                                                    <a id="Без"><input type="checkbox" checked>Без категорії</a>
-                                                </li>
-                                            </ul>
+                                        <div class="col-md-4" style="padding: 5px 5px 0 5px">
+                                            <div class="panel panel-primary" style="max-height: 250px; overflow-x: auto;">
+                                                <div class="panel-heading" style="margin-bottom: -10px;">
+                                                    <h5 class="panel-title" style="font-size: 14px">Категорії</h5>
+                                                </div>
+                                                <div class="panel-body">
+                                                    <ul style="padding-left: 0">
+                                                        @foreach (var beneficary in beneficaries)
+                                                        {
+                                                            <li class="beneficary">
+                                                                <a id="@beneficary.Split(' ')[0]"><input type="checkbox" checked>@beneficary</a>
+                                                            </li>
+                                                        }
+                                                        <li class="beneficary">
+                                                            <a id="Без"><input type="checkbox" checked>Без категорії</a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4" style="padding: 5px 10px 0 5px">
+                                            <div class="panel panel-primary" style="max-height: 250px; overflow-x: auto;">
+                                                <div class="panel-heading" style="margin-bottom: -10px;">
+                                                    <h5 class="panel-title" style="font-size: 14px">Округи</h5>
+                                                </div>
+                                                <div class="panel-body">
+                                                    <div class="row" style="padding-top: 5px;">
+                                                        <div class="col-md-6" style="padding-right: 0">
+                                                            <button class="btn btn-primary" id="getDistrictsByTypeConstituency" style="width: 100%">
+                                                                Партійний
+                                                            </button>
+                                                        </div>
+                                                        <div class="col-md-6" style="padding-left: 0;">
+                                                            <button class="btn btn-secondary" id="getDistrictsByTypeCustom" style="width: 100%">
+                                                                Виборчий
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row" style="padding-top: 5px">
+                                                        <ul class="col-md-12" id="districts">
+                                                            @Html.Partial("_FilterCheckBoxPartial", new List
+                                                                <BaseViewModel>())
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-md-12">
-                                        <ul style="padding-left: 0">
-                                            <li class="divider"></li>
-                                            <li>
+                                        <div class="row divider"></div>
+                                        <div class="row">
+                                            <div class="col-md-8">
                                                 <a class="text-center" id="showAllDisplay">
                                                     <strong>Показати всіх</strong>
                                                     <i class="fa fa-angle-right"></i>
                                                 </a>
-                                            </li>
-                                        </ul>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <button class="btn btn-primary" id="startFilter" style="width: 100%">
+                                                    Застосувати фільтр
+                                                </button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </li>
@@ -155,6 +203,68 @@
 </body>
 </html>
 <script>
+    $(document).ready(() => {
+        getDistrictsByType("@DistrictType.Сonstituency");
+    });
+
+    $("#getDistrictsByTypeConstituency").click(function (e) {
+        e.stopPropagation();
+        var selector = $("#getDistrictsByTypeConstituency");
+        var selector2 = $("#getDistrictsByTypeCustom");
+
+        if (selector.hasClass("btn-secondary")) {
+            selector.removeClass("btn-secondary");
+            selector.addClass("btn-primary");
+
+            selector2.removeClass("btn-primary");
+            selector2.addClass("btn-secondary");
+        }
+        getDistrictsByType("@DistrictType.Сonstituency");
+    });
+
+    $("#getDistrictsByTypeCustom").click(function (e) {
+        e.stopPropagation();
+        var selector = $("#getDistrictsByTypeCustom");
+        var selector2 = $("#getDistrictsByTypeConstituency");
+
+        if (selector.hasClass("btn-secondary")) {
+            selector.removeClass("btn-secondary");
+            selector.addClass("btn-primary");
+
+            selector2.removeClass("btn-primary");
+            selector2.addClass("btn-secondary");
+        }
+        getDistrictsByType("@DistrictType.Custom");
+    });
+
+    function getDistrictsByType(districtType) {
+        var data = {
+            DistrictType: districtType
+        };
+        $.get('@Url.Action("DistrictsByType", "District")', data)
+            .done((result) => {
+                $("#districts").html(result);
+
+                $("#districts > li > a").click((event) => {
+                    var target = event.target;
+                    var isChecked;
+                    if (target instanceof HTMLInputElement) {
+                        isChecked = $(target).prop("checked");
+                        if (isChecked === false)
+                            $(target).prop('checked', true);
+                        else
+                            $(target).prop('checked', false);
+                    } else {
+                        isChecked = $(target).children().prop("checked");
+                        if (isChecked === false)
+                            $(target).children().prop('checked', true);
+                        else
+                            $(target).children().prop('checked', false);
+                    }
+                });
+            });
+    }
+
     $(document).click(function () {
         $("#columnFilter").hide('slow');
     });
@@ -235,9 +345,9 @@
         fieldDisplay(!$("#workPlaceDisplay input").is(":checked"), true, "#workPlaceDisplay input", "tr #workPlaceHidden");
     });
 
-    $(".beneficary input").click(function (e) {
+    $("#startFilter").click(function (e) {
         e.stopPropagation();
-        getPersonsWithNewBeneficaries();
+        getPersonsByFilter();
     });
 
     $(".beneficary").click(function (e) {
@@ -248,11 +358,9 @@
             $("#" + beneficaryName + " input").prop('checked', false);
         else
             $("#" + beneficaryName + " input").prop('checked', true);
-
-        getPersonsWithNewBeneficaries();
     });
 
-    function getPersonsWithNewBeneficaries() {
+    function getPersonsByFilter() {
         var districtIds = getCheckedDistrictIds();
         var cityIds = getCheckedCityIds();
         var streetIds = getCheckedStreetIds();
