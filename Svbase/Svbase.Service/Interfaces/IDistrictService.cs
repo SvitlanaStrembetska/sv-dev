@@ -13,6 +13,7 @@ namespace Svbase.Service.Interfaces
         bool CreateDistrictBy(DistrictListModel model);
 
         IEnumerable<DistrictPanelBodyItemModel> GetPanelBodyDistrictsBy(DistrictType districtType);
+        IEnumerable<BaseViewModel> GetDistrictsByType(DistrictType districtType);
         IEnumerable<DistrictPanelBodyItemModel> GetPanelBodyCitiesBy(int districtId);
         DistrictViewInitDataModel GetDistrictViewInitDataModel(DistrictType districtType);
 

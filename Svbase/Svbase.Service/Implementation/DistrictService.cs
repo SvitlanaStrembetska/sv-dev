@@ -42,6 +42,11 @@ namespace Svbase.Service.Implementation
             return districts;
         }
 
+        public IEnumerable<BaseViewModel> GetDistrictsByType(DistrictType districtType)
+        {
+            return RepositoryManager.Districts.GetDistrictsByType(districtType);
+        }
+
         public IEnumerable<DistrictPanelBodyItemModel> GetPanelBodyCitiesBy(int districtId)
         {
             var cities = RepositoryManager.Districts.GetPanelBodyCitiesBy(districtId);

@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.Linq;
+using System.Net;
 using System.Web.Mvc;
 using Svbase.Controllers.Abstract;
 using Svbase.Core.Consts;
@@ -52,9 +53,14 @@ namespace Svbase.Controllers
         {
             var districts = _districtService.GetPanelBodyDistrictsBy(districtType);
             return PartialView("_DistrictsPanelBody", districts);
-
         }
 
+        [HttpGet]
+        public ActionResult DistrictsByType(DistrictType districtType)
+        {
+            return PartialView("_FilterCheckBoxPartial", _districtService.GetDistrictsByType(districtType).ToList());
+        }
+        
         [Authorize(Roles = RoleConsts.Admin)]
         [HttpGet]
         public ActionResult StreetsBy(int cityId)
