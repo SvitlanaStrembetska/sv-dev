@@ -82,7 +82,7 @@ namespace Svbase.Core.Models
             person.StationaryPhone = HomePhone;
             person.Email = Email;
             person.PartionType = PartionType;
-
+            
             return person;
         }
 
@@ -112,5 +112,12 @@ namespace Svbase.Core.Models
         public BaseViewModel Street { get; set; }
         public BaseViewModel Apartment { get; set; }
         public BaseViewModel Flat { get; set; }
+    }
+
+    public class PersonAndFullAddressViewModel : PersonViewModel
+    {
+        public int ApartmentId { get; set; }
+        public int StreetId { get; set; }
+        public int CityId { get; set; }
     }
 }

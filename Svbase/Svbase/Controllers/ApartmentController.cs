@@ -11,11 +11,13 @@ namespace Svbase.Controllers
     public class ApartmentController : GeneralController
     {
         private readonly IApartmentService _apartmentService;
+        private readonly IFlatService _flatService;
 
         public ApartmentController(IServiceManager serviceManager)
             : base(serviceManager)
         {
             _apartmentService = ServiceManager.ApartmentService;
+            _flatService = ServiceManager.FlatService;
         }
 
         [Authorize(Roles = RoleConsts.Admin)]
@@ -29,11 +31,15 @@ namespace Svbase.Controllers
 
             if (!ModelState.IsValid)
             {
-                //return RedirectToAction("De");//Todo page not found
+                return RedirectToAction("List", "City");//Todo page not found
             }
 
             var newApartmentItem = model.Update(new Apartment());
-            newApartmentItem = _apartmentService.Add(newApartmentItem);
+            var newFlatItem = new Flat { Number = Consts.DefaultAddress, Apartment = newApartmentItem };
+
+            _apartmentService.Add(newApartmentItem);
+            _flatService.Add(newFlatItem);
+
             return RedirectToAction("Details", "Street", new { id = model.StreetId });
         }
 

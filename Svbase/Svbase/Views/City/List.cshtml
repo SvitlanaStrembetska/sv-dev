@@ -1,4 +1,5 @@
-﻿@using Svbase.Core.Models
+﻿@using Svbase.Core.Consts
+@using Svbase.Core.Models
 @model IEnumerable<CityCreateModel>
 <div class="container body-content">
     <div class="row">
@@ -43,7 +44,7 @@
                                 </tr>
 
                             }
-                            @foreach (var city in Model)
+                            @foreach (var city in Model.Where(x => x.Name != Consts.DefaultAddress))
                             {
                                 <tr data-id="@city.Id">
                                     <td class="col-xs-12">

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.Entity;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -20,9 +19,6 @@ namespace Svbase.Controllers
     public class ImportController : GeneralController
     {
         private readonly IPersonService _personService;
-        private readonly IFlatService _flatService;
-        private readonly IApartmentService _apartmentService;
-        private readonly IStreetService _streetService;
         private readonly ICityService _cityService;
         private readonly IBeneficiaryService _beneficiaryService;
         private readonly IWorkService _workService;
@@ -31,9 +27,6 @@ namespace Svbase.Controllers
             : base(serviceManager)
         {
             _personService = ServiceManager.PersonService;
-            _flatService = ServiceManager.FlatService;
-            _apartmentService = ServiceManager.ApartmentService;
-            _streetService = ServiceManager.StreetService;
             _cityService = ServiceManager.CityService;
             _beneficiaryService = ServiceManager.BeneficiaryService;
             _workService = ServiceManager.WorkService;
@@ -353,9 +346,9 @@ namespace Svbase.Controllers
                     streetList.Add(street);
                 }
 
-                var apartmentName = validatedModel.ApartmentSide != "" 
+                var apartmentName = validatedModel.ApartmentSide != ""
                     ? validatedModel.ApartmentNumber + " " + validatedModel.ApartmentLetter + " корпус:" + validatedModel.ApartmentSide
-                    : validatedModel.ApartmentNumber + " " + validatedModel.ApartmentLetter;
+                    : (validatedModel.ApartmentNumber + " " + validatedModel.ApartmentLetter).Trim();
                 // apartment
                 if (streetFromDb != null && streetFromDb.Id != 0 && streetFromDb.Apartments.Any(x => x.Name.ToUpper() == apartmentName.ToUpper()))
                     apartmentFromDb = streetFromDb.Apartments.FirstOrDefault(x => x.Name.ToUpper() == apartmentName.ToUpper());

@@ -23,5 +23,7 @@ namespace Svbase.Core.Consts
         public static readonly Regex StreetRegex = new Regex("[^\\s0-9А-Ща-щЬьЮюЯяЇїІіЄєҐґ'’\\.-]");
         public static readonly Regex ApartmentRegex = new Regex("[^0-9]");
         public static readonly Regex EmailRegex = new Regex("^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$");
+
+        public const string DefaultAddress = "Не визначено";
     }
 }

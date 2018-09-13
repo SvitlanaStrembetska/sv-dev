@@ -1,10 +1,18 @@
-﻿@model IEnumerable<Svbase.Core.Models.BaseViewModel>
+﻿@using Svbase.Core.Consts
+@model IEnumerable<Svbase.Core.Models.BaseViewModel>
 
-@if (Model.Any())
+@*@if (Model.Any())
 {
     <option disabled selected> Виберіть елемент </option>
-}
+}*@
 @foreach (var item in Model)
 {
-    <option value="@item.Id">@item.Name</option>
+    if (item.Name == Consts.DefaultAddress)
+    {
+        <option selected value="@item.Id">@item.Name</option>
+    }
+    else
+    {
+        <option value="@item.Id">@item.Name</option>
+    }
 }

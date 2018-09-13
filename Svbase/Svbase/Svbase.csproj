@@ -425,13 +425,14 @@
     <Content Include="Views\Shared\_FilterCityPartial.cshtml" />
     <Content Include="Views\Shared\_FilterApartmentPartial.cshtml" />
     <Content Include="Views\Shared\_FilterFlatPartial.cshtml" />
-    <Content Include="Views\Shared\_PersonEdit.cshtml" />
+    <Content Include="Views\Shared\_PersonEditModal.cshtml" />
     <Content Include="Views\Shared\_ConfirmDelete.cshtml" />
     <Content Include="Views\Shared\_UploadFile.cshtml" />
     <Content Include="Views\Shared\_PersonsTablePartial.cshtml" />
     <Content Include="Views\Shared\_DistrictsPanelBody.cshtml" />
     <Content Include="Views\District\Index.cshtml" />
     <Content Include="Views\Shared\_DistrictApartmentPanelBody.cshtml" />
+    <Content Include="Views\Shared\_PersonEditBody.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

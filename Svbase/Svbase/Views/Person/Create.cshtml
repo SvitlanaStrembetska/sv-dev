@@ -1,5 +1,5 @@
 ﻿@using Svbase.Core.Models
-@model Svbase.Core.Models.PersonViewModel
+@model PersonAndFullAddressViewModel
 <div class="body-content margin-top">
     @using (Html.BeginForm())
     {
@@ -85,7 +85,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-12 block-container">
+                        @*<div class="col-md-12 block-container">
                             @Html.LabelFor(model => model.Gender, htmlAttributes: new { @class = "control-label col-md-2" })
                             <div class="col-md-10 padding-top-7">
 
@@ -93,25 +93,25 @@
                                 <span class="padding-left"></span>
                                 @Html.RadioButtonFor(m => m.Gender, false) @Html.Label("Жінка")
                             </div>
-                        </div>
+                        </div>*@
                         <div class="col-md-12 block-container">
                             <div class="col-sm-6">
                                 <div class="col-sm-12 ignore-padding">
                                     <label for="cities" style="width: 100% !important;">
                                         Місто
                                     </label>
-                                    <select class="form-control" id="cities"></select>
+                                    <select class="form-control" id="cities" name="CityId"></select>
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div class="col-sm-12 ignore-padding">
                                     <label for="streets" style="width: 100% !important;">
                                         Вулиця
-                                        <i class="fa fa-plus-square fa-lg pull-right" style="color: #428bca; text-align: right; float: right"
+                                        @*<i class="fa fa-plus-square fa-lg pull-right" style="color: #428bca; text-align: right; float: right"
                                            data-toggle="modal"
-                                           data-target="#streetCreateModal"></i>
+                                           data-target="#streetCreateModal"></i>*@
                                     </label>
-                                    <select class="form-control" id="streets"></select>
+                                    <select class="form-control" id="streets" name="StreetId"></select>
                                 </div>
                             </div>
                         </div>
@@ -120,20 +120,20 @@
                                 <div class="col-sm-12 ignore-padding">
                                     <label for="apartments" style="width: 100% !important;">
                                         Будинок
-                                        <i class="fa fa-plus-square fa-lg" style="color: #428bca; text-align: right; float: right"
+                                        @*<i class="fa fa-plus-square fa-lg" style="color: #428bca; text-align: right; float: right"
                                            data-toggle="modal"
-                                           data-target="#apartmentCreateModal"></i>
+                                           data-target="#apartmentCreateModal"></i>*@
                                     </label>
-                                    <select class="form-control" id="apartments"></select>
+                                    <select class="form-control" id="apartments" name="ApartmentId"></select>
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div class="col-sm-12 ignore-padding">
                                     <label for="flats" style="width: 100% !important;">
                                         Квартира
-                                        <i class="fa fa-plus-square fa-lg" style="color: #428bca; text-align: right; float: right"
+                                        @*<i class="fa fa-plus-square fa-lg" style="color: #428bca; text-align: right; float: right"
                                            data-toggle="modal"
-                                           data-target="#flatCreateModal"></i>
+                                           data-target="#flatCreateModal"></i>*@
                                     </label>
                                     <select class="form-control" id="flats" name="FlatId"></select>
                                 </div>
@@ -182,14 +182,14 @@
         <i class="fa fa-arrow-left color-svb"></i> @Html.ActionLink("Повернутися", "Index")
     </div>
 </div>
-@Html.Partial("_CityCreate", new CityCreateModel())
+@*@Html.Partial("_CityCreate", new CityCreateModel())
 @Html.Partial("_StreetCreatePartial", new StreetCreateModel())
 @Html.Partial("_ApartmentCreate", new ApartmentCreateModel())
-@Html.Partial("_FlatCreate", new FlatCreateModel())
+@Html.Partial("_FlatCreate", new FlatCreateModel())*@
 <script type="text/javascript">
-    $('.radio').on('change', function () {
-        $('.radio').not(this).prop('checked', false);
-    });
+    //$('.radio').on('change', function () {
+    //    $('.radio').not(this).prop('checked', false);
+    //});
 
     $(document).ready(() => {
         getOptionSelectCityPartial();
@@ -201,8 +201,6 @@
 
     var fName = document.getElementById("FirstName").value;
     var lName = document.getElementById("LastName").value;
-
-
     var validationName = function () {
         if (fName.trim() == '' && lName.trim() == '') {
             $("#validName").show();

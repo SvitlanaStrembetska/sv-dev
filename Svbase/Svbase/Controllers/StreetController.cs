@@ -11,10 +11,15 @@ namespace Svbase.Controllers
     public class StreetController : GeneralController
     {
         private readonly IStreetService _streetService;
+        private readonly IApartmentService _apartmentService;
+        private readonly IFlatService _flatService;
+
         public StreetController(IServiceManager serviceManager)
             : base(serviceManager)
         {
             _streetService = ServiceManager.StreetService;
+            _apartmentService = ServiceManager.ApartmentService;
+            _flatService = ServiceManager.FlatService;
         }
 
         [Authorize(Roles = RoleConsts.Admin)]
@@ -28,11 +33,17 @@ namespace Svbase.Controllers
 
             if (!ModelState.IsValid)
             {
-                //return RedirectToAction("De");//Todo page not found
+                return RedirectToAction("List", "City"); //Todo page not found
             }
 
             var newStreetItem = model.Update(new Street());
-            newStreetItem = _streetService.Add(newStreetItem);
+            var newApartmentItem = new Apartment { Name = Consts.DefaultAddress, Street = newStreetItem };
+            var newFlatItem = new Flat { Number = Consts.DefaultAddress, Apartment = newApartmentItem };
+
+            _streetService.Add(newStreetItem);
+            _apartmentService.Add(newApartmentItem);
+            _flatService.Add(newFlatItem);
+
             return RedirectToAction("Details", "City", new { id = model.CityId });
         }
 

@@ -36,6 +36,19 @@ namespace Svbase.Controllers
 
         public ActionResult Index(FilterFileImportModel filter, int page = 1)
         {
+            if (!_cityService.GetAll().Any(x => x.Name == Consts.DefaultAddress))
+            {
+                var newCityItem = new City { Name = Consts.DefaultAddress };
+                var newStreetItem = new Street { Name = Consts.DefaultAddress, City = newCityItem };
+                var newApartmentItem = new Apartment { Name = Consts.DefaultAddress, Street = newStreetItem };
+                var newFlatItem = new Flat { Number = Consts.DefaultAddress, Apartment = newApartmentItem };
+
+                _cityService.Add(newCityItem);
+                _streetService.Add(newStreetItem);
+                _apartmentService.Add(newApartmentItem);
+                _flatService.Add(newFlatItem);
+            }
+
             IQueryable<PersonSelectionModel> persons;
 
             if (Request.IsAjaxRequest())
@@ -56,11 +69,11 @@ namespace Svbase.Controllers
                 {
                     if (filter.ColumnsName.Any(column => person.Beneficiaries.Any(x => x.Name.ToUpper() == column.ToUpper()))) continue;
 
-                    if (filter.ColumnsName.Any(x=>x.Contains("Без категорії")) && person.Beneficiaries.Any())
+                    if (filter.ColumnsName.Any(x => x.Contains("Без категорії")) && person.Beneficiaries.Any())
                         personsList.Add(person);
-                    else if(!filter.ColumnsName.Any(x=>x.Contains("Без категорії")))
+                    else if (!filter.ColumnsName.Any(x => x.Contains("Без категорії")))
                         personsList.Add(person);
-                    
+
                 }
                 return PartialView("_PersonsTablePartial", personsList.ToPagedList(page, Consts.ShowRecordsPerPage));
             }
@@ -73,7 +86,7 @@ namespace Svbase.Controllers
             ViewBag.Beneficaries = beneficariesList;
 
             persons = _personService.GetPersons();
-            
+
             return View(persons.ToPagedList(page, Consts.ShowRecordsPerPage));
         }
 
@@ -93,58 +106,87 @@ namespace Svbase.Controllers
 
         public ActionResult Create()
         {
-            var beneficiaries = _beneficiaryService.GetBeneficiariesForSelecting().ToList();
-            var cities = _cityService.GetCities().ToList();
-            var streets = _streetService.GetStreetsForSelecting().ToList();
-            //flat, apartment
-
-            //return View(new PersonViewModel {Beneficiaries = beneficiaries, Cities = cities, Streets = streets});
-            return View(new PersonViewModel { Beneficiaries = beneficiaries });
+            return View(new PersonAndFullAddressViewModel { Beneficiaries = _beneficiaryService.GetBeneficiariesForSelecting().ToList() });
         }
 
         [Authorize(Roles = RoleConsts.Admin)]
         [HttpPost]
-        public ActionResult Create(PersonViewModel model)
+        public ActionResult Create(PersonAndFullAddressViewModel model)
         {
             if (model.LastName == null && model.FirstName == null)
                 return RedirectToAction("Create");
 
             var isCreated = _personService.CreatePersonByModel(model);
             return !isCreated
-                ? RedirectToAction("Create")
+                ? RedirectToAction("Create", model)
                 : RedirectToAction("Index");
         }
+
+        public ActionResult Edit(int id)
+        {
+            var person = _personService.GetPersonWithAddressById(id);
+            var personBeneficiaries = person.Beneficiaries;
+            foreach (var beneficary in _beneficiaryService.GetAll().ToList().Where(beneficary => !personBeneficiaries.Any(x => x.Id == beneficary.Id)))
+            {
+                personBeneficiaries.Add(new CheckboxItemModel
+                {
+                    Id = beneficary.Id,
+                    Name = beneficary.Name,
+                    IsChecked = false 
+                });
+            }
+            person.Beneficiaries = personBeneficiaries;
+            return PartialView("_PersonEditBody", person);
+        }
+
         [Authorize(Roles = RoleConsts.Admin)]
         [HttpPost]
-        public ActionResult Edit(PersonViewModel model)
+        public ActionResult Edit(PersonAndFullAddressViewModel model)
         {
-            if (model == null)
-            {
-                return Json(new { status = "error" });
-            }
+
+            if (model.LastName == null && model.FirstName == null)
+                return RedirectToAction("Edit", model);
 
             var person = _personService.FindById(model.Id);
             if (person == null)
-            {
-                return Json(new { status = "error" });
-            }
-            person.FirstName = model.FirstName;
-            person.LastName = model.LastName;
-            person.MiddleName = person.MiddleName;
-            person.Gender = person.Gender;
-            person.Email = person.Email;
-            person.MobileTelephoneFirst = person.MobileTelephoneFirst;
-            person.MobileTelephoneSecond = person.MobileTelephoneSecond;
-            person.BirthdayDate = person.BirthdayDate;
-            person.StationaryPhone = person.StationaryPhone;
-            person.PartionType = person.PartionType;
-            person.Position = person.Position;
-            person.Beneficiaries = person.Beneficiaries;
-            person.Flats = person.Flats;
+                return RedirectToAction("Index");
 
+            var personBeneficiaries = person.Beneficiaries.ToList();
+            foreach (var beneficary in personBeneficiaries)
+            {
+                person.Beneficiaries.Remove(beneficary);
+            }
+
+            var personFlats = person.Flats.ToList();
+            foreach (var flat in personFlats)
+            {
+                person.Flats.Remove(flat);
+            }
+            
+            person = model.Update(person);
+
+
+            if (model.Beneficiaries != null && model.Beneficiaries.Any())
+            {
+                var selectedBeneficiaries = model.Beneficiaries.Where(x => x.IsChecked).ToList();
+                foreach (var beneficiary in selectedBeneficiaries)
+                {
+                    var benef = _beneficiaryService.FindById(beneficiary.Id);
+                    person.Beneficiaries.Add(benef);
+                    _beneficiaryService.Attach(benef);
+                }
+            }
+
+            var flats = new List<Flat> { _flatService.FindById(model.FlatId) };
+            foreach (var flat in flats)
+            {
+                _flatService.Attach(flat);
+            }
+
+            person.Flats = flats;
             _personService.Update(person);
 
-            return Json(new { status = "success" });
+            return RedirectToAction("Index");
         }
 
         [Authorize(Roles = RoleConsts.Admin)]
@@ -240,9 +282,23 @@ namespace Svbase.Controllers
         }
 
         [HttpGet]
+        public ActionResult OptionSelectDefaultStreetsPartial(int cityId)
+        {
+            var streets = _cityService.GetStreetsBaseModelByCityId(cityId).Where(x=>x.Name == Consts.DefaultAddress);
+            return PartialView("_OptionSelectBasePartial", streets);
+        }
+
+        [HttpGet]
         public ActionResult OptionSelectApartmentPartial(int streetId)
         {
             var apartments = _streetService.GetApartmentsBaseModelByStreetId(streetId);
+            return PartialView("_OptionSelectBasePartial", apartments);
+        }
+
+        [HttpGet]
+        public ActionResult OptionSelectDefaultApartmentPartial(int streetId)
+        {
+            var apartments = _streetService.GetApartmentsBaseModelByStreetId(streetId).Where(x => x.Name == Consts.DefaultAddress);
             return PartialView("_OptionSelectBasePartial", apartments);
         }
 
@@ -253,11 +309,13 @@ namespace Svbase.Controllers
             return PartialView("_OptionSelectBasePartial", flats);
         }
 
+        public ActionResult OptionSelectDefaultFlatPartial(int apartmentId)
+        {
+            var flats = _apartmentService.GetFlatsBaseModelByApartmentId(apartmentId).Where(x => x.Name == Consts.DefaultAddress);
+            return PartialView("_OptionSelectBasePartial", flats);
+        }
 
-        //public ActionResult SearcResult()
-        //{
-        //    return PartialView();
-        //}
+
         public ActionResult Import()
         {
             bool isValid;

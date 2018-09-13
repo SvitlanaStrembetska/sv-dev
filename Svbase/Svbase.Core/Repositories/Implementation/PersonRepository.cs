@@ -67,22 +67,44 @@ namespace Svbase.Core.Repositories.Implementation
             {
                 Id = x.Id,
                 FirstName = x.FirstName,
-                //MiddleName = x.MiddleName,
+                MiddleName = x.MiddleName,
                 LastName = x.LastName,
-                //Position = x.Position,
-                //Gender = x.Gender,
-                //Email = x.Email,
-                //FirstMobilePhone = x.MobileTelephoneFirst,
-                //SecondMobilePhone = x.MobileTelephoneSecond,
-                //HomePhone = x.HomePhone,
-                //PartionType = x.PartionType,
-                //DateBirth = x.BirthdayDate
-                //Streets = x.Streets.Select(s => new StreetCreateModel
-                //{
-                //    Id = s.Id,
-                //    Name = s.Name,
-                //    CanDelete = !s.Apartments.Any()
-                //})
+                Email = x.Email,
+                FirstMobilePhone = x.MobileTelephoneFirst,
+                SecondMobilePhone = x.MobileTelephoneSecond,
+                HomePhone = x.StationaryPhone,
+                DateBirth = x.BirthdayDate,
+                Work = x.Work,
+                FlatId = x.Flats.FirstOrDefault().Id
+            })
+                .FirstOrDefault(x => x.Id == id);
+            return person;
+        }
+
+        public PersonAndFullAddressViewModel GetPersonWithAddressById(int id)
+        {
+            var person = DbSet.Select(x => new PersonAndFullAddressViewModel
+            {
+                Id = x.Id,
+                FirstName = x.FirstName,
+                MiddleName = x.MiddleName,
+                LastName = x.LastName,
+                Email = x.Email,
+                FirstMobilePhone = x.MobileTelephoneFirst,
+                SecondMobilePhone = x.MobileTelephoneSecond,
+                HomePhone = x.StationaryPhone,
+                DateBirth = x.BirthdayDate,
+                Beneficiaries = x.Beneficiaries.Select(b => new CheckboxItemModel
+                {
+                    Id = b.Id,
+                    Name = b.Name,
+                    IsChecked = true
+                }).ToList(),
+                Work = x.Work,
+                FlatId = x.Flats.FirstOrDefault().Id,
+                ApartmentId = x.Flats.FirstOrDefault().ApartmentId,
+                StreetId = x.Flats.FirstOrDefault().Apartment.StreetId,
+                CityId = x.Flats.FirstOrDefault().Apartment.Street.CityId
             })
                 .FirstOrDefault(x => x.Id == id);
             return person;

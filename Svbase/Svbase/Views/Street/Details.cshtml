@@ -1,4 +1,5 @@
-﻿@using Svbase.Core.Models
+﻿@using Svbase.Core.Consts
+@using Svbase.Core.Models
 @model StreetViewModel
 <div class="container body-content margin-top">
     <div class="row page-header">
@@ -47,7 +48,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var apartment in Model.Apartments)
+                            @foreach (var apartment in Model.Apartments.Where(x => x.Name != Consts.DefaultAddress))
                             {
                                 <tr data-id="@apartment.Id">
                                     <td class="col-xs-12">

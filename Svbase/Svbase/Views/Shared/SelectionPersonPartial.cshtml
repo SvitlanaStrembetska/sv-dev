@@ -75,12 +75,19 @@
     i++;
 }
 @Html.Partial("_ConfirmDelete")
-
-@*@Html.Partial("_PersonEdit")*@
+@Html.Partial("_PersonEditModal")
 <script>
     $('[data-action="edit"]').click(function () {
-        var id = (this).data('data-item-id');
-        $('#EditId').val(id);
+        var id = (this).getAttribute('data-item-id');
+        var urlAction = "@Url.Action("Edit", "Person")";
+        $.ajax({
+            url: urlAction,
+            type: 'Get',
+            data: {id: id},
+            async: false
+        }).done((data) => {
+            $("#personEditModal .modal-body").html(data);
+        });
         $('#personEditModal').modal();
     });
 
@@ -103,5 +110,4 @@
         $('#confirmDeleteModal').modal('hide');
 
     });
-
 </script>

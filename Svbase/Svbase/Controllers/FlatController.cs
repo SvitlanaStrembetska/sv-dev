@@ -42,11 +42,11 @@ namespace Svbase.Controllers
 
             if (!ModelState.IsValid)
             {
-                //return RedirectToAction("De");//Todo page not found
+                return RedirectToAction("List", "City"); //Todo page not found
             }
 
             var newFlatItem = model.Update(new Flat());
-            newFlatItem = _flatService.Add(newFlatItem);
+            _flatService.Add(newFlatItem);
             return RedirectToAction("Details", "Apartment", new { id = model.ApartmentId });
         }
 
@@ -77,5 +77,34 @@ namespace Svbase.Controllers
 
             return Json(new { status = "success" });
         }
+
+        [HttpGet]
+        public ActionResult FindAddressByFlatId(int flatId)
+        {
+            var flatById = _flatService.FindById(flatId);
+            BaseViewModel flat = new BaseViewModel
+            {
+                Id = flatById.Id,
+                Name = flatById.Number
+            };
+            BaseViewModel apartment = new BaseViewModel
+            {
+                Id = flatById.ApartmentId,
+                Name = flatById.Apartment.Name
+            };
+            BaseViewModel street = new BaseViewModel
+            {
+                Id = flatById.Apartment.StreetId,
+                Name = flatById.Apartment.Street.Name
+            };
+            BaseViewModel city = new BaseViewModel
+            {
+                Id = flatById.Apartment.Street.CityId,
+                Name = flatById.Apartment.Street.City.Name
+            };
+
+            return Json(new { flat, apartment, street, city }, JsonRequestBehavior.AllowGet);
+        }
+
     }
 }

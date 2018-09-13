@@ -30,8 +30,12 @@ namespace Svbase.Service.Implementation
 
         public PersonViewModel GetPersonById(int id)
         {
-            var person = RepositoryManager.Persons.GetPersonById(id);
-            return person;
+            return RepositoryManager.Persons.GetPersonById(id); 
+        }
+
+        public PersonAndFullAddressViewModel GetPersonWithAddressById(int id)
+        {
+            return RepositoryManager.Persons.GetPersonWithAddressById(id); 
         }
 
         public IList<BaseViewModel> GetDistrictsForFilter()
@@ -92,7 +96,7 @@ namespace Svbase.Service.Implementation
             return flats;
         }
 
-        public bool CreatePersonByModel(PersonViewModel model)
+        public bool CreatePersonByModel(PersonAndFullAddressViewModel model)
         {
             if (model == null)
             {
@@ -100,29 +104,26 @@ namespace Svbase.Service.Implementation
             }
 
             var newPerson = model.Update(new Person());
-            var selectedBeneficiaries = model.Beneficiaries
-                .Where(x => x.IsChecked)
-                .ToList();
-            newPerson.Beneficiaries = selectedBeneficiaries
-                .Select(x => new Beneficiary
+
+            if (model.Beneficiaries != null && model.Beneficiaries.Any())
+            {
+                var selectedBeneficiaries = model.Beneficiaries.Where(x => x.IsChecked).ToList();
+                newPerson.Beneficiaries = selectedBeneficiaries.Select(x => new Beneficiary
                 {
                     Id = x.Id
                 }).ToList();
-            foreach (var beneficiary in newPerson.Beneficiaries)
-            {
-                RepositoryManager.Beneficiaries.Attach(beneficiary);
-            }
-            var flats = new List<Flat>
-            {
-                new Flat
+                foreach (var beneficiary in newPerson.Beneficiaries)
                 {
-                    Id = model.FlatId
+                    RepositoryManager.Beneficiaries.Attach(beneficiary);
                 }
-            };
-            foreach (var flat in flats)   
+            }
+
+            var flats = new List<Flat> { new Flat { Id = model.FlatId } };
+            foreach (var flat in flats)
             {
                 RepositoryManager.Flats.Attach(flat);
             }
+
             newPerson.Flats = flats;
             Add(newPerson);
 

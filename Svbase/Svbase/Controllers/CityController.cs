@@ -11,11 +11,17 @@ namespace Svbase.Controllers
     public class CityController : GeneralController
     {
         private readonly ICityService _cityService;
+        private readonly IStreetService _streetService;
+        private readonly IApartmentService _apartmentService;
+        private readonly IFlatService _flatService;
 
         public CityController(IServiceManager serviceManager)
             : base(serviceManager)
         {
             _cityService = ServiceManager.CityService;
+            _streetService = ServiceManager.StreetService;
+            _apartmentService = ServiceManager.ApartmentService;
+            _flatService = ServiceManager.FlatService;
         }
 
         [Authorize(Roles = RoleConsts.Admin)]
@@ -33,7 +39,15 @@ namespace Svbase.Controllers
             }
 
             var newCityItem = model.Update(new City());
-            newCityItem = _cityService.Add(newCityItem);
+            var newStreetItem = new Street { Name = Consts.DefaultAddress, City = newCityItem };
+            var newApartmentItem = new Apartment { Name = Consts.DefaultAddress, Street = newStreetItem };
+            var newFlatItem = new Flat { Number = Consts.DefaultAddress, Apartment = newApartmentItem };
+            
+            _cityService.Add(newCityItem);
+            _streetService.Add(newStreetItem);
+            _apartmentService.Add(newApartmentItem);
+            _flatService.Add(newFlatItem);
+
             if (Request.IsAjaxRequest())
             {
                 return Json(new
@@ -88,8 +102,7 @@ namespace Svbase.Controllers
         [HttpGet]
         public ActionResult List()
         {
-            var cities = _cityService.GetCities();
-            return View(cities);
+            return View(_cityService.GetCities());
         }
     }
 }
