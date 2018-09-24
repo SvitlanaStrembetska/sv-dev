@@ -13,6 +13,7 @@ namespace Svbase.Service.Interfaces
         PersonViewModel GetPersonById(int id);
         PersonAndFullAddressViewModel GetPersonWithAddressById(int id);
         IList<BaseViewModel> GetDistrictsForFilter();
+        IList<BaseViewModel> GetWorksBaseViewModels();
         IList<BaseViewModel> GetCitiesBaseViewModels();
         IList<BaseViewModel> GetStreetsForFilter();
         //IEnumerable<BaseViewModel> GetStretsBaseModelByStreetSearchFilter(StreetSearchFilterModel filter);

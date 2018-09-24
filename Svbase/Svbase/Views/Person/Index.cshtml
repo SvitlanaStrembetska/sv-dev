@@ -188,7 +188,7 @@
             data: { filter: filter },
             async: false
         }).done((data) => {
-            $("#selectionBody").html(data);
+            $("#personsTable").html(data);
         });
     }
 
@@ -285,19 +285,6 @@
             getApartments();
         });
     }
-
-    function getCheckedDistrictIds() {
-        var districtIds = [];
-        $("#districts input:checked").each((index, element) => {
-            if (!isNaN($(element).val())) {
-                var id = Number($(element).val());
-                districtIds.push(id);
-            }
-        });
-        return districtIds;
-    }
-
-
 
     function getCheckedStreetIds() {
         var streetIds = [];
@@ -791,7 +778,7 @@
         var columnsId = getCheckedFields();
 
         $.ajax({
-            url: "@Url.Action("Index")",
+            url: "@Url.Action("Index", "Person")",
             type: 'Get',
             traditional: true,
             data: { districtIds: districtIds, cityIds: cityIds, streetIds: streetIds, apartmentIds: apartmentIds, flatIds: flatIds, columnsName: beneficaries, page: page },

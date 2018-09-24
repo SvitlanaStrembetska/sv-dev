@@ -237,7 +237,7 @@ namespace Svbase.Controllers
         public ActionResult SearchPersonsByFilter(FilterFileImportModel filter)
         {
             var persons = _personService.SearchPersonsByFilter(filter);
-            return PartialView("SelectionPersonPartial", persons);
+            return PartialView("_PersonsTablePartial", persons.ToPagedList(1, Consts.ShowRecordsPerPage));
         }
         //[HttpGet]
         //public ActionResult FilterStreetsByStreetSearchFilter(StreetSearchFilterModel filter)
@@ -265,6 +265,13 @@ namespace Svbase.Controllers
         {
             var flats = _apartmentService.GetFilterFlatsByApartmentIds(apartmentIds);
             return PartialView("_FilterFlatPartial", flats.ToList());
+        }
+
+        [HttpGet]
+        public ActionResult OptionSelectWorksPartial()
+        {
+            var works = _personService.GetWorksBaseViewModels();
+            return PartialView("_OptionSelectBasePartial", works);
         }
 
         [HttpGet]
