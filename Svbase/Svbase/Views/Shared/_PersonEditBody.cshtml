@@ -94,10 +94,10 @@
                 <div class="col-md-12 block-container">
                     <div class="col-sm-6">
                         <div class="col-sm-12 ignore-padding">
-                            <label for="cities" style="width: 100% !important;">
+                            <label for="editCities" style="width: 100% !important;">
                                 Місто
                             </label>
-                            <select class="form-control" id="cities" name="CityId"></select>
+                            <select class="form-control" id="editCities" name="CityId"></select>
                         </div>
                     </div>
                     <div class="col-sm-6">
@@ -177,7 +177,7 @@
 
     var isAlreadyGetCities = false;
 
-    $(document).on('click', '.modal-body #cities', function () {
+    $(document).on('click', '.modal-body #editCities', function () {
         if(!isAlreadyGetCities) {
             isAlreadyGetCities = true;
             getOptionSelectCityPartial();
@@ -194,7 +194,7 @@
             data: { flatId : flatId },
             async: false
         }).done((data) => {
-            $(".modal-body #cities").html('<option selected value="' + data.city.Id + '">' + data.city.Name + '</option>');
+            $(".modal-body #editCities").html('<option selected value="' + data.city.Id + '">' + data.city.Name + '</option>');
             $(".modal-body #streets").html('<option selected value="' + data.street.Id + '">' + data.street.Name + '</option>');
             $(".modal-body #apartments").html('<option selected value="' + data.apartment.Id + '">' + data.apartment.Name + '</option>');
             $(".modal-body #flats").html('<option selected value="' + data.flat.Id + '">' + data.flat.Name + '</option>');
@@ -203,13 +203,13 @@
     
     // old
     function subscribeOnSelectCity() {
-        $(".modal-body #cities").change(() => {
+        $(".modal-body #editCities").change(() => {
             getStreetsPartial();
         });
     }
 
     function getStreetsPartial() {
-        var cityId = $(".modal-body #cities").val();
+        var cityId = $(".modal-body #editCities").val();
         var urlAction = "@Url.Action("OptionSelectStreetsPartial", "Person")";
         getStreetsByCityId(urlAction, cityId);
         setDefaultApartment();
@@ -286,7 +286,7 @@
             data: {},
             async: false
         }).done((data) => {
-            $(".modal-body #cities").html(data);
+            $(".modal-body #editCities").html(data);
             setDefaultStreet();
             setDefaultApartment();
             setDefaultFlat();
@@ -294,10 +294,10 @@
     }
 
     function setDefaultStreet() {
-        for (var i = 0; i < $(".modal-body #cities option").length; i++) {
-            if ($(".modal-body #cities option")[i].hasAttribute('selected')) {
+        for (var i = 0; i < $(".modal-body #editCities option").length; i++) {
+            if ($(".modal-body #editCities option")[i].hasAttribute('selected')) {
                 var urlAction = "@Url.Action("OptionSelectDefaultStreetsPartial", "Person")";
-                var cityId = $(".modal-body #cities option")[i].getAttribute('value');
+                var cityId = $(".modal-body #editCities option")[i].getAttribute('value');
                 getStreetsByCityId(urlAction, cityId);
                 break;
             }
