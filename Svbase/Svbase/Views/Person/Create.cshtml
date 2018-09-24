@@ -78,12 +78,21 @@
                                 </div>
                             </div>
                             <div class="col-md-6 ignore-padding">
-                                @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "col-md-12" })
+                                @Html.LabelFor(model => model.Email, htmlAttributes: new {@class = "col-md-12"})
                                 <div class="col-md-12">
-                                    @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
-                                    @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                                    @Html.EditorFor(model => model.Email, new {htmlAttributes = new {@class = "form-control"}})
+                                    @Html.ValidationMessageFor(model => model.Email, "", new {@class = "text-danger"})
                                 </div>
                             </div>
+                            @*<div class="col-md-4 ignore-padding">
+                                <div class="col-md-12">
+                                    <label for="works" style="width: 100% !important;">
+                                        Місце роботи
+                                    </label>
+                                    @*<input class="form-control text-box single-line" data-val="true" id="works" type="text" value="">
+                                    <select class="form-control" id="works" name="WorkId"></select>
+                                </div>
+                            </div>*@
                         </div>
                         @*<div class="col-md-12 block-container">
                             @Html.LabelFor(model => model.Gender, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -205,6 +214,40 @@
         if (fName.trim() == '' && lName.trim() == '') {
             $("#validName").show();
         }
+    }
+
+    $("#works").click(function () {
+        $.ajax({
+            url: "@Url.Action("OptionSelectWorksPartial")",
+            type: 'Get',
+            traditional: true,
+            data: {},
+            async: false
+        }).done((data) => {
+            $("#works").html(data);
+        });
+    });
+
+
+
+    function subscribeOnClickCity() {
+        $("#cities > li > a").click((event) => {
+            var target = event.target;
+            if (target instanceof HTMLInputElement) {
+                var isChecked = $(target).prop("checked");
+                var isHighlighted = $(target)
+                    .parent().hasClass("highlighted-filter-item");
+                if (isChecked && !isHighlighted) {
+                    changeHighlightedStatus($(target).parent());
+                    getStreets();
+                } else {
+                    checkStreetsByCheckedCities();
+                }
+            } else {
+                changeHighlightedStatus(target);
+                getStreets();
+            }
+        });
     }
 
     function getOptionSelectCityPartial() {

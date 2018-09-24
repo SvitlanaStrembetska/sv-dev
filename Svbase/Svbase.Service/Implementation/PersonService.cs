@@ -48,6 +48,15 @@ namespace Svbase.Service.Implementation
             return districts;
         }
 
+        public IList<BaseViewModel> GetWorksBaseViewModels()
+        {
+            return RepositoryManager.Works.GetAll().Select(x => new BaseViewModel
+            {
+                Id = x.Id,
+                Name = x.Name
+            }).ToList();
+        }
+
         public IList<BaseViewModel> GetCitiesBaseViewModels()
         {
             var streets = RepositoryManager.Cities.GetCities().Select(x => new BaseViewModel
