@@ -132,7 +132,7 @@ namespace Svbase.Controllers
                 {
                     Id = beneficary.Id,
                     Name = beneficary.Name,
-                    IsChecked = false 
+                    IsChecked = false
                 });
             }
             person.Beneficiaries = personBeneficiaries;
@@ -162,7 +162,7 @@ namespace Svbase.Controllers
             {
                 person.Flats.Remove(flat);
             }
-            
+
             person = model.Update(person);
 
 
@@ -246,21 +246,21 @@ namespace Svbase.Controllers
         //    return PartialView("_FilterCheckBoxPartial", streets.ToList());
         //}
 
-        [HttpGet]
+        [HttpPost]
         public ActionResult FilterStreetsByCityIds(IList<int> cityIds)
         {
             var streets = _personService.GetFilterStreetsByCityIds(cityIds).ToList();
             return PartialView("FilterItemPartial", streets);
         }
 
-        [HttpGet]
+        [HttpPost]
         public ActionResult FilterApartmentsByStreetIds(IList<int> streetIds)
         {
             var filterApartments = _streetService.GetFilterApartmentsByStreetIds(streetIds);
             return PartialView("_FilterApartmentPartial", filterApartments.ToList());
         }
 
-        [HttpGet]
+        [HttpPost]
         public ActionResult FilterFlatsByApartmentIds(IList<int> apartmentIds)
         {
             var flats = _apartmentService.GetFilterFlatsByApartmentIds(apartmentIds);
@@ -291,7 +291,7 @@ namespace Svbase.Controllers
         [HttpGet]
         public ActionResult OptionSelectDefaultStreetsPartial(int cityId)
         {
-            var streets = _cityService.GetStreetsBaseModelByCityId(cityId).Where(x=>x.Name == Consts.DefaultAddress);
+            var streets = _cityService.GetStreetsBaseModelByCityId(cityId).Where(x => x.Name == Consts.DefaultAddress);
             return PartialView("_OptionSelectBasePartial", streets);
         }
 

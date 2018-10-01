@@ -274,7 +274,7 @@
         var urlAction = "@Url.Action("FilterStreetsByCityIds")";
         $.ajax({
             url: urlAction,
-            type: 'Get',
+            type: 'Post',
             traditional: true,
             data: filter,
             async: false
@@ -391,7 +391,7 @@
         var urlAction = "@Url.Action("FilterApartmentsByStreetIds")";
         $.ajax({
             url: urlAction,
-            type: 'Get',
+            type: 'Post',
             traditional: true,
             data: filter,
             async: false
@@ -480,7 +480,7 @@
         var urlAction = "@Url.Action("FilterFlatsByApartmentIds")";
         $.ajax({
             url: urlAction,
-            type: 'Get',
+            type: 'Post',
             traditional: true,
             data: filter,
             async: false
