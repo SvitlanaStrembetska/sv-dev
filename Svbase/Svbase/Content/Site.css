@@ -303,6 +303,10 @@ button a.white-color:focus {
      min-height: 0 !important;
 }
 
+.sidebar .nav-second-level li a {
+    padding-left: 30px !important;
+}
+
 @media (max-width: 768px) {
     #page-wrapper {
         margin: 0 !important;
