@@ -2,7 +2,7 @@
 @using Svbase.Core.Models
 @model PagedList.IPagedList<PersonSelectionModel>
 
-<div class="panel-body table-horizontal-scroll">
+<div class="panel-body table-horizontal-scroll padding-bottom-null">
     <table class="table table-striped table-bordered table-hover"
            id="dataTables-example">
         <thead>
@@ -41,7 +41,7 @@
         </tbody>
     </table>
 </div>
-<div class="col-md-12 margin-top-30 center">
+<div class="col-md-12 text-center">
     @Html.PagedListPager(Model, page => Url.Action("Index", "Person", new { page }))
 </div>
 <div class="modal fade" id="personEditModal" role="dialog">

@@ -299,6 +299,10 @@ button a.white-color:focus {
     padding-top: 51px;
 }
 
+#page-wrapper {
+     min-height: 0 !important;
+}
+
 @media (max-width: 768px) {
     #page-wrapper {
         margin: 0 !important;
@@ -326,4 +330,8 @@ button a.white-color:focus {
 
 .margin-right-xs {
     margin-right: 5px;
+}
+
+.padding-bottom-null {
+    padding-bottom: 0;
 }
