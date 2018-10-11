@@ -128,7 +128,7 @@ namespace Svbase.Helpers
                     MobileTelephoneSecond = mobileTelephoneSecond,
                     StationaryPhone = stationaryPhone,
                     FlatNumber = flatNumber.Length > 0 ? flatNumber : Consts.DefaultAddress,
-                    ApartmentNumber = apartmentNumber.Length > 0 ? apartmentNumber : Consts.DefaultAddress,
+                    ApartmentNumber = apartmentNumber.Length > 0 || apartmentLetter.Length > 0 || apartmentSide.Length > 0 ? apartmentNumber : Consts.DefaultAddress,
                     ApartmentLetter = apartmentLetter,
                     ApartmentSide = apartmentSide,
                     StreetName = streetName.Length > 0 ? streetName : Consts.DefaultAddress,
