@@ -105,7 +105,7 @@ namespace Svbase.Service.Implementation
             return flats;
         }
 
-        public bool CreatePersonByModel(PersonAndFullAddressViewModel model)
+        public bool CreatePersonByModel(PersonAndFullAddressViewModel model, Flat flat)
         {
             if (model == null)
             {
@@ -127,10 +127,10 @@ namespace Svbase.Service.Implementation
                 }
             }
 
-            var flats = new List<Flat> { new Flat { Id = model.FlatId } };
-            foreach (var flat in flats)
+            var flats = new List<Flat> { flat };
+            foreach (var getFlat in flats)
             {
-                RepositoryManager.Flats.Attach(flat);
+                RepositoryManager.Flats.Attach(getFlat);
             }
 
             newPerson.Flats = flats;
