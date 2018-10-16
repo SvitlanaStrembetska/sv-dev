@@ -117,13 +117,21 @@ namespace Svbase.Controllers
                 return RedirectToAction("Create");
 
             Flat flat;
-            if (model.FlatId == 0)
+            if (model.FlatId == 0 && model.ApartmentId == 0 && model.StreetId == 0)
                 flat = _flatService.GetAll().Where(x => x.Number == Consts.DefaultAddress
                                                         && x.Apartment.Name == Consts.DefaultAddress
                                                         && x.Apartment.Street.Name == Consts.DefaultAddress
-                                                        && x.Apartment.Street.City.Name == Consts.DefaultAddress)
-                    .ToList()
-                    .FirstOrDefault();
+                                                        && x.Apartment.Street.City.Id == model.CityId).ToList().FirstOrDefault();
+            else if(model.FlatId == 0 && model.ApartmentId == 0 && model.StreetId != 0)
+                flat = _flatService.GetAll().Where(x => x.Number == Consts.DefaultAddress
+                                                        && x.Apartment.Name == Consts.DefaultAddress
+                                                        && x.Apartment.Street.Id == model.StreetId
+                                                        && x.Apartment.Street.City.Id == model.CityId).ToList().FirstOrDefault();
+            else if (model.FlatId == 0 && model.ApartmentId != 0 && model.StreetId != 0)
+                flat = _flatService.GetAll().Where(x => x.Number == Consts.DefaultAddress
+                                                        && x.Apartment.Id == model.ApartmentId
+                                                        && x.Apartment.Street.Id == model.StreetId
+                                                        && x.Apartment.Street.City.Id == model.CityId).ToList().FirstOrDefault();
             else
                 flat = _flatService.FindById(model.FlatId);
 
