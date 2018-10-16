@@ -116,7 +116,18 @@ namespace Svbase.Controllers
             if (model.LastName == null && model.FirstName == null)
                 return RedirectToAction("Create");
 
-            var isCreated = _personService.CreatePersonByModel(model);
+            Flat flat;
+            if (model.FlatId == 0)
+                flat = _flatService.GetAll().Where(x => x.Number == Consts.DefaultAddress
+                                                        && x.Apartment.Name == Consts.DefaultAddress
+                                                        && x.Apartment.Street.Name == Consts.DefaultAddress
+                                                        && x.Apartment.Street.City.Name == Consts.DefaultAddress)
+                    .ToList()
+                    .FirstOrDefault();
+            else
+                flat = _flatService.FindById(model.FlatId);
+
+            var isCreated = _personService.CreatePersonByModel(model, flat);
             return !isCreated
                 ? RedirectToAction("Create", model)
                 : RedirectToAction("Index");
