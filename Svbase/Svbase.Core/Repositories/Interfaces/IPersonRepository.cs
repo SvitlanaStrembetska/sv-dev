@@ -12,5 +12,6 @@ namespace Svbase.Core.Repositories.Interfaces
         PersonViewModel GetPersonById(int id);
         PersonAndFullAddressViewModel GetPersonWithAddressById(int id);
         IQueryable<PersonSelectionModel> GetPersonsByIds(IEnumerable<int> ids);
+        int GetAllPersonsCount();
     }
 }

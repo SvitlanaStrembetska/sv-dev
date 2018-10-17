@@ -8,6 +8,7 @@ using Svbase.Service.Interfaces;
 
 namespace Svbase.Controllers
 {
+    //Категорії
     public class BeneficiaryController : GeneralController
     {
         private readonly IBeneficiaryService _beneficiaryService;

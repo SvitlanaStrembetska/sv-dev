@@ -158,5 +158,11 @@ namespace Svbase.Core.Repositories.Implementation
                 }).OrderBy(x => x.Id);
             return persons;
         }
+        public int GetAllPersonsCount()
+        {
+            var personsCount = DbSet.Count();
+
+            return personsCount;
+        }
     }
 }
