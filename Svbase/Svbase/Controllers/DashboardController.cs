@@ -15,7 +15,7 @@ namespace Svbase.Controllers
         {
             _dashboardService = ServiceManager.DashboardService;
         }
-      
+
         public ActionResult Details()
         {
             var dashboardViewModel = _dashboardService.GetDashboardViewModel();
@@ -31,5 +31,6 @@ namespace Svbase.Controllers
         {
             throw new System.NotImplementedException();
         }
+
     }
 }

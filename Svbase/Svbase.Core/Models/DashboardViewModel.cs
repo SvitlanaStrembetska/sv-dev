@@ -7,6 +7,7 @@ namespace Svbase.Core.Models
     {
         public IEnumerable<DashboardItemModel> Beneficiaries { get; set; }
         public DashboardDistrictsModel DistrictsModel { get; set; }
+        public int AllPersonsCount { get; set; }
     }
     public class DashboardManagementViewModel
     {

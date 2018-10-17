@@ -7,6 +7,6 @@ namespace Svbase.Service.Interfaces
     {
         DashboardManagementViewModel GetDashboardModel();
         DashboardViewModel GetDashboardViewModel();
-
+        int GetAllPersonsCount();
     }
 }

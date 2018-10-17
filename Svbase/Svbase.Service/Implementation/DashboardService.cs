@@ -38,12 +38,18 @@ namespace Svbase.Service.Implementation
         {
             var beneficiaries = RepositoryManager.Beneficiaries.GetDashboardBeneficiaries();
             var districtsModel = RepositoryManager.Districts.GetDashboardDistrictsModel();
+            var allpersonsCount = RepositoryManager.Persons.GetAllPersonsCount();
             var dashboardViewModel = new DashboardViewModel
             {
                 Beneficiaries = beneficiaries,
                 DistrictsModel = districtsModel,
+                AllPersonsCount = allpersonsCount
             };
             return dashboardViewModel;
+        }
+        public int GetAllPersonsCount()
+        {
+            throw new NotImplementedException();
         }
     }
 }
