@@ -652,7 +652,7 @@
         var beneficaries = [];
         $(".beneficary input").each((index, element) => {
             var fieldName = $(element).closest('a')[0].innerText.trim();
-            if (fieldName !== "" && !$("#" + fieldName.split(' ')[0] + " input").is(":checked")) {
+            if (fieldName !== "" && !$("#" + (fieldName.replace(/[^А-Ща-щЬьЮюЯяЇїІіЄєҐґ0-9]/g, '')) + " input").is(":checked")) {
                 beneficaries.push(fieldName);
             }
         });
@@ -663,7 +663,7 @@
         var beneficaries = [];
         $(".beneficary input").each((index, element) => {
             var fieldName = $(element).closest('a')[0].innerText.trim();
-            if (fieldName !== "" && $("#" + fieldName.split(' ')[0] + " input").is(":checked")) {
+            if (fieldName !== "" && $("#" + (fieldName.replace(/[^А-Ща-щЬьЮюЯяЇїІіЄєҐґ0-9]/g, '')) + " input").is(":checked")) {
                 beneficaries.push(fieldName);
             }
         });

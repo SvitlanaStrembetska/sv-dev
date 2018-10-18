@@ -1,4 +1,5 @@
-﻿@using Svbase.Core.Consts
+﻿@using System.Text.RegularExpressions
+@using Svbase.Core.Consts
 @using Svbase.Core.Enums
 @using Svbase.Core.Models
 <!DOCTYPE html>
@@ -112,7 +113,7 @@
                                                         @foreach (var beneficary in beneficaries)
                                                         {
                                                             <li class="beneficary">
-                                                                <a id="@beneficary.Split(' ')[0]"><input type="checkbox" checked>@beneficary</a>
+                                                                <a id="@Regex.Replace(beneficary, "[^А-Ща-щЬьЮюЯяЇїІіЄєҐґ0-9]", "")"><input type="checkbox" checked>@beneficary</a>
                                                             </li>
                                                         }
                                                         <li class="beneficary">
@@ -455,7 +456,7 @@
 
         $(".beneficary input").each((index, element) => {
             var fieldName = $(element).closest('a')[0].innerText.trim();
-            if (fieldName !== "" && !$("#" + fieldName.split(' ')[0] + " input").is(":checked")) {
+            if (fieldName !== "" && !$("#" + (fieldName.replace(/[^А-Ща-щЬьЮюЯяЇїІіЄєҐґ0-9]/g, '')) + " input").is(":checked")) {
                 $("#" + fieldName.split(' ')[0] + " input").prop('checked', true);
             }
         });
