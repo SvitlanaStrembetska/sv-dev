@@ -113,7 +113,7 @@ namespace Svbase.Helpers
                 errorList.Add("Номер будинку у " + (rowIndex + 2) + " рядку таблиці '" + fileName + "' повинен містити лише цифри!");
             }
 
-            if (email.Length > 0 && Consts.EmailRegex.Matches(email).Count != 0)
+            if (email.Length > 0 && Consts.EmailRegex.Matches(email).Count == 0)
             {
                 errorList.Add("Невірний формат емейлу в " + (rowIndex + 2) + " рядку таблиці '" + fileName + "'!");
             }
