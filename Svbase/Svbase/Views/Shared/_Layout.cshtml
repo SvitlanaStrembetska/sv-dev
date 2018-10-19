@@ -14,8 +14,10 @@
     <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    
 </head>
 <body>
+    <div id="loader"></div>
     <div class="navbar navbar-fixed-top navbar-default navbar-static-top padding-lr" role="navigation">
         @{
             var pathSite = HttpContext.Current.Request.Url.AbsolutePath;
@@ -30,7 +32,9 @@
                 </button>
                 <a class="navbar-brand color-svb" href="@Url.Action("Details", "Dashboard")">SV Base</a>
             </div>
+
             <div class="navbar-collapse collapse" style="height: 1px;">
+
                 <ul class="nav navbar-nav navbar-top-links navbar-right padding-top-5">
                     @{
                         string path = HttpContext.Current.Request.Url.AbsolutePath;
@@ -144,7 +148,7 @@
                                                     <div class="row" style="padding-top: 5px">
                                                         <ul class="col-md-12" id="districts">
                                                             @Html.Partial("_FilterCheckBoxPartial", new List
-                                                                <BaseViewModel>())
+                                                                                                              <BaseViewModel>())
                                                         </ul>
                                                     </div>
                                                 </div>
@@ -182,18 +186,16 @@
                 </ul>
             </div>
         </div>
-    </div>
-
+    </div>   
+    <div class="loader"></div>
     @Html.Partial("_UploadFile")
-
     <div>
         @RenderBody()
     </div>
-
+    @*<div id="divLoader" style="display:none;"> <img src="~/Images/ajax-loader.gif" alt="Loader" /> Loading... </div>*@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     <script defer src="https://use.fontawesome.com/releases/v5.0.2/js/all.js"></script>
-
     @RenderSection("scripts", required: false)
     <script src="~/Scripts/bootstrap.min.js"></script>
     <script src="~/Scripts/metisMenu.min.js"></script>
@@ -514,4 +516,5 @@
             $("#workPlaceDisplay input").prop('checked', true);
         }
     });
+    $("#loader").fadeOut(1000);
 </script>

@@ -286,6 +286,7 @@
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="Images\2image.png" />
+    <Content Include="Images\ajax-loader.gif" />
     <Content Include="Images\icon-sv.png" />
     <Content Include="Images\Tumblr.jpg" />
     <Content Include="Scripts\bootstrap.js" />
