@@ -515,5 +515,9 @@
             $("#workPlaceDisplay input").prop('checked', true);
         }
     });
-    $("#loader").fadeOut(1000);
+    $(window).ajaxStart(function () {
+        $('#loader').fadeOut(function () {
+            $('html').fadeIn();
+        });
+    });
 </script>
