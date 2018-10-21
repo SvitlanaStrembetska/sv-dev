@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Svbase.Core.Models;
+﻿using Svbase.Core.Models;
 
 namespace Svbase.Service.Interfaces
 {
@@ -7,6 +6,5 @@ namespace Svbase.Service.Interfaces
     {
         DashboardManagementViewModel GetDashboardModel();
         DashboardViewModel GetDashboardViewModel();
-        int GetAllPersonsCount();
     }
 }

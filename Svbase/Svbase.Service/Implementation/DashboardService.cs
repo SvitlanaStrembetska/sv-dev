@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Svbase.Core.Models;
+﻿using Svbase.Core.Models;
 using Svbase.Core.Repositories.Abstract;
 using Svbase.Core.Repositories.Factory;
 using Svbase.Service.Interfaces;
@@ -39,17 +36,15 @@ namespace Svbase.Service.Implementation
             var beneficiaries = RepositoryManager.Beneficiaries.GetDashboardBeneficiaries();
             var districtsModel = RepositoryManager.Districts.GetDashboardDistrictsModel();
             var allpersonsCount = RepositoryManager.Persons.GetAllPersonsCount();
+            var personsWithoutBeneficiariesCount = RepositoryManager.Persons.GetPersonsWithoutBeneficiariesCount();
             var dashboardViewModel = new DashboardViewModel
             {
                 Beneficiaries = beneficiaries,
                 DistrictsModel = districtsModel,
-                AllPersonsCount = allpersonsCount
+                AllPersonsCount = allpersonsCount,
+                PersonsWithoutBeneficiariesCount = personsWithoutBeneficiariesCount
             };
             return dashboardViewModel;
-        }
-        public int GetAllPersonsCount()
-        {
-            throw new NotImplementedException();
         }
     }
 }

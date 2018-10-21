@@ -160,9 +160,12 @@ namespace Svbase.Core.Repositories.Implementation
         }
         public int GetAllPersonsCount()
         {
-            var personsCount = DbSet.Count();
+            return DbSet.Count();
+        }
 
-            return personsCount;
+        public int GetPersonsWithoutBeneficiariesCount()
+        {
+            return DbSet.Count(x => !x.Beneficiaries.Any());
         }
     }
 }
