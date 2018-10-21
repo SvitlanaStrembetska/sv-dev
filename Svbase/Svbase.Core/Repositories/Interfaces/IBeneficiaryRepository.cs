@@ -10,6 +10,5 @@ namespace Svbase.Core.Repositories.Interfaces
         IEnumerable<BeneficiaryCreateModel> GetAllBeneficiaries();
         IEnumerable<DashboardItemModel> GetDashboardBeneficiaries();
         IEnumerable<CheckboxItemModel> GetBeneficiariesForSelecting();
-        IEnumerable<PersonSelectionModel> GetPersonsByBeneficiariesId(int beneficiaryId);
     }
 }

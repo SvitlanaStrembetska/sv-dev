@@ -36,72 +36,58 @@ namespace Svbase.Controllers
 
         public ActionResult Index(FilterFileImportModel filter, int page = 1)
         {
-            if (!_cityService.GetAll().Any(x => x.Name == Consts.DefaultAddress))
-            {
-                var newCityItem = new City { Name = Consts.DefaultAddress };
-                var newStreetItem = new Street { Name = Consts.DefaultAddress, City = newCityItem };
-                var newApartmentItem = new Apartment { Name = Consts.DefaultAddress, Street = newStreetItem };
-                var newFlatItem = new Flat { Number = Consts.DefaultAddress, Apartment = newApartmentItem };
-
-                _cityService.Add(newCityItem);
-                _streetService.Add(newStreetItem);
-                _apartmentService.Add(newApartmentItem);
-                _flatService.Add(newFlatItem);
-            }
-
             IQueryable<PersonSelectionModel> persons;
 
             if (Request.IsAjaxRequest())
             {
                 if (filter.DistrictIds != null || filter.CityIds != null || filter.StreetIds != null || filter.ApartmentIds != null || filter.FlatIds != null)
-                {
                     persons = _personService.SearchPersonsByFilter(filter);
-                }
                 else
-                {
                     persons = _personService.GetPersons();
-                }
-                if (filter.ColumnsName == null || !filter.ColumnsName.Any())
+                
+                if (filter.BeneficariesUnchecked == null || !filter.BeneficariesUnchecked.Any())
                     return PartialView("_PersonsTablePartial", persons.ToPagedList(page, Consts.ShowRecordsPerPage));
 
-                var personsList = new List<PersonSelectionModel>();
-                foreach (var person in persons)
-                {
-                    if (filter.ColumnsName.Any(column => person.Beneficiaries.Any(x => x.Name.ToUpper() == column.ToUpper()))) continue;
-
-                    if (filter.ColumnsName.Any(x => x.Contains("Без категорії")) && person.Beneficiaries.Any())
-                        personsList.Add(person);
-                    else if (!filter.ColumnsName.Any(x => x.Contains("Без категорії")))
-                        personsList.Add(person);
-
-                }
-                return PartialView("_PersonsTablePartial", personsList.ToPagedList(page, Consts.ShowRecordsPerPage));
+                return PartialView("_PersonsTablePartial", FilterPersonsByBeneficiary(persons, filter.BeneficariesUnchecked).ToPagedList(page, Consts.ShowRecordsPerPage));
             }
 
-            var beneficariesList = new List<string>();
+            //=================  generate beneficiaries list for filter  =================   
+            var beneficiariesList = new List<string>();
             foreach (var beneficary in _beneficiaryService.GetAll())
-            {
-                beneficariesList.Add(beneficary.Name);
-            }
-            ViewBag.Beneficaries = beneficariesList;
+                beneficiariesList.Add(beneficary.Name);
+            ViewBag.Beneficaries = beneficiariesList;
+            //=================  end generate beneficiaries list for filter  =============
 
             persons = _personService.GetPersons();
+            if (filter.BeneficariesUnchecked == null || !filter.BeneficariesUnchecked.Any())
+                return View(persons.ToPagedList(page, Consts.ShowRecordsPerPage));
 
-            return View(persons.ToPagedList(page, Consts.ShowRecordsPerPage));
+            //=================  generate beneficiaries unchecked list for filter (from Dashboard)  ================= 
+            ViewBag.BeneficariesUnchecked = filter.BeneficariesUnchecked.ToList();
+            //=================  end generate beneficiaries unchecked list for filter (from Dashboard)  ============= 
+
+            return View(FilterPersonsByBeneficiary(persons, filter.BeneficariesUnchecked).ToPagedList(page, Consts.ShowRecordsPerPage));
+        }
+
+        public List<PersonSelectionModel> FilterPersonsByBeneficiary(IQueryable<PersonSelectionModel> persons, IEnumerable<string> beneficaryName)
+        {
+            var personsLists = new List<PersonSelectionModel>();
+            foreach (var person in persons)
+            {
+                if (beneficaryName.Any(column => person.Beneficiaries.Any(x => x.Name.ToUpper() == column.ToUpper()))) continue;
+
+                if (beneficaryName.Any(x => x.Contains("Без категорії")) && person.Beneficiaries.Any())
+                    personsLists.Add(person);
+                else if (!beneficaryName.Any(x => x.Contains("Без категорії")))
+                    personsLists.Add(person);
+            }
+            return personsLists;
         }
 
         [HttpGet]
         public ActionResult All(int page = 1)
         {
-            var persons = _personService.GetPersons();
-
-            return PartialView("SelectionPersonPartial", persons);
-        }
-
-        public ActionResult PersonsByBeneficiaryId(int id, int page = 1)
-        {
-            var persons = _personService.GetPersonsByBeneficiariesId(id);
-            return View("Index", persons.ToPagedList(page, Consts.ShowRecordsPerPage));
+            return PartialView("SelectionPersonPartial", _personService.GetPersons());
         }
 
         public ActionResult Create()

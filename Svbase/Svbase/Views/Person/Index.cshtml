@@ -781,7 +781,7 @@
             url: "@Url.Action("Index", "Person")",
             type: 'Get',
             traditional: true,
-            data: { districtIds: districtIds, cityIds: cityIds, streetIds: streetIds, apartmentIds: apartmentIds, flatIds: flatIds, columnsName: beneficaries, page: page },
+            data: { districtIds: districtIds, cityIds: cityIds, streetIds: streetIds, apartmentIds: apartmentIds, flatIds: flatIds, BeneficariesUnchecked: beneficaries, page: page },
             async: false
         }).done((data) => {
             $("#personsTable").html(data);

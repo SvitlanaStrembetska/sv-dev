@@ -9,7 +9,6 @@ namespace Svbase.Service.Interfaces
     public interface IPersonService : IEntityService<Person>
     {
         IQueryable<PersonSelectionModel> GetPersons();
-        IEnumerable<PersonSelectionModel> GetPersonsByBeneficiariesId(int beneficiaryId);
         PersonViewModel GetPersonById(int id);
         PersonAndFullAddressViewModel GetPersonWithAddressById(int id);
         IList<BaseViewModel> GetDistrictsForFilter();

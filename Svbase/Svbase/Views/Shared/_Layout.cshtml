@@ -39,6 +39,7 @@
                     @{
                         string path = HttpContext.Current.Request.Url.AbsolutePath;
                         List<string> beneficaries = ViewBag.Beneficaries;
+                        List<string> beneficariesUnchecked = ViewBag.BeneficariesUnchecked ?? new List<string>();
                     }
                     @if (Request.IsAuthenticated)
                     {
@@ -117,11 +118,25 @@
                                                         @foreach (var beneficary in beneficaries)
                                                         {
                                                             <li class="beneficary">
-                                                                <a id="@Regex.Replace(beneficary, "[^А-Ща-щЬьЮюЯяЇїІіЄєҐґ0-9]", "")"><input type="checkbox" checked>@beneficary</a>
+                                                                @if (!beneficariesUnchecked.Contains(beneficary))
+                                                                {
+                                                                    <a id="@Regex.Replace(beneficary, "[^А-Ща-щЬьЮюЯяЇїІіЄєҐґ0-9]", "")"><input type="checkbox" checked>@beneficary</a>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <a id="@Regex.Replace(beneficary, "[^А-Ща-щЬьЮюЯяЇїІіЄєҐґ0-9]", "")"><input type="checkbox">@beneficary</a>
+                                                                }
                                                             </li>
                                                         }
                                                         <li class="beneficary">
-                                                            <a id="Без"><input type="checkbox" checked>Без категорії</a>
+                                                            @if (!beneficariesUnchecked.Contains("Без категорії"))
+                                                            {
+                                                                <a id="Безкатегорії"><input type="checkbox" checked>Без категорії</a>
+                                                            }
+                                                            else
+                                                            {
+                                                                <a id="Безкатегорії"><input type="checkbox">Без категорії</a>
+                                                            }
                                                         </li>
                                                     </ul>
                                                 </div>
@@ -148,7 +163,7 @@
                                                     <div class="row" style="padding-top: 5px">
                                                         <ul class="col-md-12" id="districts">
                                                             @Html.Partial("_FilterCheckBoxPartial", new List
-                                                                                                              <BaseViewModel>())
+                                                            <BaseViewModel>())
                                                         </ul>
                                                     </div>
                                                 </div>
@@ -186,7 +201,7 @@
                 </ul>
             </div>
         </div>
-    </div>   
+    </div>
     <div class="loader"></div>
     @Html.Partial("_UploadFile")
     <div>
@@ -206,6 +221,12 @@
 </body>
 </html>
 <script>
+    $(window).ajaxStart(function () {
+        $('#loader').fadeOut(function () {
+            $('html').fadeIn();
+        });
+    });
+
     $(document).ready(() => {
         getDistrictsByType("@DistrictType.Сonstituency");
     });
@@ -267,258 +288,258 @@
                 });
             });
     }
-
-    $(document).click(function () {
-        $("#columnFilter").hide('slow');
-    });
-
-    $("#columnFilter").click(function (e) {
-        e.stopPropagation();
-    });
-
-    $("#lastNameDisplay input").click(function (e) {
-        e.stopPropagation();
-        fieldDisplay($("#lastNameDisplay input").is(":checked"), false, "#lastNameDisplay input", "tr #lastNameHidden");
-    });
-    $("#lastNameDisplay").click(function () {
-        fieldDisplay(!$("#lastNameDisplay input").is(":checked"), true, "#lastNameDisplay input", "tr #lastNameHidden");
-    });
-
-    $("#firstNameDisplay input").click(function (e) {
-        e.stopPropagation();
-        fieldDisplay($("#firstNameDisplay input").is(":checked"), false, "#firstNameDisplay input", "tr #firstNameHidden");
-    });
-    $("#firstNameDisplay").click(function () {
-        fieldDisplay(!$("#firstNameDisplay input").is(":checked"), true, "#firstNameDisplay input", "tr #firstNameHidden");
-    });
-
-    $("#middleNameDisplay input").click(function (e) {
-        e.stopPropagation();
-        fieldDisplay($("#middleNameDisplay input").is(":checked"), false, "#middleNameDisplay input", "tr #middleNameHidden");
-    });
-    $("#middleNameDisplay").click(function () {
-        fieldDisplay(!$("#middleNameDisplay input").is(":checked"), true, "#middleNameDisplay input", "tr #middleNameHidden");
-    });
-
-    $("#phoneFirstDisplay input").click(function (e) {
-        e.stopPropagation();
-        fieldDisplay($("#phoneFirstDisplay input").is(":checked"), false, "#phoneFirstDisplay input", "tr #phone1Hidden");
-    });
-    $("#phoneFirstDisplay").click(function () {
-        fieldDisplay(!$("#phoneFirstDisplay input").is(":checked"), true, "#phoneFirstDisplay input", "tr #phone1Hidden");
-    });
-
-    $("#phoneSecondDisplay input").click(function (e) {
-        e.stopPropagation();
-        fieldDisplay($("#phoneSecondDisplay input").is(":checked"), false, "#phoneSecondDisplay input", "tr #phone2Hidden");
-    });
-    $("#phoneSecondDisplay").click(function () {
-        fieldDisplay(!$("#phoneSecondDisplay input").is(":checked"), true, "#phoneSecondDisplay input", "tr #phone2Hidden");
-    });
-
-    $("#homePhoneDisplay input").click(function (e) {
-        e.stopPropagation();
-        fieldDisplay($("#homePhoneDisplay input").is(":checked"), false, "#homePhoneDisplay input", "tr #homeNumberHidden");
-    });
-    $("#homePhoneDisplay").click(function () {
-        fieldDisplay(!$("#homePhoneDisplay input").is(":checked"), true, "#homePhoneDisplay input", "tr #homeNumberHidden");
-    });
-
-    $("#dateBirthDisplay input").click(function (e) {
-        e.stopPropagation();
-        fieldDisplay($("#dateBirthDisplay input").is(":checked"), false, "#dateBirthDisplay input", "tr #birthDateHidden");
-    });
-    $("#dateBirthDisplay").click(function () {
-        fieldDisplay(!$("#dateBirthDisplay input").is(":checked"), true, "#dateBirthDisplay input", "tr #birthDateHidden");
-    });
-
-    $("#emailDisplay input").click(function (e) {
-        e.stopPropagation();
-        fieldDisplay($("#emailDisplay input").is(":checked"), false, "#emailDisplay input", "tr #emailNameHidden");
-    });
-    $("#emailDisplay").click(function () {
-        fieldDisplay(!$("#emailDisplay input").is(":checked"), true, "#emailDisplay input", "tr #emailNameHidden");
-    });
-
-    $("#workPlaceDisplay input").click(function (e) {
-        e.stopPropagation();
-        fieldDisplay($("#workPlaceDisplay input").is(":checked"), false, "#workPlaceDisplay input", "tr #workPlaceHidden");
-    });
-    $("#workPlaceDisplay").click(function () {
-        fieldDisplay(!$("#workPlaceDisplay input").is(":checked"), true, "#workPlaceDisplay input", "tr #workPlaceHidden");
-    });
-
-    $("#startFilter").click(function (e) {
-        e.stopPropagation();
-        getPersonsByFilter();
-    });
-
-    $(".beneficary").click(function (e) {
-        e.stopPropagation();
-        var beneficaryName = this.firstElementChild.getAttribute("id");
-        var isbeneficaryNameChecked = !$("#" + beneficaryName + " input").is(":checked");
-        if (isbeneficaryNameChecked === false)
-            $("#" + beneficaryName + " input").prop('checked', false);
-        else
-            $("#" + beneficaryName + " input").prop('checked', true);
-    });
-
-    function getPersonsByFilter() {
-        var districtIds = getCheckedDistrictIds();
-        var cityIds = getCheckedCityIds();
-        var streetIds = getCheckedStreetIds();
-        var apartmentIds = getCheckedApartmentIds();
-        var flatIds = getCheckedFlatIds();
-        var beneficaries = getBeneficariesUnchecked();
-
-        var columnsId = getCheckedFields();
-
-        $.ajax({
-            url: "@Url.Action("Index", "Person")",
-            type: 'Get',
-            traditional: true,
-            data: { districtIds: districtIds, cityIds: cityIds, streetIds: streetIds, apartmentIds: apartmentIds, flatIds: flatIds, columnsName: beneficaries },
-            async: false
-        }).done((data) => {
-            $("#personsTable").html(data);
-            hideFields(columnsId);
-        });
-    }
-
-    function fieldDisplay(isChecked, isNotInput, selector, hideField) {
-        if (isNotInput) {
-            if (isChecked) {
-                $(selector).prop('checked', true);
-            } else {
-                $(selector).prop('checked', false);
-            }
-        }
-        if (isChecked) {
-            $(hideField).show();
-        } else {
-            $(hideField).hide();
-        }
-    }
-
-    $("#addressDisplay input").click(function (e) {
-        e.stopPropagation();
-        addressDisplay($("#addressDisplay input").is(":checked"));
-    });
-
-    $("#addressDisplay").click(function () {
-        var isChecked = $("#addressDisplay input").is(":checked");
-        if (isChecked)
-            $("#addressDisplay input").prop('checked', false);
-        else
-            $("#addressDisplay input").prop('checked', true);
-        addressDisplay(!isChecked);
-    });
-
-    function addressDisplay(isChecked) {
-        if (isChecked) {
-            $("tr #cityNameHidden").show();
-            $("tr #streetNameHidden").show();
-            $("tr #houseNameHidden").show();
-            $("tr #flatNameHidden").show();
-        } else {
-            $("tr #cityNameHidden").hide();
-            $("tr #streetNameHidden").hide();
-            $("tr #houseNameHidden").hide();
-            $("tr #flatNameHidden").hide();
-        }
-    }
-
-    $("#showAllDisplay").click(function () {
-        var lastNameDisplay = $("#lastNameDisplay input").is(":checked");
-        var firstNameDisplay = $("#firstNameDisplay input").is(":checked");
-        var middleNameDisplay = $("#middleNameDisplay input").is(":checked");
-        var phoneFirstDisplay = $("#phoneFirstDisplay input").is(":checked");
-        var phoneSecondDisplay = $("#phoneSecondDisplay input").is(":checked");
-        var homePhoneDisplay = $("#homePhoneDisplay input").is(":checked");
-        var dateBirthDisplay = $("#dateBirthDisplay input").is(":checked");
-        var emailDisplay = $("#emailDisplay input").is(":checked");
-        var addressDisplay = $("#addressDisplay input").is(":checked");
-        var workPlaceDisplay = $("#workPlaceDisplay input").is(":checked");
-
-        var districtIds = getCheckedDistrictIds();
-        var cityIds = getCheckedCityIds();
-        var streetIds = getCheckedStreetIds();
-        var apartmentIds = getCheckedApartmentIds();
-        var flatIds = getCheckedFlatIds();
-
-        $.ajax({
-            url: "@Url.Action("Index", "Person")",
-            type: 'Get',
-            traditional: true,
-            data: { districtIds: districtIds, cityIds: cityIds, streetIds: streetIds, apartmentIds: apartmentIds, flatIds: flatIds },
-            async: false
-        }).done((data) => {
-            $("#personsTable").html(data);
-        });
-
-        $(".beneficary input").each((index, element) => {
-            var fieldName = $(element).closest('a')[0].innerText.trim();
-            if (fieldName !== "" && !$("#" + (fieldName.replace(/[^А-Ща-щЬьЮюЯяЇїІіЄєҐґ0-9]/g, '')) + " input").is(":checked")) {
-                $("#" + fieldName.split(' ')[0] + " input").prop('checked', true);
-            }
-        });
-
-        if (!lastNameDisplay) {
-            $("tr #lastNameHidden").show();
-            $("#lastNameDisplay input").prop('checked', true);
-        }
-
-        if (!firstNameDisplay) {
-            $("tr #firstNameHidden").show();
-            $("#firstNameDisplay input").prop('checked', true);
-        }
-
-        if (!middleNameDisplay) {
-            $("tr #middleNameHidden").show();
-            $("#middleNameDisplay input").prop('checked', true);
-        }
-
-        if (!phoneFirstDisplay) {
-            $("tr #phone1Hidden").show();
-            $("#phoneFirstDisplay input").prop('checked', true);
-        }
-
-        if (!phoneSecondDisplay) {
-            $("tr #phone2Hidden").show();
-            $("#phoneSecondDisplay input").prop('checked', true);
-        }
-
-        if (!homePhoneDisplay) {
-            $("tr #homeNumberHidden").show();
-            $("#homePhoneDisplay input").prop('checked', true);
-        }
-
-        if (!dateBirthDisplay) {
-            $("tr #birthDateHidden").show();
-            $("#dateBirthDisplay input").prop('checked', true);
-        }
-
-        if (!emailDisplay) {
-            $("tr #emailNameHidden").show();
-            $("#emailDisplay input").prop('checked', true);
-        }
-
-        if (!addressDisplay) {
-            $("tr #cityNameHidden").show();
-            $("tr #streetNameHidden").show();
-            $("tr #houseNameHidden").show();
-            $("tr #flatNameHidden").show();
-            $("#addressDisplay input").prop('checked', true);
-        }
-
-        if (!workPlaceDisplay) {
-            $("tr #workPlaceHidden").show();
-            $("#workPlaceDisplay input").prop('checked', true);
-        }
-    });
-    $(window).ajaxStart(function () {
-        $('#loader').fadeOut(function () {
-            $('html').fadeIn();
-        });
-    });
 </script>
+
+@if (HttpContext.Current.Request.Url.AbsolutePath == "/Person/Index")
+{
+    <script>
+        $(document).click(function () {
+            $("#columnFilter").hide('slow');
+        });
+
+        $("#columnFilter").click(function (e) {
+            e.stopPropagation();
+        });
+
+        $("#lastNameDisplay input").click(function (e) {
+            e.stopPropagation();
+            fieldDisplay($("#lastNameDisplay input").is(":checked"), false, "#lastNameDisplay input", "tr #lastNameHidden");
+        });
+        $("#lastNameDisplay").click(function () {
+            fieldDisplay(!$("#lastNameDisplay input").is(":checked"), true, "#lastNameDisplay input", "tr #lastNameHidden");
+        });
+
+        $("#firstNameDisplay input").click(function (e) {
+            e.stopPropagation();
+            fieldDisplay($("#firstNameDisplay input").is(":checked"), false, "#firstNameDisplay input", "tr #firstNameHidden");
+        });
+        $("#firstNameDisplay").click(function () {
+            fieldDisplay(!$("#firstNameDisplay input").is(":checked"), true, "#firstNameDisplay input", "tr #firstNameHidden");
+        });
+
+        $("#middleNameDisplay input").click(function (e) {
+            e.stopPropagation();
+            fieldDisplay($("#middleNameDisplay input").is(":checked"), false, "#middleNameDisplay input", "tr #middleNameHidden");
+        });
+        $("#middleNameDisplay").click(function () {
+            fieldDisplay(!$("#middleNameDisplay input").is(":checked"), true, "#middleNameDisplay input", "tr #middleNameHidden");
+        });
+
+        $("#phoneFirstDisplay input").click(function (e) {
+            e.stopPropagation();
+            fieldDisplay($("#phoneFirstDisplay input").is(":checked"), false, "#phoneFirstDisplay input", "tr #phone1Hidden");
+        });
+        $("#phoneFirstDisplay").click(function () {
+            fieldDisplay(!$("#phoneFirstDisplay input").is(":checked"), true, "#phoneFirstDisplay input", "tr #phone1Hidden");
+        });
+
+        $("#phoneSecondDisplay input").click(function (e) {
+            e.stopPropagation();
+            fieldDisplay($("#phoneSecondDisplay input").is(":checked"), false, "#phoneSecondDisplay input", "tr #phone2Hidden");
+        });
+        $("#phoneSecondDisplay").click(function () {
+            fieldDisplay(!$("#phoneSecondDisplay input").is(":checked"), true, "#phoneSecondDisplay input", "tr #phone2Hidden");
+        });
+
+        $("#homePhoneDisplay input").click(function (e) {
+            e.stopPropagation();
+            fieldDisplay($("#homePhoneDisplay input").is(":checked"), false, "#homePhoneDisplay input", "tr #homeNumberHidden");
+        });
+        $("#homePhoneDisplay").click(function () {
+            fieldDisplay(!$("#homePhoneDisplay input").is(":checked"), true, "#homePhoneDisplay input", "tr #homeNumberHidden");
+        });
+
+        $("#dateBirthDisplay input").click(function (e) {
+            e.stopPropagation();
+            fieldDisplay($("#dateBirthDisplay input").is(":checked"), false, "#dateBirthDisplay input", "tr #birthDateHidden");
+        });
+        $("#dateBirthDisplay").click(function () {
+            fieldDisplay(!$("#dateBirthDisplay input").is(":checked"), true, "#dateBirthDisplay input", "tr #birthDateHidden");
+        });
+
+        $("#emailDisplay input").click(function (e) {
+            e.stopPropagation();
+            fieldDisplay($("#emailDisplay input").is(":checked"), false, "#emailDisplay input", "tr #emailNameHidden");
+        });
+        $("#emailDisplay").click(function () {
+            fieldDisplay(!$("#emailDisplay input").is(":checked"), true, "#emailDisplay input", "tr #emailNameHidden");
+        });
+
+        $("#workPlaceDisplay input").click(function (e) {
+            e.stopPropagation();
+            fieldDisplay($("#workPlaceDisplay input").is(":checked"), false, "#workPlaceDisplay input", "tr #workPlaceHidden");
+        });
+        $("#workPlaceDisplay").click(function () {
+            fieldDisplay(!$("#workPlaceDisplay input").is(":checked"), true, "#workPlaceDisplay input", "tr #workPlaceHidden");
+        });
+
+        $("#startFilter").click(function (e) {
+            e.stopPropagation();
+            getPersonsByFilter();
+        });
+
+        $(".beneficary").click(function (e) {
+            e.stopPropagation();
+            var beneficaryName = this.firstElementChild.getAttribute("id");
+            var isbeneficaryNameChecked = !$("#" + beneficaryName + " input").is(":checked");
+            if (isbeneficaryNameChecked === false)
+                $("#" + beneficaryName + " input").prop('checked', false);
+            else
+                $("#" + beneficaryName + " input").prop('checked', true);
+        });
+
+        function getPersonsByFilter() {
+            var districtIds = getCheckedDistrictIds();
+            var cityIds = getCheckedCityIds();
+            var streetIds = getCheckedStreetIds();
+            var apartmentIds = getCheckedApartmentIds();
+            var flatIds = getCheckedFlatIds();
+            var beneficaries = getBeneficariesUnchecked();
+
+            var columnsId = getCheckedFields();
+
+            $.ajax({
+                url: "@Url.Action("Index", "Person")",
+                type: 'Get',
+                traditional: true,
+                data: { districtIds: districtIds, cityIds: cityIds, streetIds: streetIds, apartmentIds: apartmentIds, flatIds: flatIds, BeneficariesUnchecked: beneficaries },
+                async: false
+            }).done((data) => {
+                $("#personsTable").html(data);
+                hideFields(columnsId);
+            });
+        }
+
+        function fieldDisplay(isChecked, isNotInput, selector, hideField) {
+            if (isNotInput) {
+                if (isChecked) {
+                    $(selector).prop('checked', true);
+                } else {
+                    $(selector).prop('checked', false);
+                }
+            }
+            if (isChecked) {
+                $(hideField).show();
+            } else {
+                $(hideField).hide();
+            }
+        }
+
+        $("#addressDisplay input").click(function (e) {
+            e.stopPropagation();
+            addressDisplay($("#addressDisplay input").is(":checked"));
+        });
+
+        $("#addressDisplay").click(function () {
+            var isChecked = $("#addressDisplay input").is(":checked");
+            if (isChecked)
+                $("#addressDisplay input").prop('checked', false);
+            else
+                $("#addressDisplay input").prop('checked', true);
+            addressDisplay(!isChecked);
+        });
+
+        function addressDisplay(isChecked) {
+            if (isChecked) {
+                $("tr #cityNameHidden").show();
+                $("tr #streetNameHidden").show();
+                $("tr #houseNameHidden").show();
+                $("tr #flatNameHidden").show();
+            } else {
+                $("tr #cityNameHidden").hide();
+                $("tr #streetNameHidden").hide();
+                $("tr #houseNameHidden").hide();
+                $("tr #flatNameHidden").hide();
+            }
+        }
+
+        $("#showAllDisplay").click(function () {
+            var lastNameDisplay = $("#lastNameDisplay input").is(":checked");
+            var firstNameDisplay = $("#firstNameDisplay input").is(":checked");
+            var middleNameDisplay = $("#middleNameDisplay input").is(":checked");
+            var phoneFirstDisplay = $("#phoneFirstDisplay input").is(":checked");
+            var phoneSecondDisplay = $("#phoneSecondDisplay input").is(":checked");
+            var homePhoneDisplay = $("#homePhoneDisplay input").is(":checked");
+            var dateBirthDisplay = $("#dateBirthDisplay input").is(":checked");
+            var emailDisplay = $("#emailDisplay input").is(":checked");
+            var addressDisplay = $("#addressDisplay input").is(":checked");
+            var workPlaceDisplay = $("#workPlaceDisplay input").is(":checked");
+
+            var districtIds = getCheckedDistrictIds();
+            var cityIds = getCheckedCityIds();
+            var streetIds = getCheckedStreetIds();
+            var apartmentIds = getCheckedApartmentIds();
+            var flatIds = getCheckedFlatIds();
+
+            $.ajax({
+                url: "@Url.Action("Index", "Person")",
+                type: 'Get',
+                traditional: true,
+                data: { districtIds: districtIds, cityIds: cityIds, streetIds: streetIds, apartmentIds: apartmentIds, flatIds: flatIds },
+                async: false
+            }).done((data) => {
+                $("#personsTable").html(data);
+            });
+
+            $(".beneficary input").each((index, element) => {
+                var fieldName = $(element).closest('a')[0].innerText.trim();
+                if (fieldName !== "" && !$("#" + (fieldName.replace(/[^А-Ща-щЬьЮюЯяЇїІіЄєҐґ0-9]/g, '')) + " input").is(":checked")) {
+                    $("#" + fieldName.split(' ')[0] + " input").prop('checked', true);
+                }
+            });
+
+            if (!lastNameDisplay) {
+                $("tr #lastNameHidden").show();
+                $("#lastNameDisplay input").prop('checked', true);
+            }
+
+            if (!firstNameDisplay) {
+                $("tr #firstNameHidden").show();
+                $("#firstNameDisplay input").prop('checked', true);
+            }
+
+            if (!middleNameDisplay) {
+                $("tr #middleNameHidden").show();
+                $("#middleNameDisplay input").prop('checked', true);
+            }
+
+            if (!phoneFirstDisplay) {
+                $("tr #phone1Hidden").show();
+                $("#phoneFirstDisplay input").prop('checked', true);
+            }
+
+            if (!phoneSecondDisplay) {
+                $("tr #phone2Hidden").show();
+                $("#phoneSecondDisplay input").prop('checked', true);
+            }
+
+            if (!homePhoneDisplay) {
+                $("tr #homeNumberHidden").show();
+                $("#homePhoneDisplay input").prop('checked', true);
+            }
+
+            if (!dateBirthDisplay) {
+                $("tr #birthDateHidden").show();
+                $("#dateBirthDisplay input").prop('checked', true);
+            }
+
+            if (!emailDisplay) {
+                $("tr #emailNameHidden").show();
+                $("#emailDisplay input").prop('checked', true);
+            }
+
+            if (!addressDisplay) {
+                $("tr #cityNameHidden").show();
+                $("tr #streetNameHidden").show();
+                $("tr #houseNameHidden").show();
+                $("tr #flatNameHidden").show();
+                $("#addressDisplay input").prop('checked', true);
+            }
+
+            if (!workPlaceDisplay) {
+                $("tr #workPlaceHidden").show();
+                $("#workPlaceDisplay input").prop('checked', true);
+            }
+        });
+    </script>
+}
