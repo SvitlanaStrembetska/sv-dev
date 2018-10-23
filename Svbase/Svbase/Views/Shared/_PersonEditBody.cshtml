@@ -1,7 +1,4 @@
 ﻿@model Svbase.Core.Models.PersonAndFullAddressViewModel
-@{
-    var allBeneficaries = ViewBag.AllBeneficaries;
-}
 <div class="body-content">
 @using (Html.BeginForm("Edit", "Person", method:FormMethod.Post))
 {
@@ -82,15 +79,6 @@
                         </div>
                     </div>
                 </div>
-                @*<div class="col-md-12 block-container">
-                        @Html.LabelFor(model => model.Gender, htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10 padding-top-7">
-
-                            @Html.RadioButtonFor(m => m.Gender, true) @Html.Label("Чоловік")
-                            <span class="padding-left"></span>
-                            @Html.RadioButtonFor(m => m.Gender, false) @Html.Label("Жінка")
-                        </div>
-                    </div>*@
                 <div class="col-md-12 block-container">
                     <div class="col-sm-6">
                         <div class="col-sm-12 ignore-padding">
@@ -102,28 +90,28 @@
                     </div>
                     <div class="col-sm-6">
                         <div class="col-sm-12 ignore-padding">
-                            <label for="streets" style="width: 100% !important;">
+                            <label for="editStreets" style="width: 100% !important;">
                                 Вулиця
                             </label>
-                            <select class="form-control" id="streets" name="StreetId"></select>
+                            <select class="form-control" id="editStreets" name="StreetId"></select>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-12 block-container">
                     <div class="col-sm-6">
                         <div class="col-sm-12 ignore-padding">
-                            <label for="apartments" style="width: 100% !important;">
+                            <label for="editApartments" style="width: 100% !important;">
                                 Будинок
                             </label>
-                            <select class="form-control" id="apartments" name="ApartmentId"></select>
+                            <select class="form-control" id="editApartments" name="ApartmentId"></select>
                         </div>
                     </div>
                     <div class="col-sm-6">
                         <div class="col-sm-12 ignore-padding" id="flatIdForEdit" flatIdForEdit="@Model.FlatId">
-                            <label for="flats" style="width: 100% !important;">
+                            <label for="editFlats" style="width: 100% !important;">
                                 Квартира
                             </label>
-                            <select required class="form-control" id="flats" name="FlatId"></select>
+                            <select required class="form-control" id="editFlats" name="FlatId"></select>
                         </div>
                     </div>
                 </div>
@@ -176,11 +164,40 @@
     });
 
     var isAlreadyGetCities = false;
+    var isAlreadyGetStreets = false;
+    var isAlreadyGetAppartments = false;
+    var isAlreadyGetFlats = false;
+    
 
     $(document).on('click', '.modal-body #editCities', function () {
         if(!isAlreadyGetCities) {
             isAlreadyGetCities = true;
             getOptionSelectCityPartial();
+            $(this).blur();
+        }
+    });
+
+    $(document).on('click', '.modal-body #editStreets', function () {
+        if (!isAlreadyGetStreets) {
+            isAlreadyGetStreets = true;
+            getStreetsPartial();
+            $(this).blur();
+        }
+    });
+
+    $(document).on('click', '.modal-body #editApartments', function () {
+        if (!isAlreadyGetAppartments) {
+            isAlreadyGetAppartments = true;
+            getApartmentsPartial();
+            $(this).blur();
+        }
+    });
+
+    $(document).on('click', '.modal-body #editFlats', function () {
+        if (!isAlreadyGetFlats) {
+            isAlreadyGetFlats = true;
+            getFlatsPartial();
+            $(this).blur();
         }
     });
 
@@ -195,9 +212,9 @@
             async: false
         }).done((data) => {
             $(".modal-body #editCities").html('<option selected value="' + data.city.Id + '">' + data.city.Name + '</option>');
-            $(".modal-body #streets").html('<option selected value="' + data.street.Id + '">' + data.street.Name + '</option>');
-            $(".modal-body #apartments").html('<option selected value="' + data.apartment.Id + '">' + data.apartment.Name + '</option>');
-            $(".modal-body #flats").html('<option selected value="' + data.flat.Id + '">' + data.flat.Name + '</option>');
+            $(".modal-body #editStreets").html('<option selected value="' + data.street.Id + '">' + data.street.Name + '</option>');
+            $(".modal-body #editApartments").html('<option selected value="' + data.apartment.Id + '">' + data.apartment.Name + '</option>');
+            $(".modal-body #editFlats").html('<option selected value="' + data.flat.Id + '">' + data.flat.Name + '</option>');
         });
     }
     
@@ -224,18 +241,19 @@
             data: { cityId: cityId },
             async: false
         }).done((data) => {
-            $(".modal-body #streets").html(data);
+            $(".modal-body #editStreets").html(data);
         });
     }
 
     function subscribeOnSelectStreet() {
-        $(".modal-body #streets").change(() => {
+        $(".modal-body #editStreets").change(() => {
             getApartmentsPartial();
+            setDefaultFlat();
         });
     }
 
     function getApartmentsPartial() {
-        var streetId = $(".modal-body #streets").val();
+        var streetId = $(".modal-body #editStreets").val();
         var urlAction = "@Url.Action("OptionSelectApartmentPartial", "Person")";
         getApartmentByStreetId(urlAction, streetId);
         setDefaultFlat();
@@ -249,18 +267,18 @@
             data: { streetId: streetId },
             async: false
         }).done((data) => {
-            $(".modal-body #apartments").html(data);
+            $(".modal-body #editApartments").html(data);
         });
     }
 
     function subscribeOnSelectApartment() {
-        $(".modal-body #apartments").change(() => {
+        $(".modal-body #editApartments").change(() => {
             getFlatsPartial();
         });
     }
 
     function getFlatsPartial() {
-        var apartmentId = $(".modal-body #apartments").val();
+        var apartmentId = $(".modal-body #editApartments").val();
         var urlAction = "@Url.Action("OptionSelectFlatPartial", "Person")";
         getFlatsByApartmentId(urlAction,apartmentId);
     }
@@ -273,7 +291,7 @@
             data: { apartmentId: apartmentId },
             async: false
         }).done((data) => {
-            $(".modal-body #flats").html(data);
+            $(".modal-body #editFlats").html(data);
         });
     }
 
@@ -305,10 +323,10 @@
     }
 
     function setDefaultApartment() {
-        for (var j = 0; j < $(".modal-body #streets option").length; j++) {
-            if ($(".modal-body #streets option")[j].hasAttribute('selected')) {
+        for (var j = 0; j < $(".modal-body #editStreets option").length; j++) {
+            if ($(".modal-body #editStreets option")[j].hasAttribute('selected')) {
                 var urlAction = "@Url.Action("OptionSelectDefaultApartmentPartial", "Person")";
-                var streetId = $(".modal-body #streets option")[j].getAttribute('value');
+                var streetId = $(".modal-body #editStreets option")[j].getAttribute('value');
                 getApartmentByStreetId(urlAction, streetId);
                 break;
             }
@@ -316,10 +334,10 @@
     }
 
     function setDefaultFlat() {
-        for (var k = 0; k < $(".modal-body #apartments option").length; k++) {
-            if ($(".modal-body #apartments option")[k].hasAttribute('selected')) {
+        for (var k = 0; k < $(".modal-body #editApartments option").length; k++) {
+            if ($(".modal-body #editApartments option")[k].hasAttribute('selected')) {
                 var urlAction = "@Url.Action("OptionSelectDefaultFlatPartial", "Person")";
-                var apartmentId = $(".modal-body #apartments option")[k].getAttribute('value');
+                var apartmentId = $(".modal-body #editApartments option")[k].getAttribute('value');
                 getFlatsByApartmentId(urlAction, apartmentId);
                 break;
             }
