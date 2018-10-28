@@ -99,10 +99,12 @@
                                             data-toggle="modal"
                                             data-target="#streetCreateModal"></i>*@
                                     </div>
-                                    <div class="panel-body" id="streets-panel-body">
-                                        @Html.Partial("_DistrictsPanelBody", new List<DistrictPanelBodyItemModel>())
+                                    <div class="scrollbar">
+                                        <div class="panel-body" id="streets-panel-body">
+                                            @Html.Partial("_DistrictsPanelBody", new List<DistrictPanelBodyItemModel>())
+                                        </div>
                                     </div>
-                                </div>
+                                 </div>
                             </div>
                         </div>
                     </div>
@@ -124,8 +126,10 @@
                                             data-toggle="modal"
                                             data-target="#apartmentCreateModal"></i>*@
                                     </div>
-                                    <div class="panel-body" id="apartments-panel-body">
-                                        @Html.Partial("_DistrictApartmentPanelBody", new List<DistrictPanelBodyApartmentModel>())
+                                    <div class="scrollbar">
+                                        <div class="panel-body" id="apartments-panel-body">
+                                            @Html.Partial("_DistrictApartmentPanelBody", new List<DistrictPanelBodyApartmentModel>())
+                                        </div>
                                     </div>
                                 </div>
                             </div>
