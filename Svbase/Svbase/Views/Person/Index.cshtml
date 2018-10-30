@@ -651,8 +651,8 @@
     function getBeneficariesUnchecked() {
         var beneficaries = [];
         $(".beneficary input").each((index, element) => {
-            var fieldName = $(element).closest('a')[0].innerText.trim();
-            if (fieldName !== "" && !$("#" + (fieldName.replace(/[^А-Ща-щЬьЮюЯяЇїІіЄєҐґ0-9]/g, '')) + " input").is(":checked")) {
+            var fieldName = $(element).parent().attr("id");
+            if (fieldName !== "" && !$(".beneficary #" + fieldName + " input").is(":checked")) {
                 beneficaries.push(fieldName);
             }
         });
@@ -662,8 +662,8 @@
     function getBeneficariesChecked() {
         var beneficaries = [];
         $(".beneficary input").each((index, element) => {
-            var fieldName = $(element).closest('a')[0].innerText.trim();
-            if (fieldName !== "" && $("#" + (fieldName.replace(/[^А-Ща-щЬьЮюЯяЇїІіЄєҐґ0-9]/g, '')) + " input").is(":checked")) {
+            var fieldName = $(element).parent().attr("id");
+            if (fieldName !== "" && $(".beneficary #" + fieldName + " input").is(":checked")) {
                 beneficaries.push(fieldName);
             }
         });
@@ -773,7 +773,7 @@
         var streetIds = getCheckedStreetIds();
         var apartmentIds = getCheckedApartmentIds();
         var flatIds = getCheckedFlatIds();
-        var beneficaries = getBeneficariesUnchecked();
+        var beneficaries = getBeneficariesChecked();
 
         var columnsId = getCheckedFields();
 
@@ -781,7 +781,7 @@
             url: "@Url.Action("Index", "Person")",
             type: 'Get',
             traditional: true,
-            data: { districtIds: districtIds, cityIds: cityIds, streetIds: streetIds, apartmentIds: apartmentIds, flatIds: flatIds, BeneficariesUnchecked: beneficaries, page: page },
+            data: { districtIds: districtIds, cityIds: cityIds, streetIds: streetIds, apartmentIds: apartmentIds, flatIds: flatIds, BeneficariesChecked: beneficaries, page: page },
             async: false
         }).done((data) => {
             $("#personsTable").html(data);

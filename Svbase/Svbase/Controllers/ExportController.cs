@@ -87,11 +87,11 @@ namespace Svbase.Controllers
             {
                 foreach (var person in persons)
                 {
-                    if (filter.BeneficariesUnchecked.Any(column => person.Beneficiaries != null && person.Beneficiaries.Any(x => x.Name.ToUpper() == column.ToUpper()))) continue;
+                    if (filter.BeneficariesUnchecked.Any(column => person.Beneficiaries != null && person.Beneficiaries.Any(x => x.Id.ToString().Equals(column)))) continue;
 
-                    if (filter.BeneficariesUnchecked.Any(x => x.Contains("Без категорії")) && person.Beneficiaries.Any())
+                    if (filter.BeneficariesUnchecked.Any(x => x.Contains("0")) && person.Beneficiaries.Any())
                         personsList.Add(person);
-                    else if (!filter.BeneficariesUnchecked.Any(x => x.Contains("Без категорії")))
+                    else if (!filter.BeneficariesUnchecked.Any(x => x.Contains("0")))
                         personsList.Add(person);
                 }
             }
@@ -235,8 +235,15 @@ namespace Svbase.Controllers
                 }
             }
 
-            foreach (var beneficaryName in beneficariesChecked)
-                row[beneficaryName] = person.Beneficiaries.Any(x => x.Name.ToUpper() == beneficaryName.ToUpper());
+            foreach (var beneficaryId in beneficariesChecked)
+            {
+                if (person.Beneficiaries.Any(x => x.Id.ToString().Equals(beneficaryId)))
+                {
+                    row[person.Beneficiaries.FirstOrDefault(x => x.Id.ToString().Equals(beneficaryId)).Name] = true;
+                }
+
+
+            }
 
             return row;
         }

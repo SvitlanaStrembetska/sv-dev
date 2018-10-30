@@ -1,5 +1,6 @@
 ﻿@using System.Text.RegularExpressions
 @using Svbase.Core.Consts
+@using Svbase.Core.Data.Entities
 @using Svbase.Core.Enums
 @using Svbase.Core.Models
 <!DOCTYPE html>
@@ -38,8 +39,8 @@
                 <ul class="nav navbar-nav navbar-top-links navbar-right padding-top-5">
                     @{
                         string path = HttpContext.Current.Request.Url.AbsolutePath;
-                        List<string> beneficaries = ViewBag.Beneficaries;
-                        List<string> beneficariesUnchecked = ViewBag.BeneficariesUnchecked ?? new List<string>();
+                        List<Beneficiary> beneficaries = ViewBag.Beneficaries;
+                        List<string> beneficariesChecked = ViewBag.BeneficariesChecked ?? new List<string>();
                     }
                     @if (Request.IsAuthenticated)
                     {
@@ -118,24 +119,24 @@
                                                         @foreach (var beneficary in beneficaries)
                                                         {
                                                             <li class="beneficary">
-                                                                @if (!beneficariesUnchecked.Contains(beneficary))
+                                                                @if (beneficariesChecked.Contains(beneficary.Id.ToString()))
                                                                 {
-                                                                    <a id="@Regex.Replace(beneficary, "[^А-Ща-щЬьЮюЯяЇїІіЄєҐґ0-9]", "")"><input type="checkbox" checked>@beneficary</a>
+                                                                    <a id="@beneficary.Id"><input type="checkbox" checked>@beneficary.Name</a>
                                                                 }
                                                                 else
                                                                 {
-                                                                    <a id="@Regex.Replace(beneficary, "[^А-Ща-щЬьЮюЯяЇїІіЄєҐґ0-9]", "")"><input type="checkbox">@beneficary</a>
+                                                                    <a id="@beneficary.Id"><input type="checkbox">@beneficary.Name</a>
                                                                 }
                                                             </li>
                                                         }
                                                         <li class="beneficary">
-                                                            @if (!beneficariesUnchecked.Contains("Без категорії"))
+                                                            @if (beneficariesChecked.Contains("0"))
                                                             {
-                                                                <a id="Безкатегорії"><input type="checkbox" checked>Без категорії</a>
+                                                                <a id="0"><input type="checkbox" checked>Без категорії</a>
                                                             }
                                                             else
                                                             {
-                                                                <a id="Безкатегорії"><input type="checkbox">Без категорії</a>
+                                                                <a id="0"><input type="checkbox">Без категорії</a>
                                                             }
                                                         </li>
                                                     </ul>
@@ -380,12 +381,12 @@
 
         $(".beneficary").click(function (e) {
             e.stopPropagation();
-            var beneficaryName = this.firstElementChild.getAttribute("id");
-            var isbeneficaryNameChecked = !$("#" + beneficaryName + " input").is(":checked");
-            if (isbeneficaryNameChecked === false)
-                $("#" + beneficaryName + " input").prop('checked', false);
+            var beneficaryId = this.firstElementChild.getAttribute("id");
+            var isbeneficaryIdChecked = !$(".beneficary #" + beneficaryId + " input").is(":checked");
+            if (isbeneficaryIdChecked === false)
+                $(".beneficary #" + beneficaryId + " input").prop('checked', false);
             else
-                $("#" + beneficaryName + " input").prop('checked', true);
+                $(".beneficary #" + beneficaryId + " input").prop('checked', true);
         });
 
         function getPersonsByFilter() {
@@ -394,7 +395,7 @@
             var streetIds = getCheckedStreetIds();
             var apartmentIds = getCheckedApartmentIds();
             var flatIds = getCheckedFlatIds();
-            var beneficaries = getBeneficariesUnchecked();
+            var beneficaries = getBeneficariesChecked();
 
             var columnsId = getCheckedFields();
 
@@ -402,7 +403,7 @@
                 url: "@Url.Action("Index", "Person")",
                 type: 'Get',
                 traditional: true,
-                data: { districtIds: districtIds, cityIds: cityIds, streetIds: streetIds, apartmentIds: apartmentIds, flatIds: flatIds, BeneficariesUnchecked: beneficaries },
+                data: { districtIds: districtIds, cityIds: cityIds, streetIds: streetIds, apartmentIds: apartmentIds, flatIds: flatIds, BeneficariesChecked: beneficaries },
                 async: false
             }).done((data) => {
                 $("#personsTable").html(data);
@@ -482,9 +483,9 @@
             });
 
             $(".beneficary input").each((index, element) => {
-                var fieldName = $(element).closest('a')[0].innerText.trim();
-                if (fieldName !== "" && !$("#" + (fieldName.replace(/[^А-Ща-щЬьЮюЯяЇїІіЄєҐґ0-9]/g, '')) + " input").is(":checked")) {
-                    $("#" + fieldName.split(' ')[0] + " input").prop('checked', true);
+                var fieldId = $(element).closest('#id');
+                if (fieldId !== "" && !$(".beneficary #" + fieldId + " input").is(":checked")) {
+                    $(".beneficary #" + fieldId + " input").prop('checked', true);
                 }
             });
 

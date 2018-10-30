@@ -17,15 +17,13 @@
                             {
                                 <div class="row">
                                     <div class="col-sm-12 beneficary">
-                                        <a class="text-center" href="@Url.Action("Index", "Person")">@item.Name - @item.PersonsCount </a>
-                                        <p style="display:none"><input type="checkbox" checked>@item.Name</p>
+                                        <a class="text-center" href="@Url.Action("Index", "Person", new { BeneficariesChecked = @item.Id.ToString()})">@item.Name - @item.PersonsCount </a>
                                     </div>
                                 </div>
                             }
                             <div class="row">
                                 <div class="col-sm-12 beneficary">
-                                    <a class="text-center" href="@Url.Action("Index", "Person")">Без категорії - @Model.PersonsWithoutBeneficiariesCount </a>
-                                    <p style="display:none"><input type="checkbox" checked>Без категорії</p>
+                                    <a class="text-center" href="@Url.Action("Index", "Person", new { BeneficariesChecked = "0"})">Без категорії - @Model.PersonsWithoutBeneficiariesCount </a>
                                 </div>
                             </div>
                         </div>
@@ -86,32 +84,3 @@
         </div>
     </div>
 </div>
-<script>
-    $(document).ready(() => {
-        var i = 0;
-
-        $(".beneficary").each((index, element) => {
-            var fieldName = $(element)[0].lastElementChild.innerText.trim();
-
-            var beneficaries = [];
-            $(".beneficary input").each((index1, element1) => {
-                var beneficaryName = $(element1).closest('p')[0].innerText.trim();
-                if (beneficaryName !== "" && beneficaryName !== fieldName) {
-                    beneficaries.push(beneficaryName);
-                }
-            });
-
-            $(".beneficary a:eq(" + i + ")").attr("href", function (j, origVal) {
-                origVal += "?";
-                var k;
-                for (k = 0; k < beneficaries.length; k++) {
-                    origVal += "BeneficariesUnchecked=" + beneficaries[k] + "&";
-                }
-                return origVal;
-            });
-            i++;
-        });
-
-        i = 0;
-    });
-</script>

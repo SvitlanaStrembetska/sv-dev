@@ -45,40 +45,38 @@ namespace Svbase.Controllers
                 else
                     persons = _personService.GetPersons();
                 
-                if (filter.BeneficariesUnchecked == null || !filter.BeneficariesUnchecked.Any())
+                if (filter.BeneficariesChecked == null || !filter.BeneficariesChecked.Any())
                     return PartialView("_PersonsTablePartial", persons.ToPagedList(page, Consts.ShowRecordsPerPage));
 
-                return PartialView("_PersonsTablePartial", FilterPersonsByBeneficiary(persons, filter.BeneficariesUnchecked).ToPagedList(page, Consts.ShowRecordsPerPage));
+                return PartialView("_PersonsTablePartial", FilterPersonsByBeneficiary(persons, filter.BeneficariesChecked).ToPagedList(page, Consts.ShowRecordsPerPage));
             }
 
             //=================  generate beneficiaries list for filter  =================   
-            var beneficiariesList = new List<string>();
+            var beneficiariesList = new List<Beneficiary>();
             foreach (var beneficary in _beneficiaryService.GetAll())
-                beneficiariesList.Add(beneficary.Name);
+                beneficiariesList.Add(new Beneficiary {Id = beneficary.Id, Name = beneficary.Name});
             ViewBag.Beneficaries = beneficiariesList;
             //=================  end generate beneficiaries list for filter  =============
 
             persons = _personService.GetPersons();
-            if (filter.BeneficariesUnchecked == null || !filter.BeneficariesUnchecked.Any())
+            if (filter.BeneficariesChecked == null || !filter.BeneficariesChecked.Any())
                 return View(persons.ToPagedList(page, Consts.ShowRecordsPerPage));
 
             //=================  generate beneficiaries unchecked list for filter (from Dashboard)  ================= 
-            ViewBag.BeneficariesUnchecked = filter.BeneficariesUnchecked.ToList();
+            ViewBag.BeneficariesChecked = filter.BeneficariesChecked.ToList();
             //=================  end generate beneficiaries unchecked list for filter (from Dashboard)  ============= 
 
-            return View(FilterPersonsByBeneficiary(persons, filter.BeneficariesUnchecked).ToPagedList(page, Consts.ShowRecordsPerPage));
+            return View(FilterPersonsByBeneficiary(persons, filter.BeneficariesChecked).ToPagedList(page, Consts.ShowRecordsPerPage));
         }
 
-        public List<PersonSelectionModel> FilterPersonsByBeneficiary(IQueryable<PersonSelectionModel> persons, IEnumerable<string> beneficaryName)
+        public List<PersonSelectionModel> FilterPersonsByBeneficiary(IQueryable<PersonSelectionModel> persons, IEnumerable<string> checkedBeneficariesId)
         {
             var personsLists = new List<PersonSelectionModel>();
             foreach (var person in persons)
             {
-                if (beneficaryName.Any(column => person.Beneficiaries.Any(x => x.Name.ToUpper() == column.ToUpper()))) continue;
-
-                if (beneficaryName.Any(x => x.Contains("Без категорії")) && person.Beneficiaries.Any())
+                if(checkedBeneficariesId.Any(id => person.Beneficiaries.Any(x => x.Id.ToString().Equals(id)))) 
                     personsLists.Add(person);
-                else if (!beneficaryName.Any(x => x.Contains("Без категорії")))
+                else if(checkedBeneficariesId.Any(x => x.Contains("0")) && !person.Beneficiaries.Any())
                     personsLists.Add(person);
             }
             return personsLists;
