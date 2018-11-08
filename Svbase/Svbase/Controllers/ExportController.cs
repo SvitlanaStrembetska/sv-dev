@@ -1,14 +1,11 @@
 ﻿using System.Collections.Generic;
-using System.Data;
 using System.Data.Entity;
-using System.IO;
 using System.Linq;
-using System.Text;
 using System.Web.Mvc;
-using System.Web.UI;
-using System.Web.UI.WebControls;
+using System.Web.WebPages;
+using OfficeOpenXml;
 using Svbase.Controllers.Abstract;
-using Svbase.Core.Data.Entities;
+using Svbase.Core.Consts;
 using Svbase.Core.Models;
 using Svbase.Service.Factory;
 using Svbase.Service.Interfaces;
@@ -18,234 +15,275 @@ namespace Svbase.Controllers
     public class ExportController : GeneralController
     {
         private readonly IPersonService _personService;
+        private readonly IBeneficiaryService _beneficiaryService;
 
         public ExportController(IServiceManager serviceManager) : base(serviceManager)
         {
             _personService = ServiceManager.PersonService;
+            _beneficiaryService = ServiceManager.BeneficiaryService;
         }
 
         [Authorize]
-        public void ExportExcel(FilterFileImportModel filter)
+        public void ExportToExcel(FilterFileImportModel filter)
         {
-            if(filter?.ColumnsName == null) return;
+            var pck = new ExcelPackage();
+            var ws = pck.Workbook.Worksheets.Add("Люди");
+            var isDataFind = false;
 
-            List<PersonSelectionModel> persons = new List<PersonSelectionModel>(); 
-            if ((filter.DistrictIds == null && filter.CityIds == null && filter.StreetIds == null && filter.ApartmentIds == null && filter.FlatIds == null)) { 
-                var pers = _personService.GetAll().Include(x=>x.Beneficiaries)
-                .Include(x=>x.Flats.Select(y=>y.Apartment).Select(z=>x.Street).Select(k=>k.City)).Include(x=>x.Work).Include(x=>x.Apartment);
-
-                foreach (var person in pers)
+            if (filter?.ColumnsIds != null)
+            {
+                List<PersonSelectionModel> persons;
+                if (filter.DistrictIds == null && filter.CityIds == null && filter.StreetIds == null &&
+                     filter.ApartmentIds == null && filter.FlatIds == null)
                 {
-                    var beneficaries = person.Beneficiaries.Select(b => new CheckboxItemModel { Id = b.Id, Name = b.Name }).ToList();
-                    var personFlat = person.Flats.FirstOrDefault();
+                    persons = _personService.GetAll().Include(x => x.Beneficiaries)
+                        .Include(x => x.Flats.Select(y => y.Apartment).Select(z => z.Street).Select(k => k.City))
+                        .Include(x => x.Work)
+                        .Include(x => x.Apartment).Select(x => new PersonSelectionModel
+                        {
+                            Id = x.Id,
+                            FirstName = x.FirstName,
+                            MiddleName = x.MiddleName,
+                            LastName = x.LastName,
+                            DateBirth = x.BirthdayDate,
+                            Gender = x.Gender,
+                            Position = x.Position,
+                            FirstMobilePhone = x.MobileTelephoneFirst,
+                            SecondMobilePhone = x.MobileTelephoneSecond,
+                            HomePhone = x.StationaryPhone,
+                            Email = x.Email,
+                            PartionType = x.PartionType,
+                            Beneficiaries = x.Beneficiaries.Select(b => new CheckboxItemModel
+                            {
+                                Id = b.Id,
+                                Name = b.Name
+                            }).ToList(),
+                            City = new BaseViewModel
+                            {
+                                Name = x.Flats.FirstOrDefault().Apartment.Street.City.Name
+                            },
+                            Street = new BaseViewModel
+                            {
+                                Name = x.Flats.FirstOrDefault().Apartment.Street.Name
+                            },
+                            Apartment = new BaseViewModel
+                            {
+                                Name = x.Flats.FirstOrDefault().Apartment.Name
+                            },
+                            Flat = new BaseViewModel
+                            {
+                                Name = x.Flats.FirstOrDefault().Number
+                            },
+                            Work = x.Work
+                        }).ToList();
+                }
+                else
+                    persons = _personService.SearchPersonsByFilter(filter).ToList();
 
-                    var newPerson = new PersonSelectionModel
+                //if beneficaries exists 
+                var personsList = new List<PersonSelectionModel>();
+                if (filter.BeneficariesChecked != null && filter.BeneficariesChecked.Any())
+                {
+                    foreach (var person in persons)
                     {
-                        Id = person.Id,
-                        FirstName = person.FirstName,
-                        MiddleName = person.MiddleName,
-                        LastName = person.LastName,
-                        DateBirth = person.BirthdayDate,
-                        Gender = person.Gender,
-                        Position = person.Position,
-                        FirstMobilePhone = person.MobileTelephoneFirst,
-                        SecondMobilePhone = person.MobileTelephoneSecond,
-                        HomePhone = person.StationaryPhone,
-                        Email = person.Email,
-                        PartionType = person.PartionType,
-                        Beneficiaries = beneficaries,
-                        City = new BaseViewModel
+                        if (filter.BeneficariesChecked.Any(id => person.Beneficiaries.Any(x => x.Id.ToString().Equals(id))))
+                            personsList.Add(person);
+                        else if (filter.BeneficariesChecked.Any(x => x.Contains("0")) && !person.Beneficiaries.Any())
+                            personsList.Add(person);
+                    }
+                }
+
+                //if empty result
+                if ((filter.BeneficariesChecked != null && personsList.Any()) || (filter.BeneficariesChecked == null && filter.BeneficariesUnchecked != null && persons.Any()))
+                {
+                    isDataFind = true;
+
+                    //generate file header
+                    var isColumnLastNameExists = filter.ColumnsIds.Contains(Consts.LastNameId);
+                    var isColumnFirstNameExists = filter.ColumnsIds.Contains(Consts.FirstNameId);
+                    var isColumnMiddleNameExists = filter.ColumnsIds.Contains(Consts.MiddleNameId);
+                    var isColumnFirstMobilePhoneExists = filter.ColumnsIds.Contains(Consts.FirstMobilePhoneId);
+                    var isColumnSecondMobilePhoneExists = filter.ColumnsIds.Contains(Consts.SecondMobilePhoneId);
+                    var isColumnHomePhoneExists = filter.ColumnsIds.Contains(Consts.HomePhoneId);
+                    var isColumnDateBirthExists = filter.ColumnsIds.Contains(Consts.DateBirthId);
+                    var isColumnEmailExists = filter.ColumnsIds.Contains(Consts.EmailId);
+                    var isColumnAdressExists = filter.ColumnsIds.Contains(Consts.AddressId);
+                    var isColumnWorkExists = filter.ColumnsIds.Contains(Consts.WorkPlaceId);
+
+                    int column = 1;
+                    var columnIndexes = new Dictionary<string, int>();
+                    if (isColumnLastNameExists)
+                    {
+                        ws.Cells[1, column].Value = "Прізвище";
+                        columnIndexes["Прізвище"] = column++;
+                    }
+                    if (isColumnFirstNameExists)
+                    {
+                        ws.Cells[1, column].Value = "Ім'я";
+                        columnIndexes["Ім'я"] = column++;
+                    }
+                    if (isColumnMiddleNameExists)
+                    {
+                        ws.Cells[1, column].Value = "По батькові";
+                        columnIndexes["По батькові"] = column++;
+                    }
+                    if (isColumnFirstMobilePhoneExists)
+                    {
+                        ws.Cells[1, column].Value = "Телефон 1";
+                        columnIndexes["Телефон 1"] = column++;
+                    }
+                    if (isColumnSecondMobilePhoneExists)
+                    {
+                        ws.Cells[1, column].Value = "Телефон 2";
+                        columnIndexes["Телефон 2"] = column++;
+                    }
+                    if (isColumnHomePhoneExists)
+                    {
+                        ws.Cells[1, column].Value = "Стаціонарний";
+                        columnIndexes["Стаціонарний"] = column++;
+                    }
+                    if (isColumnDateBirthExists)
+                    {
+                        ws.Column(column).Style.Numberformat.Format = "dd-mm-yyyy";
+                        ws.Cells[1, column].Value = "Дата народження";
+                        columnIndexes["Дата народження"] = column++;
+                    }
+                    if (isColumnEmailExists)
+                    {
+                        ws.Cells[1, column].Value = "Емейл";
+                        columnIndexes["Емейл"] = column++;
+                    }
+                    if (isColumnAdressExists)
+                    {
+                        ws.Cells[1, column].Value = "Населений пункт";
+                        columnIndexes["Населений пункт"] = column++;
+                        ws.Cells[1, column].Value = "Вулиця";
+                        columnIndexes["Вулиця"] = column++;
+                        ws.Cells[1, column].Value = "Будинок";
+                        columnIndexes["Будинок"] = column++;
+                        ws.Cells[1, column].Value = "Квартира";
+                        columnIndexes["Квартира"] = column++;
+                        ws.Cells[1, column].Value = "Буква";
+                        columnIndexes["Буква"] = column++;
+                        ws.Cells[1, column].Value = "Корпус";
+                        columnIndexes["Корпус"] = column++;
+                    }
+                    if (isColumnWorkExists)
+                    {
+                        ws.Cells[1, column].Value = "Місце роботи";
+                        columnIndexes["Місце роботи"] = column++;
+                    }
+
+                    var beneficiaries = _beneficiaryService.GetAll().ToList();
+
+                    if (filter.BeneficariesChecked != null)
+                        foreach (var beneficaryId in filter.BeneficariesChecked.Where(beneficaryId => !beneficaryId.Equals("0")))
                         {
-                            Name = personFlat?.Apartment?.Street?.City?.Name
-                        },
-                        Street = new BaseViewModel
-                        {
-                            Name = personFlat?.Apartment?.Street?.Name
-                        },
-                        Apartment = new BaseViewModel
-                        {
-                            Name = personFlat?.Apartment?.Name
-                        },
-                        Flat = new BaseViewModel
-                        {
-                            Name = personFlat?.Number
-                        },
-                        Work = new Work
-                        {
-                            Name = person.Work?.Name
+                            var beneficiaryName = beneficiaries.FirstOrDefault(x => x.Id == beneficaryId.AsInt()).Name;
+                            ws.Cells[1, column].Value = beneficiaryName;
+                            columnIndexes[beneficiaryName] = column++;
                         }
-                    };
-                    persons.Add(newPerson);
-                }
-            }
-            else
-                persons = _personService.SearchPersonsByFilter(filter).ToList();
 
-            //if beneficaries exists 
-            var personsList = new List<PersonSelectionModel>();
-            if (filter.BeneficariesUnchecked != null && filter.BeneficariesUnchecked.Any())
-            {
-                foreach (var person in persons)
-                {
-                    if (filter.BeneficariesUnchecked.Any(column => person.Beneficiaries != null && person.Beneficiaries.Any(x => x.Id.ToString().Equals(column)))) continue;
-
-                    if (filter.BeneficariesUnchecked.Any(x => x.Contains("0")) && person.Beneficiaries.Any())
-                        personsList.Add(person);
-                    else if (!filter.BeneficariesUnchecked.Any(x => x.Contains("0")))
-                        personsList.Add(person);
-                }
-            }
-
-            //if empty result
-            if ((filter.BeneficariesUnchecked != null && filter.BeneficariesUnchecked.Any() && !personsList.Any()) || !persons.Any()) return;
-
-            //generate file header
-            var isColumnLastNameExists = filter.ColumnsName.Contains("Прізвище");
-            var isColumnFirstNameExists = filter.ColumnsName.Contains("Ім'я");
-            var isColumnMiddleNameExists = filter.ColumnsName.Contains("По батькові");
-            var isColumnFirstMobilePhoneExists = filter.ColumnsName.Contains("Мобільний телефон 1");
-            var isColumnSecondMobilePhoneExists = filter.ColumnsName.Contains("Мобільний телефон 2");
-            var isColumnHomePhoneExists = filter.ColumnsName.Contains("Домашній номер телефону");
-            var isColumnDateBirthExists = filter.ColumnsName.Contains("Дата народження");
-            var isColumnEmailExists = filter.ColumnsName.Contains("Електронна пошта");
-            var isColumnAdressExists = filter.ColumnsName.Contains("Адреса");
-            var isColumnWorkExists = filter.ColumnsName.Contains("Місце роботи");
-            var dataTable = new DataTable();
-
-            if (isColumnLastNameExists)
-                dataTable.Columns.Add("Прізвище", typeof(string));
-            if (isColumnFirstNameExists)
-                dataTable.Columns.Add("Ім'я", typeof(string));
-            if (isColumnMiddleNameExists)
-                dataTable.Columns.Add("По батькові", typeof(string));
-            if (isColumnFirstMobilePhoneExists)
-                dataTable.Columns.Add("Телефон 1", typeof(string));
-            if (isColumnSecondMobilePhoneExists)
-                dataTable.Columns.Add("Телефон 2", typeof(string));
-            if (isColumnHomePhoneExists)
-                dataTable.Columns.Add("Стаціонарний", typeof(string));
-            if (isColumnDateBirthExists)
-                dataTable.Columns.Add("Дата народження", typeof(string));
-            if (isColumnEmailExists)
-                dataTable.Columns.Add("Емейл", typeof(string));
-            if (isColumnAdressExists)
-            {
-                dataTable.Columns.Add("Населений пункт", typeof(string));
-                dataTable.Columns.Add("Вулиця", typeof(string));
-                dataTable.Columns.Add("Будинок", typeof(string));
-                dataTable.Columns.Add("Квартира", typeof(string));
-                dataTable.Columns.Add("Буква", typeof(string));
-                dataTable.Columns.Add("Корпус", typeof(string));
-            }
-            if (isColumnWorkExists)
-                dataTable.Columns.Add("Місце роботи", typeof(string));
-
-            foreach (var beneficaryName in filter.BeneficariesChecked)
-                dataTable.Columns.Add(beneficaryName, typeof(string));
-
-            //generate table header and body if filter contains beneficaries 
-            if (filter.BeneficariesUnchecked != null && filter.BeneficariesUnchecked.Any() && personsList.Any())
-            {
-                foreach (var person in personsList)
-                {
-                    dataTable.Rows.Add(fillRow(dataTable.NewRow(), person, isColumnLastNameExists, isColumnFirstNameExists, isColumnMiddleNameExists,
-                        isColumnFirstMobilePhoneExists, isColumnSecondMobilePhoneExists, isColumnHomePhoneExists,
-                        isColumnDateBirthExists, isColumnEmailExists, isColumnWorkExists, isColumnAdressExists, filter.BeneficariesChecked));
-                }
-            }
-            else
-            {
-                foreach (var person in persons)
-                {
-                    dataTable.Rows.Add(fillRow(dataTable.NewRow(), person, isColumnLastNameExists, isColumnFirstNameExists, isColumnMiddleNameExists,
-                        isColumnFirstMobilePhoneExists, isColumnSecondMobilePhoneExists, isColumnHomePhoneExists,
-                        isColumnDateBirthExists, isColumnEmailExists, isColumnWorkExists, isColumnAdressExists, filter.BeneficariesChecked));
+                    var rowNumber = 2;
+                    if (filter.BeneficariesChecked != null && personsList.Any())
+                    {
+                        foreach (var person in personsList)
+                        {
+                            ws = fillRow(ws, columnIndexes, rowNumber++, person, isColumnLastNameExists, isColumnFirstNameExists, isColumnMiddleNameExists,
+                                isColumnFirstMobilePhoneExists, isColumnSecondMobilePhoneExists, isColumnHomePhoneExists,
+                                isColumnDateBirthExists, isColumnEmailExists, isColumnWorkExists, isColumnAdressExists, filter.BeneficariesChecked);
+                        }
+                    }
+                    else
+                    {
+                        foreach (var person in persons)
+                        {
+                            ws = fillRow(ws, columnIndexes, rowNumber++, person, isColumnLastNameExists, isColumnFirstNameExists, isColumnMiddleNameExists,
+                                isColumnFirstMobilePhoneExists, isColumnSecondMobilePhoneExists, isColumnHomePhoneExists,
+                                isColumnDateBirthExists, isColumnEmailExists, isColumnWorkExists, isColumnAdressExists, filter.BeneficariesChecked);
+                        }
+                    }
                 }
             }
 
-            if (dataTable.Columns.Count == 0) return;
+            if (!isDataFind)
+            {
+                ws.Cells[1, 1].Style.Font.Bold = true;
+                ws.Cells[1, 1].Style.Font.Size = 14;
+                ws.Cells[1, 1].Value = "Жодних записів по вашому критерію не знайдено";
+            }
 
-            var grid = new GridView { DataSource = dataTable };
-            grid.DataBind();
-
-            Response.ClearContent();
-            Response.ClearHeaders();
-            Response.Buffer = true;
-            Response.ContentType = "application/vnd.ms-excel";
-            Response.AddHeader("content-disposition", "attachment; filename=Persons.xls");
-            Response.Charset = "UTF-8";
-            Response.ContentEncoding = Encoding.GetEncoding("UTF-8");
-            var sw = new StringWriter();
-            var htmlTextWriter = new HtmlTextWriter(sw);
-
-            grid.RenderControl(htmlTextWriter);
-
-            Response.Output.Write(sw.ToString());
+            ws.Cells["A:BZ"].AutoFitColumns();
+            Response.Clear();
+            Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            Response.AddHeader("content-disposition", "attachment: filename=" + "People.xlsx");
+            Response.BinaryWrite(pck.GetAsByteArray());
             Response.End();
         }
 
-        private DataRow fillRow(DataRow row, PersonSelectionModel person, bool isColumnLastNameExists, bool isColumnFirstNameExists,
+
+        private ExcelWorksheet fillRow(ExcelWorksheet ws, Dictionary<string, int> columnIndexes, int rowNumber, PersonSelectionModel person, bool isColumnLastNameExists, bool isColumnFirstNameExists,
             bool isColumnMiddleNameExists, bool isColumnFirstMobilePhoneExists, bool isColumnSecondMobilePhoneExists,
             bool isColumnHomePhoneExists, bool isColumnDateBirthExists, bool isColumnEmailExists, bool isColumnWorkExists,
             bool isColumnAdressExists, IEnumerable<string> beneficariesChecked)
         {
             if (isColumnLastNameExists)
-                row["Прізвище"] = person.LastName;
+                ws.Cells[rowNumber, columnIndexes["Прізвище"]].Value = person.LastName;
             if (isColumnFirstNameExists)
-                row["Ім'я"] = person.FirstName;
+                ws.Cells[rowNumber, columnIndexes["Ім'я"]].Value = person.FirstName;
             if (isColumnMiddleNameExists)
-                row["По батькові"] = person.MiddleName;
+                ws.Cells[rowNumber, columnIndexes["По батькові"]].Value = person.MiddleName;
             if (isColumnFirstMobilePhoneExists)
-                row["Телефон 1"] = person.FirstMobilePhone;
+                ws.Cells[rowNumber, columnIndexes["Телефон 1"]].Value = person.FirstMobilePhone;
             if (isColumnSecondMobilePhoneExists)
-                row["Телефон 2"] = person.SecondMobilePhone;
+                ws.Cells[rowNumber, columnIndexes["Телефон 2"]].Value = person.SecondMobilePhone;
             if (isColumnHomePhoneExists)
-                row["Стаціонарний"] = person.HomePhone;
+                ws.Cells[rowNumber, columnIndexes["Стаціонарний"]].Value = person.HomePhone;
             if (isColumnDateBirthExists)
-                row["Дата народження"] = person.DateBirth;
+                ws.Cells[rowNumber, columnIndexes["Дата народження"]].Value = person.DateBirth;
             if (isColumnEmailExists)
-                row["Емейл"] = person.Email;
+                ws.Cells[rowNumber, columnIndexes["Емейл"]].Value = person.Email;
             if (isColumnWorkExists)
-                row["Місце роботи"] = person.Work?.Name;
+                ws.Cells[rowNumber, columnIndexes["Місце роботи"]].Value = person.Work?.Name;
 
             if (isColumnAdressExists)
             {
-                row["Населений пункт"] = person.City.Name;
-                row["Вулиця"] = person.Street.Name;
-                row["Квартира"] = person.Flat.Name;
+                ws.Cells[rowNumber, columnIndexes["Населений пункт"]].Value = person.City.Name;
+                ws.Cells[rowNumber, columnIndexes["Вулиця"]].Value = person.Street.Name;
+                ws.Cells[rowNumber, columnIndexes["Квартира"]].Value = person.Flat.Name;
 
                 var apartment = person.Apartment?.Name?.Split(' ') ?? new string[] { };
                 switch (apartment.Length)
                 {
                     case 1:
-                        row["Будинок"] = apartment[0];
-                        row["Буква"] = "";
-                        row["Корпус"] = "";
+                        ws.Cells[rowNumber, columnIndexes["Будинок"]].Value = apartment[0];
+                        ws.Cells[rowNumber, columnIndexes["Буква"]].Value = "";
+                        ws.Cells[rowNumber, columnIndexes["Корпус"]].Value = "";
                         break;
                     case 2:
-                        row["Будинок"] = apartment[0];
-                        row["Буква"] = apartment[1];
-                        row["Корпус"] = "";
+                        ws.Cells[rowNumber, columnIndexes["Будинок"]].Value = apartment[0];
+                        ws.Cells[rowNumber, columnIndexes["Буква"]].Value = apartment[1];
+                        ws.Cells[rowNumber, columnIndexes["Корпус"]].Value = "";
                         break;
                     case 3:
-                        row["Будинок"] = apartment[0];
-                        row["Буква"] = apartment[1];
-                        row["Корпус"] = apartment[2].Split(':')[1];
+                        ws.Cells[rowNumber, columnIndexes["Будинок"]].Value = apartment[0];
+                        ws.Cells[rowNumber, columnIndexes["Буква"]].Value = apartment[1];
+                        ws.Cells[rowNumber, columnIndexes["Корпус"]].Value = apartment[2].Split(':')[1];
                         break;
                 }
             }
+
+            if (beneficariesChecked == null)
+                return ws;
 
             foreach (var beneficaryId in beneficariesChecked)
             {
                 if (person.Beneficiaries.Any(x => x.Id.ToString().Equals(beneficaryId)))
                 {
-                    row[person.Beneficiaries.FirstOrDefault(x => x.Id.ToString().Equals(beneficaryId)).Name] = true;
+                    ws.Cells[rowNumber, columnIndexes[person.Beneficiaries.FirstOrDefault(x => x.Id.ToString().Equals(beneficaryId)).Name]].Value = true;
                 }
-
-
             }
-
-            return row;
+            return ws;
         }
     }
 }

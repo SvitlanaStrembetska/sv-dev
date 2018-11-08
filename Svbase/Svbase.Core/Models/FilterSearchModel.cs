@@ -15,7 +15,7 @@ namespace Svbase.Core.Models
 
     public class FilterFileImportModel : FilterSearchModel
     {
-        public IEnumerable<string> ColumnsName { get; set; }
+        public IEnumerable<int> ColumnsIds { get; set; }
 
         public IEnumerable<string> BeneficariesUnchecked { get; set; }
         public IEnumerable<string> BeneficariesChecked { get; set; }

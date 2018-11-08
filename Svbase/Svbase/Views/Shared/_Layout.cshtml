@@ -76,34 +76,34 @@
                                                 <div class="panel-body">
                                                     <ul id="hello" style="padding-left: 0">
                                                         <li class="column-name">
-                                                            <a id="lastNameDisplay"> <input type="checkbox" checked>Прізвище</a>
+                                                            <a id="lastNameDisplay"> <input type="checkbox" checked id=@Consts.LastNameId>Прізвище</a>
                                                         </li>
                                                         <li class="column-name">
-                                                            <a id="firstNameDisplay"> <input type="checkbox" checked>Ім'я</a>
+                                                            <a id="firstNameDisplay"> <input type="checkbox" checked id=@Consts.FirstNameId>Ім'я</a>
                                                         </li>
                                                         <li class="column-name">
-                                                            <a id="middleNameDisplay"><input type="checkbox" checked>По батькові</a>
+                                                            <a id="middleNameDisplay"><input type="checkbox" checked id=@Consts.MiddleNameId>По батькові</a>
                                                         </li>
                                                         <li class="column-name">
-                                                            <a id="phoneFirstDisplay"><input type="checkbox" checked>Мобільний телефон 1</a>
+                                                            <a id="phoneFirstDisplay"><input type="checkbox" checked id=@Consts.FirstMobilePhoneId>Мобільний телефон 1</a>
                                                         </li>
                                                         <li class="column-name">
-                                                            <a id="phoneSecondDisplay"><input type="checkbox" checked>Мобільний телефон 2</a>
+                                                            <a id="phoneSecondDisplay"><input type="checkbox" checked id=@Consts.SecondMobilePhoneId>Мобільний телефон 2</a>
                                                         </li>
                                                         <li class="column-name">
-                                                            <a id="homePhoneDisplay"><input type="checkbox" checked>Домашній номер телефону</a>
+                                                            <a id="homePhoneDisplay"><input type="checkbox" checked id=@Consts.HomePhoneId>Домашній номер телефону</a>
                                                         </li>
                                                         <li class="column-name">
-                                                            <a id="dateBirthDisplay"><input type="checkbox" checked>Дата народження</a>
+                                                            <a id="dateBirthDisplay"><input type="checkbox" checked id=@Consts.DateBirthId>Дата народження</a>
                                                         </li>
                                                         <li class="column-name">
-                                                            <a id="emailDisplay"><input type="checkbox" checked>Електронна пошта</a>
+                                                            <a id="emailDisplay"><input type="checkbox" checked id=@Consts.EmailId>Електронна пошта</a>
                                                         </li>
                                                         <li class="column-name">
-                                                            <a id="addressDisplay"><input type="checkbox" checked>Адреса</a>
+                                                            <a id="addressDisplay"><input type="checkbox" checked id=@Consts.AddressId>Адреса</a>
                                                         </li>
                                                         <li class="column-name">
-                                                            <a id="workPlaceDisplay"><input type="checkbox" checked>Місце роботи</a>
+                                                            <a id="workPlaceDisplay"><input type="checkbox" checked id=@Consts.WorkPlaceId>Місце роботи</a>
                                                         </li>
                                                     </ul>
                                                 </div>
@@ -289,7 +289,7 @@
     }
 </script>
 
-@if (HttpContext.Current.Request.Url.AbsolutePath == "/Person/Index")
+@if (HttpContext.Current.Request.Url.AbsolutePath == "/Person/Index" || HttpContext.Current.Request.Url.AbsolutePath == "/Person/PostIndex")
 {
     <script>
         $(document).click(function () {
@@ -398,10 +398,9 @@
             var columnsId = getCheckedFields();
 
             $.ajax({
-                url: "@Url.Action("Index", "Person")",
-                type: 'Get',
-                traditional: true,
-                data: { districtIds: districtIds, cityIds: cityIds, streetIds: streetIds, apartmentIds: apartmentIds, flatIds: flatIds, BeneficariesChecked: beneficaries },
+                url: "@Url.Action("PostIndex", "Person")",
+                type: 'Post',
+                data: { DistrictIds: districtIds, CityIds: cityIds, StreetIds: streetIds, ApartmentIds: apartmentIds, FlatIds: flatIds, BeneficariesChecked: beneficaries },
                 async: false
             }).done((data) => {
                 $("#personsTable").html(data);
@@ -471,9 +470,8 @@
             var flatIds = getCheckedFlatIds();
 
             $.ajax({
-                url: "@Url.Action("Index", "Person")",
-                type: 'Get',
-                traditional: true,
+                url: "@Url.Action("PostIndex", "Person")",
+                type: 'Post',
                 data: { districtIds: districtIds, cityIds: cityIds, streetIds: streetIds, apartmentIds: apartmentIds, flatIds: flatIds },
                 async: false
             }).done((data) => {
@@ -481,7 +479,7 @@
             });
 
             $(".beneficary input").each((index, element) => {
-                var fieldId = $(element).closest('#id');
+                var fieldId = $(element)[0].parentElement.getAttribute("id");
                 if (fieldId !== "" && !$(".beneficary #" + fieldId + " input").is(":checked")) {
                     $(".beneficary #" + fieldId + " input").prop('checked', true);
                 }
