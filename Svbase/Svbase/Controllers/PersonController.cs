@@ -34,33 +34,24 @@ namespace Svbase.Controllers
             _beneficiaryService = ServiceManager.BeneficiaryService;
         }
 
+        [HttpGet]
         public ActionResult Index(FilterFileImportModel filter, int page = 1)
         {
-            IQueryable<PersonSelectionModel> persons;
-
-            if (Request.IsAjaxRequest())
-            {
-                if (filter.DistrictIds != null || filter.CityIds != null || filter.StreetIds != null || filter.ApartmentIds != null || filter.FlatIds != null)
-                    persons = _personService.SearchPersonsByFilter(filter);
-                else
-                    persons = _personService.GetPersons();
-                
-                if (filter.BeneficariesChecked == null || !filter.BeneficariesChecked.Any())
-                    return PartialView("_PersonsTablePartial", persons.ToPagedList(page, Consts.ShowRecordsPerPage));
-
-                return PartialView("_PersonsTablePartial", FilterPersonsByBeneficiary(persons, filter.BeneficariesChecked).ToPagedList(page, Consts.ShowRecordsPerPage));
-            }
-
             //=================  generate beneficiaries list for filter  =================   
             var beneficiariesList = new List<Beneficiary>();
             foreach (var beneficary in _beneficiaryService.GetAll())
-                beneficiariesList.Add(new Beneficiary {Id = beneficary.Id, Name = beneficary.Name});
+                beneficiariesList.Add(new Beneficiary { Id = beneficary.Id, Name = beneficary.Name });
             ViewBag.Beneficaries = beneficiariesList;
             //=================  end generate beneficiaries list for filter  =============
 
-            persons = _personService.GetPersons();
+            var persons = _personService.GetPersons();
             if (filter.BeneficariesChecked == null || !filter.BeneficariesChecked.Any())
+            {
+                var benChecked = beneficiariesList.Select(x => x.Id.ToString()).ToList();
+                benChecked.Add("0");
+                ViewBag.BeneficariesChecked = benChecked;
                 return View(persons.ToPagedList(page, Consts.ShowRecordsPerPage));
+            }
 
             //=================  generate beneficiaries unchecked list for filter (from Dashboard)  ================= 
             ViewBag.BeneficariesChecked = filter.BeneficariesChecked.ToList();
@@ -69,14 +60,30 @@ namespace Svbase.Controllers
             return View(FilterPersonsByBeneficiary(persons, filter.BeneficariesChecked).ToPagedList(page, Consts.ShowRecordsPerPage));
         }
 
+        [HttpPost]
+        public ActionResult PostIndex(FilterFileImportModel filter, int page = 1)
+        {
+            IQueryable<PersonSelectionModel> persons;
+
+            if (filter.DistrictIds != null || filter.CityIds != null || filter.StreetIds != null || filter.ApartmentIds != null || filter.FlatIds != null)
+                persons = _personService.SearchPersonsByFilter(filter);
+            else
+                persons = _personService.GetPersons();
+
+            if (filter.BeneficariesChecked == null || !filter.BeneficariesChecked.Any())
+                return PartialView("_PersonsTablePartial", persons.ToPagedList(page, Consts.ShowRecordsPerPage));
+
+            return PartialView("_PersonsTablePartial", FilterPersonsByBeneficiary(persons, filter.BeneficariesChecked).ToPagedList(page, Consts.ShowRecordsPerPage));
+        }
+
         public List<PersonSelectionModel> FilterPersonsByBeneficiary(IQueryable<PersonSelectionModel> persons, IEnumerable<string> checkedBeneficariesId)
         {
             var personsLists = new List<PersonSelectionModel>();
             foreach (var person in persons)
             {
-                if(checkedBeneficariesId.Any(id => person.Beneficiaries.Any(x => x.Id.ToString().Equals(id)))) 
+                if (checkedBeneficariesId.Any(id => person.Beneficiaries.Any(x => x.Id.ToString().Equals(id))))
                     personsLists.Add(person);
-                else if(checkedBeneficariesId.Any(x => x.Contains("0")) && !person.Beneficiaries.Any())
+                else if (checkedBeneficariesId.Any(x => x.Contains("0")) && !person.Beneficiaries.Any())
                     personsLists.Add(person);
             }
             return personsLists;
@@ -106,7 +113,7 @@ namespace Svbase.Controllers
                                                         && x.Apartment.Name == Consts.DefaultAddress
                                                         && x.Apartment.Street.Name == Consts.DefaultAddress
                                                         && x.Apartment.Street.City.Id == model.CityId).ToList().FirstOrDefault();
-            else if(model.FlatId == 0 && model.ApartmentId == 0 && model.StreetId != 0)
+            else if (model.FlatId == 0 && model.ApartmentId == 0 && model.StreetId != 0)
                 flat = _flatService.GetAll().Where(x => x.Number == Consts.DefaultAddress
                                                         && x.Apartment.Name == Consts.DefaultAddress
                                                         && x.Apartment.Street.Id == model.StreetId

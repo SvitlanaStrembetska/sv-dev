@@ -97,7 +97,7 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" id="cencelExportBtn" class="btn btn-secondary" data-dismiss="modal">Закрити вікно</button>
-                                @Html.ActionLink("Експортувати дані", "ExportExcel", "Export", null, new { @class = "btn btn-primary", @id = "exportBtn" })
+                                @Html.ActionLink("Експортувати дані", "ExportToExcel", "Export", null, new { @class = "btn btn-primary", @id = "exportBtn"})
                             </div>
                         </div>
                     </div>
@@ -167,19 +167,24 @@
     }
 
     function search() {
-        var urlAction = "@Url.Action("SearchPersonsByFilter")";
+        var urlAction = "@Url.Action("PostIndex")";  
+
         var districtIds = getCheckedDistrictIds();
         var cityIds = getCheckedCityIds();
         var streetIds = getCheckedStreetIds();
         var apartmentIds = getCheckedApartmentIds();
         var flatIds = getCheckedFlatIds();
+        var beneficaries = getBeneficariesChecked();
+
+        var columnsId = getCheckedFields();
 
         var filter = {
             districtIds: districtIds,
             cityIds: cityIds,
             streetIds: streetIds,
             apartmentIds: apartmentIds,
-            flatIds: flatIds
+            flatIds: flatIds,
+            BeneficariesChecked: beneficaries
         };
 
         $.ajax({
@@ -189,6 +194,7 @@
             async: false
         }).done((data) => {
             $("#personsTable").html(data);
+            hideFields(columnsId);
         });
     }
 
@@ -504,7 +510,7 @@
     function getCheckedFieldsName() {
         var fields = [];
         $(".column-name input:checked").each((index, element) => {
-            var fieldName = $(element).closest('a')[0].innerText.trim();
+            var fieldName = $(element)[0].getAttribute("id");
             if (fieldName !== "") {
                 fields.push(fieldName);
             }
@@ -514,7 +520,7 @@
 
     $(document).on('click', '#exportFile', function () {
         $("#ExportFile a").attr("href", function () {
-            return "@Url.Action("ExportExcel", "Export")";
+            return "@Url.Action("ExportToExcel", "Export")";
         });
 
         var districtIds = getCheckedDistrictIds();
@@ -545,7 +551,7 @@
                 origVal += "FlatIds=" + flatIds[k] + "&";
             }
             for (k = 0; k < fieldIds.length; k++) {
-                origVal += "ColumnsName=" + fieldIds[k] + "&";
+                origVal += "ColumnsIds=" + fieldIds[k] + "&";
             }
             for (k = 0; k < beneficariesUnchecked.length; k++) {
                 origVal += "BeneficariesUnchecked=" + beneficariesUnchecked[k] + "&";
@@ -778,9 +784,8 @@
         var columnsId = getCheckedFields();
 
         $.ajax({
-            url: "@Url.Action("Index", "Person")",
-            type: 'Get',
-            traditional: true,
+            url: "@Url.Action("PostIndex", "Person")",
+            type: 'Post',
             data: { districtIds: districtIds, cityIds: cityIds, streetIds: streetIds, apartmentIds: apartmentIds, flatIds: flatIds, BeneficariesChecked: beneficaries, page: page },
             async: false
         }).done((data) => {

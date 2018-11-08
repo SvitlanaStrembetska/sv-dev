@@ -25,5 +25,19 @@ namespace Svbase.Core.Consts
         public static readonly Regex EmailRegex = new Regex("^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$");
 
         public const string DefaultAddress = "Не визначено";
+
+
+        #region fieldsIds
+        public const int LastNameId = 1;
+        public const int FirstNameId = 2;
+        public const int MiddleNameId = 3;
+        public const int FirstMobilePhoneId = 4;
+        public const int SecondMobilePhoneId = 5;
+        public const int HomePhoneId = 6;
+        public const int DateBirthId = 7;
+        public const int EmailId = 8;
+        public const int AddressId = 9;
+        public const int WorkPlaceId = 10;
+        #endregion fieldsIds
     }
 }
