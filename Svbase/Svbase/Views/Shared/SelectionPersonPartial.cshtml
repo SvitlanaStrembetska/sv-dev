@@ -78,6 +78,8 @@
 @Html.Partial("_PersonEditModal")
 <script>
     $('[data-action="edit"]').click(function () {
+        $('#loader').fadeIn();
+
         var id = (this).getAttribute('data-item-id');
         var urlAction = "@Url.Action("Edit", "Person")";
         $.ajax({
@@ -89,6 +91,7 @@
             $("#personEditModal .modal-body").html(data);
         });
         $('#personEditModal').modal();
+        $('#loader').fadeOut();
     });
 
     $('[data-action="delete"]').click(function () {

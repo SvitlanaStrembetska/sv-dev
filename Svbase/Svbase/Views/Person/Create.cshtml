@@ -217,6 +217,7 @@
     }
 
     $("#works").click(function () {
+        $('#loader').fadeIn();
         $.ajax({
             url: "@Url.Action("OptionSelectWorksPartial")",
             type: 'Get',
@@ -226,6 +227,7 @@
         }).done((data) => {
             $("#works").html(data);
         });
+        $('#loader').fadeOut();
     });
 
 
@@ -251,6 +253,7 @@
     }
 
     function getOptionSelectCityPartial() {
+        $('#loader').fadeIn();
         var urlAction = "@Url.Action("OptionSelectCitiesPartial")";
         $.ajax({
             url: urlAction,
@@ -261,6 +264,7 @@
         }).done((data) => {
             $("#cities").html(data);
         });
+        $('#loader').fadeOut();
     }
 
     function subscribeOnSelectCity() {
@@ -271,6 +275,7 @@
     }
 
     function getStreetsPartial() {
+        $('#loader').fadeIn();
         var cityId = $("#cities").val();
         var urlAction = "@Url.Action("OptionSelectStreetsPartial")";
         $.ajax({
@@ -282,6 +287,7 @@
         }).done((data) => {
             $("#streets").html(data);
         });
+        $('#loader').fadeOut();
     }
 
     function subscribeOnSelectStreet() {
@@ -297,6 +303,7 @@
     }
 
     function getApartmentsPartial() {
+        $('#loader').fadeIn();
         var streetId = $("#streets").val();
         var urlAction = "@Url.Action("OptionSelectApartmentPartial")";
         $.ajax({
@@ -308,9 +315,11 @@
         }).done((data) => {
             $("#apartments").html(data);
         });
+        $('#loader').fadeOut();
     }
 
     function getFlatsPartial() {
+        $('#loader').fadeIn();
         var apartmentId = $("#apartments").val();
         var urlAction = "@Url.Action("OptionSelectFlatPartial")";
         $.ajax({
@@ -322,6 +331,7 @@
         }).done((data) => {
             $("#flats").html(data);
         });
+        $('#loader').fadeOut();
     }
 
 </script>

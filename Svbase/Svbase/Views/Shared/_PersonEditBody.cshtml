@@ -202,6 +202,8 @@
     });
 
     function getAddressByFlatId() {
+        $('#loader').fadeIn();
+
         var flatId = $('#flatIdForEdit')[0].getAttribute('flatIdForEdit');
         var urlAction = "@Url.Action("FindAddressByFlatId", "Flat")";
         $.ajax({
@@ -216,6 +218,7 @@
             $(".modal-body #editApartments").html('<option selected value="' + data.apartment.Id + '">' + data.apartment.Name + '</option>');
             $(".modal-body #editFlats").html('<option selected value="' + data.flat.Id + '">' + data.flat.Name + '</option>');
         });
+        $('#loader').fadeOut();
     }
     
     // old
@@ -226,14 +229,19 @@
     }
 
     function getStreetsPartial() {
+        $('#loader').fadeIn();
+
         var cityId = $(".modal-body #editCities").val();
         var urlAction = "@Url.Action("OptionSelectStreetsPartial", "Person")";
         getStreetsByCityId(urlAction, cityId);
         setDefaultApartment();
         setDefaultFlat();
+        $('#loader').fadeOut();
     }
 
     function getStreetsByCityId(urlAction, cityId) {
+        $('#loader').fadeIn();
+
         $.ajax({
             url: urlAction,
             type: 'Get',
@@ -243,6 +251,7 @@
         }).done((data) => {
             $(".modal-body #editStreets").html(data);
         });
+        $('#loader').fadeOut();
     }
 
     function subscribeOnSelectStreet() {
@@ -260,6 +269,8 @@
     }
 
     function getApartmentByStreetId(urlAction, streetId) {
+        $('#loader').fadeIn();
+
         $.ajax({
             url: urlAction,
             type: 'Get',
@@ -269,6 +280,7 @@
         }).done((data) => {
             $(".modal-body #editApartments").html(data);
         });
+        $('#loader').fadeOut();
     }
 
     function subscribeOnSelectApartment() {
@@ -284,6 +296,8 @@
     }
 
     function getFlatsByApartmentId(urlAction, apartmentId) {
+        $('#loader').fadeIn();
+
         $.ajax({
             url: urlAction,
             type: 'Get',
@@ -293,9 +307,12 @@
         }).done((data) => {
             $(".modal-body #editFlats").html(data);
         });
+        $('#loader').fadeOut();
     }
 
     function getOptionSelectCityPartial() {
+        $('#loader').fadeIn();
+
         var urlAction = "@Url.Action("OptionSelectCitiesPartial","Person")";
         $.ajax({
             url: urlAction,
@@ -309,6 +326,7 @@
             setDefaultApartment();
             setDefaultFlat();
         });
+        $('#loader').fadeOut();
     }
 
     function setDefaultStreet() {

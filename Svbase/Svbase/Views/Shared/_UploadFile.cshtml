@@ -112,6 +112,8 @@
                         }
 
                         function uploadMultipleStageFiles() {
+                            $('#loader').fadeIn();
+
                             var formData = new FormData($("#contentStages form")[0]);
                             $.ajax({
                                 url: "@Url.Action("Importexcel", "Import")",
@@ -150,6 +152,7 @@
                                     console.log("FileUpload - error");
                                 }
                             });
+                            $('#loader').fadeOut();
                         }
 
                         $(document).on('change', '#selectFile', function () {
@@ -175,6 +178,8 @@
                         }
 
                         function deleteFiles(fileName, $fileBlock) {
+                            $('#loader').fadeIn();
+
                             $.ajax({
                                 url: "@Url.Action("DeleteStageFile", "Import")",
                                 data: { fileName: fileName },
@@ -196,6 +201,7 @@
                                     console.log("Delete upload file - error");
                                 }
                             });
+                            $('#loader').fadeOut();
                         }
 
                         $(document).on('click', '#endWorkWithFile', function () {
@@ -216,6 +222,8 @@
                         });
 
                         $(document).on('click', '#saveFilesData', function () {
+                            $('#loader').fadeIn();
+
                             if (isSaveFilesDataButtonClick)
                                 return false;
                             $('#saveFilesData').toggleClass('active');
@@ -283,6 +291,8 @@
                                     console.log("save files data - error");
                                 }
                             });
+
+                            $('#loader').fadeIn();
                             return false;
                         });
                     </script>
