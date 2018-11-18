@@ -149,9 +149,6 @@
     @Html.Partial("_StreetEdit")
     @Html.Partial("_ConfirmDelete")*@
 <script>
-
-
-
     $(document).ready(() => {
         window.isDirty = false;
     });
@@ -171,6 +168,7 @@
     }
 
     function saveDistrict() {
+        $('#loader').fadeIn();
         var activeDistrict = $("#districts-panel-body > .row.factor-item-active");
         var activeDistrictId = Number(activeDistrict.attr("data-item"));
         var activeStreet = $("#streets-panel-body > .row.factor-item-active");
@@ -194,7 +192,9 @@
             $("#apartments-panel-body").html(null);
             var streetRows = $("#streets-panel-body > .row");
             streetRows.removeClass("factor-item-active");
+            $('#loader').fadeOut();
         }).fail((resp) => {
+            $('#loader').fadeOut();
             showDistrictAlertDanger();
         });
     }
