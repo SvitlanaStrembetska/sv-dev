@@ -69,9 +69,9 @@
                             <div class="dropdown-menu dropdown-tasks" id="columnFilter">
                                 <div class="row" style="margin: 0">
                                     <div class="col-md-4" style="padding: 5px 5px 0 10px">
-                                        <div class="panel panel-primary new-panel-style" style="max-height: 250px; overflow-x: auto;">
+                                        <div class="panel panel-primary new-panel-style" style="max-height: 375px; overflow-x: auto;">
                                             <div class="panel-heading" style="margin-bottom: -10px;">
-                                                <h5 class="panel-title" style="font-size: 14px">Поля</h5>
+                                                <h5 class="panel-title" style="font-size: 14px">Поля<i onclick="getAllCheckBoxChecked()" class="fa fa-check-circle" id="fieldscheck" style="margin-left:60%;margin-right:13%" title="Вибрати всі"></i><i onclick="getAllCheckBoxUnChecked()" class="fa fa-times-circle" id="fieldsuncheck" title="Зняти виділення"></i></h5>
                                             </div>
                                             <div class="panel-body">
                                                 <ul id="hello" style="padding-left: 0">
@@ -110,9 +110,9 @@
                                         </div>
                                     </div>
                                     <div class="col-md-4" style="padding: 5px 5px 0 5px">
-                                        <div class="panel panel-primary" style="max-height: 250px; overflow-x: auto;">
+                                        <div class="panel panel-primary" style="max-height: 375px; overflow-x: auto;">
                                             <div class="panel-heading" style="margin-bottom: -10px;">
-                                                <h5 class="panel-title" style="font-size: 14px">Категорії</h5>
+                                                <h5 class="panel-title" style="font-size: 14px">Категорії<i onclick="getAllCategoriesChecked()" class=" fa fa-check-circle" id="categoriescheck" style="margin-left:52%;margin-right:13%" title="Вибрати всі"></i><i onclick="getAllCategoriesUnChecked()" class="fa fa-times-circle" id="categoriesuncheck" title="Зняти виділення"></i></h5>
                                             </div>
                                             <div class="panel-body">
                                                 <ul style="padding-left: 0">
@@ -144,7 +144,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-4" style="padding: 5px 10px 0 5px">
-                                        <div class="panel panel-primary" style="max-height: 250px; overflow-x: auto;">
+                                        <div class="panel panel-primary" style="max-height: 375px; overflow-x: auto;">
                                             <div class="panel-heading" style="margin-bottom: -10px;">
                                                 <h5 class="panel-title" style="font-size: 14px">Округи</h5>
                                             </div>
@@ -296,6 +296,52 @@ else
                     }
                 });
             });
+    }
+    function getAllCheckBoxChecked() {
+        $('#fieldscheck').click(function () {
+            $("#lastNameDisplay input").prop("checked", true);
+            $("#firstNameDisplay input").prop("checked", true);
+            $("#middleNameDisplay input").prop("checked", true);
+            $("#phoneFirstDisplay input").prop("checked", true);
+            $("#phoneSecondDisplay input").prop("checked", true);
+            $("#homePhoneDisplay input").prop("checked", true);
+            $("#dateBirthDisplay input").prop("checked", true);
+            $("#emailDisplay input").prop("checked", true);
+            $("#addressDisplay input").prop("checked", true);
+            $("#workPlaceDisplay input").prop("checked", true);
+        });
+    }
+    function getAllCheckBoxUnChecked() {
+        $('#fieldsuncheck').click(function () {
+            $("#lastNameDisplay input").prop("checked", false);
+            $("#firstNameDisplay input").prop("checked", false);
+            $("#middleNameDisplay input").prop("checked", false);
+            $("#phoneFirstDisplay input").prop("checked", false);
+            $("#phoneSecondDisplay input").prop("checked", false);
+            $("#homePhoneDisplay input").prop("checked", false);
+            $("#dateBirthDisplay input").prop("checked", false);
+            $("#emailDisplay input").prop("checked", false);
+            $("#addressDisplay input").prop("checked", false);
+            $("#workPlaceDisplay input").prop("checked", false);
+        });
+    }
+    function getAllCategoriesChecked() {
+        $('#categoriescheck').click(function () {
+            $(".beneficary input").each((index, element) => {
+                var fieldId = $(element)[0].parentElement.getAttribute("id");
+                if (fieldId !== "" && !$(".beneficary #" + fieldId + " input").is(":checked")) {
+                    $(".beneficary #" + fieldId + " input").prop('checked', true);
+                }
+            });
+        });
+    }
+    function getAllCategoriesUnChecked() {
+        $('#categoriesuncheck').click(function () {
+            $(".beneficary input").each((index, element) => {
+                var fieldId = $(element)[0].parentElement.getAttribute("id");
+                    $(".beneficary #" + fieldId + " input").prop('checked', false);
+            });
+        });
     }
 </script>
 
