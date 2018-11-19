@@ -296,10 +296,24 @@
             data: filter,
             async: false
         }).done((data) => {
+            var checkedStreetIds = getCheckedStreetIds();
+            var checkedApartmentIds = getCheckedApartmentIds();
+            var checkedFlatIds = getCheckedFlatIds();
             $("#streets").html(data);
+            checkStreetByIds(checkedStreetIds);
+            checkApartmentByIds(checkedApartmentIds);
+            checkFlatsByIds(checkedFlatIds);
             checkStreetsByCheckedCities();
             subscribeOnClickStreet();
             getApartments();
+        });
+    }
+
+    function checkStreetByIds(checkedStreetIds) {
+        if (!checkedStreetIds)
+            return;
+        checkedStreetIds.forEach((x) => {
+            $("#street_" + x).prop("checked", true);
         });
     }
 
@@ -411,9 +425,21 @@
             data: filter,
             async: false
         }).done((data) => {
+            var checkedApartmentIds = getCheckedApartmentIds();
+            var checkedFlatIds = getCheckedFlatIds();
             $("#apartments").html(data);
+            checkApartmentByIds(checkedApartmentIds);
+            checkFlatsByIds(checkedFlatIds);
             checkApartmentsByCheckedStreets();
             subscribeOnClickApartment();
+        });
+    }
+
+    function checkApartmentByIds(checkedApartmentIds) {
+        if (!checkedApartmentIds)
+            return;
+        checkedApartmentIds.forEach((x) => {
+            $("#apartment_" + x).prop("checked", true);
         });
     }
 
@@ -491,8 +517,18 @@
             data: filter,
             async: false
         }).done((data) => {
+            var checkedFlatIds = getCheckedFlatIds();
             $("#flats").html(data);
+            checkFlatsByIds(checkedFlatIds);
             checkFlatsByCheckedApartments();
+        });
+    }
+
+    function checkFlatsByIds(checkedFlatIds) {
+        if (!checkedFlatIds)
+            return;
+        checkedFlatIds.forEach((x) => {
+            $("#flat_" + x).prop("checked", true);
         });
     }
 
