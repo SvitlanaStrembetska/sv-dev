@@ -91,7 +91,10 @@
             $("#personEditModal .modal-body").html(data);
         });
         $('#personEditModal').modal();
-        $('#loader').fadeOut();
+
+        window.setTimeout(function () {
+            $('#loader').fadeOut();
+        }, 10000);
     });
 
     $('[data-action="delete"]').click(function () {
