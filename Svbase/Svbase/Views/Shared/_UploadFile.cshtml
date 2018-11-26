@@ -222,8 +222,6 @@
                         });
 
                         $(document).on('click', '#saveFilesData', function () {
-                            $('#loader').fadeIn();
-
                             if (isSaveFilesDataButtonClick)
                                 return false;
                             $('#saveFilesData').toggleClass('active');
@@ -291,8 +289,6 @@
                                     console.log("save files data - error");
                                 }
                             });
-
-                            $('#loader').fadeIn();
                             return false;
                         });
                     </script>

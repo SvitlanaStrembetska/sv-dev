@@ -340,6 +340,7 @@ button a.white-color:focus {
     padding-bottom: 0;
 }
 #loader {
+    display: none;
     position: fixed;
     left: 1px;
     top: 1px;
