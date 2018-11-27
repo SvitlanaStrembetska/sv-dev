@@ -16,95 +16,62 @@
 <div id="wrapper">
     <nav role="navigation">
         <div class="navbar-default sidebar" role="navigation">
-            <span><i class="fas fa-angle-double-right thumbtack" thumbtack="false"></i></span>
-            <div  class="sidebar-nav navbar-collapse">
+            <div class="sidebar-nav navbar-collapse" style="margin-top: -18px">
                 <ul class="nav left-filter-overflow" id="side-menu">
-                    <li class="li-button" style="border-bottom: none;">
-                        <div class="col-xs-12">
-                            <button id="exportFile" style="width: 100%; margin-bottom: 15px" class="btn btn-default">
-                                <a data-toggle="modal" data-target="#ExportFile"><i class="fa fa-download fa-fw"></i> Експортувати дані</a>
-                            </button>
+                    <li class="li-button" style="border-bottom: none">
+                        <div class="col-xs-12" style="display:inline-flex;margin-bottom: -30px;margin-top: -5px;">
+                            <button id="getAll" style="width: 50%; margin-bottom: 15px;margin-right:5px;" type="button" class="btn btn-danger">Показати всі</button>
+                            <button id="search" style="width: 35%; margin-bottom: 15px;" type="button" class="btn btn-primary">Пошук</button>
                         </div>
-                    </li>
-                    <li class="li-button" style="border-bottom: none;">
-                        <div class="col-xs-12">
-                            <button style="width: 100%; margin-bottom: 15px" class="btn btn-primary">
-                                <a class="white-color click" href="@Url.Action("Create", "Person")">Додати людину</a>
-                            </button>
-                        </div>
-                    </li>
-                    <li class="li-button" style="border-bottom: none;">
-                        <div class="col-xs-12">
-                            <button id="getAll" style="width: 100%; margin-bottom: 15px" type="button" class="btn btn-danger">Показати всі</button>
-                        </div>
-                    </li>
-                    <li class="li-button">
-                        <div class="col-xs-12">
-                            <button id="search" style="width: 100%; margin-bottom: 15px" type="button" class="btn btn-primary">Пошук</button>
-                        </div>
-                    </li>
-                    <li class="panel panel-default" style="margin-bottom: 0">
-                        <a id="cities-header"
-                           class="main-filter-raw-header panel-heading"
-                           style="color: #428bca; background-color: silver"
-                           onclick="toggleInById('cities')">
-                            <i class="fa fa-table fa-fw"></i> Місто, район
-                        </a>
-                        <ul id="cities" class="panel-collapse collapse nav nav-second-level" style="max-height: 300px; overflow-y: auto;"></ul>
-                    </li>
-                    <li class="panel panel-default" style="margin-bottom: 0">
-                        <a id="street-header"
-                           class="main-filter-raw-header panel-heading"
-                           style="color: #428bca; background-color: silver"
-                           onclick="toggleInById('streets')">
-                            <i class="fa fa-book fa-fw"></i> Вулиця
-                        </a>
-                        <ul id="streets" class="panel-collapse collapse nav nav-second-level" style="max-height: 300px; overflow-y: auto;"></ul>
-                    </li>
-                    <li class="panel panel-default" style="margin-bottom: 0">
-                        <a id="apartment-header" class="main-filter-raw-header panel-heading"
-                           style="color: #428bca; background-color: silver"
-                           onclick="toggleInById('apartments')">
-                            <i class="fa fa-table fa-fw"></i> Будинки
-                        </a>
-                        <ul id="apartments" class="panel-collapse collapse nav nav-second-level" style="max-height: 300px; overflow-y: auto;"></ul>
-                    </li>
-                    <li class="panel panel-default" style="margin-bottom: 0">
-                        <a id="flat-header" class="main-filter-raw-header panel-heading"
-                           style="color: #428bca; background-color: silver"
-                           onclick="toggleInById('flats')">
-                            <i class="fa fa-wrench fa-fw"></i> Номер квартири
-                        </a>
-                        <ul id="flats" class="panel-collapse collapse nav nav-second-level" style="max-height: 300px; overflow-y: auto;"></ul>
                     </li>
                 </ul>
             </div>
-        </div>
-    </nav>
-    <div id="page-wrapper" style="max-height: calc(100vh - 70px) !important; overflow-y: auto;">
-        <div class="row">
-            <div class="col-lg-12 ignore-padding">
-                <div class="modal fade bd-example-modal-lg export-file-modal" id="ExportFile" tabindex="-1" role="dialog" aria-labelledby="ExportFile" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h3 class="modal-title" id="DownloadFilelLabel">Експорт даних</h3>
-                                <button type="button" class="close close-modal" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <h3>Ви впевнені що хочете експортувати дані у Excel файл?</h3>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" id="cencelExportBtn" class="btn btn-secondary" data-dismiss="modal">Закрити вікно</button>
-                                @Html.ActionLink("Експортувати дані", "ExportToExcel", "Export", null, new { @class = "btn btn-primary", @id = "exportBtn"})
-                            </div>
-                        </div>
-                    </div>
+            <div class="col-md-12" style="display:inline-flex">
+                <span>
+                    <i class="fas fa-angle-double-right thumbtack" thumbtack="false"></i>
+                </span>
+            </div>
+                <div class="sidebar-nav navbar-collapse">
+                    <ul class="nav left-filter-overflow" id="side-menu">
+                        <li class="panel panel-default" style="margin-bottom: 0">
+                            <a id="cities-header"
+                               class="main-filter-raw-header panel-heading"
+                               style="color: #428bca; background-color: silver"
+                               onclick="toggleInById('cities')">
+                                <i class="fa fa-table fa-fw"></i> Місто, район
+                            </a>
+                            <ul id="cities" class="panel-collapse collapse nav nav-second-level" style="max-height: 300px; overflow-y: auto;"></ul>
+                        </li>
+                        <li class="panel panel-default" style="margin-bottom: 0">
+                            <a id="street-header"
+                               class="main-filter-raw-header panel-heading"
+                               style="color: #428bca; background-color: silver"
+                               onclick="toggleInById('streets')">
+                                <i class="fa fa-book fa-fw"></i> Вулиця
+                            </a>
+                            <ul id="streets" class="panel-collapse collapse nav nav-second-level" style="max-height: 300px; overflow-y: auto;"></ul>
+                        </li>
+                        <li class="panel panel-default" style="margin-bottom: 0">
+                            <a id="apartment-header" class="main-filter-raw-header panel-heading"
+                               style="color: #428bca; background-color: silver"
+                               onclick="toggleInById('apartments')">
+                                <i class="fa fa-table fa-fw"></i> Будинки
+                            </a>
+                            <ul id="apartments" class="panel-collapse collapse nav nav-second-level" style="max-height: 300px; overflow-y: auto;"></ul>
+                        </li>
+                        <li class="panel panel-default" style="margin-bottom: 0">
+                            <a id="flat-header" class="main-filter-raw-header panel-heading"
+                               style="color: #428bca; background-color: silver"
+                               onclick="toggleInById('flats')">
+                                <i class="fa fa-wrench fa-fw"></i> Номер квартири
+                            </a>
+                            <ul id="flats" class="panel-collapse collapse nav nav-second-level" style="max-height: 300px; overflow-y: auto;"></ul>
+                        </li>
+                    </ul>
                 </div>
             </div>
-        </div>
+</nav>
+    <div id="page-wrapper" style="max-height: calc(100vh - 70px) !important; overflow-y: auto;">
         <div class="row" id="personsTable">
             @Html.Partial("_PersonsTablePartial", Model)
         </div>
@@ -554,52 +521,6 @@
         });
         return fields;
     }
-
-    $(document).on('click', '#exportFile', function () {
-        $("#ExportFile a").attr("href", function () {
-            return "@Url.Action("ExportToExcel", "Export")";
-        });
-
-        var districtIds = getCheckedDistrictIds();
-        var cityIds = getCheckedCityIds();
-        var streetIds = getCheckedStreetIds();
-        var apartmentIds = getCheckedApartmentIds();
-        var flatIds = getCheckedFlatIds();
-        var fieldIds = getCheckedFieldsName();
-        var beneficariesUnchecked = getBeneficariesUnchecked();
-        var beneficariesChecked = getBeneficariesChecked();
-
-        $("#ExportFile a").attr("href", function (i, origVal) {
-            origVal += "?";
-            var k;
-            for (k = 0; k < districtIds.length; k++) {
-                origVal += "DistrictIds=" + districtIds[k] + "&";
-            }
-            for (k = 0; k < cityIds.length; k++) {
-                origVal += "CityIds=" + cityIds[k] + "&";
-            }
-            for (k = 0; k < streetIds.length; k++) {
-                origVal += "StreetIds=" + streetIds[k] + "&";
-            }
-            for (k = 0; k < apartmentIds.length; k++) {
-                origVal += "ApartmentIds=" + apartmentIds[k] + "&";
-            }
-            for (k = 0; k < flatIds.length; k++) {
-                origVal += "FlatIds=" + flatIds[k] + "&";
-            }
-            for (k = 0; k < fieldIds.length; k++) {
-                origVal += "ColumnsIds=" + fieldIds[k] + "&";
-            }
-            for (k = 0; k < beneficariesUnchecked.length; k++) {
-                origVal += "BeneficariesUnchecked=" + beneficariesUnchecked[k] + "&";
-            }
-            for (k = 0; k < beneficariesChecked.length; k++) {
-                origVal += "BeneficariesChecked=" + beneficariesChecked[k] + "&";
-            }
-
-            return origVal;
-        });
-    });
 
 
     // ==================   start show full/part of left filter   ================== // 
