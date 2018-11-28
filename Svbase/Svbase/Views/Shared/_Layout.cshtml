@@ -31,7 +31,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand color-svb" href="@Url.Action("Details", "Dashboard" )">SV Base</a>
+                <a class="navbar-brand color-svb click" href="@Url.Action("Details", "Dashboard" )">SV Base</a>
             </div>
             <div class="navbar-collapse collapse" style="height: 1px;">
                 <ul class="nav navbar-nav navbar-top-links navbar-right padding-top-5">
@@ -43,30 +43,33 @@
                     @if (Request.IsAuthenticated)
                     {
                         <li style="display:inline-block">
-                            <a href="@Url.Action("Index", "Person")" style="display:inline-block;padding-right:5px;"><i class="fa fa-user fa-fw"></i>Усі люди</a>
+                            <a href="@Url.Action("Index", "Person")" class="click" style="display:inline-block;padding-right:5px;"><i class="fa fa-user fa-fw"></i>Усі люди</a>
                         </li>
                         <li class="dropdown" style="display:inline-block">
                             <a class="dropdown-toggle" data-toggle="dropdown" style="padding-left:2px;padding-right:2px;"><i class="fa fa-caret-down" id="dropdownicon" style="display:inline-block;color:dodgerblue;font-size:20px"></i></a>
                             <ul class="dropdown-menu" style="text-align:center">
                                 <li>
-                                    <a href="@Url.Action("Create", "Person")">Додати людину</a>
+                                    <a href="@Url.Action("Create", "Person")" class="click">Додати людину</a>
                                 </li>
                             </ul>
                         </li>
+                        if (path == "/Person/Index")
+                        {
                         <li>
                             <a data-toggle="modal" data-target="#ExportFile"><i class="fa fa-upload fa-fw"></i> Зберегти в Excel</a>
                         </li>
+                        }
                         <li>
                             <a data-toggle="modal" data-target="#ImportFile"><i class="fa fa-download fa-fw"></i> Імпортувати дані</a>
                         </li>
                         <li>
-                            <a href="@Url.Action("List", "Beneficiary")"><i class="fa fa-columns fa-fw"></i> Категорії</a>
+                            <a href="@Url.Action("List", "Beneficiary")" class="click"><i class="fa fa-columns fa-fw"></i> Категорії</a>
                         </li>
                         <li>
-                            <a href="@Url.Action("Index", "District")"><i class="fa fa-database fa-fw"></i> Округи</a>
+                            <a href="@Url.Action("Index", "District")" class="click"><i class="fa fa-database fa-fw"></i> Округи</a>
                         </li>
                         <li>
-                            <a href="@Url.Action("List", "City")"><i class="fa fa-book fa-fw"></i> Адреси</a>
+                            <a href="@Url.Action("List", "City")" class="click"><i class="fa fa-book fa-fw"></i> Адреси</a>
                         </li>
 
                         if (path == "/Person/Index")
