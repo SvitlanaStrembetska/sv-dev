@@ -8,210 +8,230 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="@Url.Content(" ~/Images/icon-sv.png")" />
+    <link rel="icon" href="@Url.Content("~/Images/icon-sv.png")" />
     <title>@ViewBag.Title SVBase Application</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     @Scripts.Render("~/bundles/jquery")
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
     <div id="loader"></div>
     <div class="navbar navbar-fixed-top navbar-default navbar-static-top padding-lr" role="navigation">
         @{
-        var pathSite = HttpContext.Current.Request.Url.AbsolutePath;
+            var pathSite = HttpContext.Current.Request.Url.AbsolutePath;
         }
         <div class="@(pathSite == Consts.PersonIndexPath ? " " : " container")">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only"></span>
                     <span class="sr-only">Toggle navigation</span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand color-svb" href="@Url.Action(" Details", "Dashboard" )">SV Base</a>
+                <a class="navbar-brand color-svb" href="@Url.Action("Details", "Dashboard" )">SV Base</a>
             </div>
             <div class="navbar-collapse collapse" style="height: 1px;">
                 <ul class="nav navbar-nav navbar-top-links navbar-right padding-top-5">
                     @{
-                    string path = HttpContext.Current.Request.Url.AbsolutePath;
-                    List
-                    <Beneficiary>
-                        beneficaries = ViewBag.Beneficaries;
-                        List<string>
-                            beneficariesChecked = ViewBag.BeneficariesChecked ?? new List<string>
-                                ();
-                                }
-                                @if (Request.IsAuthenticated)
-                                {
-                                <li style="display:inline-block">
-                                    <a href="@Url.Action(" Index", "Person" )" style="display:inline-block;padding-right:5px;"><i class="fa fa-user fa-fw"></i>Усі люди</a>
-                                </li>
-                                <li class="dropdown" style="display:inline-block">
-                                    <a class="dropdown-toggle" data-toggle="dropdown" style="padding-left:2px;padding-right:2px;"><i class="fa fa-caret-down" id="dropdownicon" style="display:inline-block;color:dodgerblue;font-size:20px"></i></a>
-                                    <ul class="dropdown-menu" style="text-align:center">
-                                        <a href="@Url.Action(" Create", "Person" )">Додати людину</a>
-                                    </ul>
-                                </li>
-                                if (path == "/Person/Index")
-                                {
+                        string path = HttpContext.Current.Request.Url.AbsolutePath;
+                        List<Beneficiary> beneficaries = ViewBag.Beneficaries;
+                        List<string> beneficariesChecked = ViewBag.BeneficariesChecked ?? new List<string>();
+                    }
+                    @if (Request.IsAuthenticated)
+                    {
+                        <li style="display:inline-block">
+                            <a href="@Url.Action("Index", "Person")" style="display:inline-block;padding-right:5px;"><i class="fa fa-user fa-fw"></i>Усі люди</a>
+                        </li>
+                        <li class="dropdown" style="display:inline-block">
+                            <a class="dropdown-toggle" data-toggle="dropdown" style="padding-left:2px;padding-right:2px;"><i class="fa fa-caret-down" id="dropdownicon" style="display:inline-block;color:dodgerblue;font-size:20px"></i></a>
+                            <ul class="dropdown-menu" style="text-align:center">
                                 <li>
-                                    <a data-toggle="modal" data-target="#ExportFile"><i class="fa fa-upload fa-fw"></i> Зберегти в Excel</a>
+                                    <a href="@Url.Action("Create", "Person")">Додати людину</a>
                                 </li>
-                                }
-                                <li>
-                                    <a data-toggle="modal" data-target="#ImportFile"><i class="fa fa-download fa-fw"></i> Імпортувати дані</a>
-                                </li>
-                                <li>
-                                    <a href="@Url.Action(" List", "Beneficiary" )"><i class="fa fa-columns fa-fw"></i> Категорії</a>
-                                </li>
-                                <li>
-                                    <a href="@Url.Action(" Index", "District" )"><i class="fa fa-database fa-fw"></i> Округи</a>
-                                </li>
-                                <li>
-                                    <a href="@Url.Action(" List", "City" )"><i class="fa fa-book fa-fw"></i> Адреси</a>
-                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a data-toggle="modal" data-target="#ExportFile"><i class="fa fa-upload fa-fw"></i> Зберегти в Excel</a>
+                        </li>
+                        <li>
+                            <a data-toggle="modal" data-target="#ImportFile"><i class="fa fa-download fa-fw"></i> Імпортувати дані</a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("List", "Beneficiary")"><i class="fa fa-columns fa-fw"></i> Категорії</a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("Index", "District")"><i class="fa fa-database fa-fw"></i> Округи</a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("List", "City")"><i class="fa fa-book fa-fw"></i> Адреси</a>
+                        </li>
 
-                                if (path == "/Person/Index")
-                                {
-                                <li class="dropdown">
-                                    <a class="dropdown-toggle" data-toggle="dropdown">
-                                        <i class="fa fa-tasks fa-fw"></i> Фільтр <i class="fa fa-caret-down"></i>
-                                    </a>
-                                    <div class="dropdown-menu dropdown-tasks" id="columnFilter">
-                                        <div class="row" style="margin: 0">
-                                            <div class="col-md-4" style="padding: 5px 5px 0 10px">
-                                                <div class="panel panel-primary new-panel-style" style="max-height: 375px; overflow-x: auto;">
-                                                    <div class="panel-heading" style="margin-bottom: -10px;">
-                                                        <h5 class="panel-title" style="font-size: 14px">Поля<i onclick="getAllCheckBoxChecked()" class="fa fa-check-circle" id="fieldscheck" style="margin-left:60%;margin-right:13%" title="Вибрати всі"></i><i onclick="getAllCheckBoxUnChecked()" class="fa fa-times-circle" id="fieldsuncheck" title="Зняти виділення"></i></h5>
-                                                    </div>
-                                                    <div class="panel-body">
-                                                        <ul id="hello" style="padding-left: 0">
-                                                            <li class="column-name">
-                                                                <a id="lastNameDisplay"> <input type="checkbox" checked id=@Consts.LastNameId>Прізвище</a>
-                                                            </li>
-                                                            <li class="column-name">
-                                                                <a id="firstNameDisplay"> <input type="checkbox" checked id=@Consts.FirstNameId>Ім'я</a>
-                                                            </li>
-                                                            <li class="column-name">
-                                                                <a id="middleNameDisplay"><input type="checkbox" checked id=@Consts.MiddleNameId>По батькові</a>
-                                                            </li>
-                                                            <li class="column-name">
-                                                                <a id="phoneFirstDisplay"><input type="checkbox" checked id=@Consts.FirstMobilePhoneId>Мобільний телефон 1</a>
-                                                            </li>
-                                                            <li class="column-name">
-                                                                <a id="phoneSecondDisplay"><input type="checkbox" checked id=@Consts.SecondMobilePhoneId>Мобільний телефон 2</a>
-                                                            </li>
-                                                            <li class="column-name">
-                                                                <a id="homePhoneDisplay"><input type="checkbox" checked id=@Consts.HomePhoneId>Домашній номер телефону</a>
-                                                            </li>
-                                                            <li class="column-name">
-                                                                <a id="dateBirthDisplay"><input type="checkbox" checked id=@Consts.DateBirthId>Дата народження</a>
-                                                            </li>
-                                                            <li class="column-name">
-                                                                <a id="emailDisplay"><input type="checkbox" checked id=@Consts.EmailId>Електронна пошта</a>
-                                                            </li>
-                                                            <li class="column-name">
-                                                                <a id="addressDisplay"><input type="checkbox" checked id=@Consts.AddressId>Адреса</a>
-                                                            </li>
-                                                            <li class="column-name">
-                                                                <a id="workPlaceDisplay"><input type="checkbox" checked id=@Consts.WorkPlaceId>Місце роботи</a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
+                        if (path == "/Person/Index")
+                        {
+                            <li class="dropdown">
+                                <a class="dropdown-toggle" data-toggle="dropdown">
+                                    <i class="fa fa-tasks fa-fw"></i> Фільтр <i class="fa fa-caret-down"></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-tasks" id="columnFilter" style="width:960px">
+                                    <div class="row" style="margin: 0">
+                                        <div class="col-md-4" style="padding: 5px 5px 0 10px">
+                                            <div class="panel panel-primary new-panel-style" style="max-height: 375px; overflow-x: auto;">
+                                                <div class="panel-heading" style="margin-bottom: -10px;">
+                                                    <h5 class="panel-title" style="font-size: 14px">Поля<i onclick="getAllCheckBoxChecked()" class="fa fa-check-circle" id="fieldscheck" style="margin-left:60%;margin-right:13%" title="Вибрати всі"></i><i onclick="getAllCheckBoxUnChecked()" class="fa fa-times-circle" id="fieldsuncheck" title="Зняти виділення"></i></h5>
                                                 </div>
-                                            </div>
-                                            <div class="col-md-4" style="padding: 5px 5px 0 5px">
-                                                <div class="panel panel-primary" style="max-height: 375px; overflow-x: auto;">
-                                                    <div class="panel-heading" style="margin-bottom: -10px;">
-                                                        <h5 class="panel-title" style="font-size: 14px">Категорії<i onclick="getAllCategoriesChecked()" class=" fa fa-check-circle" id="categoriescheck" style="margin-left:52%;margin-right:13%" title="Вибрати всі"></i><i onclick="getAllCategoriesUnChecked()" class="fa fa-times-circle" id="categoriesuncheck" title="Зняти виділення"></i></h5>
-                                                    </div>
-                                                    <div class="panel-body">
-                                                        <ul style="padding-left: 0">
-                                                            @foreach (var beneficary in beneficaries)
-                                                            {
-                                                            <li class="beneficary">
-                                                                @if (beneficariesChecked.Contains(beneficary.Id.ToString()))
-                                                                {
-                                                                <a id="@beneficary.Id"><input type="checkbox" checked>@beneficary.Name</a>
-                                                                }
-                                                                else
-                                                                {
-                                                                <a id="@beneficary.Id"><input type="checkbox">@beneficary.Name</a>
-                                                                }
-                                                            </li>
-                                                            }
-                                                            <li class="beneficary">
-                                                                @if (beneficariesChecked.Contains("0"))
-                                                                {
-                                                                <a id="0"><input type="checkbox" checked>Без категорії</a>
-                                                                }
-                                                                else
-                                                                {
-                                                                <a id="0"><input type="checkbox">Без категорії</a>
-                                                                }
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4" style="padding: 5px 10px 0 5px">
-                                                <div class="panel panel-primary" style="max-height: 375px; overflow-x: auto;">
-                                                    <div class="panel-heading" style="margin-bottom: -10px;">
-                                                        <h5 class="panel-title" style="font-size: 14px">Округи</h5>
-                                                    </div>
-                                                    <div class="panel-body">
-                                                        <div class="row" style="padding-top: 5px;">
-                                                            <div class="col-md-6" style="padding-right: 0">
-                                                                <button class="btn btn-primary" id="getDistrictsByTypeConstituency" style="width: 100%">
-                                                                    Партійний
-                                                                </button>
-                                                            </div>
-                                                            <div class="col-md-6" style="padding-left: 0;">
-                                                                <button class="btn btn-secondary" id="getDistrictsByTypeCustom" style="width: 100%">
-                                                                    Виборчий
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                        <div class="row" style="padding-top: 5px">
-                                                            <ul class="col-md-12" id="districts">
-                                                                @Html.Partial("_FilterCheckBoxPartial", new List
-                                                                <BaseViewModel>())
-                                                            </ul>
-                                                        </div>
-                                                    </div>
+                                                <div class="panel-body">
+                                                    <ul id="hello" style="padding-left: 0">
+                                                        <li class="column-name">
+                                                            <a id="lastNameDisplay"> <input type="checkbox" checked id=@Consts.LastNameId>Прізвище</a>
+                                                        </li>
+                                                        <li class="column-name">
+                                                            <a id="firstNameDisplay"> <input type="checkbox" checked id=@Consts.FirstNameId>Ім'я</a>
+                                                        </li>
+                                                        <li class="column-name">
+                                                            <a id="middleNameDisplay"><input type="checkbox" checked id=@Consts.MiddleNameId>По батькові</a>
+                                                        </li>
+                                                        <li class="column-name">
+                                                            <a id="phoneFirstDisplay"><input type="checkbox" checked id=@Consts.FirstMobilePhoneId>Мобільний телефон 1</a>
+                                                        </li>
+                                                        <li class="column-name">
+                                                            <a id="phoneSecondDisplay"><input type="checkbox" checked id=@Consts.SecondMobilePhoneId>Мобільний телефон 2</a>
+                                                        </li>
+                                                        <li class="column-name">
+                                                            <a id="homePhoneDisplay"><input type="checkbox" checked id=@Consts.HomePhoneId>Домашній номер телефону</a>
+                                                        </li>
+                                                        <li class="column-name">
+                                                            <a id="dateBirthDisplay"><input type="checkbox" checked id=@Consts.DateBirthId>Дата народження</a>
+                                                        </li>
+                                                        <li class="column-name">
+                                                            <a id="emailDisplay"><input type="checkbox" checked id=@Consts.EmailId>Електронна пошта</a>
+                                                        </li>
+                                                        <li class="column-name">
+                                                            <a id="addressDisplay"><input type="checkbox" checked id=@Consts.AddressId>Адреса</a>
+                                                        </li>
+                                                        <li class="column-name">
+                                                            <a id="workPlaceDisplay"><input type="checkbox" checked id=@Consts.WorkPlaceId>Місце роботи</a>
+                                                        </li>
+                                                    </ul>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-12">
-                                            <div class="row divider"></div>
-                                            <div class="row">
-                                                <div class="col-md-8">
-                                                    <a class="text-center" id="showAllDisplay">
-                                                        <strong>Показати всіх</strong>
-                                                        <i class="fa fa-angle-right"></i>
-                                                    </a>
+                                        <div class="col-md-4" style="padding: 5px 5px 0 5px">
+                                            <div class="panel panel-primary" style="max-height: 375px; overflow-x: auto;">
+                                                <div class="panel-heading" style="margin-bottom: -10px;">
+                                                    <h5 class="panel-title" style="font-size: 14px">Категорії<i onclick="getAllCategoriesChecked()" class=" fa fa-check-circle" id="categoriescheck" style="margin-left:52%;margin-right:13%" title="Вибрати всі"></i><i onclick="getAllCategoriesUnChecked()" class="fa fa-times-circle" id="categoriesuncheck" title="Зняти виділення"></i></h5>
                                                 </div>
-                                                <div class="col-md-4">
-                                                    <button class="btn btn-primary" id="startFilter" style="width: 100%">
-                                                        Застосувати фільтр
-                                                    </button>
+                                                <div class="panel-body">
+                                                    <ul style="padding-left: 0">
+                                                        @foreach (var beneficary in beneficaries)
+                                                        {
+                                                            <li class="beneficary">
+                                                                @if (beneficariesChecked.Contains(beneficary.Id.ToString()))
+                                                                {
+                                                                    <a id="@beneficary.Id"><input type="checkbox" checked>@beneficary.Name</a>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <a id="@beneficary.Id"><input type="checkbox">@beneficary.Name</a>
+                                                                }
+                                                            </li>
+                                                        }
+                                                        <li class="beneficary">
+                                                            @if (beneficariesChecked.Contains("0"))
+                                                            {
+                                                                <a id="0"><input type="checkbox" checked>Без категорії</a>
+                                                            }
+                                                            else
+                                                            {
+                                                                <a id="0"><input type="checkbox">Без категорії</a>
+                                                            }
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4" style="padding: 5px 10px 0 5px">
+                                            <div class="panel panel-primary" style="max-height: 375px; overflow-x: auto;">
+                                                <div class="panel-heading" style="margin-bottom: -10px;">
+                                                    <h5 class="panel-title" style="font-size: 14px">Округи</h5>
+                                                </div>
+                                                <div class="panel-body">
+                                                    <div class="row" style="padding-top: 5px;">
+                                                        <div class="col-md-6" style="padding-right: 0">
+                                                            <button class="btn btn-primary" id="getDistrictsByTypeConstituency" style="width: 100%">
+                                                                Партійний
+                                                            </button>
+                                                        </div>
+                                                        <div class="col-md-6" style="padding-left: 0;">
+                                                            <button class="btn btn-secondary" id="getDistrictsByTypeCustom" style="width: 100%">
+                                                                Виборчий
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row" style="padding-top: 5px">
+                                                        <ul class="col-md-12" id="districts">
+                                                            @Html.Partial("_FilterCheckBoxPartial", new List
+                                                            <BaseViewModel>())
+                                                        </ul>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </li>
-                                }
-                                }
-                                <li class="dropdown">
-                                    <a class="dropdown-toggle" data-toggle="dropdown">
-                                        @Context.User.Identity.Name <i class="fa fa-caret-down"></i>
-                                    </a>
-                                    <ul class="dropdown-menu">
-                                        @Html.Partial("_LoginPartial")
-                                    </ul>
-                                </li>
+                                    <div class="col-md-12">
+                                        <div class="row divider"></div>
+                                        <div class="row">
+                                            <div class="col-md-8">
+                                                <a class="text-center" id="showAllDisplay">
+                                                    <strong>Показати всіх</strong>
+                                                    <i class="fa fa-angle-right"></i>
+                                                </a>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <button class="btn btn-primary" id="startFilter" style="width: 100%">
+                                                    Застосувати фільтр
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        }
+                    }
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown">
+                            @Context.User.Identity.Name <i class="fa fa-caret-down"></i>
+                        </a>
+                        <ul class="dropdown-menu">
+                            @Html.Partial("_LoginPartial")
+                        </ul>
+                    </li>
                 </ul>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12 ignore-padding">
+            <div class="modal fade bd-example-modal-lg export-file-modal" id="ExportFile" tabindex="-1" role="dialog" aria-labelledby="ExportFile" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3 class="modal-title" id="DownloadFilelLabel">Експорт даних</h3>
+                            <button type="button" class="close close-modal" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <h3>Ви впевнені що хочете експортувати дані у Excel файл?</h3>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" id="cencelExportBtn" class="btn btn-secondary" data-dismiss="modal">Закрити вікно</button>
+                            @Html.ActionLink("Експортувати дані", "ExportToExcel", "Export", null, new { @class = "btn btn-primary", @id = "exportBtn" })
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -228,23 +248,23 @@
     <script src="~/Scripts/datatables/jquery.dataTables.min.js"></script>
     <script src="~/Scripts/datatables/dataTables.bootstrap.min.js"></script>
     <script src="~/Scripts/dataTables.responsive.js"></script>
-    <script src="~/Scripts/sb-admin-2.js"></script>
+    <script src="~/Scripts/sb-admin-2.min.js"></script>
 </body>
 </html>
 
 @if (HttpContext.Current.Request.Url.AbsolutePath == "/Person/Index" || HttpContext.Current.Request.Url.AbsolutePath == "/Person/PostIndex")
 {
-<script>
+    <script>
         window.setTimeout(function () {
             $('#loader').fadeOut();
         }, 10000);
-</script>
+    </script>
 }
 else
 {
-<script>
+    <script>
         $('#loader').fadeOut();
-</script>
+    </script>
 }
 
 <script>
@@ -408,7 +428,7 @@ else
 
 @if (HttpContext.Current.Request.Url.AbsolutePath == "/Person/Index" || HttpContext.Current.Request.Url.AbsolutePath == "/Person/PostIndex")
 {
-<script>
+    <script>
         $(document).click(function () {
             $("#columnFilter").hide('slow');
         });
@@ -662,5 +682,5 @@ else
 
             $('#loader').fadeOut();
         });
-</script>
+    </script>
 }
