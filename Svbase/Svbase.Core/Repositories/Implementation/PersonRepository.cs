@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Svbase.Core.Consts;
 using Svbase.Core.Data;
 using Svbase.Core.Data.Entities;
 using Svbase.Core.Models;
@@ -25,6 +24,7 @@ namespace Svbase.Core.Repositories.Implementation
                     LastName = x.LastName,
                     Position = x.Position,
                     Gender = x.Gender,
+                    IsDead = x.IsDead,
                     Email = x.Email,
                     FirstMobilePhone = x.MobileTelephoneFirst,
                     SecondMobilePhone = x.MobileTelephoneSecond,
@@ -75,6 +75,7 @@ namespace Svbase.Core.Repositories.Implementation
                 HomePhone = x.StationaryPhone,
                 DateBirth = x.BirthdayDate,
                 Work = x.Work,
+                IsDead = x.IsDead,
                 FlatId = x.Flats.FirstOrDefault().Id
             })
                 .FirstOrDefault(x => x.Id == id);
@@ -94,6 +95,8 @@ namespace Svbase.Core.Repositories.Implementation
                 SecondMobilePhone = x.MobileTelephoneSecond,
                 HomePhone = x.StationaryPhone,
                 DateBirth = x.BirthdayDate,
+                Gender = x.Gender,
+                IsDead = x.IsDead,
                 Beneficiaries = x.Beneficiaries.Select(b => new CheckboxItemModel
                 {
                     Id = b.Id,
@@ -123,6 +126,7 @@ namespace Svbase.Core.Repositories.Implementation
                     LastName = x.LastName,
                     DateBirth = x.BirthdayDate,
                     Gender = x.Gender,
+                    IsDead = x.IsDead,
                     Position = x.Position,
                     FirstMobilePhone = x.MobileTelephoneFirst,
                     SecondMobilePhone = x.MobileTelephoneSecond,

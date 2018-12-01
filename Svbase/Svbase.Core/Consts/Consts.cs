@@ -38,6 +38,7 @@ namespace Svbase.Core.Consts
         public const int EmailId = 8;
         public const int AddressId = 9;
         public const int WorkPlaceId = 10;
+        public const int IsDeadId = 11;
         #endregion fieldsIds
     }
 }

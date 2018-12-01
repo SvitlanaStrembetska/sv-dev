@@ -47,6 +47,7 @@ namespace Svbase.Controllers
                             LastName = x.LastName,
                             DateBirth = x.BirthdayDate,
                             Gender = x.Gender,
+                            IsDead = x.IsDead,
                             Position = x.Position,
                             FirstMobilePhone = x.MobileTelephoneFirst,
                             SecondMobilePhone = x.MobileTelephoneSecond,
@@ -109,6 +110,7 @@ namespace Svbase.Controllers
                     var isColumnEmailExists = filter.ColumnsIds.Contains(Consts.EmailId);
                     var isColumnAdressExists = filter.ColumnsIds.Contains(Consts.AddressId);
                     var isColumnWorkExists = filter.ColumnsIds.Contains(Consts.WorkPlaceId);
+                    var isColumnIsDeadExists = filter.ColumnsIds.Contains(Consts.IsDeadId);
 
                     int column = 1;
                     var columnIndexes = new Dictionary<string, int>();
@@ -173,6 +175,11 @@ namespace Svbase.Controllers
                         ws.Cells[1, column].Value = "Місце роботи";
                         columnIndexes["Місце роботи"] = column++;
                     }
+                    if (isColumnIsDeadExists)
+                    {
+                        ws.Cells[1, column].Value = "Помер(ла)";
+                        columnIndexes["Помер(ла)"] = column++;
+                    }
 
                     var beneficiaries = _beneficiaryService.GetAll().ToList();
 
@@ -191,7 +198,7 @@ namespace Svbase.Controllers
                         {
                             ws = fillRow(ws, columnIndexes, rowNumber++, person, isColumnLastNameExists, isColumnFirstNameExists, isColumnMiddleNameExists,
                                 isColumnFirstMobilePhoneExists, isColumnSecondMobilePhoneExists, isColumnHomePhoneExists,
-                                isColumnDateBirthExists, isColumnEmailExists, isColumnWorkExists, isColumnAdressExists, filter.BeneficariesChecked);
+                                isColumnDateBirthExists, isColumnEmailExists, isColumnWorkExists, isColumnAdressExists, isColumnIsDeadExists, filter.BeneficariesChecked);
                         }
                     }
                     else
@@ -200,7 +207,7 @@ namespace Svbase.Controllers
                         {
                             ws = fillRow(ws, columnIndexes, rowNumber++, person, isColumnLastNameExists, isColumnFirstNameExists, isColumnMiddleNameExists,
                                 isColumnFirstMobilePhoneExists, isColumnSecondMobilePhoneExists, isColumnHomePhoneExists,
-                                isColumnDateBirthExists, isColumnEmailExists, isColumnWorkExists, isColumnAdressExists, filter.BeneficariesChecked);
+                                isColumnDateBirthExists, isColumnEmailExists, isColumnWorkExists, isColumnAdressExists, isColumnIsDeadExists, filter.BeneficariesChecked);
                         }
                     }
                 }
@@ -225,7 +232,7 @@ namespace Svbase.Controllers
         private ExcelWorksheet fillRow(ExcelWorksheet ws, Dictionary<string, int> columnIndexes, int rowNumber, PersonSelectionModel person, bool isColumnLastNameExists, bool isColumnFirstNameExists,
             bool isColumnMiddleNameExists, bool isColumnFirstMobilePhoneExists, bool isColumnSecondMobilePhoneExists,
             bool isColumnHomePhoneExists, bool isColumnDateBirthExists, bool isColumnEmailExists, bool isColumnWorkExists,
-            bool isColumnAdressExists, IEnumerable<string> beneficariesChecked)
+            bool isColumnAdressExists, bool isColumnIsDeadExists, IEnumerable<string> beneficariesChecked)
         {
             if (isColumnLastNameExists)
                 ws.Cells[rowNumber, columnIndexes["Прізвище"]].Value = person.LastName;
@@ -272,6 +279,9 @@ namespace Svbase.Controllers
                         break;
                 }
             }
+
+            if (isColumnIsDeadExists)
+                ws.Cells[rowNumber, columnIndexes["Помер(ла)"]].Value = person.IsDead;
 
             if (beneficariesChecked == null)
                 return ws;

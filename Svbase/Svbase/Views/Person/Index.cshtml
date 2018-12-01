@@ -635,6 +635,7 @@
         var isEmailDisplay = false;
         var isAddressDisplay = false;
         var isWorkPlaceDisplay = false;
+        var isDeadDisplay = false;
 
         for (var i = 0; i < columnsName.length; i++) {
             if (columnsName[i] === "lastNameDisplay")
@@ -659,6 +660,8 @@
                 isAddressDisplay = true;
             else if (columnsName[i] === "workPlaceDisplay")
                 isWorkPlaceDisplay = true;
+            else if (columnsName[i] === "isDeadDisplay")
+                isDeadDisplay = true;
         }
 
         if (!islastNameDisplay) {
@@ -713,9 +716,16 @@
             $("tr #workPlaceHidden").hide();
             $("#workPlaceDisplay input").prop('checked', false);
         }
+
+        if (!isDeadDisplay) {
+            $("tr #isDeadHidden").hide();
+            $("#isDeadDisplay input").prop('checked', false);
+        }
     };
 
-    $(document).on('click', '.pagination > a', function () {
+    $(document).on('click', '.pagination > li > a', function (e) {
+        e.preventDefault();
+
         var page = $(this)[0].search.trim().substring(6);
 
         if (page === "")

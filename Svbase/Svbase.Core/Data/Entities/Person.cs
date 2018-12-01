@@ -17,6 +17,7 @@ namespace Svbase.Core.Data.Entities
         public string Position { get; set; }
         public string PartionType { get; set; }
         public bool Gender { get; set; }
+        public bool IsDead { get; set; }
 
         public int? CityId { get; set; }
         public virtual City City{ get; set; }

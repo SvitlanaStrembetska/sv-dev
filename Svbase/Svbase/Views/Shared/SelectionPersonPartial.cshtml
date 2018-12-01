@@ -53,15 +53,16 @@
                 @($"{item.Name} ")
             }
         </td>
+        <td id="isDeadHidden">@(person.IsDead ? "так" : "ні")</td>
         <td>
             <a href="@Url.Action("Details", "Person", new {id = person.Id})">
                 <i style="color: gray; margin-right: 5px; cursor: pointer"
-                   class="pull-right glyphicon glyphicon-info-sign"></i>
+                   class="pull-right glyphicon glyphicon-info-sign click"></i>
             </a>
         </td>
         <td>
             <i style="color: gray; margin-right: 5px; cursor: pointer"
-               class="pull-right glyphicon glyphicon-pencil"
+               class="pull-right glyphicon glyphicon-pencil click"
                data-action="edit"
                data-item-id="@person.Id"></i>
         </td>
@@ -78,8 +79,6 @@
 @Html.Partial("_PersonEditModal")
 <script>
     $('[data-action="edit"]').click(function () {
-        $('#loader').fadeIn();
-
         var id = (this).getAttribute('data-item-id');
         var urlAction = "@Url.Action("Edit", "Person")";
         $.ajax({

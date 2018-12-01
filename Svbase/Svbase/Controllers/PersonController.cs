@@ -130,7 +130,7 @@ namespace Svbase.Controllers
             var isCreated = _personService.CreatePersonByModel(model, flat);
             return !isCreated
                 ? RedirectToAction("Create", model)
-                : RedirectToAction("Index");
+                : RedirectToAction("Index", "Person");
         }
 
         public ActionResult Edit(int id)

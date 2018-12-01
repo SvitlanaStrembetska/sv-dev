@@ -1,5 +1,4 @@
-﻿@using System.Text.RegularExpressions
-@using Svbase.Core.Consts
+﻿@using Svbase.Core.Consts
 @using Svbase.Core.Data.Entities
 @using Svbase.Core.Enums
 @using Svbase.Core.Models
@@ -11,8 +10,8 @@
     <link rel="icon" href="@Url.Content("~/Images/icon-sv.png")" />
     <title>@ViewBag.Title SVBase Application</title>
     @Styles.Render("~/Content/css")
-    @Scripts.Render("~/bundles/modernizr")
     @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/modernizr")
     <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -116,6 +115,9 @@
                                                         </li>
                                                         <li class="column-name">
                                                             <a id="workPlaceDisplay"><input type="checkbox" checked id=@Consts.WorkPlaceId>Місце роботи</a>
+                                                        </li>
+                                                        <li class="column-name">
+                                                            <a id="isDeadDisplay"><input type="checkbox" checked id=@Consts.IsDeadId>Помер(ла)</a>
                                                         </li>
                                                     </ul>
                                                 </div>
@@ -348,6 +350,7 @@ else
             $("#emailDisplay input").prop("checked", true);
             $("#addressDisplay input").prop("checked", true);
             $("#workPlaceDisplay input").prop("checked", true);
+            $("#isDeadDisplay input").prop("checked", true);
         });
     }
     function getAllCheckBoxUnChecked() {
@@ -362,6 +365,7 @@ else
             $("#emailDisplay input").prop("checked", false);
             $("#addressDisplay input").prop("checked", false);
             $("#workPlaceDisplay input").prop("checked", false);
+            $("#isDeadDisplay input").prop("checked", false);
         });
     }
     function getAllCategoriesChecked() {
@@ -512,6 +516,14 @@ else
             fieldDisplay(!$("#workPlaceDisplay input").is(":checked"), true, "#workPlaceDisplay input", "tr #workPlaceHidden");
         });
 
+        $("#isDeadDisplay input").click(function (e) {
+            e.stopPropagation();
+            fieldDisplay($("#isDeadDisplay input").is(":checked"), false, "#isDeadDisplay input", "tr #isDeadHidden");
+        });
+        $("#isDeadDisplay").click(function () {
+            fieldDisplay(!$("#isDeadDisplay input").is(":checked"), true, "#isDeadDisplay input", "tr #isDeadHidden");
+        });
+
         $("#startFilter").click(function () {
             getPersonsByFilter();
             $('#filter').find(".dropdown-toggle").dropdown("toggle");
@@ -607,6 +619,7 @@ else
             var emailDisplay = $("#emailDisplay input").is(":checked");
             var addressDisplay = $("#addressDisplay input").is(":checked");
             var workPlaceDisplay = $("#workPlaceDisplay input").is(":checked");
+            var isDeadDisplay = $("#isDeadDisplay input").is(":checked");
 
             var districtIds = getCheckedDistrictIds();
             var cityIds = getCheckedCityIds();
@@ -681,6 +694,11 @@ else
             if (!workPlaceDisplay) {
                 $("tr #workPlaceHidden").show();
                 $("#workPlaceDisplay input").prop('checked', true);
+            }
+
+            if (!isDeadDisplay) {
+                $("tr #isDeadHidden").show();
+                $("#isDeadDisplay input").prop('checked', true);
             }
 
             $('#loader').fadeOut();
