@@ -44,7 +44,8 @@ namespace Svbase.Controllers
             ViewBag.Beneficaries = beneficiariesList;
             //=================  end generate beneficiaries list for filter  =============
 
-            var persons = _personService.GetPersons();
+            var persons = filter.DistrictIds != null ? _personService.SearchPersonsByFilter(filter) : _personService.GetPersons();
+
             if (filter.BeneficariesChecked == null || !filter.BeneficariesChecked.Any())
             {
                 var benChecked = beneficiariesList.Select(x => x.Id.ToString()).ToList();
