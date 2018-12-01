@@ -23,29 +23,42 @@ namespace Svbase.Core.Models
         [Phone]
         [Display(Name = "Мобільний телефон 1")]
         public string FirstMobilePhone { get; set; }
+
         [Phone]
         [Display(Name = "Мобільний телефон 2")]
         public string SecondMobilePhone { get; set; }
+
         [Phone]
         [Display(Name = "Домашній номер телефону")]
         public string HomePhone { get; set; }
+
         [EmailAddress]
         [Display(Name = "Електронна пошта")]
         public string Email { get; set; }
+
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         [Display(Name = "Дата народження")]
         public DateTime? DateBirth { get; set; }
+
         [Display(Name = "Посада")]
         public string Position { get; set; }
+
         [Display(Name = "Партійний тип")]
         public string PartionType { get; set; }
+
         [Display(Name = "Стать")]
         public bool Gender { get; set; }
+
+        [Display(Name = "Помер(ла)")]
+        public bool IsDead { get; set; }
+
         [Display(Name = "Квартира")]
         public int FlatId { get; set; }
+
         [Display(Name = "Місце роботи")]
         public Work Work { get; set; }
+
         public IList<CheckboxItemModel> Beneficiaries { get; set; }
         public IList<Beneficiary> BeneficariesList { get; set; }
 
@@ -67,6 +80,7 @@ namespace Svbase.Core.Models
             HomePhone = person.StationaryPhone;
             Email = person.Email;
             PartionType = person.PartionType;
+            IsDead = person.IsDead;
         }
         public Person Update(Person person)
         {
@@ -82,6 +96,7 @@ namespace Svbase.Core.Models
             person.StationaryPhone = HomePhone;
             person.Email = Email;
             person.PartionType = PartionType;
+            person.IsDead = IsDead;
             
             return person;
         }
@@ -99,7 +114,7 @@ namespace Svbase.Core.Models
             FirstMobilePhone = entity.MobileTelephoneFirst;
             SecondMobilePhone = entity.MobileTelephoneSecond;
             HomePhone = entity.StationaryPhone;
-
+            IsDead = entity.IsDead;
         }
         //public int BeneficiaryId { get; set; }
         //public int DistrictId { get; set; }
