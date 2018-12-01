@@ -15,13 +15,13 @@
 </head>
 <div id="wrapper">
     <nav role="navigation">
-        <div class="navbar-default sidebar" role="navigation">
+        <div class="navbar-default sidebar" role="navigation" style="width: 50px">
             <div class="sidebar-nav navbar-collapse" style="margin-top: -18px">
                 <ul class="nav left-filter-overflow" id="side-menu">
-                    <li class="li-button" style="border-bottom: none">
+                    <li class="li-button" style="border-bottom: none; display: none">
                         <div class="col-xs-12" style="display:inline-flex;margin-bottom: -30px;margin-top: -5px;">
-                            <button id="getAll" style="width: 50%; margin-bottom: 15px;margin-right:5px;" type="button" class="btn btn-danger">Показати всі</button>
-                            <button id="search" style="width: 35%; margin-bottom: 15px;" type="button" class="btn btn-primary">Пошук</button>
+                            <button id="getAll" style="width: 50%; margin-bottom: 15px;margin-right:5px;" type="button" class="btn btn-danger click">Показати всі</button>
+                            <button id="search" style="width: 35%; margin-bottom: 15px;" type="button" class="btn btn-primary click">Пошук</button>
                         </div>
                     </li>
                 </ul>
@@ -38,40 +38,40 @@
                            class="main-filter-raw-header panel-heading"
                            style="color: #428bca; background-color: silver"
                            onclick="toggleInById('cities')">
-                            <i class="fa fa-table fa-fw"></i> Місто, район
+                            <i class="fa fa-table fa-fw"></i>
                         </a>
-                        <ul id="cities" class="panel-collapse collapse nav nav-second-level" style="max-height: 300px; overflow-y: auto;"></ul>
+                        <ul id="cities" class="panel-collapse collapse nav nav-second-level" style="max-height: 300px; overflow-y: auto; display: none"></ul>
                     </li>
                     <li class="panel panel-default" style="margin-bottom: 0">
                         <a id="street-header"
                            class="main-filter-raw-header panel-heading"
                            style="color: #428bca; background-color: silver"
                            onclick="toggleInById('streets')">
-                            <i class="fa fa-book fa-fw"></i> Вулиця
+                            <i class="fa fa-book fa-fw"></i>
                         </a>
-                        <ul id="streets" class="panel-collapse collapse nav nav-second-level" style="max-height: 300px; overflow-y: auto;"></ul>
+                        <ul id="streets" class="panel-collapse collapse nav nav-second-level" style="max-height: 300px; overflow-y: auto; display: none"></ul>
                     </li>
                     <li class="panel panel-default" style="margin-bottom: 0">
                         <a id="apartment-header" class="main-filter-raw-header panel-heading"
                            style="color: #428bca; background-color: silver"
                            onclick="toggleInById('apartments')">
-                            <i class="fa fa-table fa-fw"></i> Будинки
+                            <i class="fa fa-table fa-fw"></i>
                         </a>
-                        <ul id="apartments" class="panel-collapse collapse nav nav-second-level" style="max-height: 300px; overflow-y: auto;"></ul>
+                        <ul id="apartments" class="panel-collapse collapse nav nav-second-level" style="max-height: 300px; overflow-y: auto; display: none"></ul>
                     </li>
                     <li class="panel panel-default" style="margin-bottom: 0">
                         <a id="flat-header" class="main-filter-raw-header panel-heading"
                            style="color: #428bca; background-color: silver"
                            onclick="toggleInById('flats')">
-                            <i class="fa fa-wrench fa-fw"></i> Номер квартири
+                            <i class="fa fa-wrench fa-fw"></i>
                         </a>
-                        <ul id="flats" class="panel-collapse collapse nav nav-second-level" style="max-height: 300px; overflow-y: auto;"></ul>
+                        <ul id="flats" class="panel-collapse collapse nav nav-second-level" style="max-height: 300px; overflow-y: auto; display: none"></ul>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
-    <div id="page-wrapper" style="max-height: calc(100vh - 70px) !important; overflow-y: auto;">
+    <div id="page-wrapper" style="max-height: calc(100vh - 70px) !important; overflow-y: auto; margin: 0 0 0 50px">
         <div class="row" id="personsTable">
             @Html.Partial("_PersonsTablePartial", Model)
         </div>
@@ -85,13 +85,14 @@
         isSidebarToogled = true;
     }
 
-    $(document).ready(() => {
-        $('#loader').fadeIn();
+    $(".pagination li").each((index, element) => {
+        $(element).addClass("click");
+    });
 
+    $(document).ready(() => {
         subscribeEvents();
         getDistrictPartialView();
         getCitiesPartialView();
-        showPartOfFilterBlock();
 
         $('#loader').fadeOut();
     });
@@ -108,7 +109,6 @@
     }
 
     function getAll() {
-        $('#loader').fadeIn();
         var urlAction = "@Url.Action("All")";
         $.ajax({
             url: urlAction,
@@ -715,10 +715,7 @@
         }
     };
 
-    $(document).on('click', '.pagination > a', function (e) {
-        e.preventDefault();
-        $('#loader').fadeIn();
-
+    $(document).on('click', '.pagination > a', function () {
         var page = $(this)[0].search.trim().substring(6);
 
         if (page === "")

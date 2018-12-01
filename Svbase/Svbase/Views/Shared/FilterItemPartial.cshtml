@@ -9,7 +9,7 @@
     </li>
     foreach (var item in filterItem.Items)
     {
-        <li class="@("street_"+filterItem.ParentId) main-filter-raw-header">
+        <li class="@("street_"+filterItem.ParentId) main-filter-raw-header click">
             <a>
                 <input id="@("street_"+ item.Id)"
                        type="checkbox"

@@ -20,7 +20,7 @@
                 </li>
                 foreach (var apartment in street.Items)
                 {
-                    <li class="@("apartment_"+street.ParentId) main-filter-raw-header">
+                    <li class="@("apartment_"+street.ParentId) main-filter-raw-header click">
                         <a>
                             <input onchange="onChangeApartment(@street.ParentId, @filterItem.City.Id)"
                                    id="apartment_@apartment.Id"
