@@ -42,7 +42,7 @@
         </tbody>
     </table>
 </div>
-<div class="col-md-12 text-center">
+<div class="col-md-12 text-center" style="transform: translateY(10px);position: absolute;bottom: -30px;">
     @Html.PagedListPager(Model, page => Url.Action("Index", "Person", new { page }))
 </div>
 <div class="modal fade" id="personEditModal" role="dialog">
