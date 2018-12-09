@@ -8,22 +8,25 @@
                         <div class="panel-heading" style="font-weight: bold">Категорії</div>
                         <div class="panel-body">
                             <div class="row">
-                                    <div class="col-sm-12">
-                                        <a class="text-center click" href="@Url.Action("Index", "Person")">Всього людей - @Model.AllPersonsCount </a>
-                                    </div>
+                                <div class="col-sm-12">
+                                    <a class="text-center click" href="@Url.Action("Index", "Person")">Всього людей - @Model.AllPersonsCount </a>
+                                </div>
                             </div>
-                            <p/>
+                            <p />
                             @foreach (var item in Model.Beneficiaries)
                             {
                                 <div class="row">
                                     <div class="col-sm-12 beneficary">
-                                        <a class="text-center click" href="@Url.Action("Index", "Person", new { BeneficariesChecked = @item.Id.ToString()})">@item.Name - @item.PersonsCount </a>
+                                        <a class="text-center click" href="@Url.Action("Index", "Person", new {BeneficariesChecked = @item.Id.ToString()})">
+                                            @item.Name - @item.PersonsCount  (@item.PersonsWithMobilePhoneCount<i class="fa fa-mobile-alt fa-fw"></i>)</a>
                                     </div>
                                 </div>
                             }
                             <div class="row">
                                 <div class="col-sm-12 beneficary">
-                                    <a class="text-center click" href="@Url.Action("Index", "Person", new { BeneficariesChecked = "0"})">Без категорії - @Model.PersonsWithoutBeneficiariesCount </a>
+                                    <a class="text-center click" href="@Url.Action("Index", "Person", new {BeneficariesChecked = "0"})">
+                                        Без категорії - @Model.WithoutBeneficiaries.PersonsCount  (@Model.WithoutBeneficiaries.PersonsWidthMobilePhoneCount<i class="fa fa-mobile-alt fa-fw"></i>)
+                                    </a>
                                 </div>
                             </div>
                         </div>

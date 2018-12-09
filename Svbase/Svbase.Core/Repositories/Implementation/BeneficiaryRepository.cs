@@ -31,7 +31,8 @@ namespace Svbase.Core.Repositories.Implementation
             {
                 Id = x.Id,
                 Name = x.Name,
-                PersonsCount = x.Persons.Count
+                PersonsCount = x.Persons.Count,
+                PersonsWithMobilePhoneCount = x.Persons.Count(z => z.MobileTelephoneFirst.Length > 0 || z.MobileTelephoneSecond.Length > 0)
             }).ToList();
             return beneficiaries;
         }

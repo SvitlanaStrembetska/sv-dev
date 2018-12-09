@@ -19,5 +19,6 @@ namespace Svbase.Core.Models
 
         public IEnumerable<string> BeneficariesUnchecked { get; set; }
         public IEnumerable<string> BeneficariesChecked { get; set; }
+        public bool IsDeadPerson { get; set; }
     }
 }

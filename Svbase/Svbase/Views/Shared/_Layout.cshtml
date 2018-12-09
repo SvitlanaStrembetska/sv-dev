@@ -12,9 +12,8 @@
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/modernizr")
-    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="~/Scripts/bootstrap-3.3.7.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
 </head>
 <body>
     <div id="loader"></div>
@@ -117,7 +116,7 @@
                                                             <a id="workPlaceDisplay"><input type="checkbox" checked id=@Consts.WorkPlaceId>Місце роботи</a>
                                                         </li>
                                                         <li class="column-name">
-                                                            <a id="isDeadDisplay"><input type="checkbox" checked id=@Consts.IsDeadId>Помер(ла)</a>
+                                                            <a id="isDeadDisplay"><input type="checkbox" id=@Consts.IsDeadId>Помер(ла)</a>
                                                         </li>
                                                     </ul>
                                                 </div>
@@ -244,11 +243,9 @@
     <div>
         @RenderBody()
     </div>
-    @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
-    <script defer src="https://use.fontawesome.com/releases/v5.0.2/js/all.js"></script>
+    <script defer src="~/Scripts/all.min.js"></script>
     @RenderSection("scripts", required: false)
-    <script src="~/Scripts/bootstrap.min.js"></script>
     <script src="~/Scripts/metisMenu.min.js"></script>
     <script src="~/Scripts/datatables/jquery.dataTables.min.js"></script>
     <script src="~/Scripts/datatables/dataTables.bootstrap.min.js"></script>
@@ -350,7 +347,6 @@ else
             $("#emailDisplay input").prop("checked", true);
             $("#addressDisplay input").prop("checked", true);
             $("#workPlaceDisplay input").prop("checked", true);
-            $("#isDeadDisplay input").prop("checked", true);
         });
     }
     function getAllCheckBoxUnChecked() {
@@ -365,7 +361,6 @@ else
             $("#emailDisplay input").prop("checked", false);
             $("#addressDisplay input").prop("checked", false);
             $("#workPlaceDisplay input").prop("checked", false);
-            $("#isDeadDisplay input").prop("checked", false);
         });
     }
     function getAllCategoriesChecked() {
@@ -518,10 +513,10 @@ else
 
         $("#isDeadDisplay input").click(function (e) {
             e.stopPropagation();
-            fieldDisplay($("#isDeadDisplay input").is(":checked"), false, "#isDeadDisplay input", "tr #isDeadHidden");
+            isDeadfieldDisplay($("#workPlaceDisplay input").is(":checked"), false, "#workPlaceDisplay input");
         });
         $("#isDeadDisplay").click(function () {
-            fieldDisplay(!$("#isDeadDisplay input").is(":checked"), true, "#isDeadDisplay input", "tr #isDeadHidden");
+            isDeadfieldDisplay(!$("#isDeadDisplay input").is(":checked"), true, "#isDeadDisplay input");
         });
 
         $("#startFilter").click(function () {
@@ -548,13 +543,14 @@ else
             var apartmentIds = getCheckedApartmentIds();
             var flatIds = getCheckedFlatIds();
             var beneficaries = getBeneficariesChecked();
-
+            var isDeadPerson = $("#isDeadDisplay input").prop('checked');
+            
             var columnsId = getCheckedFields();
 
             $.ajax({
                 url: "@Url.Action("PostIndex", "Person")",
                 type: 'Post',
-                data: { DistrictIds: districtIds, CityIds: cityIds, StreetIds: streetIds, ApartmentIds: apartmentIds, FlatIds: flatIds, BeneficariesChecked: beneficaries },
+                data: { DistrictIds: districtIds, CityIds: cityIds, StreetIds: streetIds, ApartmentIds: apartmentIds, FlatIds: flatIds, BeneficariesChecked: beneficaries, IsDeadPerson:isDeadPerson },
                 async: false
             }).done((data) => {
                 $("#personsTable").html(data);
@@ -575,6 +571,16 @@ else
                 $(hideField).show();
             } else {
                 $(hideField).hide();
+            }
+        }
+        
+        function isDeadfieldDisplay(isChecked, isNotInput, selector) {
+            if (isNotInput) {
+                if (isChecked) {
+                    $(selector).prop('checked', true);
+                } else {
+                    $(selector).prop('checked', false);
+                }
             }
         }
 
@@ -696,9 +702,8 @@ else
                 $("#workPlaceDisplay input").prop('checked', true);
             }
 
-            if (!isDeadDisplay) {
-                $("tr #isDeadHidden").show();
-                $("#isDeadDisplay input").prop('checked', true);
+            if (isDeadDisplay) {
+                $("#isDeadDisplay input").prop('checked', false);
             }
 
             $('#loader').fadeOut();
