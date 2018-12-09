@@ -14,5 +14,6 @@ namespace Svbase.Core.Repositories.Interfaces
         IQueryable<PersonSelectionModel> GetPersonsByIds(IEnumerable<int> ids);
         int GetAllPersonsCount();
         int GetPersonsWithoutBeneficiariesCount();
+        int GetPersonsWidthMobilePhoneWithoutBeneficiariesCount();
     }
 }

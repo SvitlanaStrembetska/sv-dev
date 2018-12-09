@@ -6,10 +6,11 @@ namespace Svbase.Core.Models
     public class DashboardViewModel
     {
         public IEnumerable<DashboardItemModel> Beneficiaries { get; set; }
+        public DashboardPersonsWithoutBeneficiaries WithoutBeneficiaries { get; set; }
         public DashboardDistrictsModel DistrictsModel { get; set; }
         public int AllPersonsCount { get; set; }
-        public int PersonsWithoutBeneficiariesCount { get; set; }
     }
+
     public class DashboardManagementViewModel
     {
         public IEnumerable<DistrictListModel> DistrictsModel { get; set; }
@@ -26,11 +27,18 @@ namespace Svbase.Core.Models
         public IEnumerable<DashboardItemModel> CustomDistricts { get; set; }
     }
 
+    public class DashboardPersonsWithoutBeneficiaries
+    {
+        public int PersonsCount { get; set; }
+        public int PersonsWidthMobilePhoneCount { get; set; }
+    }
+
     public class DashboardItemModel
     {
         public int Id { get; set; }
         public string Name { get; set; }
         public int PersonsCount { get; set; }
+        public int PersonsWithMobilePhoneCount { get; set; }
     }
 
     public class DashboardDistrictItemModel : DashboardItemModel

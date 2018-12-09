@@ -174,7 +174,7 @@ namespace Svbase.Service.Implementation
             }
 
             personsIds = personsIds.Distinct().ToList();
-            var persons = RepositoryManager.Persons.GetPersonsByIds(personsIds);
+            var persons = RepositoryManager.Persons.GetPersonsByIds(personsIds).Where(x => x.IsDead == filter.IsDeadPerson);
             return persons;
         }
 

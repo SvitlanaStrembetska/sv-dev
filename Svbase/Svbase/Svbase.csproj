@@ -272,6 +272,7 @@
     <Content Include="Images\icon-sv.png" />
     <Content Include="Images\Tumblr.jpg" />
     <Content Include="Scripts\all.min.js" />
+    <Content Include="Scripts\bootstrap-3.3.7.min.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -284,6 +285,7 @@
     <Content Include="less\dataTables.responsive.scss" />
     <Content Include="Images\test2.xlsx" />
     <Content Include="Images\test2.csv" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <None Include="Properties\PublishProfiles\SDolinovska.pubxml" />
     <Content Include="Scripts\dataTables.bootstrap.min.js" />
     <Content Include="Scripts\dataTables.responsive.js" />

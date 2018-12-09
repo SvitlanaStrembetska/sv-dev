@@ -53,7 +53,7 @@
                 @($"{item.Name} ")
             }
         </td>
-        <td id="isDeadHidden">@(person.IsDead ? "так" : "ні")</td>
+        <td id="isDeadHidden" style="display: none !important">@(person.IsDead ? "так" : "ні")</td>
         <td>
             <a href="@Url.Action("Details", "Person", new {id = person.Id})">
                 <i style="color: gray; margin-right: 5px; cursor: pointer"

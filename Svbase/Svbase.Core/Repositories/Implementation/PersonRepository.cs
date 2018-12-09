@@ -171,5 +171,9 @@ namespace Svbase.Core.Repositories.Implementation
         {
             return DbSet.Count(x => !x.Beneficiaries.Any());
         }
+        public int GetPersonsWidthMobilePhoneWithoutBeneficiariesCount()
+        {
+            return DbSet.Count(x => !x.Beneficiaries.Any() && x.MobileTelephoneFirst.Length > 0 || x.MobileTelephoneSecond.Length > 0);
+        }
     }
 }

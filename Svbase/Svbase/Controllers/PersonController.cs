@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Web.Mvc;
-using CsvHelper;
 using Svbase.Controllers.Abstract;
 using Svbase.Core.Consts;
 using Svbase.Core.Data.Entities;
@@ -44,7 +42,7 @@ namespace Svbase.Controllers
             ViewBag.Beneficaries = beneficiariesList;
             //=================  end generate beneficiaries list for filter  =============
 
-            var persons = filter.DistrictIds != null ? _personService.SearchPersonsByFilter(filter) : _personService.GetPersons();
+            var persons = filter.DistrictIds != null ? _personService.SearchPersonsByFilter(filter) : _personService.GetPersons().Where(x => x.IsDead == filter.IsDeadPerson);
 
             if (filter.BeneficariesChecked == null || !filter.BeneficariesChecked.Any())
             {
@@ -69,7 +67,7 @@ namespace Svbase.Controllers
             if (filter.DistrictIds != null || filter.CityIds != null || filter.StreetIds != null || filter.ApartmentIds != null || filter.FlatIds != null)
                 persons = _personService.SearchPersonsByFilter(filter);
             else
-                persons = _personService.GetPersons();
+                persons = _personService.GetPersons().Where(x => x.IsDead == filter.IsDeadPerson);
 
             if (filter.BeneficariesChecked == null || !filter.BeneficariesChecked.Any())
                 return PartialView("_PersonsTablePartial", persons.ToPagedList(page, Consts.ShowRecordsPerPage));
@@ -93,7 +91,7 @@ namespace Svbase.Controllers
         [HttpGet]
         public ActionResult All(int page = 1)
         {
-            return PartialView("SelectionPersonPartial", _personService.GetPersons());
+            return PartialView("SelectionPersonPartial", _personService.GetPersons().Where(x => x.IsDead == false));
         }
 
         public ActionResult Create()
@@ -332,60 +330,5 @@ namespace Svbase.Controllers
             var flats = _apartmentService.GetFlatsBaseModelByApartmentId(apartmentId).Where(x => x.Name == Consts.DefaultAddress);
             return PartialView("_OptionSelectBasePartial", flats);
         }
-
-
-        public ActionResult Import()
-        {
-            bool isValid;
-
-            IEnumerable<Person> result = new List<Person>();
-            var worker = new ImportModelCsvService();
-            var error = new List<CsvErrorModel>();
-            var model = new List<PersonViewModel>();
-            var fileName = Path.GetFileName("test2.csv");
-            var path = Path.Combine(Server.MapPath("~/Images/"), fileName);
-            using (var textReader = System.IO.File.OpenText(path))
-            {
-                var csv = new CsvReader(textReader);
-
-                isValid = worker.Validate(csv, out error);
-            }
-            if (isValid)
-            {
-                using (var textReader = System.IO.File.OpenText(path))
-                {
-                    var csv = new CsvReader(textReader);
-                    result = worker.Read(csv);
-
-                    var entities = new List<Person>();
-                    var i = 0;
-                    do
-                    {
-                        entities.AddRange(_personService.AddRange(result.Skip(i).Take(i + 1000)));
-                        i += 1000;
-                    } while (i < result.Count());
-
-                    foreach (var entity in entities)
-                    {
-                        var viewModel = new PersonViewModel();
-                        viewModel.SetFields(entity);
-                        model.Add(viewModel);
-                    }
-                }
-            }
-            else
-            {
-                model = new List<PersonViewModel>();
-                //error
-            }
-
-            return View("Import", model);
-        }
-
-        public ActionResult Export()
-        {
-            return View();
-        }
     }
-
 }
