@@ -83,40 +83,40 @@
                                                 <div class="panel-heading" style="margin-bottom: -10px;">
                                                     <h5 class="panel-title" style="font-size: 14px">Поля<i onclick="getAllCheckBoxChecked()" class="fa fa-check-circle" id="fieldscheck" style="margin-left:60%;margin-right:13%" title="Вибрати всі"></i><i onclick="getAllCheckBoxUnChecked()" class="fa fa-times-circle" id="fieldsuncheck" title="Зняти виділення"></i></h5>
                                                 </div>
-                                                <div class="panel-body">
+                                                <div class="panel-body" style="padding-left:0px">
                                                     <ul id="hello" style="padding-left: 0">
                                                         <li class="column-name">
-                                                            <a id="lastNameDisplay"> <input type="checkbox" checked id=@Consts.LastNameId>Прізвище</a>
+                                                            <a id="lastNameDisplay"> <input type="checkbox" checked id=@Consts.LastNameId style="margin-right:5px">Прізвище</a>
                                                         </li>
                                                         <li class="column-name">
-                                                            <a id="firstNameDisplay"> <input type="checkbox" checked id=@Consts.FirstNameId>Ім'я</a>
+                                                            <a id="firstNameDisplay"> <input type="checkbox" checked id=@Consts.FirstNameId style="margin-right:5px">Ім'я</a>
                                                         </li>
                                                         <li class="column-name">
-                                                            <a id="middleNameDisplay"><input type="checkbox" checked id=@Consts.MiddleNameId>По батькові</a>
+                                                            <a id="middleNameDisplay"><input type="checkbox" checked id=@Consts.MiddleNameId style="margin-right:5px">По батькові</a>
                                                         </li>
                                                         <li class="column-name">
-                                                            <a id="phoneFirstDisplay"><input type="checkbox" checked id=@Consts.FirstMobilePhoneId>Мобільний телефон 1</a>
+                                                            <a id="phoneFirstDisplay"><input type="checkbox" checked id=@Consts.FirstMobilePhoneId style="margin-right:5px">Мобільний телефон 1</a>
                                                         </li>
                                                         <li class="column-name">
-                                                            <a id="phoneSecondDisplay"><input type="checkbox" checked id=@Consts.SecondMobilePhoneId>Мобільний телефон 2</a>
+                                                            <a id="phoneSecondDisplay"><input type="checkbox" checked id=@Consts.SecondMobilePhoneId style="margin-right:5px">Мобільний телефон 2</a>
                                                         </li>
                                                         <li class="column-name">
-                                                            <a id="homePhoneDisplay"><input type="checkbox" checked id=@Consts.HomePhoneId>Домашній номер телефону</a>
+                                                            <a id="homePhoneDisplay"><input type="checkbox" checked id=@Consts.HomePhoneId style="margin-right:5px">Домашній номер телефону</a>
                                                         </li>
                                                         <li class="column-name">
-                                                            <a id="dateBirthDisplay"><input type="checkbox" checked id=@Consts.DateBirthId>Дата народження</a>
+                                                            <a id="dateBirthDisplay"><input type="checkbox" checked id=@Consts.DateBirthId style="margin-right:5px">Дата народження</a>
                                                         </li>
                                                         <li class="column-name">
-                                                            <a id="emailDisplay"><input type="checkbox" checked id=@Consts.EmailId>Електронна пошта</a>
+                                                            <a id="emailDisplay"><input type="checkbox" checked id=@Consts.EmailId style="margin-right:5px">Електронна пошта</a>
                                                         </li>
                                                         <li class="column-name">
-                                                            <a id="addressDisplay"><input type="checkbox" checked id=@Consts.AddressId>Адреса</a>
+                                                            <a id="addressDisplay"><input type="checkbox" checked id=@Consts.AddressId style="margin-right:5px">Адреса</a>
                                                         </li>
                                                         <li class="column-name">
-                                                            <a id="workPlaceDisplay"><input type="checkbox" checked id=@Consts.WorkPlaceId>Місце роботи</a>
+                                                            <a id="workPlaceDisplay"><input type="checkbox" checked id=@Consts.WorkPlaceId style="margin-right:5px">Місце роботи</a>
                                                         </li>
                                                         <li class="column-name">
-                                                            <a id="isDeadDisplay"><input type="checkbox" id=@Consts.IsDeadId>Помер(ла)</a>
+                                                            <a id="isDeadDisplay"><input type="checkbox" id=@Consts.IsDeadId style="margin-right:5px">Помер(ла)</a>
                                                         </li>
                                                     </ul>
                                                 </div>
@@ -127,29 +127,29 @@
                                                 <div class="panel-heading" style="margin-bottom: -10px;">
                                                     <h5 class="panel-title" style="font-size: 14px">Категорії<i onclick="getAllCategoriesChecked()" class=" fa fa-check-circle" id="categoriescheck" style="margin-left:52%;margin-right:13%" title="Вибрати всі"></i><i onclick="getAllCategoriesUnChecked()" class="fa fa-times-circle" id="categoriesuncheck" title="Зняти виділення"></i></h5>
                                                 </div>
-                                                <div class="panel-body">
+                                                <div class="panel-body" style="padding-left:0px">
                                                     <ul style="padding-left: 0">
                                                         @foreach (var beneficary in beneficaries)
                                                         {
                                                             <li class="beneficary">
                                                                 @if (beneficariesChecked.Contains(beneficary.Id.ToString()))
                                                                 {
-                                                                    <a id="@beneficary.Id"><input type="checkbox" checked>@beneficary.Name</a>
+                                                                    <a id="@beneficary.Id" style="display:flex;margin-top:-4px"><input type="checkbox" checked style="margin-right:5px">@beneficary.Name</a>
                                                                 }
                                                                 else
                                                                 {
-                                                                    <a id="@beneficary.Id"><input type="checkbox">@beneficary.Name</a>
+                                                                    <a id="@beneficary.Id" style="display:flex;margin-top:-4px"><input type="checkbox" style="margin-right:5px">@beneficary.Name</a>
                                                                 }
                                                             </li>
                                                         }
                                                         <li class="beneficary">
                                                             @if (beneficariesChecked.Contains("0"))
                                                             {
-                                                                <a id="0"><input type="checkbox" checked>Без категорії</a>
+                                                                <a id="0" style="display:flex;margin-top:-4px"><input type="checkbox" checked style="margin-right:5px">Без категорії</a>
                                                             }
                                                             else
                                                             {
-                                                                <a id="0"><input type="checkbox">Без категорії</a>
+                                                                <a id="0" style="display:flex;margin-top:-4px"><input type="checkbox" style="margin-right:5px">Без категорії</a>
                                                             }
                                                         </li>
                                                     </ul>
@@ -174,7 +174,7 @@
                                                             </button>
                                                         </div>
                                                     </div>
-                                                    <div class="row" style="padding-top: 5px">
+                                                    <div class="row" style="padding-top: 5px;margin-left:-30px">
                                                         <ul class="col-md-12" id="districts">
                                                             @Html.Partial("_FilterCheckBoxPartial", new List
                                                             <BaseViewModel>())
@@ -347,6 +347,7 @@ else
             $("#emailDisplay input").prop("checked", true);
             $("#addressDisplay input").prop("checked", true);
             $("#workPlaceDisplay input").prop("checked", true);
+            $("#isDeadDisplay input").prop("checked", true);
         });
     }
     function getAllCheckBoxUnChecked() {
@@ -361,6 +362,7 @@ else
             $("#emailDisplay input").prop("checked", false);
             $("#addressDisplay input").prop("checked", false);
             $("#workPlaceDisplay input").prop("checked", false);
+            $("#isDeadDisplay input").prop("checked", false);
         });
     }
     function getAllCategoriesChecked() {

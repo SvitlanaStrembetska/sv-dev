@@ -48,9 +48,19 @@
             }
         </td>
         <td>
+            @{var index = 1;}
             @foreach (var item in person.Beneficiaries)
             {
-                @($"{item.Name} ")
+                if (index < person.Beneficiaries.Count)
+                {
+                    @($"{item.Name}, ")
+                    index++;
+                }
+                else
+                {
+                    @($"{item.Name} ")
+                    index++;
+                }       
             }
         </td>
         <td id="isDeadHidden" style="display: none !important">@(person.IsDead ? "так" : "ні")</td>
