@@ -41,7 +41,7 @@ namespace Svbase.Controllers
                 beneficiariesList.Add(new Beneficiary { Id = beneficary.Id, Name = beneficary.Name });
             ViewBag.Beneficaries = beneficiariesList;
             //=================  end generate beneficiaries list for filter  =============
-
+            
             var persons = filter.DistrictIds != null ? _personService.SearchPersonsByFilter(filter) : _personService.GetPersons().Where(x => x.IsDead == filter.IsDeadPerson);
 
             if (filter.BeneficariesChecked == null || !filter.BeneficariesChecked.Any())
@@ -86,6 +86,19 @@ namespace Svbase.Controllers
                     personsLists.Add(person);
             }
             return personsLists;
+        }
+
+        [HttpPost]
+        public ActionResult SearchPeople(PersonSearchModel searchFields, int page = 1)
+        {
+            IQueryable<PersonSelectionModel> persons;
+
+            if (searchFields.IsFirstNameIncludedInSearch || searchFields.IsLastNameIncludedInSearch || searchFields.IsMiddleNameIncludedInSearch || searchFields.IsMobilePhoneIncludedInSearch)
+                persons = _personService.SearchPersonsByFields(searchFields);
+            else
+                persons = _personService.GetPersons().Where(x => x.IsDead == false);
+
+            return PartialView("_PersonsTablePartial", persons.ToPagedList(page, Consts.ShowRecordsPerPage));
         }
 
         [HttpGet]

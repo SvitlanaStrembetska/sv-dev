@@ -37,6 +37,7 @@
                         string path = HttpContext.Current.Request.Url.AbsolutePath;
                         List<Beneficiary> beneficaries = ViewBag.Beneficaries;
                         List<string> beneficariesChecked = ViewBag.BeneficariesChecked ?? new List<string>();
+                        PersonSearchModel personSearch = new PersonSearchModel();
                     }
                     @if (Request.IsAuthenticated)
                     {
@@ -76,47 +77,47 @@
                                 <a class="dropdown-toggle" data-toggle="dropdown">
                                     <i class="fa fa-tasks fa-fw"></i> Фільтр <i class="fa fa-caret-down"></i>
                                 </a>
-                                <div class="dropdown-menu dropdown-tasks" id="columnFilter" style="width:960px">
+                                <div class="dropdown-menu dropdown-tasks dropdown-body" style="width: 960px">
                                     <div class="row" style="margin: 0">
                                         <div class="col-md-4" style="padding: 5px 5px 0 10px">
                                             <div class="panel panel-primary new-panel-style" style="max-height: 375px; overflow-x: auto;">
                                                 <div class="panel-heading" style="margin-bottom: -10px;">
-                                                    <h5 class="panel-title" style="font-size: 14px">Поля<i onclick="getAllCheckBoxChecked()" class="fa fa-check-circle" id="fieldscheck" style="margin-left:60%;margin-right:13%" title="Вибрати всі"></i><i onclick="getAllCheckBoxUnChecked()" class="fa fa-times-circle" id="fieldsuncheck" title="Зняти виділення"></i></h5>
+                                                    <h5 class="panel-title" style="font-size: 14px">Поля<i onclick="getAllCheckBoxChecked()" class="fa fa-check-circle" id="fieldscheck" style="margin-left: 60%; margin-right: 13%" title="Вибрати всі"></i><i onclick="getAllCheckBoxUnChecked()" class="fa fa-times-circle" id="fieldsuncheck" title="Зняти виділення"></i></h5>
                                                 </div>
-                                                <div class="panel-body" style="padding-left:0px">
+                                                <div class="panel-body" style="padding-left: 0px">
                                                     <ul id="hello" style="padding-left: 0">
                                                         <li class="column-name">
-                                                            <a id="lastNameDisplay"> <input type="checkbox" checked id=@Consts.LastNameId style="margin-right:5px">Прізвище</a>
+                                                            <a id="lastNameDisplay"> <input type="checkbox" checked id=@Consts.LastNameId style="margin-right: 5px">Прізвище</a>
                                                         </li>
                                                         <li class="column-name">
-                                                            <a id="firstNameDisplay"> <input type="checkbox" checked id=@Consts.FirstNameId style="margin-right:5px">Ім'я</a>
+                                                            <a id="firstNameDisplay"> <input type="checkbox" checked id=@Consts.FirstNameId style="margin-right: 5px">Ім'я</a>
                                                         </li>
                                                         <li class="column-name">
-                                                            <a id="middleNameDisplay"><input type="checkbox" checked id=@Consts.MiddleNameId style="margin-right:5px">По батькові</a>
+                                                            <a id="middleNameDisplay"><input type="checkbox" checked id=@Consts.MiddleNameId style="margin-right: 5px">По батькові</a>
                                                         </li>
                                                         <li class="column-name">
-                                                            <a id="phoneFirstDisplay"><input type="checkbox" checked id=@Consts.FirstMobilePhoneId style="margin-right:5px">Мобільний телефон 1</a>
+                                                            <a id="phoneFirstDisplay"><input type="checkbox" checked id=@Consts.FirstMobilePhoneId style="margin-right: 5px">Мобільний телефон 1</a>
                                                         </li>
                                                         <li class="column-name">
-                                                            <a id="phoneSecondDisplay"><input type="checkbox" checked id=@Consts.SecondMobilePhoneId style="margin-right:5px">Мобільний телефон 2</a>
+                                                            <a id="phoneSecondDisplay"><input type="checkbox" checked id=@Consts.SecondMobilePhoneId style="margin-right: 5px">Мобільний телефон 2</a>
                                                         </li>
                                                         <li class="column-name">
-                                                            <a id="homePhoneDisplay"><input type="checkbox" checked id=@Consts.HomePhoneId style="margin-right:5px">Домашній номер телефону</a>
+                                                            <a id="homePhoneDisplay"><input type="checkbox" checked id=@Consts.HomePhoneId style="margin-right: 5px">Домашній номер телефону</a>
                                                         </li>
                                                         <li class="column-name">
-                                                            <a id="dateBirthDisplay"><input type="checkbox" checked id=@Consts.DateBirthId style="margin-right:5px">Дата народження</a>
+                                                            <a id="dateBirthDisplay"><input type="checkbox" checked id=@Consts.DateBirthId style="margin-right: 5px">Дата народження</a>
                                                         </li>
                                                         <li class="column-name">
-                                                            <a id="emailDisplay"><input type="checkbox" checked id=@Consts.EmailId style="margin-right:5px">Електронна пошта</a>
+                                                            <a id="emailDisplay"><input type="checkbox" checked id=@Consts.EmailId style="margin-right: 5px">Електронна пошта</a>
                                                         </li>
                                                         <li class="column-name">
-                                                            <a id="addressDisplay"><input type="checkbox" checked id=@Consts.AddressId style="margin-right:5px">Адреса</a>
+                                                            <a id="addressDisplay"><input type="checkbox" checked id=@Consts.AddressId style="margin-right: 5px">Адреса</a>
                                                         </li>
                                                         <li class="column-name">
-                                                            <a id="workPlaceDisplay"><input type="checkbox" checked id=@Consts.WorkPlaceId style="margin-right:5px">Місце роботи</a>
+                                                            <a id="workPlaceDisplay"><input type="checkbox" checked id=@Consts.WorkPlaceId style="margin-right: 5px">Місце роботи</a>
                                                         </li>
                                                         <li class="column-name">
-                                                            <a id="isDeadDisplay"><input type="checkbox" id=@Consts.IsDeadId style="margin-right:5px">Помер(ла)</a>
+                                                            <a id="isDeadDisplay"><input type="checkbox" id=@Consts.IsDeadId style="margin-right: 5px">Помер(ла)</a>
                                                         </li>
                                                     </ul>
                                                 </div>
@@ -125,31 +126,31 @@
                                         <div class="col-md-4" style="padding: 5px 5px 0 5px">
                                             <div class="panel panel-primary" style="max-height: 375px; overflow-x: auto;">
                                                 <div class="panel-heading" style="margin-bottom: -10px;">
-                                                    <h5 class="panel-title" style="font-size: 14px">Категорії<i onclick="getAllCategoriesChecked()" class=" fa fa-check-circle" id="categoriescheck" style="margin-left:52%;margin-right:13%" title="Вибрати всі"></i><i onclick="getAllCategoriesUnChecked()" class="fa fa-times-circle" id="categoriesuncheck" title="Зняти виділення"></i></h5>
+                                                    <h5 class="panel-title" style="font-size: 14px">Категорії<i onclick="getAllCategoriesChecked()" class=" fa fa-check-circle" id="categoriescheck" style="margin-left: 52%; margin-right: 13%" title="Вибрати всі"></i><i onclick="getAllCategoriesUnChecked()" class="fa fa-times-circle" id="categoriesuncheck" title="Зняти виділення"></i></h5>
                                                 </div>
-                                                <div class="panel-body" style="padding-left:0px">
+                                                <div class="panel-body" style="padding-left: 0px">
                                                     <ul style="padding-left: 0">
                                                         @foreach (var beneficary in beneficaries)
                                                         {
                                                             <li class="beneficary">
                                                                 @if (beneficariesChecked.Contains(beneficary.Id.ToString()))
                                                                 {
-                                                                    <a id="@beneficary.Id" style="display:flex;margin-top:-4px"><input type="checkbox" checked style="margin-right:5px">@beneficary.Name</a>
+                                                                    <a id="@beneficary.Id" style="display: flex; margin-top: -4px"><input type="checkbox" checked style="margin-right: 5px">@beneficary.Name</a>
                                                                 }
                                                                 else
                                                                 {
-                                                                    <a id="@beneficary.Id" style="display:flex;margin-top:-4px"><input type="checkbox" style="margin-right:5px">@beneficary.Name</a>
+                                                                    <a id="@beneficary.Id" style="display: flex; margin-top: -4px"><input type="checkbox" style="margin-right: 5px">@beneficary.Name</a>
                                                                 }
                                                             </li>
                                                         }
                                                         <li class="beneficary">
                                                             @if (beneficariesChecked.Contains("0"))
                                                             {
-                                                                <a id="0" style="display:flex;margin-top:-4px"><input type="checkbox" checked style="margin-right:5px">Без категорії</a>
+                                                                <a id="0" style="display: flex; margin-top: -4px"><input type="checkbox" checked style="margin-right: 5px">Без категорії</a>
                                                             }
                                                             else
                                                             {
-                                                                <a id="0" style="display:flex;margin-top:-4px"><input type="checkbox" style="margin-right:5px">Без категорії</a>
+                                                                <a id="0" style="display: flex; margin-top: -4px"><input type="checkbox" style="margin-right: 5px">Без категорії</a>
                                                             }
                                                         </li>
                                                     </ul>
@@ -174,10 +175,10 @@
                                                             </button>
                                                         </div>
                                                     </div>
-                                                    <div class="row" style="padding-top: 5px;margin-left:-30px">
+                                                    <div class="row" style="padding-top: 5px; margin-left: -30px">
                                                         <ul class="col-md-12" id="districts">
                                                             @Html.Partial("_FilterCheckBoxPartial", new List
-                                                            <BaseViewModel>())
+                                                                <BaseViewModel>())
                                                         </ul>
                                                     </div>
                                                 </div>
@@ -188,7 +189,7 @@
                                         <div class="row divider"></div>
                                         <div class="row">
                                             <div class="col-md-8">
-                                                <a class="text-center" id="showAllDisplay">
+                                                <a class="text-center show-all-display-filter">
                                                     <strong>Показати всіх</strong>
                                                     <i class="fa fa-angle-right"></i>
                                                 </a>
@@ -196,6 +197,75 @@
                                             <div class="col-md-4">
                                                 <button class="btn btn-primary click" id="startFilter" style="width: 100%">
                                                     Застосувати фільтр
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="dropdown">
+                                <a class="dropdown-toggle" data-toggle="dropdown">
+                                    <i class="fa fa-search fa-fw"></i> Пошук <i class="fa fa-caret-down"></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-tasks dropdown-body" style="width:400px">
+                                    <div class="row" style="margin: 0">
+                                        <div class="col-md-12 ignore-padding">
+                                            <div class="col-md-12 block-container">
+                                                <div class="col-md-12 ignore-padding" style="display: inline-block">
+                                                    @Html.LabelFor(model => personSearch.LastName, htmlAttributes: new { @class = "col-md-12" })
+                                                    <div class="col-md-11">
+                                                        @Html.EditorFor(model => personSearch.LastName, new { htmlAttributes = new { @class = "form-control" } })
+                                                        @Html.ValidationMessageFor(model => personSearch.LastName, "", new { @class = "text-danger" })
+                                                    </div>
+                                                    <div class="col-md-1">
+                                                        <input type="checkbox" id="isLastNameIncludedInSearch" checked style="margin-right: 5px">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12 ignore-padding" style="display: inline-block">
+                                                    @Html.LabelFor(model => personSearch.FirstName, htmlAttributes: new { @class = "col-md-12" })
+                                                    <div class="col-md-11">
+                                                        @Html.EditorFor(model => personSearch.FirstName, new { htmlAttributes = new { @class = "form-control" } })
+                                                        @Html.ValidationMessageFor(model => personSearch.FirstName, "", new { @class = "text-danger" })
+                                                    </div>
+                                                    <div class="col-md-1">
+                                                        <input type="checkbox" id="isFirstNameIncludedInSearch" checked style="margin-right: 5px">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12 ignore-padding" style="display: inline-block">
+                                                    @Html.LabelFor(model => personSearch.MiddleName, htmlAttributes: new { @class = "col-md-12" })
+                                                    <div class="col-md-11">
+                                                        @Html.EditorFor(model => personSearch.MiddleName, new { htmlAttributes = new { @class = "form-control" } })
+                                                        @Html.ValidationMessageFor(model => personSearch.MiddleName, "", new { @class = "text-danger" })
+                                                    </div>
+                                                    <div class="col-md-1">
+                                                        <input type="checkbox" id="isMiddleNameIncludedInSearch" checked style="margin-right: 5px">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12 ignore-padding" style="display: inline-block">
+                                                    @Html.LabelFor(model => personSearch.MobilePhone, htmlAttributes: new { @class = "col-md-12" })
+                                                    <div class="col-md-11">
+                                                        @Html.EditorFor(model => personSearch.MobilePhone, new { htmlAttributes = new { @class = "form-control" } })
+                                                        @Html.ValidationMessageFor(model => personSearch.MobilePhone, "", new { @class = "text-danger" })
+                                                    </div>
+                                                    <div class="col-md-1">
+                                                        <input type="checkbox" id="isMobilePhoneIncludedInSearch" checked style="margin-right: 5px">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="row divider"></div>
+                                        <div class="row">
+                                            <div class="col-md-8">
+                                                <a class="text-center show-all-display-search">
+                                                    <strong>Показати всіх</strong>
+                                                    <i class="fa fa-angle-right"></i>
+                                                </a>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <button class="btn btn-primary click" id="startSearch" style="width: 100%">
+                                                    Пошук
                                                 </button>
                                             </div>
                                         </div>
@@ -434,10 +504,10 @@ else
 {
     <script>
         $(document).click(function () {
-            $("#columnFilter").hide('slow');
+            $(".dropdown-body").hide('slow');
         });
 
-        $("#columnFilter").click(function (e) {
+        $(".dropdown-body").click(function (e) {
             e.stopPropagation();
         });
 
@@ -522,7 +592,14 @@ else
         });
 
         $("#startFilter").click(function () {
+            $("#paginationWay").val("@Consts.PaginationByFilter");
             getPersonsByFilter();
+            $('#filter').find(".dropdown-toggle").dropdown("toggle");
+        });
+
+        $("#startSearch").click(function () {
+            $("#paginationWay").val("@Consts.PaginationBySearch");
+            getPersonsBySearch();
             $('#filter').find(".dropdown-toggle").dropdown("toggle");
         });
 
@@ -536,6 +613,31 @@ else
                 $(".beneficary #" + beneficaryId + " input").prop('checked', true);
         });
 
+        function getPersonsBySearch() {
+            $('#loader').fadeIn();
+            var searchFields = {
+                FirstName: $("#personSearch_FirstName").val(),
+                LastName: $("#personSearch_LastName").val(),
+                MiddleName: $("#personSearch_MiddleName").val(),
+                MobilePhone: $("#personSearch_MobilePhone").val(),
+                IsFirstNameIncludedInSearch: $("#isFirstNameIncludedInSearch").is(":checked"),
+                IsLastNameIncludedInSearch: $("#isLastNameIncludedInSearch").is(":checked"),
+                IsMiddleNameIncludedInSearch: $("#isMiddleNameIncludedInSearch").is(":checked"),
+                IsMobilePhoneIncludedInSearch: $("#isMobilePhoneIncludedInSearch").is(":checked")
+            }
+
+            $.ajax({
+                url: "@Url.Action("SearchPeople", "Person")",
+                type: 'Post',
+                data: { searchFields: searchFields},
+                async: false
+            }).done((data) => {
+                $("#personsTable").html(data);
+            });
+
+            $('#loader').fadeOut();
+        }
+
         function getPersonsByFilter() {
             $('#loader').fadeIn();
 
@@ -546,13 +648,13 @@ else
             var flatIds = getCheckedFlatIds();
             var beneficaries = getBeneficariesChecked();
             var isDeadPerson = $("#isDeadDisplay input").prop('checked');
-            
+
             var columnsId = getCheckedFields();
 
             $.ajax({
                 url: "@Url.Action("PostIndex", "Person")",
                 type: 'Post',
-                data: { DistrictIds: districtIds, CityIds: cityIds, StreetIds: streetIds, ApartmentIds: apartmentIds, FlatIds: flatIds, BeneficariesChecked: beneficaries, IsDeadPerson:isDeadPerson },
+                data: { DistrictIds: districtIds, CityIds: cityIds, StreetIds: streetIds, ApartmentIds: apartmentIds, FlatIds: flatIds, BeneficariesChecked: beneficaries, IsDeadPerson: isDeadPerson },
                 async: false
             }).done((data) => {
                 $("#personsTable").html(data);
@@ -575,7 +677,7 @@ else
                 $(hideField).hide();
             }
         }
-        
+
         function isDeadfieldDisplay(isChecked, isNotInput, selector) {
             if (isNotInput) {
                 if (isChecked) {
@@ -614,7 +716,7 @@ else
             }
         }
 
-        $("#showAllDisplay").click(function () {
+        $(".show-all-display-filter").click(function () {
             $('#loader').fadeIn();
 
             var lastNameDisplay = $("#lastNameDisplay input").is(":checked");
@@ -708,6 +810,29 @@ else
                 $("#isDeadDisplay input").prop('checked', false);
             }
 
+            $('#loader').fadeOut();
+        });
+
+        $(".show-all-display-search").click(function() {
+            $('#loader').fadeIn();
+
+            $("#personSearch_FirstName").val(""),
+            $("#personSearch_LastName").val(""),
+            $("#personSearch_MiddleName").val(""),
+            $("#personSearch_MobilePhone").val(""),
+            $("#isFirstNameIncludedInSearch").prop('checked', true);
+            $("#isLastNameIncludedInSearch").prop('checked', true);
+            $("#isMiddleNameIncludedInSearch").prop('checked', true);
+            $("#isMobilePhoneIncludedInSearch").prop('checked', true);
+
+            $.ajax({
+                url: "@Url.Action("PostIndex", "Person")",
+                type: 'Post',
+                data: {},
+                async: false
+            }).done((data) => {
+                $("#personsTable").html(data);
+            });
             $('#loader').fadeOut();
         });
     </script>

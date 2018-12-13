@@ -94,6 +94,11 @@ namespace Svbase.Service.Implementation
             return streets;
         }
 
+        public IQueryable<PersonSelectionModel> SearchPersonsByFields(PersonSearchModel searchFields)
+        {
+            return RepositoryManager.Persons.SearchPersonsByFields(searchFields);
+        }
+
         public IEnumerable<BaseViewModel> GetFlatsBaseModelByApatrmentIds(IList<int> apartmentIds)
         {
             var flats = RepositoryManager.Apartments.GetFlatBaseModelByApartmentIds(apartmentIds);
