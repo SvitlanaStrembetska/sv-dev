@@ -135,6 +135,7 @@
     <Compile Include="Migrations\DbInitializer\CreateIfNotExistWithSeed.cs" />
     <Compile Include="Models\ApartmentFilterModel.cs" />
     <Compile Include="Models\ApartmentViewModel.cs" />
+    <Compile Include="Models\PersonSearchModel.cs" />
     <Compile Include="Models\WorkViewModel.cs" />
     <Compile Include="Models\BeneficiaryViewModel.cs" />
     <Compile Include="Models\CheckboxItemModel.cs" />

@@ -1,47 +1,51 @@
 ﻿@using PagedList.Mvc
+@using Svbase.Core.Consts
 @using Svbase.Core.Models
 @model PagedList.IPagedList<PersonSelectionModel>
 
 <div class="panel-body table-horizontal-scroll padding-bottom-null">
     <table class="table table-striped table-bordered table-hover"
-           id="dataTables-example" style="font-size:12px">
+           id="dataTables-example" style="font-size: 12px">
         <thead>
-            <tr>
-                <th>№</th>
-                <th id="lastNameHidden">Прізвище</th>
-                <th id="firstNameHidden">Ім'я</th>
-                <th id="middleNameHidden">По батькові</th>
-                <th id="phone1Hidden">Моб. тел. 1</th>
-                <th id="phone2Hidden">Моб. тел. 2</th>
-                <th id="homeNumberHidden">Дом. тел.</th>
-                <th id="birthDateHidden">Дата<br> народження</th>
-                <th id="emailNameHidden">Емейл</th>
-                <th id="cityNameHidden">Місто</th>
-                <th id="streetNameHidden">Вулиця</th>
-                <th id="houseNameHidden">Будинок</th>
-                <th id="flatNameHidden">Квартира</th>
-                <th id="workPlaceHidden">Місце<br> роботи</th>
-                <th id="categoryNameHidden">Категорія</th>
-                <th id="isDeadHidden" style="display: none !important">Помер(ла)</th>
-                <th>
-                    <i title="Детальніше" style="color: gray; margin-right: 5px; cursor: pointer"
-                       class="pull-right glyphicon glyphicon-info-sign"></i>
-                </th>
-                <th>
-                    <i title="Редагувати" style="color: gray; margin-right: 5px; cursor: pointer"
-                       class="pull-right glyphicon glyphicon-pencil"></i>
-                </th>
-                <th>
-                    <i title="Видалити" style="color: red; cursor: pointer"
-                       class="pull-right glyphicon glyphicon-trash"></i>
-                </th>
-            </tr>
+        <tr>
+            <th>№</th>
+            <th id="lastNameHidden">Прізвище</th>
+            <th id="firstNameHidden">Ім'я</th>
+            <th id="middleNameHidden">По батькові</th>
+            <th id="phone1Hidden">Моб. тел. 1</th>
+            <th id="phone2Hidden">Моб. тел. 2</th>
+            <th id="homeNumberHidden">Дом. тел.</th>
+            <th id="birthDateHidden">Дата<br> народження</th>
+            <th id="emailNameHidden">Емейл</th>
+            <th id="cityNameHidden">Місто</th>
+            <th id="streetNameHidden">Вулиця</th>
+            <th id="houseNameHidden">Будинок</th>
+            <th id="flatNameHidden">Квартира</th>
+            <th id="workPlaceHidden">Місце<br> роботи</th>
+            <th id="categoryNameHidden">Категорія</th>
+            <th id="isDeadHidden" style="display: none !important">Помер(ла)</th>
+            <th>
+                <i title="Детальніше" style="color: gray; margin-right: 5px; cursor: pointer"
+                   class="pull-right glyphicon glyphicon-info-sign"></i>
+            </th>
+            <th>
+                <i title="Редагувати" style="color: gray; margin-right: 5px; cursor: pointer"
+                   class="pull-right glyphicon glyphicon-pencil"></i>
+            </th>
+            <th>
+                <i title="Видалити" style="color: red; cursor: pointer"
+                   class="pull-right glyphicon glyphicon-trash"></i>
+            </th>
+        </tr>
         </thead>
         <tbody id="selectionBody">
-            @Html.Partial("SelectionPersonPartial", Model)
+        @Html.Partial("SelectionPersonPartial", Model)
         </tbody>
     </table>
 </div>
+
+<input style="display: none" id="paginationWay" value="@Consts.PaginationByFilter"/>
+
 <div class="col-md-12 text-center" style="transform: translateY(10px);position: absolute;bottom: 10px;">
     @Html.PagedListPager(Model, page => Url.Action("Index", "Person", new { page }))
 </div>

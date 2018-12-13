@@ -40,5 +40,10 @@ namespace Svbase.Core.Consts
         public const int WorkPlaceId = 10;
         public const int IsDeadId = 11;
         #endregion fieldsIds
+
+        #region paginationWay
+        public const int PaginationByFilter = 1;
+        public const int PaginationBySearch = 2;
+        #endregion paginationWay
     }
 }

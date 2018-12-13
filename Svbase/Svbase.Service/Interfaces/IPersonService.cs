@@ -21,5 +21,6 @@ namespace Svbase.Service.Interfaces
         bool CreatePersonByModel(PersonAndFullAddressViewModel model, Flat flat);
         IQueryable<PersonSelectionModel> SearchPersonsByFilter(FilterFileImportModel filter);
         IEnumerable<ItemFilterModel> GetFilterStreetsByCityIds(IList<int> cityIds);
+        IQueryable<PersonSelectionModel> SearchPersonsByFields(PersonSearchModel searchFields);
     }
 }
