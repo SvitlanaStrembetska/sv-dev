@@ -35,15 +35,20 @@ namespace Svbase.Service.Implementation
         {
             var beneficiaries = RepositoryManager.Beneficiaries.GetDashboardBeneficiaries();
             var districtsModel = RepositoryManager.Districts.GetDashboardDistrictsModel();
-            var allpersonsCount = RepositoryManager.Persons.GetAllPersonsCount();
+            var allPersonsCount = RepositoryManager.Persons.GetAllPersonsCount();
+            var allPersonsMobilePhoneCount = RepositoryManager.Persons.GetAllPersonsWithMobilePhoneCount();
             var personsCount = RepositoryManager.Persons.GetPersonsWithoutBeneficiariesCount();
             var personsWidthMobilePhoneCount = RepositoryManager.Persons.GetPersonsWidthMobilePhoneWithoutBeneficiariesCount();
             var dashboardViewModel = new DashboardViewModel
             {
                 Beneficiaries = beneficiaries,
                 DistrictsModel = districtsModel,
-                AllPersonsCount = allpersonsCount,
-                WithoutBeneficiaries = new DashboardPersonsWithoutBeneficiaries
+                AllPersons = new DashboardPersonsBeneficiaries
+                {
+                    PersonsCount = allPersonsCount,
+                    PersonsWidthMobilePhoneCount = allPersonsMobilePhoneCount
+                },
+                WithoutBeneficiaries = new DashboardPersonsBeneficiaries
                 {
                     PersonsCount = personsCount,
                     PersonsWidthMobilePhoneCount = personsWidthMobilePhoneCount,

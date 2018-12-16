@@ -9,7 +9,7 @@
                         <div class="panel-body">
                             <div class="row">
                                 <div class="col-sm-12">
-                                    <a class="text-center click" href="@Url.Action("Index", "Person")">Всього людей - @Model.AllPersonsCount </a>
+                                    <a class="text-center click" href="@Url.Action("Index", "Person")">Всього людей - @Model.AllPersons.PersonsCount  (@Model.AllPersons.PersonsWidthMobilePhoneCount<i class="fa fa-mobile-alt fa-fw"></i>)</a>
                                 </div>
                             </div>
                             <p />

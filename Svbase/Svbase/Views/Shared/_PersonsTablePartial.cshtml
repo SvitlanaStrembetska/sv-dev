@@ -43,9 +43,6 @@
         </tbody>
     </table>
 </div>
-
-<input style="display: none" id="paginationWay" value="@Consts.PaginationByFilter"/>
-
 <div class="col-md-12 text-center" style="transform: translateY(10px);position: absolute;bottom: 10px;">
     @Html.PagedListPager(Model, page => Url.Action("Index", "Person", new { page }))
 </div>

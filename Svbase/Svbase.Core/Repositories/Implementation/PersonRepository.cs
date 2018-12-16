@@ -227,6 +227,11 @@ namespace Svbase.Core.Repositories.Implementation
             return DbSet.Count();
         }
 
+        public int GetAllPersonsWithMobilePhoneCount()
+        {
+            return DbSet.Count(x => x.MobileTelephoneFirst.Length > 0 || x.MobileTelephoneSecond.Length > 0);
+        }
+
         public int GetPersonsWithoutBeneficiariesCount()
         {
             return DbSet.Count(x => !x.Beneficiaries.Any());
@@ -234,6 +239,52 @@ namespace Svbase.Core.Repositories.Implementation
         public int GetPersonsWidthMobilePhoneWithoutBeneficiariesCount()
         {
             return DbSet.Count(x => !x.Beneficiaries.Any() && (x.MobileTelephoneFirst.Length > 0 || x.MobileTelephoneSecond.Length > 0));
+        }
+
+        public IQueryable<PersonSelectionModel> SearchDublicateByFirstAndLastName()
+        {
+            return DbSet.Where(x => DbSet.Count(y => (x.FirstName == y.FirstName) && (x.LastName == y.LastName)) > 1).Distinct().Select(x => new PersonSelectionModel
+            {
+                Id = x.Id,
+                FirstName = x.FirstName,
+                MiddleName = x.MiddleName,
+                LastName = x.LastName,
+                Position = x.Position,
+                Gender = x.Gender,
+                IsDead = x.IsDead,
+                Email = x.Email,
+                FirstMobilePhone = x.MobileTelephoneFirst,
+                SecondMobilePhone = x.MobileTelephoneSecond,
+                HomePhone = x.StationaryPhone,
+                PartionType = x.PartionType,
+                DateBirth = x.BirthdayDate,
+                Beneficiaries = x.Beneficiaries.Select(b => new CheckboxItemModel
+                {
+                    Id = b.Id,
+                    Name = b.Name
+                }).ToList(),
+                City = x.Flats.Select(f => new BaseViewModel
+                {
+                    Id = f.Apartment.Street.City.Id,
+                    Name = f.Apartment.Street.City.Name,
+                }).FirstOrDefault(),
+                Street = x.Flats.Select(f => new BaseViewModel
+                {
+                    Id = f.Apartment.Street.Id,
+                    Name = f.Apartment.Street.Name,
+                }).FirstOrDefault(),
+                Apartment = x.Flats.Select(f => new BaseViewModel
+                {
+                    Id = f.Apartment.Id,
+                    Name = f.Apartment.Name,
+                }).FirstOrDefault(),
+                Flat = x.Flats.Select(f => new BaseViewModel
+                {
+                    Id = f.Id,
+                    Name = f.Number,
+                }).FirstOrDefault(),
+                Work = x.Work
+            }).OrderBy(x=>x.LastName).ThenBy(x => x.FirstName);
         }
     }
 }

@@ -73,6 +73,7 @@
         </div>
     </nav>
     <div id="page-wrapper" style="max-height: calc(95vh - 70px) !important; overflow-y: auto; margin: 0 0 0 50px">
+        <input style="display: none" type="text" id="paginationWay" value="@Consts.PaginationByFilter" />
         <div class="row" id="personsTable">
             @Html.Partial("_PersonsTablePartial", Model)
         </div>
@@ -731,8 +732,12 @@
             return false;
 
         var paginationWay = $('#paginationWay').val();
-        if (paginationWay === @Consts.PaginationByFilter) paginationByFilter(page);
-        else if (paginationWay === @Consts.PaginationBySearch) paginationBySearch(page);
+        if (paginationWay === '@Consts.PaginationByFilter')
+            paginationByFilter(page);
+        else if (paginationWay === '@Consts.PaginationBySearch')
+            paginationBySearch(page);
+        else if (paginationWay === '@Consts.PaginationByDublicateSearch')
+            paginationByDublicateSearch(page);
             
         $(".pagination li").each((index, element) => {
             $(element).addClass("click");
@@ -783,6 +788,17 @@
             url: "@Url.Action("SearchPeople", "Person")",
             type: 'Post',
             data: { searchFields: searchFields, page: page},
+            async: false
+        }).done((data) => {
+            $("#personsTable").html(data);
+        });
+    }
+
+    function paginationByDublicateSearch(page) {
+        $.ajax({
+            url: "@Url.Action("DublicateSearch", "Dublicate")",
+            type: 'Post',
+            data: { page: page},
             async: false
         }).done((data) => {
             $("#personsTable").html(data);

@@ -14,7 +14,14 @@ namespace Svbase.Core.Repositories.Interfaces
         IQueryable<PersonSelectionModel> GetPersonsByIds(IEnumerable<int> ids);
         IQueryable<PersonSelectionModel> SearchPersonsByFields(PersonSearchModel searchFields);
         int GetAllPersonsCount();
+        int GetAllPersonsWithMobilePhoneCount();
         int GetPersonsWithoutBeneficiariesCount();
         int GetPersonsWidthMobilePhoneWithoutBeneficiariesCount();
+
+
+        #region DIBLICATE SEARCH
+        IQueryable<PersonSelectionModel> SearchDublicateByFirstAndLastName();
+
+        #endregion
     }
 }

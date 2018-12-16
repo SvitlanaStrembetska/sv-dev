@@ -22,5 +22,11 @@ namespace Svbase.Service.Interfaces
         IQueryable<PersonSelectionModel> SearchPersonsByFilter(FilterFileImportModel filter);
         IEnumerable<ItemFilterModel> GetFilterStreetsByCityIds(IList<int> cityIds);
         IQueryable<PersonSelectionModel> SearchPersonsByFields(PersonSearchModel searchFields);
+
+        #region DIBLICATE SEARCH
+
+        IQueryable<PersonSelectionModel> SearchDublicateByFirstAndLastName();
+
+        #endregion
     }
 }

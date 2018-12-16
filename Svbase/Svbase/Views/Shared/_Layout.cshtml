@@ -189,7 +189,7 @@
                                         <div class="row divider"></div>
                                         <div class="row">
                                             <div class="col-md-8">
-                                                <a class="text-center show-all-display-filter">
+                                                <a class="text-center show-all-display-filter click">
                                                     <strong>Показати всіх</strong>
                                                     <i class="fa fa-angle-right"></i>
                                                 </a>
@@ -207,7 +207,7 @@
                                 <a class="dropdown-toggle" data-toggle="dropdown">
                                     <i class="fa fa-search fa-fw"></i> Пошук <i class="fa fa-caret-down"></i>
                                 </a>
-                                <div class="dropdown-menu dropdown-tasks dropdown-body" style="width:400px">
+                                <div class="dropdown-menu dropdown-tasks dropdown-body" style="width: 400px">
                                     <div class="row" style="margin: 0">
                                         <div class="col-md-12 ignore-padding">
                                             <div class="col-md-12 block-container">
@@ -258,7 +258,7 @@
                                         <div class="row divider"></div>
                                         <div class="row">
                                             <div class="col-md-8">
-                                                <a class="text-center show-all-display-search">
+                                                <a class="text-center show-all-display-search click">
                                                     <strong>Показати всіх</strong>
                                                     <i class="fa fa-angle-right"></i>
                                                 </a>
@@ -266,6 +266,29 @@
                                             <div class="col-md-4">
                                                 <button class="btn btn-primary click" id="startSearch" style="width: 100%">
                                                     Пошук
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="dropdown">
+                                <a class="dropdown-toggle" data-toggle="dropdown">
+                                    <i class="fa fa-search fa-fw"></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-tasks dropdown-body" style="width:400px">
+                                    <div class="col-md-12">
+                                        <div class="row divider"></div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <a class="text-center show-all-display-search click">
+                                                    <strong>Показати всіх</strong>
+                                                    <i class="fa fa-angle-right"></i>
+                                                </a>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <button class="btn btn-primary click" id="startDublicateSearch" style="width: 100%">
+                                                    Пошук дублікатів
                                                 </button>
                                             </div>
                                         </div>
@@ -592,15 +615,18 @@ else
         });
 
         $("#startFilter").click(function () {
-            $("#paginationWay").val("@Consts.PaginationByFilter");
+            $("#paginationWay").attr('value', '@Consts.PaginationByFilter');
             getPersonsByFilter();
-            $('#filter').find(".dropdown-toggle").dropdown("toggle");
         });
 
         $("#startSearch").click(function () {
-            $("#paginationWay").val("@Consts.PaginationBySearch");
+            $("#paginationWay").attr('value', '@Consts.PaginationBySearch');
             getPersonsBySearch();
-            $('#filter').find(".dropdown-toggle").dropdown("toggle");
+        });
+
+        $("#startDublicateSearch").click(function () {
+            $("#paginationWay").attr('value', '@Consts.PaginationByDublicateSearch');
+            getPersonsByDublicateSearch();
         });
 
         $(".beneficary").click(function (e) {
@@ -629,7 +655,20 @@ else
             $.ajax({
                 url: "@Url.Action("SearchPeople", "Person")",
                 type: 'Post',
-                data: { searchFields: searchFields},
+                data: { searchFields: searchFields },
+                async: false
+            }).done((data) => {
+                $("#personsTable").html(data);
+            });
+
+            $('#loader').fadeOut();
+        }
+
+        function getPersonsByDublicateSearch() {
+            $.ajax({
+                url: "@Url.Action("DublicateSearch", "Dublicate")",
+                type: 'Post',
+                data: {},
                 async: false
             }).done((data) => {
                 $("#personsTable").html(data);
@@ -813,7 +852,7 @@ else
             $('#loader').fadeOut();
         });
 
-        $(".show-all-display-search").click(function() {
+        $(".show-all-display-search").click(function () {
             $('#loader').fadeIn();
 
             $("#personSearch_FirstName").val(""),

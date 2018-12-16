@@ -44,6 +44,7 @@ namespace Svbase.Core.Consts
         #region paginationWay
         public const int PaginationByFilter = 1;
         public const int PaginationBySearch = 2;
+        public const int PaginationByDublicateSearch = 3;
         #endregion paginationWay
     }
 }
