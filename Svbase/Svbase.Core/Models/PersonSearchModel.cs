@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Svbase.Core.Models
 {
@@ -24,5 +25,6 @@ namespace Svbase.Core.Models
         public string MobilePhone { get; set; }
         public bool IsMobilePhoneIncludedInSearch { get; set; }
 
+        public IEnumerable<int> ColumnsIds { get; set; }
     }
 }

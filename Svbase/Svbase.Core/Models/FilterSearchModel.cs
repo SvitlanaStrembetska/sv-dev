@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Svbase.Core.Enums;
 
 namespace Svbase.Core.Models
@@ -19,6 +20,16 @@ namespace Svbase.Core.Models
 
         public IEnumerable<string> BeneficariesUnchecked { get; set; }
         public IEnumerable<string> BeneficariesChecked { get; set; }
+
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
+        public DateTime? StartDateMonth { get; set; }
+        public DateTime? EndDateMonth { get; set; }
+        public SortOrder SortOrder { get; set; }
+        public ColumnName FirstSortOrder { get; set; }
+        public ColumnName SecondSortOrder { get; set; }
+        public ColumnName ThirdSortOrder { get; set; }
+
         public bool IsDeadPerson { get; set; }
     }
 }

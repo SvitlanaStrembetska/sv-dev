@@ -247,6 +247,7 @@
     </Compile>
     <Compile Include="Helpers\ConvertDataHelper.cs" />
     <Compile Include="Helpers\FilesDataValidationHelper.cs" />
+    <Compile Include="Helpers\PersonFilterHelper.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\FileValidationModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -258,6 +259,8 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\bootstrap-datepicker.min.css" />
+    <Content Include="Content\bootstrap-multiselect.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\dataTables.responsive.css" />
     <Content Include="Content\datatables\dataTables.bootstrap.min.css" />
@@ -274,6 +277,8 @@
     <Content Include="Images\Tumblr.jpg" />
     <Content Include="Scripts\all.min.js" />
     <Content Include="Scripts\bootstrap-3.3.7.min.js" />
+    <Content Include="Scripts\bootstrap-datepicker.min.js" />
+    <Content Include="Scripts\bootstrap-multiselect.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -360,6 +365,9 @@
     <Content Include="Views\District\Index.cshtml" />
     <Content Include="Views\Shared\_DistrictApartmentPanelBody.cshtml" />
     <Content Include="Views\Shared\_PersonEditBody.cshtml" />
+    <Content Include="Views\Shared\_FilterMultiSelectPartial.cshtml" />
+    <Content Include="Views\Shared\_SortByColumnsInFilter.cshtml" />
+    <Content Include="Views\Shared\_ShowColumnsListInFilter.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

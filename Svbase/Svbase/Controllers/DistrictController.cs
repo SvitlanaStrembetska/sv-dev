@@ -58,7 +58,7 @@ namespace Svbase.Controllers
         [HttpGet]
         public ActionResult DistrictsByType(DistrictType districtType)
         {
-            return PartialView("_FilterCheckBoxPartial", _districtService.GetDistrictsByType(districtType).ToList());
+            return PartialView("_FilterMultiSelectPartial", _districtService.GetDistrictsByType(districtType).ToList());
         }
         
         [Authorize(Roles = RoleConsts.Admin)]

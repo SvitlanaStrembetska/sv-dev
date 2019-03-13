@@ -1,0 +1,7 @@
+﻿@model IList<Svbase.Core.Models.BaseViewModel>
+<select id="SelectedDistricts" multiple="multiple">
+    @foreach (var item in @Model)
+    {
+        <option value="@item.Id">@item.Name</option>
+    }
+</select>
