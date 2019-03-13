@@ -8,6 +8,7 @@ using Svbase.Core.Models;
 using Svbase.Service.Factory;
 using Svbase.Service.Interfaces;
 using PagedList;
+using Svbase.Helpers;
 
 namespace Svbase.Controllers
 {
@@ -20,6 +21,7 @@ namespace Svbase.Controllers
         private readonly IApartmentService _apartmentService;
         private readonly IFlatService _flatService;
         private readonly IBeneficiaryService _beneficiaryService;
+        private readonly PersonFilterHelper _personFilterHelper;
 
         public PersonController(IServiceManager serviceManager)
             : base(serviceManager)
@@ -30,6 +32,7 @@ namespace Svbase.Controllers
             _apartmentService = ServiceManager.ApartmentService;
             _flatService = ServiceManager.FlatService;
             _beneficiaryService = ServiceManager.BeneficiaryService;
+            _personFilterHelper = new PersonFilterHelper();
         }
 
         [HttpGet]
@@ -56,7 +59,7 @@ namespace Svbase.Controllers
             ViewBag.BeneficariesChecked = filter.BeneficariesChecked.ToList();
             //=================  end generate beneficiaries unchecked list for filter (from Dashboard)  ============= 
 
-            return View(FilterPersonsByBeneficiary(persons, filter.BeneficariesChecked).ToPagedList(page, Consts.ShowRecordsPerPage));
+            return View(_personFilterHelper.FilterPersonsByBeneficiary(persons, filter.BeneficariesChecked).ToPagedList(page, Consts.ShowRecordsPerPage));
         }
 
         [HttpPost]
@@ -69,25 +72,28 @@ namespace Svbase.Controllers
             else
                 persons = _personService.GetPersons().Where(x => x.IsDead == filter.IsDeadPerson);
 
+            if (filter.StartDate != null && filter.EndDate != null)
+                persons = persons.Where(x => x.DateBirth >= filter.StartDate && x.DateBirth <= filter.EndDate);
+            else if (filter.StartDate != null)
+                persons = persons.Where(x => x.DateBirth >= filter.StartDate);
+            else if (filter.EndDate != null)
+                persons = persons.Where(x => x.DateBirth <= filter.EndDate);
+            else if (filter.StartDateMonth != null && filter.EndDateMonth != null)
+                persons = persons.Where(x => x.DateBirth.Value.Day >= filter.StartDateMonth.Value.Day 
+                    && x.DateBirth.Value.Month >= filter.StartDateMonth.Value.Month 
+                    && x.DateBirth.Value.Day <= filter.EndDateMonth.Value.Day
+                    && x.DateBirth.Value.Month <= filter.EndDateMonth.Value.Month);
+            else if (filter.StartDateMonth != null)
+                persons = persons.Where(x => x.DateBirth.Value.Day >= filter.StartDateMonth.Value.Day && x.DateBirth.Value.Month >= filter.StartDateMonth.Value.Month);
+            else if (filter.EndDateMonth != null)
+                persons = persons.Where(x => x.DateBirth.Value.Day <= filter.EndDateMonth.Value.Day && x.DateBirth.Value.Month <= filter.EndDateMonth.Value.Month);
+
             if (filter.BeneficariesChecked == null || !filter.BeneficariesChecked.Any())
-                return PartialView("_PersonsTablePartial", persons.ToPagedList(page, Consts.ShowRecordsPerPage));
+                return PartialView("_PersonsTablePartial", _personFilterHelper.OrderPersonsBy(persons, filter.SortOrder, filter.FirstSortOrder,filter.SecondSortOrder,filter.ThirdSortOrder).ToPagedList(page, Consts.ShowRecordsPerPage));
 
-            return PartialView("_PersonsTablePartial", FilterPersonsByBeneficiary(persons, filter.BeneficariesChecked).ToPagedList(page, Consts.ShowRecordsPerPage));
+            return PartialView("_PersonsTablePartial", _personFilterHelper.OrderPersonsBy(_personFilterHelper.FilterPersonsByBeneficiary(persons, filter.BeneficariesChecked), filter.SortOrder, filter.FirstSortOrder, filter.SecondSortOrder, filter.ThirdSortOrder).ToPagedList(page, Consts.ShowRecordsPerPage));
         }
-
-        public List<PersonSelectionModel> FilterPersonsByBeneficiary(IQueryable<PersonSelectionModel> persons, IEnumerable<string> checkedBeneficariesId)
-        {
-            var personsLists = new List<PersonSelectionModel>();
-            foreach (var person in persons)
-            {
-                if (checkedBeneficariesId.Any(id => person.Beneficiaries.Any(x => x.Id.ToString().Equals(id))))
-                    personsLists.Add(person);
-                else if (checkedBeneficariesId.Any(x => x.Contains("0")) && !person.Beneficiaries.Any())
-                    personsLists.Add(person);
-            }
-            return personsLists;
-        }
-
+        
         [HttpPost]
         public ActionResult SearchPeople(PersonSearchModel searchFields, int page = 1)
         {
@@ -109,7 +115,7 @@ namespace Svbase.Controllers
 
         public ActionResult Create()
         {
-            return View(new PersonAndFullAddressViewModel { Beneficiaries = _beneficiaryService.GetBeneficiariesForSelecting().ToList() });
+            return View(new PersonAndFullAddressViewModel {Beneficiaries = _beneficiaryService.GetBeneficiariesForSelecting().ToList()});
         }
 
         [Authorize(Roles = RoleConsts.Admin)]
@@ -121,27 +127,16 @@ namespace Svbase.Controllers
 
             Flat flat;
             if (model.FlatId == 0 && model.ApartmentId == 0 && model.StreetId == 0)
-                flat = _flatService.GetAll().Where(x => x.Number == Consts.DefaultAddress
-                                                        && x.Apartment.Name == Consts.DefaultAddress
-                                                        && x.Apartment.Street.Name == Consts.DefaultAddress
-                                                        && x.Apartment.Street.City.Id == model.CityId).ToList().FirstOrDefault();
+                flat = _flatService.GetAll().Where(x => x.Number == Consts.DefaultAddress && x.Apartment.Name == Consts.DefaultAddress && x.Apartment.Street.Name == Consts.DefaultAddress && x.Apartment.Street.City.Id == model.CityId).ToList().FirstOrDefault();
             else if (model.FlatId == 0 && model.ApartmentId == 0 && model.StreetId != 0)
-                flat = _flatService.GetAll().Where(x => x.Number == Consts.DefaultAddress
-                                                        && x.Apartment.Name == Consts.DefaultAddress
-                                                        && x.Apartment.Street.Id == model.StreetId
-                                                        && x.Apartment.Street.City.Id == model.CityId).ToList().FirstOrDefault();
+                flat = _flatService.GetAll().Where(x => x.Number == Consts.DefaultAddress && x.Apartment.Name == Consts.DefaultAddress && x.Apartment.Street.Id == model.StreetId && x.Apartment.Street.City.Id == model.CityId).ToList().FirstOrDefault();
             else if (model.FlatId == 0 && model.ApartmentId != 0 && model.StreetId != 0)
-                flat = _flatService.GetAll().Where(x => x.Number == Consts.DefaultAddress
-                                                        && x.Apartment.Id == model.ApartmentId
-                                                        && x.Apartment.Street.Id == model.StreetId
-                                                        && x.Apartment.Street.City.Id == model.CityId).ToList().FirstOrDefault();
+                flat = _flatService.GetAll().Where(x => x.Number == Consts.DefaultAddress && x.Apartment.Id == model.ApartmentId && x.Apartment.Street.Id == model.StreetId && x.Apartment.Street.City.Id == model.CityId).ToList().FirstOrDefault();
             else
                 flat = _flatService.FindById(model.FlatId);
 
             var isCreated = _personService.CreatePersonByModel(model, flat);
-            return !isCreated
-                ? RedirectToAction("Create", model)
-                : RedirectToAction("Index", "Person");
+            return !isCreated ? RedirectToAction("Create", model) : RedirectToAction("Index", "Person");
         }
 
         public ActionResult Edit(int id)
@@ -152,9 +147,7 @@ namespace Svbase.Controllers
             {
                 personBeneficiaries.Add(new CheckboxItemModel
                 {
-                    Id = beneficary.Id,
-                    Name = beneficary.Name,
-                    IsChecked = false
+                    Id = beneficary.Id, Name = beneficary.Name, IsChecked = false
                 });
             }
             person.Beneficiaries = personBeneficiaries;
@@ -165,7 +158,6 @@ namespace Svbase.Controllers
         [HttpPost]
         public ActionResult Edit(PersonAndFullAddressViewModel model)
         {
-
             if (model.LastName == null && model.FirstName == null)
                 return RedirectToAction("Edit", model);
 
@@ -199,7 +191,7 @@ namespace Svbase.Controllers
                 }
             }
 
-            var flats = new List<Flat> { _flatService.FindById(model.FlatId) };
+            var flats = new List<Flat> {_flatService.FindById(model.FlatId)};
             foreach (var flat in flats)
             {
                 _flatService.Attach(flat);
@@ -217,7 +209,7 @@ namespace Svbase.Controllers
         {
             _personService.DeleteById(id);
 
-            return Json(new { status = "success" });
+            return Json(new {status = "success"});
         }
 
         [Authorize(Roles = RoleConsts.Admin)]

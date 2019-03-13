@@ -147,15 +147,14 @@
         $('#loader').fadeIn();
         var urlAction = "@Url.Action("PostIndex")";
 
+        var selectedColumns = $("#SelectedColumnsFilter").val();
         var districtIds = getCheckedDistrictIds();
         var cityIds = getCheckedCityIds();
         var streetIds = getCheckedStreetIds();
         var apartmentIds = getCheckedApartmentIds();
         var flatIds = getCheckedFlatIds();
         var beneficaries = getBeneficariesChecked();
-        var isDeadPerson = $("#isDeadDisplay input").prop('checked');
-
-        var columnsId = getCheckedFields();
+        var isDeadPerson = selectedColumns.includes('@Consts.IsDeadId');
 
         var filter = {
             districtIds: districtIds,
@@ -174,20 +173,13 @@
             async: false
         }).done((data) => {
             $("#personsTable").html(data);
-            hideFields(columnsId);
+            hideFields(selectedColumns);
         });
         $('#loader').fadeOut();
     }
 
     function getCheckedDistrictIds() {
-        var districtIds = [];
-        $("#districts input:checked").each((index, element) => {
-            if (!isNaN($(element).val())) {
-                var id = Number($(element).val());
-                districtIds.push(id);
-            }
-        });
-        return districtIds;
+        return $("#SelectedDistricts").val();
     }
 
     function getCitiesPartialView() {
@@ -515,18 +507,6 @@
         return fields;
     }
 
-    function getCheckedFieldsName() {
-        var fields = [];
-        $(".column-name input:checked").each((index, element) => {
-            var fieldName = $(element)[0].getAttribute("id");
-            if (fieldName !== "") {
-                fields.push(fieldName);
-            }
-        });
-        return fields;
-    }
-
-
     // ==================   start show full/part of left filter   ================== //
     $(document).on('click', '.thumbtack', function() {
         var currentVal = $(this).attr('thumbtack');
@@ -610,25 +590,19 @@
 
 
     function getBeneficariesUnchecked() {
+        //return $("#SelectedBeneficiaries").val();
         var beneficaries = [];
-        $(".beneficary input").each((index, element) => {
-            var fieldName = $(element).parent().attr("id");
-            if (fieldName !== "" && !$(".beneficary #" + fieldName + " input").is(":checked")) {
-                beneficaries.push(fieldName);
+        $("#SelectedBeneficiaries option").each((index, element) => {
+            var isOptionActive = $(element).is(":selected");
+            if (!isOptionActive) {
+                beneficaries.push($(element).val());
             }
         });
         return beneficaries;
     }
 
     function getBeneficariesChecked() {
-        var beneficaries = [];
-        $(".beneficary input").each((index, element) => {
-            var fieldName = $(element).parent().attr("id");
-            if (fieldName !== "" && $(".beneficary #" + fieldName + " input").is(":checked")) {
-                beneficaries.push(fieldName);
-            }
-        });
-        return beneficaries;
+        return $("#SelectedBeneficiaries").val();
     }
 
     function hideFields(columnsName) {
@@ -644,27 +618,25 @@
         var isWorkPlaceDisplay = false;
 
         for (var i = 0; i < columnsName.length; i++) {
-            if (columnsName[i] === "lastNameDisplay")
+            if (columnsName[i] === "@Consts.LastNameId")
                 islastNameDisplay = true;
-            else if (columnsName[i] === "firstNameDisplay")
+            else if (columnsName[i] === "@Consts.FirstNameId")
                 isFirstNameDisplay = true;
-            else if (columnsName[i] === "middleNameDisplay")
+            else if (columnsName[i] === "@Consts.MiddleNameId")
                 isMiddleNameDisplay = true;
-            else if (columnsName[i] === "phoneFirstDisplay")
+            else if (columnsName[i] === "@Consts.FirstMobilePhoneId")
                 isPhoneFirstDisplay = true;
-            else if (columnsName[i] === "phoneSecondDisplay")
+            else if (columnsName[i] === "@Consts.SecondMobilePhoneId")
                 isPhoneSecondDisplay = true;
-            else if (columnsName[i] === "phoneSecondDisplay")
-                isPhoneSecondDisplay = true;
-            else if (columnsName[i] === "homePhoneDisplay")
+            else if (columnsName[i] === "@Consts.HomePhoneId")
                 isHomePhoneDisplay = true;
-            else if (columnsName[i] === "dateBirthDisplay")
+            else if (columnsName[i] === "@Consts.DateBirthId")
                 isDateBirthDisplay = true;
-            else if (columnsName[i] === "emailDisplay")
+            else if (columnsName[i] === "@Consts.EmailId")
                 isEmailDisplay = true;
-            else if (columnsName[i] === "addressDisplay")
+            else if (columnsName[i] === "@Consts.AddressId")
                 isAddressDisplay = true;
-            else if (columnsName[i] === "workPlaceDisplay")
+            else if (columnsName[i] === "@Consts.WorkPlaceId")
                 isWorkPlaceDisplay = true;
         }
 
@@ -738,7 +710,7 @@
             paginationBySearch(page);
         else if (paginationWay === '@Consts.PaginationByDublicateSearch')
             paginationByDublicateSearch(page);
-            
+
         $(".pagination li").each((index, element) => {
             $(element).addClass("click");
         });
@@ -747,24 +719,55 @@
     });
 
     function paginationByFilter(page) {
+        var startDate = $("#personFilter_StartDate").val();
+        var endDate = $("#personFilter_EndDate").val();
+        var startDateMonth = $("#personFilter_StartDateMonth").val();
+        var endDateMonth = $("#personFilter_EndDateMonth").val();
+        if ($("#orderByCurrentDate").hasClass("btn-primary")) {
+            startDateMonth = null;
+            endDateMonth = null;
+        } else if ($("#orderByMonths").hasClass("btn-primary")) {
+            startDate = null;
+            endDate = null;
+        }
+
+        var sortOrder = null;
+        var firstSortOrder = null;
+        var secondSortOrder = null;
+        var thirdSortOrder = null;
+        if (!$("#FirstSortOrder")[0].hasAttribute('disabled'))
+            sortOrder = $("#SortOrder").val();
+        if (!$("#FirstSortOrder")[0].hasAttribute('disabled'))
+            firstSortOrder = $("#FirstSortOrder").val();
+        if (!$("#SecondSortOrder")[0].hasAttribute('disabled'))
+            secondSortOrder = $("#SecondSortOrder").val();
+        if (!$("#ThirdSortOrder")[0].hasAttribute('disabled'))
+            thirdSortOrder = $("#ThirdSortOrder").val();
+
+        var selectedColumns = $("#SelectedColumnsFilter").val();
         var districtIds = getCheckedDistrictIds();
         var cityIds = getCheckedCityIds();
         var streetIds = getCheckedStreetIds();
         var apartmentIds = getCheckedApartmentIds();
         var flatIds = getCheckedFlatIds();
         var beneficaries = getBeneficariesChecked();
-        var isDeadPerson = $("#isDeadDisplay input").prop('checked');
-
-        var columnsId = getCheckedFields();
+        var isDeadPerson = selectedColumns.includes('@Consts.IsDeadId');
 
         $.ajax({
             url: "@Url.Action("PostIndex", "Person")",
             type: 'Post',
-            data: { districtIds: districtIds, cityIds: cityIds, streetIds: streetIds, apartmentIds: apartmentIds, flatIds: flatIds, BeneficariesChecked: beneficaries, IsDeadPerson: isDeadPerson, page: page },
+            data: { districtIds: districtIds, cityIds: cityIds,
+                    streetIds: streetIds, apartmentIds: apartmentIds,
+                    flatIds: flatIds, BeneficariesChecked: beneficaries,
+                    StartDate: startDate, EndDate: endDate,
+                    StartDateMonth: startDateMonth, EndDateMonth: endDateMonth,
+                    SortOrder: sortOrder, FirstSortOrder: firstSortOrder,
+                    SecondSortOrder: secondSortOrder, ThirdSortOrder: thirdSortOrder,
+                    IsDeadPerson: isDeadPerson, page: page },
             async: false
         }).done((data) => {
             $("#personsTable").html(data);
-            hideFields(columnsId);
+            hideFields(selectedColumns);
         });
         $(".pagination li").each((index, element) => {
             $(element).addClass("click");

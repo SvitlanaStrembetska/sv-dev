@@ -14,6 +14,10 @@
     @Scripts.Render("~/bundles/modernizr")
     <script src="~/Scripts/bootstrap-3.3.7.min.js"></script>
     <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/bootstrap-datepicker.min.js"></script>
+    <link rel="stylesheet" href="~/Content/bootstrap-multiselect.css" type="text/css">
+    <link rel="stylesheet" href="~/Content/bootstrap-datepicker.min.css" type="text/css">
+    <script type="text/javascript" src="~/Scripts/bootstrap-multiselect.js"></script>
 </head>
 <body>
     <div id="loader"></div>
@@ -34,26 +38,53 @@
             <div class="navbar-collapse collapse" style="height: 1px;">
                 <ul class="nav navbar-nav navbar-top-links navbar-right padding-top-5">
                     @{
-                        string path = HttpContext.Current.Request.Url.AbsolutePath;
-                        List<Beneficiary> beneficaries = ViewBag.Beneficaries;
+                        var path = HttpContext.Current.Request.Url.AbsolutePath;
+                        var personFilter = new PersonFilterViewModel
+                        {
+                            Beneficiaries = new List<SelectListItem>
+                            {
+                                new SelectListItem()
+                            },
+                            Districts = new List<SelectListItem>
+                            {
+                                new SelectListItem()
+                            },
+                            FirstSortOrder = new List<ColumnName>
+                            {
+                                ColumnName.FirstName,
+                                ColumnName.LastName
+                            },
+                            SecondSortOrder = new List<ColumnName> { },
+                            ThirdSortOrder = new List<ColumnName> { }
+                        };
+                        List<Beneficiary> beneficaries = ViewBag.Beneficaries ?? new List<Beneficiary>();
                         List<string> beneficariesChecked = ViewBag.BeneficariesChecked ?? new List<string>();
-                        PersonSearchModel personSearch = new PersonSearchModel();
+                        var personSearch = new PersonSearchModel();
                     }
                     @if (Request.IsAuthenticated)
                     {
-                        <li style="display:inline-block">
-                            <a href="@Url.Action("Index", "Person")" class="click" style="display:inline-block;padding-right:5px;"><i class="fa fa-user fa-fw"></i>Усі люди</a>
-                        </li>
-                        <li class="dropdown" style="display:inline-block">
-                            <a class="dropdown-toggle" data-toggle="dropdown" style="padding-left:2px;padding-right:2px;"><i class="fa fa-caret-down" id="dropdownicon" style="display:inline-block;color:dodgerblue;font-size:20px"></i></a>
-                            <ul class="dropdown-menu" style="text-align:center">
-                                <li>
-                                    <a href="@Url.Action("Create", "Person")" class="click">Додати людину</a>
-                                </li>
-                            </ul>
+                        <li style="display: inline-block">
+                            <a href="@Url.Action("Index", "Person")" class="click" style="display: inline-block; padding-right: 5px;"><i class="fa fa-user fa-fw"></i>Усі люди</a>
                         </li>
                         if (path == "/Person/Index")
                         {
+                            <li class="dropdown" style="display: inline-block">
+                                <a class="dropdown-toggle" data-toggle="dropdown" style="padding-left: 2px; padding-right: 2px;"><i class="fa fa-caret-down" id="dropdownicon" style="display: inline-block; color: dodgerblue; font-size: 20px"></i></a>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a data-toggle="modal" data-target="#Filter" id="openFilter">Фільтр</a>
+                                    </li>
+                                    <li>
+                                        <a data-toggle="modal" data-target="#SearchPeople">Пошук людей</a>
+                                    </li>
+                                    <li>
+                                        <a class="click" id="startDublicateSearch">Пошук дублікатів</a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("Create", "Person")" class="click">Додати людину</a>
+                                    </li>
+                                </ul>
+                            </li>
                             <li>
                                 <a data-toggle="modal" data-target="#ExportFile"><i class="fa fa-upload fa-fw"></i> Зберегти в Excel</a>
                             </li>
@@ -70,232 +101,6 @@
                         <li>
                             <a href="@Url.Action("List", "City")" class="click"><i class="fa fa-book fa-fw"></i> Адреси</a>
                         </li>
-
-                        if (path == "/Person/Index")
-                        {
-                            <li class="dropdown">
-                                <a class="dropdown-toggle" data-toggle="dropdown">
-                                    <i class="fa fa-tasks fa-fw"></i> Фільтр <i class="fa fa-caret-down"></i>
-                                </a>
-                                <div class="dropdown-menu dropdown-tasks dropdown-body" style="width: 960px">
-                                    <div class="row" style="margin: 0">
-                                        <div class="col-md-4" style="padding: 5px 5px 0 10px">
-                                            <div class="panel panel-primary new-panel-style" style="max-height: 375px; overflow-x: auto;">
-                                                <div class="panel-heading" style="margin-bottom: -10px;">
-                                                    <h5 class="panel-title" style="font-size: 14px">Поля<i onclick="getAllCheckBoxChecked()" class="fa fa-check-circle" id="fieldscheck" style="margin-left: 60%; margin-right: 13%" title="Вибрати всі"></i><i onclick="getAllCheckBoxUnChecked()" class="fa fa-times-circle" id="fieldsuncheck" title="Зняти виділення"></i></h5>
-                                                </div>
-                                                <div class="panel-body" style="padding-left: 0px">
-                                                    <ul id="hello" style="padding-left: 0">
-                                                        <li class="column-name">
-                                                            <a id="lastNameDisplay"> <input type="checkbox" checked id=@Consts.LastNameId style="margin-right: 5px">Прізвище</a>
-                                                        </li>
-                                                        <li class="column-name">
-                                                            <a id="firstNameDisplay"> <input type="checkbox" checked id=@Consts.FirstNameId style="margin-right: 5px">Ім'я</a>
-                                                        </li>
-                                                        <li class="column-name">
-                                                            <a id="middleNameDisplay"><input type="checkbox" checked id=@Consts.MiddleNameId style="margin-right: 5px">По батькові</a>
-                                                        </li>
-                                                        <li class="column-name">
-                                                            <a id="phoneFirstDisplay"><input type="checkbox" checked id=@Consts.FirstMobilePhoneId style="margin-right: 5px">Мобільний телефон 1</a>
-                                                        </li>
-                                                        <li class="column-name">
-                                                            <a id="phoneSecondDisplay"><input type="checkbox" checked id=@Consts.SecondMobilePhoneId style="margin-right: 5px">Мобільний телефон 2</a>
-                                                        </li>
-                                                        <li class="column-name">
-                                                            <a id="homePhoneDisplay"><input type="checkbox" checked id=@Consts.HomePhoneId style="margin-right: 5px">Домашній номер телефону</a>
-                                                        </li>
-                                                        <li class="column-name">
-                                                            <a id="dateBirthDisplay"><input type="checkbox" checked id=@Consts.DateBirthId style="margin-right: 5px">Дата народження</a>
-                                                        </li>
-                                                        <li class="column-name">
-                                                            <a id="emailDisplay"><input type="checkbox" checked id=@Consts.EmailId style="margin-right: 5px">Електронна пошта</a>
-                                                        </li>
-                                                        <li class="column-name">
-                                                            <a id="addressDisplay"><input type="checkbox" checked id=@Consts.AddressId style="margin-right: 5px">Адреса</a>
-                                                        </li>
-                                                        <li class="column-name">
-                                                            <a id="workPlaceDisplay"><input type="checkbox" checked id=@Consts.WorkPlaceId style="margin-right: 5px">Місце роботи</a>
-                                                        </li>
-                                                        <li class="column-name">
-                                                            <a id="isDeadDisplay"><input type="checkbox" id=@Consts.IsDeadId style="margin-right: 5px">Помер(ла)</a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4" style="padding: 5px 5px 0 5px">
-                                            <div class="panel panel-primary" style="max-height: 375px; overflow-x: auto;">
-                                                <div class="panel-heading" style="margin-bottom: -10px;">
-                                                    <h5 class="panel-title" style="font-size: 14px">Категорії<i onclick="getAllCategoriesChecked()" class=" fa fa-check-circle" id="categoriescheck" style="margin-left: 52%; margin-right: 13%" title="Вибрати всі"></i><i onclick="getAllCategoriesUnChecked()" class="fa fa-times-circle" id="categoriesuncheck" title="Зняти виділення"></i></h5>
-                                                </div>
-                                                <div class="panel-body" style="padding-left: 0px">
-                                                    <ul style="padding-left: 0">
-                                                        @foreach (var beneficary in beneficaries)
-                                                        {
-                                                            <li class="beneficary">
-                                                                @if (beneficariesChecked.Contains(beneficary.Id.ToString()))
-                                                                {
-                                                                    <a id="@beneficary.Id" style="display: flex; margin-top: -4px"><input type="checkbox" checked style="margin-right: 5px">@beneficary.Name</a>
-                                                                }
-                                                                else
-                                                                {
-                                                                    <a id="@beneficary.Id" style="display: flex; margin-top: -4px"><input type="checkbox" style="margin-right: 5px">@beneficary.Name</a>
-                                                                }
-                                                            </li>
-                                                        }
-                                                        <li class="beneficary">
-                                                            @if (beneficariesChecked.Contains("0"))
-                                                            {
-                                                                <a id="0" style="display: flex; margin-top: -4px"><input type="checkbox" checked style="margin-right: 5px">Без категорії</a>
-                                                            }
-                                                            else
-                                                            {
-                                                                <a id="0" style="display: flex; margin-top: -4px"><input type="checkbox" style="margin-right: 5px">Без категорії</a>
-                                                            }
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4" style="padding: 5px 10px 0 5px">
-                                            <div class="panel panel-primary" style="max-height: 375px; overflow-x: auto;">
-                                                <div class="panel-heading" style="margin-bottom: -10px;">
-                                                    <h5 class="panel-title" style="font-size: 14px">Округи</h5>
-                                                </div>
-                                                <div class="panel-body">
-                                                    <div class="row" style="padding-top: 5px;">
-                                                        <div class="col-md-6" style="padding-right: 0">
-                                                            <button class="btn btn-primary" id="getDistrictsByTypeConstituency" style="width: 100%">
-                                                                Партійний
-                                                            </button>
-                                                        </div>
-                                                        <div class="col-md-6" style="padding-left: 0;">
-                                                            <button class="btn btn-secondary" id="getDistrictsByTypeCustom" style="width: 100%">
-                                                                Виборчий
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row" style="padding-top: 5px; margin-left: -30px">
-                                                        <ul class="col-md-12" id="districts">
-                                                            @Html.Partial("_FilterCheckBoxPartial", new List
-                                                                <BaseViewModel>())
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="row divider"></div>
-                                        <div class="row">
-                                            <div class="col-md-8">
-                                                <a class="text-center show-all-display-filter click">
-                                                    <strong>Показати всіх</strong>
-                                                    <i class="fa fa-angle-right"></i>
-                                                </a>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <button class="btn btn-primary click" id="startFilter" style="width: 100%">
-                                                    Застосувати фільтр
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="dropdown">
-                                <a class="dropdown-toggle" data-toggle="dropdown">
-                                    <i class="fa fa-search fa-fw"></i> Пошук <i class="fa fa-caret-down"></i>
-                                </a>
-                                <div class="dropdown-menu dropdown-tasks dropdown-body" style="width: 400px">
-                                    <div class="row" style="margin: 0">
-                                        <div class="col-md-12 ignore-padding">
-                                            <div class="col-md-12 block-container">
-                                                <div class="col-md-12 ignore-padding" style="display: inline-block">
-                                                    @Html.LabelFor(model => personSearch.LastName, htmlAttributes: new { @class = "col-md-12" })
-                                                    <div class="col-md-11">
-                                                        @Html.EditorFor(model => personSearch.LastName, new { htmlAttributes = new { @class = "form-control" } })
-                                                        @Html.ValidationMessageFor(model => personSearch.LastName, "", new { @class = "text-danger" })
-                                                    </div>
-                                                    <div class="col-md-1">
-                                                        <input type="checkbox" id="isLastNameIncludedInSearch" checked style="margin-right: 5px">
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-12 ignore-padding" style="display: inline-block">
-                                                    @Html.LabelFor(model => personSearch.FirstName, htmlAttributes: new { @class = "col-md-12" })
-                                                    <div class="col-md-11">
-                                                        @Html.EditorFor(model => personSearch.FirstName, new { htmlAttributes = new { @class = "form-control" } })
-                                                        @Html.ValidationMessageFor(model => personSearch.FirstName, "", new { @class = "text-danger" })
-                                                    </div>
-                                                    <div class="col-md-1">
-                                                        <input type="checkbox" id="isFirstNameIncludedInSearch" checked style="margin-right: 5px">
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-12 ignore-padding" style="display: inline-block">
-                                                    @Html.LabelFor(model => personSearch.MiddleName, htmlAttributes: new { @class = "col-md-12" })
-                                                    <div class="col-md-11">
-                                                        @Html.EditorFor(model => personSearch.MiddleName, new { htmlAttributes = new { @class = "form-control" } })
-                                                        @Html.ValidationMessageFor(model => personSearch.MiddleName, "", new { @class = "text-danger" })
-                                                    </div>
-                                                    <div class="col-md-1">
-                                                        <input type="checkbox" id="isMiddleNameIncludedInSearch" checked style="margin-right: 5px">
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-12 ignore-padding" style="display: inline-block">
-                                                    @Html.LabelFor(model => personSearch.MobilePhone, htmlAttributes: new { @class = "col-md-12" })
-                                                    <div class="col-md-11">
-                                                        @Html.EditorFor(model => personSearch.MobilePhone, new { htmlAttributes = new { @class = "form-control" } })
-                                                        @Html.ValidationMessageFor(model => personSearch.MobilePhone, "", new { @class = "text-danger" })
-                                                    </div>
-                                                    <div class="col-md-1">
-                                                        <input type="checkbox" id="isMobilePhoneIncludedInSearch" checked style="margin-right: 5px">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="row divider"></div>
-                                        <div class="row">
-                                            <div class="col-md-8">
-                                                <a class="text-center show-all-display-search click">
-                                                    <strong>Показати всіх</strong>
-                                                    <i class="fa fa-angle-right"></i>
-                                                </a>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <button class="btn btn-primary click" id="startSearch" style="width: 100%">
-                                                    Пошук
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="dropdown">
-                                <a class="dropdown-toggle" data-toggle="dropdown">
-                                    <i class="fa fa-search fa-fw"></i>
-                                </a>
-                                <div class="dropdown-menu dropdown-tasks dropdown-body" style="width:400px">
-                                    <div class="col-md-12">
-                                        <div class="row divider"></div>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <a class="text-center show-all-display-search click">
-                                                    <strong>Показати всіх</strong>
-                                                    <i class="fa fa-angle-right"></i>
-                                                </a>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <button class="btn btn-primary click" id="startDublicateSearch" style="width: 100%">
-                                                    Пошук дублікатів
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                        }
                     }
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown">
@@ -325,7 +130,261 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" id="cencelExportBtn" class="btn btn-secondary" data-dismiss="modal">Закрити вікно</button>
-                            @Html.ActionLink("Експортувати дані", "ExportToExcel", "Export", null, new { @class = "btn btn-primary", @id = "exportBtn" })
+                            @Html.ActionLink("Експортувати дані", "ExportToExcelByFilter", "Export", null, new { @class = "btn btn-primary", @id = "exportBtn" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12 ignore-padding">
+            <div class="modal fade bd-example-modal-lg export-file-modal" id="Filter" tabindex="-1" role="dialog" aria-labelledby="Filter" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3 class="modal-title">Фільтр</h3>
+                            <button type="button" class="close close-modal" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body" style="margin-bottom: -35px">
+                            <div>
+                                <div class="col-md-12 ignore-padding" style="display: inline-block; margin-bottom: 15px;">
+                                    <label class="col-md-12" for="SelectedColumnsFilter">Поля</label>
+                                    <div class="col-md-12">
+                                        <select id="SelectedColumnsFilter" multiple="multiple">
+                                            @Html.Partial("_ShowColumnsListInFilter")
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 ignore-padding" style="display: inline-block; margin-bottom: 15px;">
+                                    <label class="col-md-12" for="SelectedBeneficiaries">Категорії</label>
+                                    <div class="col-md-12">
+                                        <select id="SelectedBeneficiaries" multiple="multiple">
+                                            @foreach (var beneficary in beneficaries)
+                                            {
+                                                if (beneficariesChecked.Contains(beneficary.Id.ToString()))
+                                                {
+                                                    <option value="@beneficary.Id" selected="selected">@beneficary.Name</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@beneficary.Id">@beneficary.Name</option>
+                                                }
+                                            }
+                                            @if (beneficariesChecked.Contains("0"))
+                                            {
+                                                <option value="0" selected="selected">Без категорії</option>
+
+                                            }
+                                            else
+                                            {
+                                                <option value="0">Без категорії</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 ignore-padding" style="display: inline-block; margin-bottom: 15px;">
+                                    <label class="col-md-12">Округи</label>
+                                    <div class="col-md-12 ignore-padding" style="display: inline-block">
+                                        <div class="col-md-6" style="padding-right: 0">
+                                            <button class="btn btn-primary" id="getDistrictsByTypeConstituency" style="width: 100%">
+                                                Партійний
+                                            </button>
+                                        </div>
+                                        <div class="col-md-6" style="padding-left: 0;">
+                                            <button class="btn btn-secondary" id="getDistrictsByTypeCustom" style="width: 100%">
+                                                Виборчий
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 ignore-padding" id="districtsForSelect" style="display: inline-block; padding: 0 15px 0 15px !important">
+                                        @Html.Partial("_FilterMultiSelectPartial", new List<BaseViewModel>())
+                                    </div>
+                                </div>
+                                <div class="col-md-12 ignore-padding" style="display: inline-block; margin-bottom: 15px;">
+                                    <div class="col-md-12 ignore-padding" style="display: inline-block">
+                                        <div class="col-md-6" style="padding-right: 0">
+                                            <button class="btn btn-primary" id="orderByCurrentDate" style="width: 100%">
+                                                По даті
+                                            </button>
+                                        </div>
+                                        <div class="col-md-6" style="padding-left: 0;">
+                                            <button class="btn btn-secondary" id="orderByMonths" style="width: 100%">
+                                                По місяцях
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 ignore-padding" id="orderByCurrentDateBlock" style="display: inline-block; padding: 0 15px 0 15px !important">
+                                        <div class="input-daterange input-group" id="datepicker1">
+                                            @Html.EditorFor(model => personFilter.StartDate, new { htmlAttributes = new { @class = "input-sm form-control", @name = "start", @autocomplete = "off" } })
+                                            <span class="input-group-addon">до</span>
+                                            @Html.EditorFor(model => personFilter.EndDate, new { htmlAttributes = new { @class = "input-sm form-control", @name = "end", @autocomplete = "off" } })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 ignore-padding" id="orderByMonthsBlock" style="display: none; padding: 0 15px 0 15px !important">
+                                        <div class="input-daterange input-group" id="datepicker2">
+                                            @Html.EditorFor(model => personFilter.StartDateMonth, new {htmlAttributes = new { @class = "input-sm form-control", @name = "start", @autocomplete = "off"} })
+                                            <span class="input-group-addon">до</span>
+                                            @Html.EditorFor(model => personFilter.EndDateMonth, new { htmlAttributes = new { @class = "input-sm form-control", @name = "end", @autocomplete = "off" } })
+                                        </div>
+                                    </div>
+                                    <script>
+                                        $(function () {
+                                            $("#datepicker1").datepicker({
+                                                format: "dd-mm-yyyy",
+                                                weekStart: 0,
+                                                maxViewMode: 2,
+                                                clearBtn: true,
+                                                forceParse: false
+                                            });
+                                            $("#datepicker2").datepicker({
+                                                format: "dd-mm",
+                                                weekStart: 0,
+                                                maxViewMode: 1,
+                                                clearBtn: true,
+                                                forceParse: false
+                                            });
+                                        });
+                                    </script>
+                                </div>
+                                <div class="col-md-12 ignore-padding" style="display: inline-block">
+                                    <label class="col-md-12" for="FirstSortOrder">Сортувати за</label>
+                                </div>
+                                <div class="col-md-12 ignore-padding" style="display: inline-block; padding: 0 15px 0 15px !important; margin-bottom: 10px">
+                                    <div class="col-md-8" style="padding: 0">
+                                        <select id="FirstSortOrder">
+                                            @Html.Partial("_SortByColumnsInFilter")
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4" style="padding-right: 0; text-align: right">
+                                        <button type="button" id="enableFirstSortOrder" class="btn btn-primary">Дозволити вибір</button>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 ignore-padding" style="display: inline-block; padding: 0 15px 0 15px !important; margin-bottom: 10px">
+                                    <div class="col-md-8" style="padding: 0">
+                                        <select id="SecondSortOrder">
+                                            @Html.Partial("_SortByColumnsInFilter")
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4" style="padding-right: 0; text-align: right">
+                                        <button type="button" id="enableSecondSortOrder" class="btn btn-primary" disabled="disabled">Дозволити вибір</button>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 ignore-padding" style="display: inline-block; padding: 0 15px 0 15px !important">
+                                    <div class="col-md-8" style="padding: 0">
+                                        <select id="ThirdSortOrder">
+                                            @Html.Partial("_SortByColumnsInFilter")
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4" style="padding-right: 0; text-align: right">
+                                        <button type="button" id="enableThirdSortOrder" class="btn btn-primary" disabled="disabled">Дозволити вибір</button>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 ignore-padding" style="display: inline-block; margin-top: 10px">
+                                    <label class="col-md-6" for="SortOrder" style="text-align: right; padding-top: 6px">Порядок сортування</label>
+                                    <div class="col-md-6 ignore-padding" style="display: inline-block; padding: 0 15px 0 15px !important; margin-bottom: 10px">
+                                        <div class="col-md-12" style="padding: 0">
+                                            <select id="SortOrder">
+                                                <option value="@SortOrder.Ascending">По зростанню</option>
+                                                <option value="@SortOrder.Descending">По спаданню</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" id="cencelFilterBtn" class="btn btn-secondary" data-dismiss="modal">Закрити вікно</button>
+                            <button type="button" id="startFilter" class="btn btn-primary click" data-dismiss="modal">Застосувати фільтр</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12 ignore-padding">
+            <div class="modal fade bd-example-modal-lg export-file-modal" id="SearchPeople" tabindex="-1" role="dialog" aria-labelledby="SearchPeople" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3 class="modal-title">Пошук</h3>
+                            <button type="button" class="close close-modal" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body" style="margin: -20px">
+                            <div class="row" style="margin: 0">
+                                <div class="col-md-12 ignore-padding">
+                                    <div class="col-md-12 block-container">
+                                        <div class="col-md-12 ignore-padding" style="display: inline-block">
+                                            <label class="col-md-12" for="SelectedColumnsSearch">Поля</label>
+                                            <div class="col-md-12">
+                                                <select id="SelectedColumnsSearch" multiple="multiple">
+                                                    @Html.Partial("_ShowColumnsListInFilter")
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12 ignore-padding" style="display: inline-block">
+                                            @Html.LabelFor(model => personSearch.LastName, htmlAttributes: new { @class = "col-md-12" })
+                                            <div class="col-md-11">
+                                                @Html.EditorFor(model => personSearch.LastName, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.ValidationMessageFor(model => personSearch.LastName, "", new { @class = "text-danger" })
+                                            </div>
+                                            <div class="col-md-1">
+                                                <input type="checkbox" id="isLastNameIncludedInSearch" checked style="margin-right: 5px">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12 ignore-padding" style="display: inline-block">
+                                            @Html.LabelFor(model => personSearch.FirstName, htmlAttributes: new { @class = "col-md-12" })
+                                            <div class="col-md-11">
+                                                @Html.EditorFor(model => personSearch.FirstName, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.ValidationMessageFor(model => personSearch.FirstName, "", new { @class = "text-danger" })
+                                            </div>
+                                            <div class="col-md-1">
+                                                <input type="checkbox" id="isFirstNameIncludedInSearch" checked style="margin-right: 5px">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12 ignore-padding" style="display: inline-block">
+                                            @Html.LabelFor(model => personSearch.MiddleName, htmlAttributes: new { @class = "col-md-12" })
+                                            <div class="col-md-11">
+                                                @Html.EditorFor(model => personSearch.MiddleName, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.ValidationMessageFor(model => personSearch.MiddleName, "", new { @class = "text-danger" })
+                                            </div>
+                                            <div class="col-md-1">
+                                                <input type="checkbox" id="isMiddleNameIncludedInSearch" checked style="margin-right: 5px">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12 ignore-padding" style="display: inline-block">
+                                            @Html.LabelFor(model => personSearch.MobilePhone, htmlAttributes: new { @class = "col-md-12" })
+                                            <div class="col-md-11">
+                                                @Html.EditorFor(model => personSearch.MobilePhone, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.ValidationMessageFor(model => personSearch.MobilePhone, "", new { @class = "text-danger" })
+                                            </div>
+                                            <div class="col-md-1">
+                                                <input type="checkbox" id="isMobilePhoneIncludedInSearch" checked style="margin-right: 5px">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <div class="row">
+                                <div class="col-md-8" style="margin-top: 6px;">
+                                    <a class="text-center show-all-display-search click" data-dismiss="modal">
+                                        <strong>Показати всіх</strong>
+                                        <i class="fa fa-angle-right"></i>
+                                    </a>
+                                </div>
+                                <div class="col-md-4">
+                                    <button class="btn btn-primary click" id="startSearch" data-dismiss="modal" style="width: 100%">
+                                        Пошук
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -353,6 +412,147 @@
         window.setTimeout(function () {
             $('#loader').fadeOut();
         }, 10000);
+
+        $(document).ready(function () {
+            $('#SelectedColumnsFilter').multiselect({
+                includeSelectAllOption: true,
+                enableFiltering: true,
+                enableCaseInsensitiveFiltering: true,
+                buttonContainer: '<div class="btn-group" style="width:100% !important"/>',
+                buttonWidth: '100% !important',
+                nonSelectedText: 'Жодної не вибрано',
+                nSelectedText: ' вибрано',
+                allSelectedText: 'Вибрано всі',
+                selectAllText: 'Вибрати всі',
+                maxHeight: '300'
+            });
+
+            $('#SelectedColumnsSearch').multiselect({
+                includeSelectAllOption: true,
+                enableFiltering: true,
+                enableCaseInsensitiveFiltering: true,
+                buttonContainer: '<div class="btn-group" style="width:100% !important"/>',
+                buttonWidth: '100% !important',
+                nonSelectedText: 'Жодної не вибрано',
+                nSelectedText: ' вибрано',
+                allSelectedText: 'Вибрано всі',
+                selectAllText: 'Вибрати всі',
+                maxHeight: '300'
+            });
+
+            $('#SelectedBeneficiaries').multiselect({
+                includeSelectAllOption: true,
+                enableFiltering: true,
+                enableCaseInsensitiveFiltering: true,
+                buttonContainer: '<div class="btn-group" style="width:100% !important"/>',
+                buttonWidth: '100% !important',
+                nonSelectedText: 'Жодної не вибрано',
+                nSelectedText: ' вибрано',
+                allSelectedText: 'Вибрано всі',
+                selectAllText: 'Вибрати всі',
+                maxHeight: '300'
+            });
+
+            $('#SortOrder').multiselect({
+                buttonContainer: '<div class="btn-group" style="width:100% !important"/>',
+                buttonWidth: '100% !important',
+                nonSelectedText: 'Жодний не вибрано',
+                maxHeight: '300'
+            });
+
+            $('#FirstSortOrder').multiselect({
+                enableFiltering: true,
+                enableCaseInsensitiveFiltering: true,
+                buttonContainer: '<div class="btn-group" style="width:100% !important"/>',
+                buttonWidth: '100% !important',
+                nonSelectedText: 'Жодний не вибрано',
+                maxHeight: '300',
+                dropUp: true,
+                onDropdownHide: function (event) {
+                    $('#enableSecondSortOrder').removeAttr('disabled');
+                }
+            });
+
+            $('#SecondSortOrder').multiselect({
+                enableFiltering: true,
+                enableCaseInsensitiveFiltering: true,
+                buttonContainer: '<div class="btn-group" style="width:100% !important"/>',
+                buttonWidth: '100% !important',
+                nonSelectedText: 'Жодний не вибрано',
+                maxHeight: '300',
+                dropUp: true,
+                onDropdownHide: function (event) {
+                    $('#enableThirdSortOrder').removeAttr('disabled');
+                }
+            });
+
+            $('#ThirdSortOrder').multiselect({
+                enableFiltering: true,
+                enableCaseInsensitiveFiltering: true,
+                buttonContainer: '<div class="btn-group" style="width:100% !important"/>',
+                buttonWidth: '100% !important',
+                nonSelectedText: 'Жодний не вибрано',
+                maxHeight: '300',
+                dropUp: true
+            });
+
+            $('#SortOrder').multiselect('disable');
+            $('#FirstSortOrder').multiselect('disable');
+            $('#SecondSortOrder').multiselect('disable');
+            $('#ThirdSortOrder').multiselect('disable');
+
+            var isEnableFirstSortOrder = true;
+            var isEnableSecondSortOrder = true;
+            var isEnableThirdSortOrder = true;
+
+            $("#enableFirstSortOrder").click(function () {
+                if (isEnableFirstSortOrder) {
+                    $('#SortOrder').multiselect('enable');
+                    $('#FirstSortOrder').multiselect('enable');
+                    $(this).html('Заборонити вибір');
+                    isEnableFirstSortOrder = false;
+                } else {
+                    $('#SortOrder').multiselect('disable');
+                    $('#FirstSortOrder').multiselect('disable');
+                    $('#SecondSortOrder').multiselect('disable');
+                    $('#ThirdSortOrder').multiselect('disable');
+                    $(this).html('Дозволити вибір');
+                    $('#enableSecondSortOrder').attr('disabled', 'disabled');
+                    $('#enableThirdSortOrder').attr('disabled', 'disabled');
+                    $('#enableSecondSortOrder').html('Дозволити вибір');
+                    $('#enableThirdSortOrder').html('Дозволити вибір');
+                    isEnableFirstSortOrder = true;
+                    isEnableSecondSortOrder = true;
+                    isEnableThirdSortOrder = true;
+                }
+            });
+            $("#enableSecondSortOrder").click(function () {
+                if (isEnableSecondSortOrder) {
+                    $('#SecondSortOrder').multiselect('enable');
+                    $(this).html('Заборонити вибір');
+                    isEnableSecondSortOrder = false;
+                } else {
+                    $('#SecondSortOrder').multiselect('disable');
+                    $('#ThirdSortOrder').multiselect('disable');
+                    $(this).html('Дозволити вибір');
+                    $('#enableThirdSortOrder').attr('disabled', 'disabled');
+                    $('#enableThirdSortOrder').html('Дозволити вибір');
+                    isEnableSecondSortOrder = true;
+                    isEnableThirdSortOrder = true;
+                }
+            });
+            $("#enableThirdSortOrder").click(function () {
+                if (isEnableThirdSortOrder) {
+                    $('#ThirdSortOrder').multiselect('enable');
+                    $(this).html('Заборонити вибір');
+                    isEnableThirdSortOrder = false;
+                } else {
+                    $('#ThirdSortOrder').multiselect('disable');
+                    $(this).html('Дозволити вибір');
+                    isEnableThirdSortOrder = true;
+                }
+            });
+        });
     </script>
 }
 else
@@ -367,8 +567,12 @@ else
         $('#loader').fadeIn();
     });
 
-    $(document).ready(() => {
-        getDistrictsByType("@DistrictType.Сonstituency");
+    var isGetDistrictsClicked = false;
+    $("#openFilter").click(function () {
+        if (!isGetDistrictsClicked) {
+            getDistrictsByType("@DistrictType.Сonstituency");
+            isGetDistrictsClicked = true;
+        }
     });
 
     $("#getDistrictsByTypeConstituency").click(function (e) {
@@ -407,88 +611,102 @@ else
         };
         $.get('@Url.Action("DistrictsByType", "District")', data)
             .done((result) => {
-                $("#districts").html(result);
-
-                $("#districts > li > a").click((event) => {
-                    var target = event.target;
-                    var isChecked;
-                    if (target instanceof HTMLInputElement) {
-                        isChecked = $(target).prop("checked");
-                        if (isChecked === false)
-                            $(target).prop('checked', true);
-                        else
-                            $(target).prop('checked', false);
-                    } else {
-                        isChecked = $(target).children().prop("checked");
-                        if (isChecked === false)
-                            $(target).children().prop('checked', true);
-                        else
-                            $(target).children().prop('checked', false);
-                    }
+                $("#districtsForSelect").html(result);
+                $('#SelectedDistricts').multiselect({
+                    includeSelectAllOption: true,
+                    enableFiltering: true,
+                    enableCaseInsensitiveFiltering: true,
+                    buttonContainer: '<div class="btn-group" style="width:100% !important"/>',
+                    buttonWidth: '100% !important',
+                    nonSelectedText: 'Жодного не вибрано',
+                    nSelectedText: ' вибрано',
+                    allSelectedText: 'Вибрано всі',
+                    selectAllText: 'Вибрати всі',
+                    maxHeight: '300'
                 });
             });
     }
-    function getAllCheckBoxChecked() {
-        $('#fieldscheck').click(function () {
-            $("#lastNameDisplay input").prop("checked", true);
-            $("#firstNameDisplay input").prop("checked", true);
-            $("#middleNameDisplay input").prop("checked", true);
-            $("#phoneFirstDisplay input").prop("checked", true);
-            $("#phoneSecondDisplay input").prop("checked", true);
-            $("#homePhoneDisplay input").prop("checked", true);
-            $("#dateBirthDisplay input").prop("checked", true);
-            $("#emailDisplay input").prop("checked", true);
-            $("#addressDisplay input").prop("checked", true);
-            $("#workPlaceDisplay input").prop("checked", true);
-            $("#isDeadDisplay input").prop("checked", true);
-        });
-    }
-    function getAllCheckBoxUnChecked() {
-        $('#fieldsuncheck').click(function () {
-            $("#lastNameDisplay input").prop("checked", false);
-            $("#firstNameDisplay input").prop("checked", false);
-            $("#middleNameDisplay input").prop("checked", false);
-            $("#phoneFirstDisplay input").prop("checked", false);
-            $("#phoneSecondDisplay input").prop("checked", false);
-            $("#homePhoneDisplay input").prop("checked", false);
-            $("#dateBirthDisplay input").prop("checked", false);
-            $("#emailDisplay input").prop("checked", false);
-            $("#addressDisplay input").prop("checked", false);
-            $("#workPlaceDisplay input").prop("checked", false);
-            $("#isDeadDisplay input").prop("checked", false);
-        });
-    }
-    function getAllCategoriesChecked() {
-        $('#categoriescheck').click(function () {
-            $(".beneficary input").each((index, element) => {
-                var fieldId = $(element)[0].parentElement.getAttribute("id");
-                if (fieldId !== "" && !$(".beneficary #" + fieldId + " input").is(":checked")) {
-                    $(".beneficary #" + fieldId + " input").prop('checked', true);
-                }
-            });
-        });
-    }
-    function getAllCategoriesUnChecked() {
-        $('#categoriesuncheck').click(function () {
-            $(".beneficary input").each((index, element) => {
-                var fieldId = $(element)[0].parentElement.getAttribute("id");
-                $(".beneficary #" + fieldId + " input").prop('checked', false);
-            });
-        });
-    }
+
+    $("#orderByCurrentDate").click(function (e) {
+        e.stopPropagation();
+        var selector = $("#orderByCurrentDate");
+        var selector2 = $("#orderByMonths");
+
+        if (selector.hasClass("btn-secondary")) {
+            selector.removeClass("btn-secondary");
+            selector.addClass("btn-primary");
+
+            selector2.removeClass("btn-primary");
+            selector2.addClass("btn-secondary");
+        }
+
+        $("#orderByCurrentDateBlock").css('display', "inline-block");
+        $("#orderByMonthsBlock").css('display', "none");
+    });
+
+    $("#orderByMonths").click(function (e) {
+        e.stopPropagation();
+        var selector = $("#orderByMonths");
+        var selector2 = $("#orderByCurrentDate");
+
+        if (selector.hasClass("btn-secondary")) {
+            selector.removeClass("btn-secondary");
+            selector.addClass("btn-primary");
+
+            selector2.removeClass("btn-primary");
+            selector2.addClass("btn-secondary");
+        }
+
+        $("#orderByMonthsBlock").css('display', "inline-block");
+        $("#orderByCurrentDateBlock").css('display', "none");
+    });
+
     $(document).on('click', '#ExportFile', function () {
+        var paginationWay = $('#paginationWay').val();
+        if (paginationWay === '@Consts.PaginationByFilter')
+            exportToExcelByFilter();
+        else if (paginationWay === '@Consts.PaginationBySearch')
+            exportToExcelBySearch();
+    });
+
+    function exportToExcelByFilter() {
         $("#ExportFile a").attr("href", function () {
-            return "@Url.Action("ExportToExcel", "Export")";
+            return "@Url.Action("ExportToExcelByFilter", "Export")";
         });
+        var startDate = $("#personFilter_StartDate").val();
+        var endDate = $("#personFilter_EndDate").val();
+        var startDateMonth = $("#personFilter_StartDateMonth").val();
+        var endDateMonth = $("#personFilter_EndDateMonth").val();
+        if ($("#orderByCurrentDate").hasClass("btn-primary")) {
+            startDateMonth = null;
+            endDateMonth = null;
+        } else if ($("#orderByMonths").hasClass("btn-primary")) {
+            startDate = null;
+            endDate = null;
+        }
+
+        var sortOrder = null;
+        var firstSortOrder = null;
+        var secondSortOrder = null;
+        var thirdSortOrder = null;
+        var fieldIds = $("#SelectedColumnsFilter").val();
+        if (!$("#FirstSortOrder")[0].hasAttribute('disabled'))
+            sortOrder = $("#SortOrder").val();
+        if (!$("#FirstSortOrder")[0].hasAttribute('disabled'))
+            firstSortOrder = $("#FirstSortOrder").val();
+        if (!$("#SecondSortOrder")[0].hasAttribute('disabled'))
+            secondSortOrder = $("#SecondSortOrder").val();
+        if (!$("#ThirdSortOrder")[0].hasAttribute('disabled'))
+            thirdSortOrder = $("#ThirdSortOrder").val();
 
         var districtIds = getCheckedDistrictIds();
         var cityIds = getCheckedCityIds();
         var streetIds = getCheckedStreetIds();
         var apartmentIds = getCheckedApartmentIds();
         var flatIds = getCheckedFlatIds();
-        var fieldIds = getCheckedFieldsName();
         var beneficariesUnchecked = getBeneficariesUnchecked();
         var beneficariesChecked = getBeneficariesChecked();
+        var isDeadPerson = fieldIds.includes('@Consts.IsDeadId');
 
         $("#ExportFile a").attr("href", function (i, origVal) {
             origVal += "?";
@@ -517,10 +735,54 @@ else
             for (k = 0; k < beneficariesChecked.length; k++) {
                 origVal += "BeneficariesChecked=" + beneficariesChecked[k] + "&";
             }
+            origVal += "StartDate=" + startDate + "&";
+            origVal += "EndDate=" + endDate + "&";
+            origVal += "StartDateMonth=" + startDateMonth + "&";
+            origVal += "EndDateMonth=" + endDateMonth + "&";
+            origVal += "SortOrder=" + sortOrder + "&";
+            origVal += "FirstSortOrder=" + firstSortOrder + "&";
+            origVal += "SecondSortOrder=" + secondSortOrder + "&";
+            origVal += "ThirdSortOrder=" + thirdSortOrder + "&";
+            origVal += "IsDeadPerson=" + isDeadPerson;
 
             return origVal;
         });
-    });
+    }
+
+    function exportToExcelBySearch() {
+        $("#ExportFile a").attr("href", function () {
+            return "@Url.Action("ExportToExcelBySearch", "Export")";
+        });
+
+        var searchFields = {
+            FirstName: $("#personSearch_FirstName").val(),
+            LastName: $("#personSearch_LastName").val(),
+            MiddleName: $("#personSearch_MiddleName").val(),
+            MobilePhone: $("#personSearch_MobilePhone").val(),
+            IsFirstNameIncludedInSearch: $("#isFirstNameIncludedInSearch").is(":checked"),
+            IsLastNameIncludedInSearch: $("#isLastNameIncludedInSearch").is(":checked"),
+            IsMiddleNameIncludedInSearch: $("#isMiddleNameIncludedInSearch").is(":checked"),
+            IsMobilePhoneIncludedInSearch: $("#isMobilePhoneIncludedInSearch").is(":checked"),
+            ColumnsIds: $("#SelectedColumnsSearch").val()
+        }
+
+        $("#ExportFile a").attr("href", function (i, origVal) {
+            origVal += "?";
+            for (k = 0; k < searchFields.ColumnsIds.length; k++) {
+                origVal += "ColumnsIds=" + searchFields.ColumnsIds[k] + "&";
+            }
+            origVal += "FirstName=" + searchFields.FirstName + "&";
+            origVal += "LastName=" + searchFields.LastName + "&";
+            origVal += "MiddleName=" + searchFields.MiddleName + "&";
+            origVal += "MobilePhone=" + searchFields.MobilePhone + "&";
+            origVal += "IsFirstNameIncludedInSearch=" + searchFields.IsFirstNameIncludedInSearch + "&";
+            origVal += "IsLastNameIncludedInSearch=" + searchFields.IsLastNameIncludedInSearch + "&";
+            origVal += "IsMiddleNameIncludedInSearch=" + searchFields.IsMiddleNameIncludedInSearch + "&";
+            origVal += "IsMobilePhoneIncludedInSearch=" + searchFields.IsMobilePhoneIncludedInSearch;
+
+            return origVal;
+        });
+    }
 </script>
 
 @if (HttpContext.Current.Request.Url.AbsolutePath == "/Person/Index" || HttpContext.Current.Request.Url.AbsolutePath == "/Person/PostIndex")
@@ -532,86 +794,6 @@ else
 
         $(".dropdown-body").click(function (e) {
             e.stopPropagation();
-        });
-
-        $("#lastNameDisplay input").click(function (e) {
-            e.stopPropagation();
-            fieldDisplay($("#lastNameDisplay input").is(":checked"), false, "#lastNameDisplay input", "tr #lastNameHidden");
-        });
-        $("#lastNameDisplay").click(function () {
-            fieldDisplay(!$("#lastNameDisplay input").is(":checked"), true, "#lastNameDisplay input", "tr #lastNameHidden");
-        });
-
-        $("#firstNameDisplay input").click(function (e) {
-            e.stopPropagation();
-            fieldDisplay($("#firstNameDisplay input").is(":checked"), false, "#firstNameDisplay input", "tr #firstNameHidden");
-        });
-        $("#firstNameDisplay").click(function () {
-            fieldDisplay(!$("#firstNameDisplay input").is(":checked"), true, "#firstNameDisplay input", "tr #firstNameHidden");
-        });
-
-        $("#middleNameDisplay input").click(function (e) {
-            e.stopPropagation();
-            fieldDisplay($("#middleNameDisplay input").is(":checked"), false, "#middleNameDisplay input", "tr #middleNameHidden");
-        });
-        $("#middleNameDisplay").click(function () {
-            fieldDisplay(!$("#middleNameDisplay input").is(":checked"), true, "#middleNameDisplay input", "tr #middleNameHidden");
-        });
-
-        $("#phoneFirstDisplay input").click(function (e) {
-            e.stopPropagation();
-            fieldDisplay($("#phoneFirstDisplay input").is(":checked"), false, "#phoneFirstDisplay input", "tr #phone1Hidden");
-        });
-        $("#phoneFirstDisplay").click(function () {
-            fieldDisplay(!$("#phoneFirstDisplay input").is(":checked"), true, "#phoneFirstDisplay input", "tr #phone1Hidden");
-        });
-
-        $("#phoneSecondDisplay input").click(function (e) {
-            e.stopPropagation();
-            fieldDisplay($("#phoneSecondDisplay input").is(":checked"), false, "#phoneSecondDisplay input", "tr #phone2Hidden");
-        });
-        $("#phoneSecondDisplay").click(function () {
-            fieldDisplay(!$("#phoneSecondDisplay input").is(":checked"), true, "#phoneSecondDisplay input", "tr #phone2Hidden");
-        });
-
-        $("#homePhoneDisplay input").click(function (e) {
-            e.stopPropagation();
-            fieldDisplay($("#homePhoneDisplay input").is(":checked"), false, "#homePhoneDisplay input", "tr #homeNumberHidden");
-        });
-        $("#homePhoneDisplay").click(function () {
-            fieldDisplay(!$("#homePhoneDisplay input").is(":checked"), true, "#homePhoneDisplay input", "tr #homeNumberHidden");
-        });
-
-        $("#dateBirthDisplay input").click(function (e) {
-            e.stopPropagation();
-            fieldDisplay($("#dateBirthDisplay input").is(":checked"), false, "#dateBirthDisplay input", "tr #birthDateHidden");
-        });
-        $("#dateBirthDisplay").click(function () {
-            fieldDisplay(!$("#dateBirthDisplay input").is(":checked"), true, "#dateBirthDisplay input", "tr #birthDateHidden");
-        });
-
-        $("#emailDisplay input").click(function (e) {
-            e.stopPropagation();
-            fieldDisplay($("#emailDisplay input").is(":checked"), false, "#emailDisplay input", "tr #emailNameHidden");
-        });
-        $("#emailDisplay").click(function () {
-            fieldDisplay(!$("#emailDisplay input").is(":checked"), true, "#emailDisplay input", "tr #emailNameHidden");
-        });
-
-        $("#workPlaceDisplay input").click(function (e) {
-            e.stopPropagation();
-            fieldDisplay($("#workPlaceDisplay input").is(":checked"), false, "#workPlaceDisplay input", "tr #workPlaceHidden");
-        });
-        $("#workPlaceDisplay").click(function () {
-            fieldDisplay(!$("#workPlaceDisplay input").is(":checked"), true, "#workPlaceDisplay input", "tr #workPlaceHidden");
-        });
-
-        $("#isDeadDisplay input").click(function (e) {
-            e.stopPropagation();
-            isDeadfieldDisplay($("#workPlaceDisplay input").is(":checked"), false, "#workPlaceDisplay input");
-        });
-        $("#isDeadDisplay").click(function () {
-            isDeadfieldDisplay(!$("#isDeadDisplay input").is(":checked"), true, "#isDeadDisplay input");
         });
 
         $("#startFilter").click(function () {
@@ -627,16 +809,6 @@ else
         $("#startDublicateSearch").click(function () {
             $("#paginationWay").attr('value', '@Consts.PaginationByDublicateSearch');
             getPersonsByDublicateSearch();
-        });
-
-        $(".beneficary").click(function (e) {
-            e.stopPropagation();
-            var beneficaryId = this.firstElementChild.getAttribute("id");
-            var isbeneficaryIdChecked = !$(".beneficary #" + beneficaryId + " input").is(":checked");
-            if (isbeneficaryIdChecked === false)
-                $(".beneficary #" + beneficaryId + " input").prop('checked', false);
-            else
-                $(".beneficary #" + beneficaryId + " input").prop('checked', true);
         });
 
         function getPersonsBySearch() {
@@ -659,8 +831,8 @@ else
                 async: false
             }).done((data) => {
                 $("#personsTable").html(data);
+                hideFields($("#SelectedColumnsSearch").val());
             });
-
             $('#loader').fadeOut();
         }
 
@@ -680,79 +852,59 @@ else
         function getPersonsByFilter() {
             $('#loader').fadeIn();
 
+            var selectedColumns = $("#SelectedColumnsFilter").val();
             var districtIds = getCheckedDistrictIds();
             var cityIds = getCheckedCityIds();
             var streetIds = getCheckedStreetIds();
             var apartmentIds = getCheckedApartmentIds();
             var flatIds = getCheckedFlatIds();
             var beneficaries = getBeneficariesChecked();
-            var isDeadPerson = $("#isDeadDisplay input").prop('checked');
+            var isDeadPerson = selectedColumns.includes('@Consts.IsDeadId');
 
-            var columnsId = getCheckedFields();
+            var startDate = $("#personFilter_StartDate").val();
+            var endDate = $("#personFilter_EndDate").val();
+            var startDateMonth = $("#personFilter_StartDateMonth").val();
+            var endDateMonth = $("#personFilter_EndDateMonth").val();
+            if ($("#orderByCurrentDate").hasClass("btn-primary")) {
+                startDateMonth = null;
+                endDateMonth = null;
+            } else if ($("#orderByMonths").hasClass("btn-primary")) {
+                startDate = null;
+                endDate = null;
+            }
+
+            var sortOrder = null;
+            var firstSortOrder = null;
+            var secondSortOrder = null;
+            var thirdSortOrder = null;
+
+            if (!$("#FirstSortOrder")[0].hasAttribute('disabled'))
+                sortOrder = $("#SortOrder").val();
+            if (!$("#FirstSortOrder")[0].hasAttribute('disabled'))
+                firstSortOrder = $("#FirstSortOrder").val();
+            if (!$("#SecondSortOrder")[0].hasAttribute('disabled'))
+                secondSortOrder = $("#SecondSortOrder").val();
+            if (!$("#ThirdSortOrder")[0].hasAttribute('disabled'))
+                thirdSortOrder = $("#ThirdSortOrder").val();
 
             $.ajax({
                 url: "@Url.Action("PostIndex", "Person")",
                 type: 'Post',
-                data: { DistrictIds: districtIds, CityIds: cityIds, StreetIds: streetIds, ApartmentIds: apartmentIds, FlatIds: flatIds, BeneficariesChecked: beneficaries, IsDeadPerson: isDeadPerson },
+                data: {
+                    DistrictIds: districtIds, CityIds: cityIds,
+                    StreetIds: streetIds, ApartmentIds: apartmentIds,
+                    FlatIds: flatIds, BeneficariesChecked: beneficaries,
+                    IsDeadPerson: isDeadPerson, StartDate: startDate,
+                    EndDate: endDate, StartDateMonth: startDateMonth, EndDateMonth: endDateMonth,
+                    SortOrder: sortOrder, FirstSortOrder: firstSortOrder,
+                    SecondSortOrder: secondSortOrder, ThirdSortOrder: thirdSortOrder
+                },
                 async: false
             }).done((data) => {
                 $("#personsTable").html(data);
-                hideFields(columnsId);
+                hideFields(selectedColumns);
             });
             $('#loader').fadeOut();
-        }
-
-        function fieldDisplay(isChecked, isNotInput, selector, hideField) {
-            if (isNotInput) {
-                if (isChecked) {
-                    $(selector).prop('checked', true);
-                } else {
-                    $(selector).prop('checked', false);
-                }
-            }
-            if (isChecked) {
-                $(hideField).show();
-            } else {
-                $(hideField).hide();
-            }
-        }
-
-        function isDeadfieldDisplay(isChecked, isNotInput, selector) {
-            if (isNotInput) {
-                if (isChecked) {
-                    $(selector).prop('checked', true);
-                } else {
-                    $(selector).prop('checked', false);
-                }
-            }
-        }
-
-        $("#addressDisplay input").click(function (e) {
-            e.stopPropagation();
-            addressDisplay($("#addressDisplay input").is(":checked"));
-        });
-
-        $("#addressDisplay").click(function () {
-            var isChecked = $("#addressDisplay input").is(":checked");
-            if (isChecked)
-                $("#addressDisplay input").prop('checked', false);
-            else
-                $("#addressDisplay input").prop('checked', true);
-            addressDisplay(!isChecked);
-        });
-
-        function addressDisplay(isChecked) {
-            if (isChecked) {
-                $("tr #cityNameHidden").show();
-                $("tr #streetNameHidden").show();
-                $("tr #houseNameHidden").show();
-                $("tr #flatNameHidden").show();
-            } else {
-                $("tr #cityNameHidden").hide();
-                $("tr #streetNameHidden").hide();
-                $("tr #houseNameHidden").hide();
-                $("tr #flatNameHidden").hide();
-            }
         }
 
         $(".show-all-display-filter").click(function () {
@@ -856,10 +1008,10 @@ else
             $('#loader').fadeIn();
 
             $("#personSearch_FirstName").val(""),
-            $("#personSearch_LastName").val(""),
-            $("#personSearch_MiddleName").val(""),
-            $("#personSearch_MobilePhone").val(""),
-            $("#isFirstNameIncludedInSearch").prop('checked', true);
+                $("#personSearch_LastName").val(""),
+                $("#personSearch_MiddleName").val(""),
+                $("#personSearch_MobilePhone").val(""),
+                $("#isFirstNameIncludedInSearch").prop('checked', true);
             $("#isLastNameIncludedInSearch").prop('checked', true);
             $("#isMiddleNameIncludedInSearch").prop('checked', true);
             $("#isMobilePhoneIncludedInSearch").prop('checked', true);
