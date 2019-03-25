@@ -24,8 +24,8 @@ namespace Svbase.Service.Interfaces
         IQueryable<PersonSelectionModel> SearchPersonsByFields(PersonSearchModel searchFields);
 
         #region DIBLICATE SEARCH
-
         IQueryable<PersonSelectionModel> SearchDublicateByFirstAndLastName();
+        IQueryable<PersonSelectionModel> SearchDublicateByPhoneNumber();
 
         #endregion
     }

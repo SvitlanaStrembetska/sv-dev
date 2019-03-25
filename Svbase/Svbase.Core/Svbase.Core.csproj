@@ -84,6 +84,7 @@
     <Compile Include="Data\Entities\Flat.cs" />
     <Compile Include="Data\Entities\Person.cs" />
     <Compile Include="Data\Entities\Street.cs" />
+    <Compile Include="Enums\DublicateSearchType.cs" />
     <Compile Include="Enums\SortOrder.cs" />
     <Compile Include="Enums\ColumnName.cs" />
     <Compile Include="Enums\DistrictPanelBodyItemType.cs" />

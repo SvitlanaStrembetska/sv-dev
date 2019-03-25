@@ -78,7 +78,7 @@
                                         <a data-toggle="modal" data-target="#SearchPeople">Пошук людей</a>
                                     </li>
                                     <li>
-                                        <a class="click" id="startDublicateSearch">Пошук дублікатів</a>
+                                        <a data-toggle="modal" data-target="#DublicateSearch">Пошук дублікатів</a>
                                     </li>
                                     <li>
                                         <a href="@Url.Action("Create", "Person")" class="click">Додати людину</a>
@@ -297,7 +297,10 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" id="cencelFilterBtn" class="btn btn-secondary" data-dismiss="modal">Закрити вікно</button>
-                            <button type="button" id="startFilter" class="btn btn-primary click" data-dismiss="modal">Застосувати фільтр</button>
+                            <button type="button" id="startFilter" class="btn btn-primary has-spinner" data-dismiss="modal">
+                                Застосувати фільтр
+                                <span class="spinner"><i class="fas fa-spinner fa-spin"></i></span>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -391,6 +394,57 @@
             </div>
         </div>
     </div>
+    <div class="row">
+        <div class="col-lg-12 ignore-padding">
+            <div class="modal fade bd-example-modal-lg export-file-modal" id="DublicateSearch" tabindex="-1" role="dialog" aria-labelledby="DublicateSearch" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3 class="modal-title">Пошук дублікатів</h3>
+                            <button type="button" class="close close-modal" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body" style="margin: -20px">
+                            <div class="row" style="margin: 0">
+                                <div class="col-md-12 ignore-padding">
+                                    <div class="col-md-12 block-container">
+                                        <div class="col-md-12 ignore-padding" style="display: inline-block">
+                                            <label class="col-md-12" for="DublicateSearchType" style="padding-top: 6px">Пошук</label>
+                                            <div class="col-md-12 ignore-padding" style="display: inline-block; padding: 0 15px 0 15px !important; margin-bottom: 10px">
+                                                <div class="col-md-12" style="padding: 0">
+                                                    <select id="DublicateSearchType">
+                                                        <option value="@DublicateSearchType.FirstAndLastName">По імені та прізвищу</option>
+                                                        <option value="@DublicateSearchType.PhoneNumber">По номерах телефонів</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <div class="row">
+                                <div class="col-md-8" style="margin-top: 6px;">
+                                    <a class="text-center show-all-display-search click" data-dismiss="modal">
+                                        <strong>Показати всіх</strong>
+                                        <i class="fa fa-angle-right"></i>
+                                    </a>
+                                </div>
+                                <div class="col-md-4">
+                                    <button class="btn btn-primary click" id="startDublicateSearch" data-dismiss="modal" style="width: 100%">
+                                        Пошук
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     @Html.Partial("_UploadFile")
     <div>
         @RenderBody()
@@ -552,6 +606,13 @@
                     isEnableThirdSortOrder = true;
                 }
             });
+        });
+
+        $('#DublicateSearchType').multiselect({
+            buttonContainer: '<div class="btn-group" style="width:100% !important"/>',
+            buttonWidth: '100% !important',
+            nonSelectedText: 'Жодний не вибрано',
+            maxHeight: '300'
         });
     </script>
 }
@@ -797,8 +858,12 @@ else
         });
 
         $("#startFilter").click(function () {
+            $('#startFilter').toggleClass('active');
+            $('.spinner').css('display', 'inline-block');
             $("#paginationWay").attr('value', '@Consts.PaginationByFilter');
             getPersonsByFilter();
+            $('#startFilter').toggleClass('active');
+            $('.spinner').css('display', 'none');
         });
 
         $("#startSearch").click(function () {
@@ -837,10 +902,11 @@ else
         }
 
         function getPersonsByDublicateSearch() {
+            var dublicateSearchType = $("#DublicateSearchType").val();
             $.ajax({
                 url: "@Url.Action("DublicateSearch", "Dublicate")",
                 type: 'Post',
-                data: {},
+                data: { searchType: dublicateSearchType },
                 async: false
             }).done((data) => {
                 $("#personsTable").html(data);
@@ -850,8 +916,6 @@ else
         }
 
         function getPersonsByFilter() {
-            $('#loader').fadeIn();
-
             var selectedColumns = $("#SelectedColumnsFilter").val();
             var districtIds = getCheckedDistrictIds();
             var cityIds = getCheckedCityIds();
@@ -904,7 +968,6 @@ else
                 $("#personsTable").html(data);
                 hideFields(selectedColumns);
             });
-            $('#loader').fadeOut();
         }
 
         $(".show-all-display-filter").click(function () {

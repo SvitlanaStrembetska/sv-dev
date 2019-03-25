@@ -104,6 +104,11 @@ namespace Svbase.Service.Implementation
             return RepositoryManager.Persons.SearchDublicateByFirstAndLastName();
         }
 
+        public IQueryable<PersonSelectionModel> SearchDublicateByPhoneNumber()
+        {
+            return RepositoryManager.Persons.SearchDublicateByPhoneNumber();
+        }
+
         public IEnumerable<BaseViewModel> GetFlatsBaseModelByApatrmentIds(IList<int> apartmentIds)
         {
             var flats = RepositoryManager.Apartments.GetFlatBaseModelByApartmentIds(apartmentIds);

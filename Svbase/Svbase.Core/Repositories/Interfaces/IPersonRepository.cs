@@ -21,6 +21,7 @@ namespace Svbase.Core.Repositories.Interfaces
 
         #region DIBLICATE SEARCH
         IQueryable<PersonSelectionModel> SearchDublicateByFirstAndLastName();
+        IQueryable<PersonSelectionModel> SearchDublicateByPhoneNumber();
 
         #endregion
     }

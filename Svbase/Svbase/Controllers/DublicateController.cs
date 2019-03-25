@@ -3,6 +3,8 @@ using System.Web.Mvc;
 using PagedList;
 using Svbase.Controllers.Abstract;
 using Svbase.Core.Consts;
+using Svbase.Core.Enums;
+using Svbase.Core.Models;
 using Svbase.Service.Factory;
 using Svbase.Service.Interfaces;
 
@@ -20,12 +22,23 @@ namespace Svbase.Controllers
         }
 
         [HttpPost]
-        public ActionResult DublicateSearch(int page = 1)
+        public ActionResult DublicateSearch(DublicateSearchType searchType, int page = 1)
         {
-            var persons = _personService.SearchDublicateByFirstAndLastName().ToList();
+            IQueryable<PersonSelectionModel> persons;
+            switch (searchType)
+            {
+                case DublicateSearchType.FirstAndLastName:
+                    persons = _personService.SearchDublicateByFirstAndLastName();
+                    break;
+                case DublicateSearchType.PhoneNumber:
+                    persons = _personService.SearchDublicateByPhoneNumber();
+                    break;
+                default:
+                    persons = _personService.SearchDublicateByFirstAndLastName();
+                    break;
+            }
 
             return PartialView("_PersonsTablePartial", persons.ToPagedList(page, Consts.ShowRecordsPerPage));
         }
-
     }
 }
