@@ -289,9 +289,9 @@ namespace Svbase.Core.Repositories.Implementation
 
         public IQueryable<PersonSelectionModel> SearchDublicateByPhoneNumber()
         {
-            return DbSet.Where(x => DbSet.Count(y => (x.MobileTelephoneFirst.Trim() == y.MobileTelephoneFirst.Trim() && y.MobileTelephoneFirst.Trim().Length > 0)
-                || (x.MobileTelephoneSecond.Trim() == y.MobileTelephoneSecond.Trim() && y.MobileTelephoneSecond.Trim().Length > 0)
-                || (x.StationaryPhone.Trim() == y.StationaryPhone.Trim() && y.StationaryPhone.Trim().Length > 0)
+            return DbSet.Where(x => DbSet.Count(y => (x.MobileTelephoneFirst == y.MobileTelephoneFirst && y.MobileTelephoneFirst.Trim().Length > 0)
+                || (x.MobileTelephoneSecond == y.MobileTelephoneSecond && y.MobileTelephoneSecond.Trim().Length > 0)
+                || (x.StationaryPhone == y.StationaryPhone && y.StationaryPhone.Trim().Length > 0)
                 ) > 1).Distinct().Select(x => new PersonSelectionModel
             {
                 Id = x.Id,

@@ -1,4 +1,5 @@
 ﻿using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Svbase.Core.Data.Configuration;
 using Svbase.Core.Data.Entities;
@@ -20,7 +21,11 @@ namespace Svbase.Core.Data
         #endregion
 
         public ApplicationDbContext()
-            : base("DefaultConnection"){}
+            : base("DefaultConnection")
+        {
+            var objectContext = (this as IObjectContextAdapter).ObjectContext;
+            objectContext.CommandTimeout = 900;
+        }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 using PagedList;
 using Svbase.Controllers.Abstract;
@@ -24,17 +25,17 @@ namespace Svbase.Controllers
         [HttpPost]
         public ActionResult DublicateSearch(DublicateSearchType searchType, int page = 1)
         {
-            IQueryable<PersonSelectionModel> persons;
+            IEnumerable<PersonSelectionModel> persons;
             switch (searchType)
             {
                 case DublicateSearchType.FirstAndLastName:
-                    persons = _personService.SearchDublicateByFirstAndLastName();
+                    persons = _personService.SearchDublicateByFirstAndLastName().AsEnumerable();
                     break;
                 case DublicateSearchType.PhoneNumber:
-                    persons = _personService.SearchDublicateByPhoneNumber();
+                    persons = _personService.SearchDublicateByPhoneNumber().AsEnumerable();
                     break;
                 default:
-                    persons = _personService.SearchDublicateByFirstAndLastName();
+                    persons = _personService.SearchDublicateByFirstAndLastName().AsEnumerable();
                     break;
             }
 
