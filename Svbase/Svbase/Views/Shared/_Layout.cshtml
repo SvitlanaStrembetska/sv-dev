@@ -19,7 +19,7 @@
     <link rel="stylesheet" href="~/Content/bootstrap-datepicker.min.css" type="text/css">
     <script type="text/javascript" src="~/Scripts/bootstrap-multiselect.js"></script>
 </head>
-<body>
+<body style="padding-bottom: 0px">
     <div id="loader"></div>
     <div class="navbar navbar-fixed-top navbar-default navbar-static-top padding-lr" role="navigation">
         @{
@@ -225,7 +225,7 @@
                                     </div>
                                     <div class="col-md-12 ignore-padding" id="orderByMonthsBlock" style="display: none; padding: 0 15px 0 15px !important">
                                         <div class="input-daterange input-group" id="datepicker2">
-                                            @Html.EditorFor(model => personFilter.StartDateMonth, new {htmlAttributes = new { @class = "input-sm form-control", @name = "start", @autocomplete = "off"} })
+                                            @Html.EditorFor(model => personFilter.StartDateMonth, new { htmlAttributes = new { @class = "input-sm form-control", @name = "start", @autocomplete = "off" } })
                                             <span class="input-group-addon">до</span>
                                             @Html.EditorFor(model => personFilter.EndDateMonth, new { htmlAttributes = new { @class = "input-sm form-control", @name = "end", @autocomplete = "off" } })
                                         </div>
@@ -864,16 +864,19 @@ else
             getPersonsByFilter();
             $('#startFilter').toggleClass('active');
             $('.spinner').css('display', 'none');
+            showBlock(1);
         });
 
         $("#startSearch").click(function () {
             $("#paginationWay").attr('value', '@Consts.PaginationBySearch');
             getPersonsBySearch();
+            showBlock(1);
         });
 
         $("#startDublicateSearch").click(function () {
             $("#paginationWay").attr('value', '@Consts.PaginationByDublicateSearch');
             getPersonsByDublicateSearch();
+            showBlock(1);
         });
 
         function getPersonsBySearch() {
@@ -896,8 +899,18 @@ else
                 async: false
             }).done((data) => {
                 $("#personsTable").html(data);
-                hideFields($("#SelectedColumnsSearch").val());
             });
+
+            $.ajax({
+                url: "@Url.Action("SearchPeoplePagesCount", "Person")",
+                type: 'Post',
+                data: { searchFields: searchFields },
+                async: false
+            }).done((data) => {
+                $(".pagination").html(data);
+            });
+
+            hideFields($("#SelectedColumnsSearch").val());
             $('#loader').fadeOut();
         }
 
@@ -910,6 +923,15 @@ else
                 async: false
             }).done((data) => {
                 $("#personsTable").html(data);
+            });
+
+            $.ajax({
+                url: "@Url.Action("DublicateSearchPagesCount", "Dublicate")",
+                type: 'Post',
+                data: { searchType: dublicateSearchType },
+                async: false
+            }).done((data) => {
+                $(".pagination").html(data);
             });
 
             $('#loader').fadeOut();
@@ -968,113 +990,34 @@ else
                 $("#personsTable").html(data);
                 hideFields(selectedColumns);
             });
-        }
-
-        $(".show-all-display-filter").click(function () {
-            $('#loader').fadeIn();
-
-            var lastNameDisplay = $("#lastNameDisplay input").is(":checked");
-            var firstNameDisplay = $("#firstNameDisplay input").is(":checked");
-            var middleNameDisplay = $("#middleNameDisplay input").is(":checked");
-            var phoneFirstDisplay = $("#phoneFirstDisplay input").is(":checked");
-            var phoneSecondDisplay = $("#phoneSecondDisplay input").is(":checked");
-            var homePhoneDisplay = $("#homePhoneDisplay input").is(":checked");
-            var dateBirthDisplay = $("#dateBirthDisplay input").is(":checked");
-            var emailDisplay = $("#emailDisplay input").is(":checked");
-            var addressDisplay = $("#addressDisplay input").is(":checked");
-            var workPlaceDisplay = $("#workPlaceDisplay input").is(":checked");
-            var isDeadDisplay = $("#isDeadDisplay input").is(":checked");
-
-            var districtIds = getCheckedDistrictIds();
-            var cityIds = getCheckedCityIds();
-            var streetIds = getCheckedStreetIds();
-            var apartmentIds = getCheckedApartmentIds();
-            var flatIds = getCheckedFlatIds();
 
             $.ajax({
-                url: "@Url.Action("PostIndex", "Person")",
+                url: "@Url.Action("PostIndexPagesCount", "Person")",
                 type: 'Post',
-                data: { districtIds: districtIds, cityIds: cityIds, streetIds: streetIds, apartmentIds: apartmentIds, flatIds: flatIds },
+                data: {
+                    DistrictIds: districtIds, CityIds: cityIds,
+                    StreetIds: streetIds, ApartmentIds: apartmentIds,
+                    FlatIds: flatIds, BeneficariesChecked: beneficaries,
+                    IsDeadPerson: isDeadPerson, StartDate: startDate,
+                    EndDate: endDate, StartDateMonth: startDateMonth, EndDateMonth: endDateMonth,
+                    SortOrder: sortOrder, FirstSortOrder: firstSortOrder,
+                    SecondSortOrder: secondSortOrder, ThirdSortOrder: thirdSortOrder
+                },
                 async: false
             }).done((data) => {
-                $("#personsTable").html(data);
+                $(".pagination").html(data);
             });
+        }
 
-            $(".beneficary input").each((index, element) => {
-                var fieldId = $(element)[0].parentElement.getAttribute("id");
-                if (fieldId !== "" && !$(".beneficary #" + fieldId + " input").is(":checked")) {
-                    $(".beneficary #" + fieldId + " input").prop('checked', true);
-                }
-            });
-
-            if (!lastNameDisplay) {
-                $("tr #lastNameHidden").show();
-                $("#lastNameDisplay input").prop('checked', true);
-            }
-
-            if (!firstNameDisplay) {
-                $("tr #firstNameHidden").show();
-                $("#firstNameDisplay input").prop('checked', true);
-            }
-
-            if (!middleNameDisplay) {
-                $("tr #middleNameHidden").show();
-                $("#middleNameDisplay input").prop('checked', true);
-            }
-
-            if (!phoneFirstDisplay) {
-                $("tr #phone1Hidden").show();
-                $("#phoneFirstDisplay input").prop('checked', true);
-            }
-
-            if (!phoneSecondDisplay) {
-                $("tr #phone2Hidden").show();
-                $("#phoneSecondDisplay input").prop('checked', true);
-            }
-
-            if (!homePhoneDisplay) {
-                $("tr #homeNumberHidden").show();
-                $("#homePhoneDisplay input").prop('checked', true);
-            }
-
-            if (!dateBirthDisplay) {
-                $("tr #birthDateHidden").show();
-                $("#dateBirthDisplay input").prop('checked', true);
-            }
-
-            if (!emailDisplay) {
-                $("tr #emailNameHidden").show();
-                $("#emailDisplay input").prop('checked', true);
-            }
-
-            if (!addressDisplay) {
-                $("tr #cityNameHidden").show();
-                $("tr #streetNameHidden").show();
-                $("tr #houseNameHidden").show();
-                $("tr #flatNameHidden").show();
-                $("#addressDisplay input").prop('checked', true);
-            }
-
-            if (!workPlaceDisplay) {
-                $("tr #workPlaceHidden").show();
-                $("#workPlaceDisplay input").prop('checked', true);
-            }
-
-            if (isDeadDisplay) {
-                $("#isDeadDisplay input").prop('checked', false);
-            }
-
-            $('#loader').fadeOut();
-        });
 
         $(".show-all-display-search").click(function () {
             $('#loader').fadeIn();
 
             $("#personSearch_FirstName").val(""),
-                $("#personSearch_LastName").val(""),
-                $("#personSearch_MiddleName").val(""),
-                $("#personSearch_MobilePhone").val(""),
-                $("#isFirstNameIncludedInSearch").prop('checked', true);
+            $("#personSearch_LastName").val(""),
+            $("#personSearch_MiddleName").val(""),
+            $("#personSearch_MobilePhone").val(""),
+            $("#isFirstNameIncludedInSearch").prop('checked', true);
             $("#isLastNameIncludedInSearch").prop('checked', true);
             $("#isMiddleNameIncludedInSearch").prop('checked', true);
             $("#isMobilePhoneIncludedInSearch").prop('checked', true);
@@ -1087,6 +1030,16 @@ else
             }).done((data) => {
                 $("#personsTable").html(data);
             });
+
+            $.ajax({
+                url: "@Url.Action("PostIndexPagesCount", "Person")",
+                type: 'Get',
+                data: {},
+                async: false
+            }).done((data) => {
+                $(".pagination").html(data);
+            });
+
             $('#loader').fadeOut();
         });
     </script>

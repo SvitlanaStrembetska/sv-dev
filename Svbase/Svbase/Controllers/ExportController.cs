@@ -101,7 +101,7 @@ namespace Svbase.Controllers
                     persons = persons.Where(x => x.DateBirth.Value.Day <= filter.EndDateMonth.Value.Day && x.DateBirth.Value.Month <= filter.EndDateMonth.Value.Month);
 
                 //if beneficaries exists 
-                IEnumerable<PersonSelectionModel> personsList = null;
+                IQueryable<PersonSelectionModel> personsList = null;
                 if (filter.BeneficariesChecked != null && filter.BeneficariesChecked.Any())
                 {
                     personsList = _personFilterHelper.FilterPersonsByBeneficiary(persons, filter.BeneficariesChecked);
@@ -207,9 +207,9 @@ namespace Svbase.Controllers
                     var rowNumber = 2;
                     if (filter.BeneficariesChecked != null && personsList != null && personsList.Any())
                     {
-                        personsList = _personFilterHelper.OrderPersonsBy(personsList, filter.SortOrder, filter.FirstSortOrder,
+                        var people = _personFilterHelper.OrderPersonsBy(personsList, filter.SortOrder, filter.FirstSortOrder,
                             filter.SecondSortOrder, filter.ThirdSortOrder);
-                        foreach (var person in personsList)
+                        foreach (var person in people)
                         {
                             ws = FillRow(ws, columnIndexes, rowNumber++, person, isColumnLastNameExists, isColumnFirstNameExists, isColumnMiddleNameExists,
                                 isColumnFirstMobilePhoneExists, isColumnSecondMobilePhoneExists, isColumnHomePhoneExists,

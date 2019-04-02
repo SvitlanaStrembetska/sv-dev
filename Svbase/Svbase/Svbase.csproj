@@ -252,6 +252,7 @@
     <Compile Include="Models\FileValidationModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\PageModel.cs" />
     <Compile Include="Models\UploadFilesModel.cs" />
     <Compile Include="Modules\RepositoryModule.cs" />
     <Compile Include="Modules\ServiceModule.cs" />
@@ -368,6 +369,7 @@
     <Content Include="Views\Shared\_FilterMultiSelectPartial.cshtml" />
     <Content Include="Views\Shared\_SortByColumnsInFilter.cshtml" />
     <Content Include="Views\Shared\_ShowColumnsListInFilter.cshtml" />
+    <Content Include="Views\Shared\PageBlock.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
