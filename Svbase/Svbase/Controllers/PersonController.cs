@@ -9,6 +9,7 @@ using Svbase.Service.Factory;
 using Svbase.Service.Interfaces;
 using PagedList;
 using Svbase.Helpers;
+using Svbase.Models;
 
 namespace Svbase.Controllers
 {
@@ -36,8 +37,10 @@ namespace Svbase.Controllers
         }
 
         [HttpGet]
-        public ActionResult Index(FilterFileImportModel filter, int page = 1)
+        public ActionResult Index(FilterFileImportModel filter, int page=1)
         {
+            var skip = (page - 1) * Consts.ShowRecordsPerPage;
+
             //=================  generate beneficiaries list for filter  =================   
             var beneficiariesList = new List<Beneficiary>();
             foreach (var beneficary in _beneficiaryService.GetAll())
@@ -45,72 +48,129 @@ namespace Svbase.Controllers
             ViewBag.Beneficaries = beneficiariesList;
             //=================  end generate beneficiaries list for filter  =============
             
-            var persons = filter.DistrictIds != null ? _personService.SearchPersonsByFilter(filter) : _personService.GetPersons().Where(x => x.IsDead == filter.IsDeadPerson);
+            var people = filter.DistrictIds != null ? _personService.SearchPersonsByFilter(filter) : _personService.GetPersons().Where(x => x.IsDead == filter.IsDeadPerson);
+            ViewBag.PagesCount = (people.Count() + Consts.ShowRecordsPerPage - 1) / Consts.ShowRecordsPerPage;
 
             if (filter.BeneficariesChecked == null || !filter.BeneficariesChecked.Any())
             {
                 var benChecked = beneficiariesList.Select(x => x.Id.ToString()).ToList();
                 benChecked.Add("0");
                 ViewBag.BeneficariesChecked = benChecked;
-                return View(persons.ToPagedList(page, Consts.ShowRecordsPerPage));
+                return View(people.Skip(skip).Take(Consts.ShowRecordsPerPage).ToList());
             }
 
             //=================  generate beneficiaries unchecked list for filter (from Dashboard)  ================= 
             ViewBag.BeneficariesChecked = filter.BeneficariesChecked.ToList();
             //=================  end generate beneficiaries unchecked list for filter (from Dashboard)  ============= 
+            
 
-            return View(_personFilterHelper.FilterPersonsByBeneficiary(persons, filter.BeneficariesChecked).ToPagedList(page, Consts.ShowRecordsPerPage));
+            return View(_personFilterHelper.FilterPersonsByBeneficiary(people, filter.BeneficariesChecked).Skip(skip).Take(Consts.ShowRecordsPerPage).ToList());
         }
 
         [HttpPost]
         public ActionResult PostIndex(FilterFileImportModel filter, int page = 1)
         {
-            IQueryable<PersonSelectionModel> persons;
-
-            if (filter.DistrictIds != null || filter.CityIds != null || filter.StreetIds != null || filter.ApartmentIds != null || filter.FlatIds != null)
-                persons = _personService.SearchPersonsByFilter(filter);
-            else
-                persons = _personService.GetPersons().Where(x => x.IsDead == filter.IsDeadPerson);
-
-            if (filter.StartDate != null && filter.EndDate != null)
-                persons = persons.Where(x => x.DateBirth >= filter.StartDate && x.DateBirth <= filter.EndDate);
-            else if (filter.StartDate != null)
-                persons = persons.Where(x => x.DateBirth >= filter.StartDate);
-            else if (filter.EndDate != null)
-                persons = persons.Where(x => x.DateBirth <= filter.EndDate);
-            else if (filter.StartDateMonth != null && filter.EndDateMonth != null)
-                persons = persons.Where(x => x.DateBirth.Value.Day >= filter.StartDateMonth.Value.Day 
-                    && x.DateBirth.Value.Month >= filter.StartDateMonth.Value.Month 
-                    && x.DateBirth.Value.Day <= filter.EndDateMonth.Value.Day
-                    && x.DateBirth.Value.Month <= filter.EndDateMonth.Value.Month);
-            else if (filter.StartDateMonth != null)
-                persons = persons.Where(x => x.DateBirth.Value.Day >= filter.StartDateMonth.Value.Day && x.DateBirth.Value.Month >= filter.StartDateMonth.Value.Month);
-            else if (filter.EndDateMonth != null)
-                persons = persons.Where(x => x.DateBirth.Value.Day <= filter.EndDateMonth.Value.Day && x.DateBirth.Value.Month <= filter.EndDateMonth.Value.Month);
+            var skip = (page - 1) * Consts.ShowRecordsPerPage;
+            var people = GetPeopleByFilter(filter);
 
             if (filter.BeneficariesChecked == null || !filter.BeneficariesChecked.Any())
-                return PartialView("_PersonsTablePartial", _personFilterHelper.OrderPersonsBy(persons, filter.SortOrder, filter.FirstSortOrder,filter.SecondSortOrder,filter.ThirdSortOrder).ToPagedList(page, Consts.ShowRecordsPerPage));
+                return PartialView("_PersonsTablePartial", _personFilterHelper.OrderPersonsBy(people, filter.SortOrder, filter.FirstSortOrder,
+                    filter.SecondSortOrder, filter.ThirdSortOrder, skip, Consts.ShowRecordsPerPage));
 
-            return PartialView("_PersonsTablePartial", _personFilterHelper.OrderPersonsBy(_personFilterHelper.FilterPersonsByBeneficiary(persons, filter.BeneficariesChecked), filter.SortOrder, filter.FirstSortOrder, filter.SecondSortOrder, filter.ThirdSortOrder).ToPagedList(page, Consts.ShowRecordsPerPage));
+            return PartialView("_PersonsTablePartial", _personFilterHelper.OrderPersonsBy(
+                _personFilterHelper.FilterPersonsByBeneficiary(people, filter.BeneficariesChecked), 
+                filter.SortOrder, filter.FirstSortOrder, filter.SecondSortOrder, filter.ThirdSortOrder,
+                skip, Consts.ShowRecordsPerPage));
         }
-        
+
+        [HttpPost]
+        public ActionResult PostIndexPagesCount(FilterFileImportModel filter)
+        {
+            var people = GetPeopleByFilter(filter);
+            var pagesCount = (people.Count() + Consts.ShowRecordsPerPage - 1) / Consts.ShowRecordsPerPage;
+            return PartialView("PageBlock", new PageModel { PagesCount = pagesCount });
+        }
+
+        private IQueryable<PersonSelectionModel> GetPeopleByFilter(FilterFileImportModel filter)
+        {
+            IQueryable<PersonSelectionModel> people;
+
+            if (filter.DistrictIds != null || filter.CityIds != null || filter.StreetIds != null ||
+                filter.ApartmentIds != null || filter.FlatIds != null)
+                people = _personService.SearchPersonsByFilter(filter);
+            else
+                people = _personService.GetPersons().Where(x => x.IsDead == filter.IsDeadPerson);
+
+            if (filter.StartDate != null && filter.EndDate != null)
+                people = people.Where(x => x.DateBirth >= filter.StartDate && x.DateBirth <= filter.EndDate);
+            else if (filter.StartDate != null)
+                people = people.Where(x => x.DateBirth >= filter.StartDate);
+            else if (filter.EndDate != null)
+                people = people.Where(x => x.DateBirth <= filter.EndDate);
+            else if (filter.StartDateMonth != null && filter.EndDateMonth != null)
+                people = people.Where(x => x.DateBirth.Value.Day >= filter.StartDateMonth.Value.Day
+                                           && x.DateBirth.Value.Month >= filter.StartDateMonth.Value.Month
+                                           && x.DateBirth.Value.Day <= filter.EndDateMonth.Value.Day
+                                           && x.DateBirth.Value.Month <= filter.EndDateMonth.Value.Month);
+            else if (filter.StartDateMonth != null)
+                people =
+                    people.Where(
+                        x =>
+                            x.DateBirth.Value.Day >= filter.StartDateMonth.Value.Day &&
+                            x.DateBirth.Value.Month >= filter.StartDateMonth.Value.Month);
+            else if (filter.EndDateMonth != null)
+                people =
+                    people.Where(
+                        x =>
+                            x.DateBirth.Value.Day <= filter.EndDateMonth.Value.Day &&
+                            x.DateBirth.Value.Month <= filter.EndDateMonth.Value.Month);
+            return people;
+        }
+
         [HttpPost]
         public ActionResult SearchPeople(PersonSearchModel searchFields, int page = 1)
         {
-            IQueryable<PersonSelectionModel> persons;
+            var skip = (page - 1) * Consts.ShowRecordsPerPage;
+            var persons = GetPeopleBySearch(searchFields);
+
+            return PartialView("_PersonsTablePartial", persons.Skip(skip).Take(Consts.ShowRecordsPerPage).ToList());
+        }
+
+        [HttpPost]
+        public ActionResult SearchPeoplePagesCount(PersonSearchModel searchFields, int page = 1)
+        {
+            var people = GetPeopleBySearch(searchFields);
+
+            var pagesCount = (people.Count() + Consts.ShowRecordsPerPage - 1) / Consts.ShowRecordsPerPage;
+            return PartialView("PageBlock", new PageModel { PagesCount = pagesCount });
+        }
+
+
+        public IQueryable<PersonSelectionModel> GetPeopleBySearch(PersonSearchModel searchFields)
+        {
+            IQueryable<PersonSelectionModel> people;
 
             if (searchFields.IsFirstNameIncludedInSearch || searchFields.IsLastNameIncludedInSearch || searchFields.IsMiddleNameIncludedInSearch || searchFields.IsMobilePhoneIncludedInSearch)
-                persons = _personService.SearchPersonsByFields(searchFields);
+                people = _personService.SearchPersonsByFields(searchFields);
             else
-                persons = _personService.GetPersons().Where(x => x.IsDead == false);
+                people = _personService.GetPersons().Where(x => x.IsDead == false);
 
-            return PartialView("_PersonsTablePartial", persons.ToPagedList(page, Consts.ShowRecordsPerPage));
+            return people;
         }
 
         [HttpGet]
         public ActionResult All(int page = 1)
         {
-            return PartialView("SelectionPersonPartial", _personService.GetPersons().Where(x => x.IsDead == false));
+            var skip = (page - 1) * Consts.ShowRecordsPerPage;
+            return PartialView("_PersonsTablePartial", _personService.GetPersons().Where(x => x.IsDead == false).Skip(skip).Take(Consts.ShowRecordsPerPage));
+        }
+
+        public ActionResult AllPagesCount()
+        {
+            var people = _personService.GetPersons().Where(x => x.IsDead == false);
+
+            var pagesCount = (people.Count() + Consts.ShowRecordsPerPage - 1) / Consts.ShowRecordsPerPage;
+            return PartialView("PageBlock", new PageModel { PagesCount = pagesCount });
         }
 
         public ActionResult Create()

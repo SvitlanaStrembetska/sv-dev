@@ -1,6 +1,7 @@
 ﻿@using Svbase.Core.Consts
 @using Svbase.Core.Models
-@model PagedList.IPagedList<PersonSelectionModel>
+@using Svbase.Models
+@model IEnumerable<PersonSelectionModel>
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -78,6 +79,11 @@
             @Html.Partial("_PersonsTablePartial", Model)
         </div>
     </div>
+    <div align="center">
+        <ul class="pagination" align="center" style="margin: 0 !important;">
+            @Html.Partial("PageBlock", new PageModel{ PagesCount = ViewBag.PagesCount ?? 1})
+        </ul>
+    </div>
 </div>
 <script>
     var isSidebarToogled = false;
@@ -86,10 +92,6 @@
         $("#" + itemId).toggle('in');
         isSidebarToogled = true;
     }
-
-    $(".pagination li").each((index, element) => {
-        $(element).addClass("click");
-    });
 
     $(document).ready(() => {
         subscribeEvents();
@@ -118,7 +120,9 @@
             data: {},
             async: false
         }).done((data) => {
-            $("#selectionBody").html(data);
+            $("#personsTable").html(data);
+            currentPaginationBlock = 1;
+            showBlock(currentPaginationBlock);
         });
         $('#loader').fadeOut();
     }
@@ -508,7 +512,7 @@
     }
 
     // ==================   start show full/part of left filter   ================== //
-    $(document).on('click', '.thumbtack', function() {
+    $(document).on('click', '.thumbtack', function () {
         var currentVal = $(this).attr('thumbtack');
         if (currentVal === "true") {
             $(this).closest('span').html('<i class="fas fa-angle-double-right thumbtack" thumbtack="false"></i>');
@@ -695,13 +699,80 @@
 
     };
 
-    $(document).on('click', '.pagination > li > a', function(e) {
-        e.preventDefault();
-        $('#loader').fadeIn();
+    // ================================  Pagination Block ===================================
+    var currentPaginationBlock = 1;
+    var maxPaginationBlock = 1;
 
-        var page = $(this)[0].search.trim().substring(6);
-        if (page === "")
+    getMaxPaginationBlockValue();
+    function getMaxPaginationBlockValue() {
+        $(".pagination li").each((index, element) => {
+            if ($(element).attr("paginationBlock") != null) {
+                maxPaginationBlock = $(element).attr("paginationBlock");
+            }
+        });
+    }
+
+    function showBlock(paginationBlock) {
+        $(".pagination li").each((index, element) => {
+            if ($(element).attr("paginationBlock") == paginationBlock) {
+                $(element).css("display", "inline");
+            } else {
+                $(element).css("display", "none");
+            }
+        });
+        if (paginationBlock != 1) {
+            $(".leftPoints").css("display", "inline");
+            $(".hasErrowLeft").css("display", "inline");
+            $(".hasErrowLeftEnd").css("display", "inline");
+        } else {
+            $(".leftPoints").css("display", "none");
+            $(".hasErrowLeft").css("display", "none");
+            $(".hasErrowLeftEnd").css("display", "none");
+        }
+        if (paginationBlock != maxPaginationBlock) {
+            $(".rightPoints").css("display", "inline");
+            $(".hasErrowRight").css("display", "inline");
+            $(".hasErrowRightEnd").css("display", "inline");
+        } else {
+            $(".rightPoints").css("display", "none");
+            $(".hasErrowRight").css("display", "none");
+            $(".hasErrowRightEnd").css("display", "none");
+        }
+    }
+
+    $(document).on('click', '.pagination > li > a', function (e) {
+        e.preventDefault();
+
+        if ($(this).parent().hasClass("hasErrowLeft")) {
+            showBlock(--currentPaginationBlock);
             return false;
+        }
+        else if ($(this).parent().hasClass("hasErrowLeftEnd")) {
+            currentPaginationBlock = 1;
+            showBlock(currentPaginationBlock);
+            return false;
+        }
+        else if ($(this).parent().hasClass("hasErrowRight")) {
+            showBlock(++currentPaginationBlock);
+            return false;
+        }
+        else if ($(this).parent().hasClass("hasErrowRightEnd")) {
+            getMaxPaginationBlockValue();
+            currentPaginationBlock = maxPaginationBlock;
+            showBlock(currentPaginationBlock);
+            return false;
+        }
+
+        var page = $(this)[0].innerText;
+        if(page === "" || page === "...")
+            return false;
+        
+        $(".pagination li").each((index, element) => {
+            if ($(element).hasClass("active")) {
+                $(element).removeClass("active");
+            }
+        });
+        $(this).parent().addClass("active");
 
         var paginationWay = $('#paginationWay').val();
         if (paginationWay === '@Consts.PaginationByFilter')
@@ -710,10 +781,6 @@
             paginationBySearch(page);
         else if (paginationWay === '@Consts.PaginationByDublicateSearch')
             paginationByDublicateSearch(page);
-
-        $(".pagination li").each((index, element) => {
-            $(element).addClass("click");
-        });
 
         $('#loader').fadeOut();
     });
@@ -756,21 +823,20 @@
         $.ajax({
             url: "@Url.Action("PostIndex", "Person")",
             type: 'Post',
-            data: { districtIds: districtIds, cityIds: cityIds,
-                    streetIds: streetIds, apartmentIds: apartmentIds,
-                    flatIds: flatIds, BeneficariesChecked: beneficaries,
-                    StartDate: startDate, EndDate: endDate,
-                    StartDateMonth: startDateMonth, EndDateMonth: endDateMonth,
-                    SortOrder: sortOrder, FirstSortOrder: firstSortOrder,
-                    SecondSortOrder: secondSortOrder, ThirdSortOrder: thirdSortOrder,
-                    IsDeadPerson: isDeadPerson, page: page },
+            data: {
+                districtIds: districtIds, cityIds: cityIds,
+                streetIds: streetIds, apartmentIds: apartmentIds,
+                flatIds: flatIds, BeneficariesChecked: beneficaries,
+                StartDate: startDate, EndDate: endDate,
+                StartDateMonth: startDateMonth, EndDateMonth: endDateMonth,
+                SortOrder: sortOrder, FirstSortOrder: firstSortOrder,
+                SecondSortOrder: secondSortOrder, ThirdSortOrder: thirdSortOrder,
+                IsDeadPerson: isDeadPerson, page: page
+            },
             async: false
         }).done((data) => {
             $("#personsTable").html(data);
             hideFields(selectedColumns);
-        });
-        $(".pagination li").each((index, element) => {
-            $(element).addClass("click");
         });
     }
 
@@ -790,7 +856,7 @@
         $.ajax({
             url: "@Url.Action("SearchPeople", "Person")",
             type: 'Post',
-            data: { searchFields: searchFields, page: page},
+            data: { searchFields: searchFields, page: page },
             async: false
         }).done((data) => {
             $("#personsTable").html(data);
@@ -798,10 +864,11 @@
     }
 
     function paginationByDublicateSearch(page) {
+        var dublicateSearchType = $("#DublicateSearchType").val();
         $.ajax({
             url: "@Url.Action("DublicateSearch", "Dublicate")",
             type: 'Post',
-            data: { page: page},
+            data: { searchType:dublicateSearchType, page: page },
             async: false
         }).done((data) => {
             $("#personsTable").html(data);

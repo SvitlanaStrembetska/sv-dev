@@ -1,8 +1,6 @@
-﻿@using PagedList.Mvc
-@using Svbase.Core.Models
-@model PagedList.IPagedList<PersonSelectionModel>
-
-<div class="panel-body table-horizontal-scroll padding-bottom-null">
+﻿@using Svbase.Core.Models
+@model IEnumerable<PersonSelectionModel>
+<div class="panel-body table-horizontal-scroll padding-bottom-null" style="margin-bottom: -15px;">
     <table class="table table-striped table-bordered table-hover"
            id="dataTables-example" style="font-size: 12px">
         <thead>
@@ -41,9 +39,6 @@
         @Html.Partial("SelectionPersonPartial", Model)
         </tbody>
     </table>
-</div>
-<div class="col-md-12 text-center" style="transform: translateY(10px);position: absolute;bottom: 10px;">
-    @Html.PagedListPager(Model, page => Url.Action("Index", "Person", new { page }))
 </div>
 <div class="modal fade" id="personEditModal" role="dialog">
     <div class="modal-dialog" style="max-width: 800px; width: 100% !important;">

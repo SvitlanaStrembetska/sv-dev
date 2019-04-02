@@ -1,0 +1,33 @@
+﻿@model Svbase.Models.PageModel
+@{
+    var paginationBlock = 1;
+    var iterator = 2;
+}
+<li class="hasErrowLeftEnd" style="display: none"><a><i class="fa fa-angle-double-left" aria-hidden="true"></i></a></li>
+<li class="hasErrowLeft" style="display: none"><a><i class="fa fa-angle-left" aria-hidden="true"></i></a></li>
+<li class="leftPoints" style="display: none"><a>...</a></li>
+<li class="active click" paginationBlock="1"><a>1</a></li>
+@while (iterator <= Model.PagesCount)
+{
+    if (iterator <= 10)
+    {
+        <li class="click" paginationBlock="@paginationBlock"><a>@iterator</a></li>
+    }
+    else
+    {
+        <li class="click" paginationBlock="@paginationBlock" style="display: none"><a>@iterator</a></li>
+    }
+
+    if (iterator % 10 == 0)
+    {
+        paginationBlock++;
+    }
+    iterator++;
+}
+@if (Model.PagesCount > 10)
+{
+    <li class="rightPoints"><a>...</a></li>
+    <li class="hasErrowRight"><a><i class="fa fa-angle-right" aria-hidden="true"></i></a></li>
+    <li class="hasErrowRightEnd"><a><i class="fa fa-angle-double-right" aria-hidden="true"></i></a></li>
+}
+

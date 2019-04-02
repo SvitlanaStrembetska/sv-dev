@@ -8,21 +8,51 @@ namespace Svbase.Helpers
 {
     public class PersonFilterHelper
     {
-        public IEnumerable<PersonSelectionModel> FilterPersonsByBeneficiary(IEnumerable<PersonSelectionModel> persons, IEnumerable<string> checkedBeneficariesId)
+        public IQueryable<PersonSelectionModel> FilterPersonsByBeneficiary(IQueryable<PersonSelectionModel> persons, IEnumerable<string> checkedBeneficariesId)
         {
-            var personsLists = new List<PersonSelectionModel>();
+            var personsLists = persons.Where(
+                x => checkedBeneficariesId.Any(id => x.Beneficiaries.Any(y => y.Id.ToString().Equals(id)))
+                || (checkedBeneficariesId.Any(z => z.Contains("0")) && !x.Beneficiaries.Any()));
 
-            foreach (var person in persons)
-            {
-                if (checkedBeneficariesId.Any(id => person.Beneficiaries.Any(x => x.Id.ToString().Equals(id))))
-                    personsLists.Add(person);
-                else if (checkedBeneficariesId.Any(x => x.Contains("0")) && !person.Beneficiaries.Any())
-                    personsLists.Add(person);
-            }
             return personsLists;
         }
 
-        public IEnumerable<PersonSelectionModel> OrderPersonsBy(IEnumerable<PersonSelectionModel> persons, SortOrder sortOrder, ColumnName firstSortOrder, ColumnName secondSortOrder, ColumnName thirdSortOrder)
+        public IEnumerable<PersonSelectionModel> OrderPersonsBy(IQueryable<PersonSelectionModel> persons, SortOrder sortOrder, ColumnName firstSortOrder, ColumnName secondSortOrder, ColumnName thirdSortOrder, int skip, int take)
+        {
+            var firstOrder = GetColumnName(firstSortOrder);
+            var secondOrder = GetColumnName(secondSortOrder);
+            var thirdOrder = GetColumnName(thirdSortOrder);
+
+            var isFirstOrderNotNull = isColumnNameNull(firstSortOrder);
+
+            IEnumerable<PersonSelectionModel> orderedPeople = null;
+
+            switch (sortOrder)
+            {
+                case SortOrder.Ascending:
+                    if (firstSortOrder != 0 && secondSortOrder != 0 && thirdSortOrder != 0)
+                    {
+                        orderedPeople = persons.OrderBy(isFirstOrderNotNull).ThenBy(firstOrder).ThenBy(secondOrder).ThenBy(thirdOrder).Skip(skip).Take(take);
+                    }
+                    else if (firstSortOrder != 0 && secondSortOrder != 0 && thirdSortOrder == 0)
+                        orderedPeople = persons.OrderBy(isFirstOrderNotNull).ThenBy(firstOrder).ThenBy(secondOrder).Skip(skip).Take(take);
+                    else if (firstSortOrder != 0 && secondSortOrder == 0 && thirdSortOrder == 0)
+                        orderedPeople = persons.OrderBy(isFirstOrderNotNull).ThenBy(firstOrder).Skip(skip).Take(take);
+                    break;
+                case SortOrder.Descending:
+                    if (firstSortOrder != 0 && secondSortOrder != 0 && thirdSortOrder != 0)
+                        orderedPeople = persons.OrderByDescending(firstOrder).ThenBy(secondOrder).ThenBy(thirdOrder).Skip(skip).Take(take);
+                    else if (firstSortOrder != 0 && secondSortOrder != 0 && thirdSortOrder == 0)
+                        orderedPeople = persons.OrderByDescending(firstOrder).ThenBy(secondOrder).Skip(skip).Take(take);
+                    else if (firstSortOrder != 0 && secondSortOrder == 0 && thirdSortOrder == 0)
+                        orderedPeople = persons.OrderByDescending(firstOrder).Skip(skip).Take(take);
+                    break;
+            }
+
+            return orderedPeople ?? persons.Skip(skip).Take(take).ToList();
+        }
+
+        public IEnumerable<PersonSelectionModel> OrderPersonsBy(IQueryable<PersonSelectionModel> persons, SortOrder sortOrder, ColumnName firstSortOrder, ColumnName secondSortOrder, ColumnName thirdSortOrder)
         {
             var firstOrder = GetColumnName(firstSortOrder);
             var secondOrder = GetColumnName(secondSortOrder);
@@ -54,7 +84,7 @@ namespace Svbase.Helpers
                     break;
             }
 
-            return orderedPeople ?? persons;
+            return orderedPeople ?? persons.ToList();
         }
 
         private Func<PersonSelectionModel, object> GetColumnName(ColumnName columnName)

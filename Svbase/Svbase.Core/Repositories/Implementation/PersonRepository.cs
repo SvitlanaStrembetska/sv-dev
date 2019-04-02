@@ -240,11 +240,12 @@ namespace Svbase.Core.Repositories.Implementation
         {
             return DbSet.Count(x => !x.Beneficiaries.Any() && (x.MobileTelephoneFirst.Length > 0 || x.MobileTelephoneSecond.Length > 0));
         }
-
+        
         public IQueryable<PersonSelectionModel> SearchDublicateByFirstAndLastName()
         {
-            return DbSet.Where(x => DbSet.Count(y => (x.FirstName == y.FirstName) && (x.FirstName != "") && (x.LastName == y.LastName) && (x.LastName != "")) > 1).Distinct().Select(x => new PersonSelectionModel
-            {
+            return DbSet.GroupBy(x => new { x.FirstName, x.LastName }).Where(x => x.Count() > 1).SelectMany(x => x)
+                .Where(x => x.FirstName.Trim().Length > 0 && x.LastName.Trim().Length > 0).Select(x => new PersonSelectionModel
+                {
                 Id = x.Id,
                 FirstName = x.FirstName,
                 MiddleName = x.MiddleName,
@@ -284,16 +285,15 @@ namespace Svbase.Core.Repositories.Implementation
                     Name = f.Number,
                 }).FirstOrDefault(),
                 Work = x.Work
-            }).OrderBy(x=>x.LastName).ThenBy(x => x.FirstName);
+            }).OrderBy(x => x.LastName).ThenBy(x => x.FirstName);
         }
+
 
         public IQueryable<PersonSelectionModel> SearchDublicateByPhoneNumber()
         {
-            return DbSet.Where(x => DbSet.Count(y => (x.MobileTelephoneFirst == y.MobileTelephoneFirst && y.MobileTelephoneFirst.Trim().Length > 0)
-                || (x.MobileTelephoneSecond == y.MobileTelephoneSecond && y.MobileTelephoneSecond.Trim().Length > 0)
-                || (x.StationaryPhone == y.StationaryPhone && y.StationaryPhone.Trim().Length > 0)
-                ) > 1).Distinct().Select(x => new PersonSelectionModel
-            {
+            return DbSet.GroupBy(x => new { x.MobileTelephoneFirst, x.MobileTelephoneSecond, x.StationaryPhone }).Where(x => x.Count() > 1).SelectMany(x => x)
+                .Where(x => x.MobileTelephoneFirst.Trim().Length > 0 || x.MobileTelephoneSecond.Trim().Length > 0 || x.StationaryPhone.Trim().Length > 0).Select(x => new PersonSelectionModel
+                {
                 Id = x.Id,
                 FirstName = x.FirstName,
                 MiddleName = x.MiddleName,
@@ -333,7 +333,7 @@ namespace Svbase.Core.Repositories.Implementation
                     Name = f.Number,
                 }).FirstOrDefault(),
                 Work = x.Work
-            }).OrderBy(x => x.FirstMobilePhone).ThenBy(x => x.SecondMobilePhone).ThenBy(x => x.HomePhone);
+            }).OrderBy(x => x.HomePhone).ThenBy(x => x.SecondMobilePhone).ThenBy(x => x.FirstMobilePhone);
         }
     }
 }
