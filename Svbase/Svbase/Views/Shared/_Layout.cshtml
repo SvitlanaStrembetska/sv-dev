@@ -433,8 +433,9 @@
                                     </a>
                                 </div>
                                 <div class="col-md-4">
-                                    <button class="btn btn-primary click" id="startDublicateSearch" data-dismiss="modal" style="width: 100%">
+                                    <button class="btn btn-primary click has-spinner" id="startDublicateSearch" data-dismiss="modal" style="width: 100%">
                                         Пошук
+                                        <span class="spinner"><i class="fas fa-spinner fa-spin"></i></span>
                                     </button>
                                 </div>
                             </div>
@@ -874,8 +875,12 @@ else
         });
 
         $("#startDublicateSearch").click(function () {
+            $('#startDublicateSearch').toggleClass('active');
+            $('.spinner').css('display', 'inline-block');
             $("#paginationWay").attr('value', '@Consts.PaginationByDublicateSearch');
             getPersonsByDublicateSearch();
+            $('#startDublicateSearch').toggleClass('active');
+            $('.spinner').css('display', 'none');
             showBlock(1);
         });
 
