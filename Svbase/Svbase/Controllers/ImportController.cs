@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Entity;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -64,7 +65,7 @@ namespace Svbase.Controllers
         {
             var files = new List<UploadFilesModel>();
             var errorsList = new List<string>();
-            var beneficaries = _beneficiaryService.GetAll();
+            var beneficaries = _beneficiaryService.GetAll().ToList();
 
             if (!multipleFiles.Any())
                 errorsList.Add("Жоден файл не прикріплено!");
@@ -160,7 +161,7 @@ namespace Svbase.Controllers
             return Json(new { status = Consts.StatusSuccess }, JsonRequestBehavior.AllowGet);
         }
 
-        private List<Dictionary<string, object>> ConvertDataTableToDictionary(DataTable dataTable, string fileName, IQueryable<Beneficiary> beneficaries, ref List<string> errorList)
+        private List<Dictionary<string, object>> ConvertDataTableToDictionary(DataTable dataTable, string fileName, IEnumerable<Beneficiary> beneficaries, ref List<string> errorList)
         {
             var rows = new List<Dictionary<string, object>>();
             var validationHelper = new FilesDataValidationHelper();
@@ -229,7 +230,7 @@ namespace Svbase.Controllers
         {
             if (filesName == null) return Json(new { status = Consts.StatusError, message = "Жоден файл не прикріплено!" });
 
-            var beneficaries = _beneficiaryService.GetAll();
+            var beneficaries = _beneficiaryService.GetAll().ToList();
             var errorsList = new List<string>();
             var successList = new List<string>();
 
@@ -288,7 +289,7 @@ namespace Svbase.Controllers
             return errorsList.Any() ? Json(new { status = Consts.StatusError, errorsList, successList }, JsonRequestBehavior.AllowGet) : Json(new { status = Consts.StatusSuccess, successList }, JsonRequestBehavior.AllowGet);
         }
 
-        private IEnumerable<Person> ConverDataRowsToPersonList(DataTable dataTable, string fileName, IQueryable<Beneficiary> beneficaries, ref List<string> generalFileRowsErrorList)
+        private IEnumerable<Person> ConverDataRowsToPersonList(DataTable dataTable, string fileName, IEnumerable<Beneficiary> beneficaries, ref List<string> generalFileRowsErrorList)
         {
             var personList = new List<Person>();
             var cityList = new List<City>();
@@ -297,11 +298,11 @@ namespace Svbase.Controllers
             var flatList = new List<Flat>();
             var workList = new List<Work>();
 
-            var dbCities = _cityService.GetAll();
-            var dbWorks = _workService.GetAll();
-            
-            var fileDataValidationHelper = new FilesDataValidationHelper();
+            var dbCities = _cityService.GetAll().ToList();
+            var dbWorks = _workService.GetAll().ToList();
 
+            var fileDataValidationHelper = new FilesDataValidationHelper();
+            var date = DateTime.Now;
             foreach (DataRow row in dataTable.Rows)
             {
                 var newErrorList = new List<string>();
@@ -431,6 +432,8 @@ namespace Svbase.Controllers
                 personList.Add(person);
 
             }
+            var date2 = DateTime.Now;
+            var res = date2 - date;
             
             return personList;
         }
