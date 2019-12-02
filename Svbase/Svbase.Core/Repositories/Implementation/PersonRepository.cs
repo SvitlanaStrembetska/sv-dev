@@ -11,7 +11,9 @@ namespace Svbase.Core.Repositories.Implementation
     public class PersonRepository : GenericRepository<Person>, IPersonRepository
     {
         public PersonRepository(ApplicationDbContext context)
-            : base(context) { }
+            : base(context)
+        {
+        }
 
         public IQueryable<PersonSelectionModel> GetPersons()
         {
@@ -56,7 +58,7 @@ namespace Svbase.Core.Repositories.Implementation
                         Id = f.Id,
                         Name = f.Number,
                     }).FirstOrDefault(),
-                    Work =  x.Work
+                    Work = x.Work
                 }).OrderBy(x => x.Id);
             return persons;
         }
@@ -173,8 +175,9 @@ namespace Svbase.Core.Repositories.Implementation
             if (searchFields.IsMiddleNameIncludedInSearch)
                 searchTerms = searchTerms.Where(x => x.MiddleName.ToString().Contains(searchFields.MiddleName));
             if (searchFields.IsMobilePhoneIncludedInSearch)
-                searchTerms = searchTerms.Where(x => x.MobileTelephoneFirst.ToString().Contains(searchFields.MobilePhone)
-                    || x.MobileTelephoneSecond.ToString().Contains(searchFields.MobilePhone));
+                searchTerms =
+                    searchTerms.Where(x => x.MobileTelephoneFirst.ToString().Contains(searchFields.MobilePhone)
+                                           || x.MobileTelephoneSecond.ToString().Contains(searchFields.MobilePhone));
 
             var persons = searchTerms
                 .Select(x => new PersonSelectionModel
@@ -236,104 +239,126 @@ namespace Svbase.Core.Repositories.Implementation
         {
             return DbSet.Count(x => !x.Beneficiaries.Any());
         }
+
         public int GetPersonsWidthMobilePhoneWithoutBeneficiariesCount()
         {
-            return DbSet.Count(x => !x.Beneficiaries.Any() && (x.MobileTelephoneFirst.Length > 0 || x.MobileTelephoneSecond.Length > 0));
+            return
+                DbSet.Count(
+                    x =>
+                        !x.Beneficiaries.Any() &&
+                        (x.MobileTelephoneFirst.Length > 0 || x.MobileTelephoneSecond.Length > 0));
         }
-        
+
         public IQueryable<PersonSelectionModel> SearchDublicateByFirstAndLastName()
         {
-            return DbSet.GroupBy(x => new { x.FirstName, x.LastName }).Where(x => x.Count() > 1).SelectMany(x => x)
-                .Where(x => x.FirstName.Trim().Length > 0 && x.LastName.Trim().Length > 0).Select(x => new PersonSelectionModel
+            return DbSet.GroupBy(x => new {x.FirstName, x.LastName}).Where(x => x.Count() > 1).SelectMany(x => x)
+                .Where(x => x.FirstName.Trim().Length > 0 && x.LastName.Trim().Length > 0)
+                .Select(x => new PersonSelectionModel
                 {
-                Id = x.Id,
-                FirstName = x.FirstName,
-                MiddleName = x.MiddleName,
-                LastName = x.LastName,
-                Position = x.Position,
-                Gender = x.Gender,
-                IsDead = x.IsDead,
-                Email = x.Email,
-                FirstMobilePhone = x.MobileTelephoneFirst,
-                SecondMobilePhone = x.MobileTelephoneSecond,
-                HomePhone = x.StationaryPhone,
-                PartionType = x.PartionType,
-                DateBirth = x.BirthdayDate,
-                Beneficiaries = x.Beneficiaries.Select(b => new CheckboxItemModel
-                {
-                    Id = b.Id,
-                    Name = b.Name
-                }).ToList(),
-                City = x.Flats.Select(f => new BaseViewModel
-                {
-                    Id = f.Apartment.Street.City.Id,
-                    Name = f.Apartment.Street.City.Name,
-                }).FirstOrDefault(),
-                Street = x.Flats.Select(f => new BaseViewModel
-                {
-                    Id = f.Apartment.Street.Id,
-                    Name = f.Apartment.Street.Name,
-                }).FirstOrDefault(),
-                Apartment = x.Flats.Select(f => new BaseViewModel
-                {
-                    Id = f.Apartment.Id,
-                    Name = f.Apartment.Name,
-                }).FirstOrDefault(),
-                Flat = x.Flats.Select(f => new BaseViewModel
-                {
-                    Id = f.Id,
-                    Name = f.Number,
-                }).FirstOrDefault(),
-                Work = x.Work
-            }).OrderBy(x => x.LastName).ThenBy(x => x.FirstName);
+                    Id = x.Id,
+                    FirstName = x.FirstName,
+                    MiddleName = x.MiddleName,
+                    LastName = x.LastName,
+                    Position = x.Position,
+                    Gender = x.Gender,
+                    IsDead = x.IsDead,
+                    Email = x.Email,
+                    FirstMobilePhone = x.MobileTelephoneFirst,
+                    SecondMobilePhone = x.MobileTelephoneSecond,
+                    HomePhone = x.StationaryPhone,
+                    PartionType = x.PartionType,
+                    DateBirth = x.BirthdayDate,
+                    Beneficiaries = x.Beneficiaries.Select(b => new CheckboxItemModel
+                    {
+                        Id = b.Id,
+                        Name = b.Name
+                    }).ToList(),
+                    City = x.Flats.Select(f => new BaseViewModel
+                    {
+                        Id = f.Apartment.Street.City.Id,
+                        Name = f.Apartment.Street.City.Name,
+                    }).FirstOrDefault(),
+                    Street = x.Flats.Select(f => new BaseViewModel
+                    {
+                        Id = f.Apartment.Street.Id,
+                        Name = f.Apartment.Street.Name,
+                    }).FirstOrDefault(),
+                    Apartment = x.Flats.Select(f => new BaseViewModel
+                    {
+                        Id = f.Apartment.Id,
+                        Name = f.Apartment.Name,
+                    }).FirstOrDefault(),
+                    Flat = x.Flats.Select(f => new BaseViewModel
+                    {
+                        Id = f.Id,
+                        Name = f.Number,
+                    }).FirstOrDefault(),
+                    Work = x.Work
+                }).OrderBy(x => x.LastName).ThenBy(x => x.FirstName);
         }
 
 
         public IQueryable<PersonSelectionModel> SearchDublicateByPhoneNumber()
         {
-            return DbSet.GroupBy(x => new { x.MobileTelephoneFirst, x.MobileTelephoneSecond, x.StationaryPhone }).Where(x => x.Count() > 1).SelectMany(x => x)
-                .Where(x => x.MobileTelephoneFirst.Trim().Length > 0 || x.MobileTelephoneSecond.Trim().Length > 0 || x.StationaryPhone.Trim().Length > 0).Select(x => new PersonSelectionModel
-                {
-                Id = x.Id,
+            return DbSet.GroupBy(x => new {x.MobileTelephoneFirst, x.MobileTelephoneSecond, x.StationaryPhone})
+                .Where(x => x.Count() > 1)
+                .SelectMany(x => x)
+                .Where(
+                    x =>
+                        x.MobileTelephoneFirst.Trim().Length > 0 || x.MobileTelephoneSecond.Trim().Length > 0 ||
+                        x.StationaryPhone.Trim().Length > 0).Select(x => new PersonSelectionModel
+                        {
+                            Id = x.Id,
+                            FirstName = x.FirstName,
+                            MiddleName = x.MiddleName,
+                            LastName = x.LastName,
+                            Position = x.Position,
+                            Gender = x.Gender,
+                            IsDead = x.IsDead,
+                            Email = x.Email,
+                            FirstMobilePhone = x.MobileTelephoneFirst,
+                            SecondMobilePhone = x.MobileTelephoneSecond,
+                            HomePhone = x.StationaryPhone,
+                            PartionType = x.PartionType,
+                            DateBirth = x.BirthdayDate,
+                            Beneficiaries = x.Beneficiaries.Select(b => new CheckboxItemModel
+                            {
+                                Id = b.Id,
+                                Name = b.Name
+                            }).ToList(),
+                            City = x.Flats.Select(f => new BaseViewModel
+                            {
+                                Id = f.Apartment.Street.City.Id,
+                                Name = f.Apartment.Street.City.Name,
+                            }).FirstOrDefault(),
+                            Street = x.Flats.Select(f => new BaseViewModel
+                            {
+                                Id = f.Apartment.Street.Id,
+                                Name = f.Apartment.Street.Name,
+                            }).FirstOrDefault(),
+                            Apartment = x.Flats.Select(f => new BaseViewModel
+                            {
+                                Id = f.Apartment.Id,
+                                Name = f.Apartment.Name,
+                            }).FirstOrDefault(),
+                            Flat = x.Flats.Select(f => new BaseViewModel
+                            {
+                                Id = f.Id,
+                                Name = f.Number,
+                            }).FirstOrDefault(),
+                            Work = x.Work
+                        }).OrderBy(x => x.HomePhone).ThenBy(x => x.SecondMobilePhone).ThenBy(x => x.FirstMobilePhone);
+        }
+
+        public IEnumerable<PersonDublicateModel> GetPersonDublicateModel()
+        {
+            return DbSet.Select(x => new PersonDublicateModel
+            {
                 FirstName = x.FirstName,
-                MiddleName = x.MiddleName,
                 LastName = x.LastName,
-                Position = x.Position,
-                Gender = x.Gender,
-                IsDead = x.IsDead,
-                Email = x.Email,
-                FirstMobilePhone = x.MobileTelephoneFirst,
-                SecondMobilePhone = x.MobileTelephoneSecond,
-                HomePhone = x.StationaryPhone,
-                PartionType = x.PartionType,
-                DateBirth = x.BirthdayDate,
-                Beneficiaries = x.Beneficiaries.Select(b => new CheckboxItemModel
-                {
-                    Id = b.Id,
-                    Name = b.Name
-                }).ToList(),
-                City = x.Flats.Select(f => new BaseViewModel
-                {
-                    Id = f.Apartment.Street.City.Id,
-                    Name = f.Apartment.Street.City.Name,
-                }).FirstOrDefault(),
-                Street = x.Flats.Select(f => new BaseViewModel
-                {
-                    Id = f.Apartment.Street.Id,
-                    Name = f.Apartment.Street.Name,
-                }).FirstOrDefault(),
-                Apartment = x.Flats.Select(f => new BaseViewModel
-                {
-                    Id = f.Apartment.Id,
-                    Name = f.Apartment.Name,
-                }).FirstOrDefault(),
-                Flat = x.Flats.Select(f => new BaseViewModel
-                {
-                    Id = f.Id,
-                    Name = f.Number,
-                }).FirstOrDefault(),
-                Work = x.Work
-            }).OrderBy(x => x.HomePhone).ThenBy(x => x.SecondMobilePhone).ThenBy(x => x.FirstMobilePhone);
+                StreetName = x.Apartment.Street.Name,
+                ApartmentNumber = x.Apartment.Name
+             });
         }
     }
 }

@@ -233,6 +233,7 @@ namespace Svbase.Controllers
             var beneficaries = _beneficiaryService.GetAll().ToList();
             var errorsList = new List<string>();
             var successList = new List<string>();
+            var skippedRowsList = new List<int>();
 
             foreach (var fileName in filesName)
             {
@@ -269,7 +270,7 @@ namespace Svbase.Controllers
 
                 //convert data rows to persons list
                 var generalFileRowsErrorList = new List<string>();
-                var personList = ConverDataRowsToPersonList(dataTable, fileName, beneficaries, ref generalFileRowsErrorList);
+                var personList = ConverDataRowsToPersonList(dataTable, fileName, beneficaries, ref generalFileRowsErrorList, ref skippedRowsList);
                 if (generalFileRowsErrorList.Any())
                 {
                     errorsList.AddRange(generalFileRowsErrorList);
@@ -286,10 +287,10 @@ namespace Svbase.Controllers
                 System.IO.File.Delete(pathToExcelFile);
             }
 
-            return errorsList.Any() ? Json(new { status = Consts.StatusError, errorsList, successList }, JsonRequestBehavior.AllowGet) : Json(new { status = Consts.StatusSuccess, successList }, JsonRequestBehavior.AllowGet);
+            return errorsList.Any() ? Json(new { status = Consts.StatusError, errorsList, successList }, JsonRequestBehavior.AllowGet) : Json(new { status = Consts.StatusSuccess, skippedRowsList, successList }, JsonRequestBehavior.AllowGet);
         }
 
-        private IEnumerable<Person> ConverDataRowsToPersonList(DataTable dataTable, string fileName, IEnumerable<Beneficiary> beneficaries, ref List<string> generalFileRowsErrorList)
+        private IEnumerable<Person> ConverDataRowsToPersonList(DataTable dataTable, string fileName, IEnumerable<Beneficiary> beneficaries, ref List<string> generalFileRowsErrorList, ref List<int> skippedRowsList)
         {
             var personList = new List<Person>();
             var cityList = new List<City>();
@@ -298,11 +299,11 @@ namespace Svbase.Controllers
             var flatList = new List<Flat>();
             var workList = new List<Work>();
 
+            var dbPeople = _personService.GetPersonDublicateModel().ToList();
             var dbCities = _cityService.GetAll().ToList();
             var dbWorks = _workService.GetAll().ToList();
 
             var fileDataValidationHelper = new FilesDataValidationHelper();
-            var date = DateTime.Now;
             foreach (DataRow row in dataTable.Rows)
             {
                 var newErrorList = new List<string>();
@@ -429,11 +430,12 @@ namespace Svbase.Controllers
                         Email = validatedModel.Email
                     };
 
-                personList.Add(person);
-
+                if(dbPeople.Any(x => x.FirstName == person.FirstName && x.LastName == person.LastName && x.ApartmentNumber == person.Apartment?.Name && x.StreetName == person.Apartment?.Street?.Name) ||
+                   personList.Any(x => x.FirstName == person.FirstName && x.LastName == person.LastName && x.Apartment?.Name == person.Apartment?.Name && x.Apartment?.Street?.Name == person.Apartment?.Street?.Name))
+                    skippedRowsList.Add(dataTable.Rows.IndexOf(row)+2);
+                else
+                    personList.Add(person);
             }
-            var date2 = DateTime.Now;
-            var res = date2 - date;
             
             return personList;
         }

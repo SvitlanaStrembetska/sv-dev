@@ -252,6 +252,14 @@
                                             successList += "<li>" + data.successList[i] + "</li>";
                                         }
                                         $("#fileInfo").prepend(successList + "</ul></div>");
+                                        var skippedRowsList = '<div class="errors-block"><h4>Знайдено дублікати в наступних рядках:</h4><ul class="errors-list">';
+                                        if (data.skippedRowsList != undefined) {
+                                            for (var i = 0; i < data.skippedRowsList.length; i++) {
+                                                skippedRowsList += "<li>" + data.skippedRowsList[i] + "</li>";
+                                            }
+                                            $("#fileInfo").append(skippedRowsList + "</ul></div>");
+                                        }
+                                        
                                         $("#fileInfo").append('<button type="button" id="endWorkWithFile" class="btn btn-primary"> Завершити роботу з файлами </button>');
                                         $('#saveFilesData').toggleClass('active');
                                         $('.spinner').css('display', 'none');

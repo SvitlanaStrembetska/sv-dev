@@ -135,4 +135,13 @@ namespace Svbase.Core.Models
         public int StreetId { get; set; }
         public int CityId { get; set; }
     }
+
+    public class PersonDublicateModel
+    {
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string StreetName { get; set; }
+        public string ApartmentNumber { get; set; }
+    }
+
 }

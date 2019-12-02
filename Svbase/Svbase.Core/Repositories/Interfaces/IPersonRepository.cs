@@ -18,6 +18,8 @@ namespace Svbase.Core.Repositories.Interfaces
         int GetPersonsWithoutBeneficiariesCount();
         int GetPersonsWidthMobilePhoneWithoutBeneficiariesCount();
 
+        IEnumerable<PersonDublicateModel> GetPersonDublicateModel();
+
 
         #region DIBLICATE SEARCH
         IQueryable<PersonSelectionModel> SearchDublicateByFirstAndLastName();
