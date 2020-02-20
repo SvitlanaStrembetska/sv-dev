@@ -1,26 +1,22 @@
-﻿using System;
+﻿using Svbase.Core.Consts;
+using Svbase.Core.Data.Entities;
+using Svbase.Core.Enums;
+using Svbase.Service.Factory;
+using Svbase.Service.Interfaces;
+using System;
 using System.Security.Principal;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
-using Svbase.Core.Consts;
-using Svbase.Core.Data.Entities;
-using Svbase.Core.Enums;
-using Svbase.Core.Repositories.Abstract;
-using Svbase.Service.Factory;
-using Svbase.Service.Interfaces;
 
 namespace Svbase.Controllers.Abstract
 {
     public abstract class GeneralController : Controller
     {
         private HttpContextBase _context;
-        private ApplicationUserManager _userManager;
         private ApplicationUser _currentUser;
-        private ApplicationSignInManager _signInManager;
 
         protected SystemRole UserRole;
-        protected IUnitOfWork UnitOfWork;
         public IServiceManager ServiceManager;
 
         protected IApplicationUserService ApplicationUserService;
@@ -55,7 +51,7 @@ namespace Svbase.Controllers.Abstract
                 if (CurrentUser != null)
                 {
                     ViewBag.CurrentUser = CurrentUser;
-                  
+
                 }
 
             }

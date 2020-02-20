@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
-using Svbase.Core.Enums;
+﻿using Svbase.Core.Enums;
+using System.Collections.Generic;
 
 namespace Svbase.Core.Models
 {
     public class DashboardViewModel
     {
-        public IEnumerable<DashboardItemModel> Beneficiaries { get; set; }
+        public List<DashboardItemModel> Beneficiaries { get; set; }
         public DashboardPersonsBeneficiaries WithoutBeneficiaries { get; set; }
         public DashboardDistrictsModel DistrictsModel { get; set; }
         public DashboardPersonsBeneficiaries AllPersons { get; set; }

@@ -1,7 +1,7 @@
-﻿using System;
+﻿using Svbase.Core.Data.Entities;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using Svbase.Core.Data.Entities;
 
 namespace Svbase.Core.Models
 {
@@ -15,10 +15,10 @@ namespace Svbase.Core.Models
         [Display(Name = "Прізвище")]
         public string LastName { get; set; }
 
-       
+
     }
 
-    public class PersonViewModel  : PersonListModel
+    public class PersonViewModel : PersonListModel
     {
         [Phone]
         [Display(Name = "Мобільний телефон 1")]
@@ -97,7 +97,7 @@ namespace Svbase.Core.Models
             person.Email = Email;
             person.PartionType = PartionType;
             person.IsDead = IsDead;
-            
+
             return person;
         }
 

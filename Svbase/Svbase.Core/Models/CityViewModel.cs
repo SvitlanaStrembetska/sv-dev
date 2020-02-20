@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using Svbase.Core.Data.Entities;
+﻿using Svbase.Core.Data.Entities;
+using System.Collections.Generic;
 
 namespace Svbase.Core.Models
 {

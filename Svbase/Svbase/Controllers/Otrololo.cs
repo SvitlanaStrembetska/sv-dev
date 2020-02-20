@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Svbase.Core.Data.Entities;
+using System;
 using System.Collections.Generic;
 using System.Net;
 using CsvHelper;
-using Svbase.Core.Data.Entities;
 
 namespace Svbase.Controllers
 {
@@ -58,7 +58,7 @@ namespace Svbase.Controllers
             while (csv.Read())
             {
                 i++;
-                if(i == 2) continue;
+                if (i == 2) continue;
                 string firstName;
                 string middleName;
                 string secondName;
@@ -104,7 +104,7 @@ namespace Svbase.Controllers
                         ErrorMessage = "Invalid type. Should be string."
                     });
                 }
-              
+
                 if (!csv.TryGetField(3, out position))
                 {
                     error.Add(new CsvErrorModel
@@ -137,7 +137,7 @@ namespace Svbase.Controllers
                         ErrorMessage = "Invalid type. Should be string."
                     });
                 }
-              
+
                 if (!csv.TryGetField(6, out mobileTelephoneFirst))
                 {
                     error.Add(new CsvErrorModel

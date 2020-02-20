@@ -1,15 +1,15 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
-using Svbase.Controllers.Abstract;
+﻿using Svbase.Controllers.Abstract;
 using Svbase.Core.Consts;
 using Svbase.Core.Data.Entities;
 using Svbase.Core.Models;
-using Svbase.Service.Factory;
-using Svbase.Service.Interfaces;
-using PagedList;
 using Svbase.Helpers;
 using Svbase.Models;
+using Svbase.Service.Factory;
+using Svbase.Service.Interfaces;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace Svbase.Controllers
 {
@@ -37,7 +37,7 @@ namespace Svbase.Controllers
         }
 
         [HttpGet]
-        public ActionResult Index(FilterFileImportModel filter, int page=1)
+        public ActionResult Index(FilterFileImportModel filter, int page = 1)
         {
             var skip = (page - 1) * Consts.ShowRecordsPerPage;
 
@@ -47,7 +47,7 @@ namespace Svbase.Controllers
                 beneficiariesList.Add(new Beneficiary { Id = beneficary.Id, Name = beneficary.Name });
             ViewBag.Beneficaries = beneficiariesList;
             //=================  end generate beneficiaries list for filter  =============
-            
+
             var people = filter.DistrictIds != null ? _personService.SearchPersonsByFilter(filter) : _personService.GetPersons().Where(x => x.IsDead == filter.IsDeadPerson);
             ViewBag.PagesCount = (people.Count() + Consts.ShowRecordsPerPage - 1) / Consts.ShowRecordsPerPage;
 
@@ -62,7 +62,7 @@ namespace Svbase.Controllers
             //=================  generate beneficiaries unchecked list for filter (from Dashboard)  ================= 
             ViewBag.BeneficariesChecked = filter.BeneficariesChecked.ToList();
             //=================  end generate beneficiaries unchecked list for filter (from Dashboard)  ============= 
-            
+
 
             return View(_personFilterHelper.FilterPersonsByBeneficiary(people, filter.BeneficariesChecked).Skip(skip).Take(Consts.ShowRecordsPerPage).ToList());
         }
@@ -78,7 +78,7 @@ namespace Svbase.Controllers
                     filter.SecondSortOrder, filter.ThirdSortOrder, skip, Consts.ShowRecordsPerPage));
 
             return PartialView("_PersonsTablePartial", _personFilterHelper.OrderPersonsBy(
-                _personFilterHelper.FilterPersonsByBeneficiary(people, filter.BeneficariesChecked), 
+                _personFilterHelper.FilterPersonsByBeneficiary(people, filter.BeneficariesChecked),
                 filter.SortOrder, filter.FirstSortOrder, filter.SecondSortOrder, filter.ThirdSortOrder,
                 skip, Consts.ShowRecordsPerPage));
         }
@@ -173,9 +173,9 @@ namespace Svbase.Controllers
             return PartialView("PageBlock", new PageModel { PagesCount = pagesCount });
         }
 
-        public ActionResult Create()
+        public async Task<ActionResult> Create()
         {
-            return View(new PersonAndFullAddressViewModel {Beneficiaries = _beneficiaryService.GetBeneficiariesForSelecting().ToList()});
+            return View(new PersonAndFullAddressViewModel { Beneficiaries = await _beneficiaryService.GetBeneficiariesForSelectingAsync() });
         }
 
         [Authorize(Roles = RoleConsts.Admin)]
@@ -207,7 +207,9 @@ namespace Svbase.Controllers
             {
                 personBeneficiaries.Add(new CheckboxItemModel
                 {
-                    Id = beneficary.Id, Name = beneficary.Name, IsChecked = false
+                    Id = beneficary.Id,
+                    Name = beneficary.Name,
+                    IsChecked = false
                 });
             }
             person.Beneficiaries = personBeneficiaries;
@@ -251,7 +253,7 @@ namespace Svbase.Controllers
                 }
             }
 
-            var flats = new List<Flat> {_flatService.FindById(model.FlatId)};
+            var flats = new List<Flat> { _flatService.FindById(model.FlatId) };
             foreach (var flat in flats)
             {
                 _flatService.Attach(flat);
@@ -269,7 +271,7 @@ namespace Svbase.Controllers
         {
             _personService.DeleteById(id);
 
-            return Json(new {status = "success"});
+            return Json(new { status = "success" });
         }
 
         [Authorize(Roles = RoleConsts.Admin)]

@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
-using Svbase.Core.Data.Abstract;
+﻿using Svbase.Core.Data.Abstract;
 using Svbase.Core.Enums;
+using System.Collections.Generic;
 
 namespace Svbase.Core.Data.Entities
 {

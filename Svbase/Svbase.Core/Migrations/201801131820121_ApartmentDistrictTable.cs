@@ -1,8 +1,7 @@
 namespace Svbase.Core.Migrations
 {
-    using System;
     using System.Data.Entity.Migrations;
-    
+
     public partial class ApartmentDistrictTable : DbMigration
     {
         public override void Up()
@@ -14,30 +13,30 @@ namespace Svbase.Core.Migrations
             CreateTable(
                 "dbo.ApartmentDistrict",
                 c => new
-                    {
-                        ApartmentId = c.Int(nullable: false),
-                        DistrictId = c.Int(nullable: false),
-                    })
+                {
+                    ApartmentId = c.Int(nullable: false),
+                    DistrictId = c.Int(nullable: false),
+                })
                 .PrimaryKey(t => new { t.ApartmentId, t.DistrictId })
                 .ForeignKey("dbo.Apartment", t => t.ApartmentId, cascadeDelete: true)
                 .ForeignKey("dbo.Districts", t => t.DistrictId, cascadeDelete: true)
                 .Index(t => t.ApartmentId)
                 .Index(t => t.DistrictId);
-            
+
             DropTable("dbo.StreetDistrict");
         }
-        
+
         public override void Down()
         {
             CreateTable(
                 "dbo.StreetDistrict",
                 c => new
-                    {
-                        StreetId = c.Int(nullable: false),
-                        DistrictId = c.Int(nullable: false),
-                    })
+                {
+                    StreetId = c.Int(nullable: false),
+                    DistrictId = c.Int(nullable: false),
+                })
                 .PrimaryKey(t => new { t.StreetId, t.DistrictId });
-            
+
             DropForeignKey("dbo.ApartmentDistrict", "DistrictId", "dbo.Districts");
             DropForeignKey("dbo.ApartmentDistrict", "ApartmentId", "dbo.Apartment");
             DropIndex("dbo.ApartmentDistrict", new[] { "DistrictId" });

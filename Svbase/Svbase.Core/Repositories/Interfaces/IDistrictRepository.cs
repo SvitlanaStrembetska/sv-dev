@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using Svbase.Core.Data.Entities;
+﻿using Svbase.Core.Data.Entities;
 using Svbase.Core.Enums;
 using Svbase.Core.Models;
 using Svbase.Core.Repositories.Abstract;
+using System.Collections.Generic;
 
 namespace Svbase.Core.Repositories.Interfaces
 {
@@ -14,7 +14,5 @@ namespace Svbase.Core.Repositories.Interfaces
         IEnumerable<DistrictPanelBodyItemModel> GetPanelBodyDistrictsBy(DistrictType districtType);
         IEnumerable<BaseViewModel> GetDistrictsByType(DistrictType districtType);
         IEnumerable<DistrictPanelBodyItemModel> GetPanelBodyCitiesBy(int districtId);
-        //DistrictCreateModel GetDistrictById(int id);
-        //IEnumerable<BaseViewModel> GetStretsBaseModelByDistrictIds(IList<int> districtIds);
     }
 }

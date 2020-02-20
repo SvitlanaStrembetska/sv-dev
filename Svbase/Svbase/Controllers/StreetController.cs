@@ -1,10 +1,10 @@
-﻿using System.Web.Mvc;
-using Svbase.Controllers.Abstract;
+﻿using Svbase.Controllers.Abstract;
 using Svbase.Core.Consts;
 using Svbase.Core.Data.Entities;
 using Svbase.Core.Models;
 using Svbase.Service.Factory;
 using Svbase.Service.Interfaces;
+using System.Web.Mvc;
 
 namespace Svbase.Controllers
 {
@@ -28,7 +28,7 @@ namespace Svbase.Controllers
         {
             if (string.IsNullOrEmpty(model.Name))
             {
-                ModelState.AddModelError("", "Invalid Name");
+                ModelState.AddModelError("", @"Invalid Name");
             }
 
             if (!ModelState.IsValid)
@@ -74,7 +74,7 @@ namespace Svbase.Controllers
             var street = _streetService.GetStreetById(id);
             if (street == null)
             {
-                RedirectToAction("List","City");
+                RedirectToAction("List", "City");
             }
             return View(street);
         }

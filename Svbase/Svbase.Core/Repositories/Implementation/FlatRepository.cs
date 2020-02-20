@@ -1,10 +1,10 @@
-﻿using System.Linq;
-using Svbase.Core.Data;
+﻿using Svbase.Core.Data;
 using Svbase.Core.Data.Entities;
 using Svbase.Core.Models;
 using Svbase.Core.Repositories.Abstract;
 using Svbase.Core.Repositories.Interfaces;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Svbase.Core.Repositories.Implementation
 {

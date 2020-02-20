@@ -1,5 +1,5 @@
-﻿using System.Data.Entity.ModelConfiguration;
-using Svbase.Core.Data.Entities;
+﻿using Svbase.Core.Data.Entities;
+using System.Data.Entity.ModelConfiguration;
 
 namespace Svbase.Core.Data.Configuration
 {

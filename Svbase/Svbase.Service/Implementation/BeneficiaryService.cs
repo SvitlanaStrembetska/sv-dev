@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Svbase.Core.Data.Entities;
 using Svbase.Core.Models;
 using Svbase.Core.Repositories.Abstract;
@@ -26,6 +27,19 @@ namespace Svbase.Service.Implementation
         public IEnumerable<CheckboxItemModel> GetBeneficiariesForSelecting()
         {
             var beneficiaries = RepositoryManager.Beneficiaries.GetBeneficiariesForSelecting();
+            return beneficiaries;
+        }
+
+        public async Task<List<BeneficiaryCreateModel>> GetAllBeneficiariesAsync()
+        {
+            var beneficiaries = await RepositoryManager.Beneficiaries.GetAllBeneficiariesAsync();
+            return beneficiaries;
+        }
+
+        public async Task<List<CheckboxItemModel>> GetBeneficiariesForSelectingAsync()
+        {
+            var beneficiaries = await RepositoryManager.Beneficiaries.GetBeneficiariesForSelectingAsync();
+
             return beneficiaries;
         }
     }

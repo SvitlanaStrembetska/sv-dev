@@ -14,7 +14,7 @@ namespace Svbase.Core.Models
     public class StreetCreateModel : StreetBaseViewModel
     {
         [Display(Name = "Псевдонім")]
-       
+
         public bool CanDelete { get; set; }
         public int CityId { get; set; }
         public Street Update(Street street)

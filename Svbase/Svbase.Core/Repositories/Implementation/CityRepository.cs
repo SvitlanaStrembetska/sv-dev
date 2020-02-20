@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Svbase.Core.Data;
+﻿using Svbase.Core.Data;
 using Svbase.Core.Data.Entities;
 using Svbase.Core.Enums;
 using Svbase.Core.Models;
 using Svbase.Core.Repositories.Abstract;
 using Svbase.Core.Repositories.Interfaces;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Svbase.Core.Repositories.Implementation
 {
@@ -54,7 +54,7 @@ namespace Svbase.Core.Repositories.Implementation
 
         public IEnumerable<BaseViewModel> GetStretsBaseModelByCityIds(IList<int> cityIds)
         {
-            if(cityIds == null) return new List<BaseViewModel>();
+            if (cityIds == null) return new List<BaseViewModel>();
             var cities = DbSet.OrderBy(y => y.Name).Where(x => cityIds.Contains(x.Id));
             if (!cities.Any()) return new List<BaseViewModel>();
             var streetsLists = cities.OrderBy(y => y.Name)
@@ -75,7 +75,7 @@ namespace Svbase.Core.Repositories.Implementation
         public IEnumerable<BaseViewModel> GetStreetsBaseModelByCityId(int id)
         {
             var city = DbSet.FirstOrDefault(x => x.Id == id);
-            if(city == null) return new List<BaseViewModel>();
+            if (city == null) return new List<BaseViewModel>();
             var streets = city.Streets.OrderBy(y => y.Name).Select(x => new BaseViewModel
             {
                 Id = x.Id,
@@ -86,7 +86,7 @@ namespace Svbase.Core.Repositories.Implementation
 
         public IEnumerable<int> GetPersonsIdsByCityIds(List<int> cityIds)
         {
-            if(cityIds == null || !cityIds.Any())
+            if (cityIds == null || !cityIds.Any())
                 return new List<int>();
 
             var cities = DbSet.Where(x => cityIds.Contains(x.Id)).Select(x => x);

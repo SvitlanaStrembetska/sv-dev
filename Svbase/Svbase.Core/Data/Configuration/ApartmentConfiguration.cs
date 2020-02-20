@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Svbase.Core.Data.Entities;
 using System.Data.Entity.ModelConfiguration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Svbase.Core.Data.Entities;
 
 namespace Svbase.Core.Data.Configuration
 {

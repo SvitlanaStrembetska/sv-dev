@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Svbase.Core.Enums;
+using Svbase.Core.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Svbase.Core.Enums;
-using Svbase.Core.Models;
 
 namespace Svbase.Helpers
 {
@@ -10,9 +10,10 @@ namespace Svbase.Helpers
     {
         public IQueryable<PersonSelectionModel> FilterPersonsByBeneficiary(IQueryable<PersonSelectionModel> persons, IEnumerable<string> checkedBeneficariesId)
         {
+            var checkedList = checkedBeneficariesId.ToList();
             var personsLists = persons.Where(
-                x => checkedBeneficariesId.Any(id => x.Beneficiaries.Any(y => y.Id.ToString().Equals(id)))
-                || (checkedBeneficariesId.Any(z => z.Contains("0")) && !x.Beneficiaries.Any()));
+                x => checkedList.Any(id => x.Beneficiaries.Any(y => y.Id.ToString().Equals(id)))
+                     || (checkedList.Any(z => z.Contains("0")) && !x.Beneficiaries.Any()));
 
             return personsLists;
         }
@@ -140,7 +141,7 @@ namespace Svbase.Helpers
                 case ColumnName.MobileTelephoneSecond:
                     return model => string.IsNullOrEmpty(model.SecondMobilePhone);
                 case ColumnName.StationaryPhone:
-                    return model => string.IsNullOrEmpty(model.HomePhone); 
+                    return model => string.IsNullOrEmpty(model.HomePhone);
                 case ColumnName.BirthdayDate:
                     return model => model.DateBirth == null;
                 case ColumnName.Email:

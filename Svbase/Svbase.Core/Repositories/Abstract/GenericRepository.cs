@@ -1,14 +1,14 @@
-﻿using System;
+﻿using Svbase.Core.Data;
+using Svbase.Core.Data.Abstract;
+using System;
 using System.Data.Entity;
 using System.Linq;
-using Svbase.Core.Data;
-using Svbase.Core.Data.Abstract;
 
 namespace Svbase.Core.Repositories.Abstract
 {
     public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : class, IEntity
     {
-        public DbSet<TEntity> DbSet { get;}
+        public DbSet<TEntity> DbSet { get; }
         protected readonly ApplicationDbContext Context;
 
         protected GenericRepository(ApplicationDbContext context)

@@ -1,18 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
-using System.IO;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using Svbase.Controllers.Abstract;
+﻿using Svbase.Controllers.Abstract;
 using Svbase.Core.Consts;
 using Svbase.Core.Data.Entities;
 using Svbase.Helpers;
 using Svbase.Models;
 using Svbase.Service.Factory;
 using Svbase.Service.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.Entity;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Web;
+using System.Web.Mvc;
 
 namespace Svbase.Controllers
 {
@@ -55,17 +56,15 @@ namespace Svbase.Controllers
 
             return RedirectToAction("UploadDocument");
         }
-      
-        
-          
+
         [Authorize]
         [ActionName("Importexcel")]
         [HttpPost]
-        public JsonResult ImportExcel(IList<HttpPostedFileBase> multipleFiles)
+        public async Task<JsonResult> ImportExcel(IList<HttpPostedFileBase> multipleFiles)
         {
             var files = new List<UploadFilesModel>();
             var errorsList = new List<string>();
-            var beneficaries = _beneficiaryService.GetAll().ToList();
+            var beneficaries = await _beneficiaryService.GetAll().ToListAsync();
 
             if (!multipleFiles.Any())
                 errorsList.Add("Жоден файл не прикріплено!");
@@ -85,7 +84,7 @@ namespace Svbase.Controllers
                     }
 
                     //check file extension
-                    var extension = Path.GetExtension(file.FileName).ToLower();
+                    var extension = Path.GetExtension(file.FileName)?.ToLower();
                     string[] validFileTypes = { ".xls", ".xlsx" };
                     if (!validFileTypes.Contains(extension))
                     {
@@ -94,7 +93,7 @@ namespace Svbase.Controllers
                     }
 
                     //save file to /Content/Uploads
-                    string pathToExcelFile = string.Format("{0}/{1}", Server.MapPath("~/Content/Uploads"), file.FileName);
+                    string pathToExcelFile = $"{Server.MapPath("~/Content/Uploads")}/{file.FileName}";
                     if (!Directory.Exists(pathToExcelFile))
                         Directory.CreateDirectory(Server.MapPath("~/Content/Uploads"));
                     if (System.IO.File.Exists(pathToExcelFile))
@@ -130,7 +129,7 @@ namespace Svbase.Controllers
                         continue;
                     }
 
-                    files.Add(new UploadFilesModel()
+                    files.Add(new UploadFilesModel
                     {
                         FileName = file.FileName,
                         DataList = datalist
@@ -138,7 +137,7 @@ namespace Svbase.Controllers
                 }
 
                 if (errorsList.Any())
-                    foreach (var pathToExcelFile in multipleFiles.Select(file => string.Format("{0}/{1}", Server.MapPath("~/Content/Uploads"), file.FileName)).Where(pathToExcelFile => System.IO.File.Exists(pathToExcelFile)))
+                    foreach (var pathToExcelFile in multipleFiles.Select(file => $"{Server.MapPath("~/Content/Uploads")}/{file.FileName}").Where(pathToExcelFile => System.IO.File.Exists(pathToExcelFile)))
                     {
                         System.IO.File.Delete(pathToExcelFile);
                     }
@@ -161,7 +160,7 @@ namespace Svbase.Controllers
             return Json(new { status = Consts.StatusSuccess }, JsonRequestBehavior.AllowGet);
         }
 
-        private List<Dictionary<string, object>> ConvertDataTableToDictionary(DataTable dataTable, string fileName, IEnumerable<Beneficiary> beneficaries, ref List<string> errorList)
+        private List<Dictionary<string, object>> ConvertDataTableToDictionary(DataTable dataTable, string fileName, List<Beneficiary> beneficaries, ref List<string> errorList)
         {
             var rows = new List<Dictionary<string, object>>();
             var validationHelper = new FilesDataValidationHelper();
@@ -175,7 +174,7 @@ namespace Svbase.Controllers
                 var row = new Dictionary<string, object>();
                 foreach (DataColumn col in dataTable.Columns)
                 {
-                    if (col.ColumnName.ToUpper() == "ДАТА НАРОДЖЕННЯ" && validatedModel.BirthdayDate != null) 
+                    if (col.ColumnName.ToUpper() == "ДАТА НАРОДЖЕННЯ" && validatedModel.BirthdayDate != null)
                         row.Add(col.ColumnName, validatedModel.BirthdayDate.ToString().Trim().Substring(0, 10));
                     else if (beneficaries.Any(x => x.Name == col.ColumnName))
                         row.Add(col.ColumnName, dr[col].ToString().ToUpper() == "TRUE");
@@ -206,18 +205,12 @@ namespace Svbase.Controllers
 
             if (extension.Trim() == ".xls")
             {
-                connString =
-                    string.Format(
-                        "Provider=Microsoft.Jet.OLEDB.4.0; data source={0}; Extended Properties=Excel 8.0;",
-                        pathToExcelFile);
+                connString = $"Provider=Microsoft.Jet.OLEDB.4.0; data source={pathToExcelFile}; Extended Properties=Excel 8.0;";
                 dataTable = ConvertDataHelper.ConvertXslXtoDataTable(pathToExcelFile, connString, showTableRowsCount, ref errorsList);
             }
             else if (extension.Trim() == ".xlsx")
             {
-                connString =
-                    string.Format(
-                        "Provider=Microsoft.ACE.OLEDB.12.0;Data Source={0};Extended Properties=\"Excel 12.0 Xml;HDR=YES;IMEX=1\";",
-                        pathToExcelFile);
+                connString = $"Provider=Microsoft.ACE.OLEDB.12.0;Data Source={pathToExcelFile};Extended Properties=\"Excel 12.0 Xml;HDR=YES;IMEX=1\";";
                 dataTable = ConvertDataHelper.ConvertXslXtoDataTable(pathToExcelFile, connString, showTableRowsCount, ref errorsList);
             }
 
@@ -226,11 +219,11 @@ namespace Svbase.Controllers
 
         [Authorize]
         [HttpPost]
-        public JsonResult SaveFilesDataToDb(IList<string> filesName)
+        public async Task<JsonResult> SaveFilesDataToDb(IList<string> filesName)
         {
             if (filesName == null) return Json(new { status = Consts.StatusError, message = "Жоден файл не прикріплено!" });
 
-            var beneficaries = _beneficiaryService.GetAll().ToList();
+            var beneficiaries = await _beneficiaryService.GetAll().ToListAsync();
             var errorsList = new List<string>();
             var successList = new List<string>();
             var skippedRowsList = new List<int>();
@@ -251,7 +244,7 @@ namespace Svbase.Controllers
                 }
 
                 //parse file
-                var extension = Path.GetExtension(fileName).ToLower();
+                var extension = Path.GetExtension(fileName)?.ToLower();
                 var dataTable = ParseFile(extension, pathToExcelFile, Consts.ShowAllTableRowsCount, ref errorsList);
                 if (dataTable == null)
                 {
@@ -261,7 +254,7 @@ namespace Svbase.Controllers
 
                 //validate file columns
                 var errorModel = new List<string>();
-                var isFileColumnsNotValid = new FilesDataValidationHelper().ValidateFileColumns(dataTable, fileName, beneficaries, ref errorModel);
+                var isFileColumnsNotValid = new FilesDataValidationHelper().ValidateFileColumns(dataTable, fileName, beneficiaries, ref errorModel);
                 if (isFileColumnsNotValid)
                 {
                     errorsList.AddRange(errorModel);
@@ -270,7 +263,7 @@ namespace Svbase.Controllers
 
                 //convert data rows to persons list
                 var generalFileRowsErrorList = new List<string>();
-                var personList = ConverDataRowsToPersonList(dataTable, fileName, beneficaries, ref generalFileRowsErrorList, ref skippedRowsList);
+                var personList = ConverDataRowsToPersonList(dataTable, fileName, beneficiaries, ref generalFileRowsErrorList, ref skippedRowsList);
                 if (generalFileRowsErrorList.Any())
                 {
                     errorsList.AddRange(generalFileRowsErrorList);
@@ -290,7 +283,7 @@ namespace Svbase.Controllers
             return errorsList.Any() ? Json(new { status = Consts.StatusError, errorsList, successList }, JsonRequestBehavior.AllowGet) : Json(new { status = Consts.StatusSuccess, skippedRowsList, successList }, JsonRequestBehavior.AllowGet);
         }
 
-        private IEnumerable<Person> ConverDataRowsToPersonList(DataTable dataTable, string fileName, IEnumerable<Beneficiary> beneficaries, ref List<string> generalFileRowsErrorList, ref List<int> skippedRowsList)
+        private List<Person> ConverDataRowsToPersonList(DataTable dataTable, string fileName, List<Beneficiary> beneficaries, ref List<string> generalFileRowsErrorList, ref List<int> skippedRowsList)
         {
             var personList = new List<Person>();
             var cityList = new List<City>();
@@ -299,9 +292,9 @@ namespace Svbase.Controllers
             var flatList = new List<Flat>();
             var workList = new List<Work>();
 
-            var dbPeople = _personService.GetPersonDublicateModel().ToList();
-            var dbCities = _cityService.GetAll().ToList();
-            var dbWorks = _workService.GetAll().ToList();
+            var dbPeople = Task.Run(() => _personService.GetPersonDublicateModel().ToList()).GetAwaiter().GetResult();
+            var dbCities = Task.Run(() => _cityService.GetAll().ToList()).GetAwaiter().GetResult();
+            var dbWorks = Task.Run(() => _workService.GetAll().ToList()).GetAwaiter().GetResult();
 
             var fileDataValidationHelper = new FilesDataValidationHelper();
             foreach (DataRow row in dataTable.Rows)
@@ -325,7 +318,7 @@ namespace Svbase.Controllers
                 var apartmentFromDb = new Apartment();
                 var flat = new Flat();
                 var flatFromDb = new Flat();
-                
+
                 // city
                 if (dbCities.Any(x => x.Name.ToUpper() == validatedModel.CityName.ToUpper()))
                     cityFromDb = dbCities.FirstOrDefault(x => x.Name.ToUpper() == validatedModel.CityName.ToUpper());
@@ -333,7 +326,7 @@ namespace Svbase.Controllers
                     city = cityList.FirstOrDefault(x => x.Name.ToUpper() == validatedModel.CityName.ToUpper());
                 else
                 {
-                    city = new City {Name = validatedModel.CityName};
+                    city = new City { Name = validatedModel.CityName };
                     cityList.Add(city);
                 }
 
@@ -344,7 +337,7 @@ namespace Svbase.Controllers
                     street = streetList.FirstOrDefault(x => x.Name.ToUpper() == validatedModel.StreetName.ToUpper() && x.City.Name.ToUpper() == validatedModel.CityName.ToUpper());
                 else
                 {
-                    street = cityFromDb != null && cityFromDb.Id != 0 ? new Street {Name = validatedModel.StreetName, City = cityFromDb} : new Street { Name = validatedModel.StreetName, City = city };
+                    street = cityFromDb != null && cityFromDb.Id != 0 ? new Street { Name = validatedModel.StreetName, City = cityFromDb } : new Street { Name = validatedModel.StreetName, City = city };
                     streetList.Add(street);
                 }
 
@@ -354,7 +347,7 @@ namespace Svbase.Controllers
                 // apartment
                 if (streetFromDb != null && streetFromDb.Id != 0 && streetFromDb.Apartments.Any(x => x.Name.ToUpper() == apartmentName.ToUpper()))
                     apartmentFromDb = streetFromDb.Apartments.FirstOrDefault(x => x.Name.ToUpper() == apartmentName.ToUpper());
-                else if (apartmentList.Any(x => x.Name.ToUpper() == apartmentName.ToUpper() 
+                else if (apartmentList.Any(x => x.Name.ToUpper() == apartmentName.ToUpper()
                                         && x.Street.Name.ToUpper() == validatedModel.StreetName.ToUpper()
                                         && x.Street.City.Name.ToUpper() == validatedModel.CityName.ToUpper()))
                     apartment = apartmentList.FirstOrDefault(x => x.Name.ToUpper() == apartmentName.ToUpper()
@@ -394,11 +387,11 @@ namespace Svbase.Controllers
                     flatList.Add(flat);
                 }
 
-                var beneficariesList = new List<Beneficiary>();
+                var beneficiariesList = new List<Beneficiary>();
                 foreach (var beneficary in beneficaries)
                 {
                     if (validatedModel.Beneficaries[beneficary.Name].ToString().ToUpper() == "TRUE")
-                        beneficariesList.Add(beneficary);
+                        beneficiariesList.Add(beneficary);
                 }
 
                 Work workingPlace;
@@ -408,35 +401,35 @@ namespace Svbase.Controllers
                     workingPlace = workList.FirstOrDefault(x => x.Name.ToUpper() == validatedModel.WorkName.ToUpper());
                 else
                 {
-                    workingPlace = new Work {Name = validatedModel.WorkName};
+                    workingPlace = new Work { Name = validatedModel.WorkName };
                     workList.Add(workingPlace);
                 }
-                
+
                 var person = new Person
-                    {
-                        FirstName = validatedModel.FirstName,
-                        LastName = validatedModel.LastName,
-                        MiddleName = validatedModel.MiddleName,
-                        BirthdayDate = validatedModel.BirthdayDate,
-                        MobileTelephoneFirst = validatedModel.MobileTelephoneFirst,
-                        MobileTelephoneSecond = validatedModel.MobileTelephoneSecond,
-                        StationaryPhone = validatedModel.StationaryPhone,
-                        Flats = new List<Flat>
+                {
+                    FirstName = validatedModel.FirstName,
+                    LastName = validatedModel.LastName,
+                    MiddleName = validatedModel.MiddleName,
+                    BirthdayDate = validatedModel.BirthdayDate,
+                    MobileTelephoneFirst = validatedModel.MobileTelephoneFirst,
+                    MobileTelephoneSecond = validatedModel.MobileTelephoneSecond,
+                    StationaryPhone = validatedModel.StationaryPhone,
+                    Flats = new List<Flat>
                         {
                             flatFromDb != null && flatFromDb.Id != 0 ? flatFromDb : flat
                         },
-                        Beneficiaries = beneficariesList,
-                        Work = workingPlace,
-                        Email = validatedModel.Email
-                    };
+                    Beneficiaries = beneficiariesList,
+                    Work = workingPlace,
+                    Email = validatedModel.Email
+                };
 
-                if(dbPeople.Any(x => x.FirstName == person.FirstName && x.LastName == person.LastName && x.ApartmentNumber == person.Apartment?.Name && x.StreetName == person.Apartment?.Street?.Name) ||
+                if (dbPeople.Any(x => x.FirstName == person.FirstName && x.LastName == person.LastName && x.ApartmentNumber == person.Apartment?.Name && x.StreetName == person.Apartment?.Street?.Name) ||
                    personList.Any(x => x.FirstName == person.FirstName && x.LastName == person.LastName && x.Apartment?.Name == person.Apartment?.Name && x.Apartment?.Street?.Name == person.Apartment?.Street?.Name))
-                    skippedRowsList.Add(dataTable.Rows.IndexOf(row)+2);
+                    skippedRowsList.Add(dataTable.Rows.IndexOf(row) + 2);
                 else
                     personList.Add(person);
             }
-            
+
             return personList;
         }
     }

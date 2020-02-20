@@ -1,10 +1,11 @@
-﻿using System.Web.Mvc;
+﻿using System.Threading.Tasks;
 using Svbase.Controllers.Abstract;
 using Svbase.Core.Consts;
 using Svbase.Core.Data.Entities;
 using Svbase.Core.Models;
 using Svbase.Service.Factory;
 using Svbase.Service.Interfaces;
+using System.Web.Mvc;
 
 namespace Svbase.Controllers
 {
@@ -21,9 +22,10 @@ namespace Svbase.Controllers
 
         [Authorize(Roles = RoleConsts.Admin)]
         [HttpGet]
-        public ActionResult List()
+        public async Task<ActionResult> List()
         {
-            var beneficiaries = _beneficiaryService.GetAllBeneficiaries();
+            var beneficiaries = await _beneficiaryService.GetAllBeneficiariesAsync();
+
             return View(beneficiaries);
         }
 
@@ -33,7 +35,7 @@ namespace Svbase.Controllers
         {
             if (string.IsNullOrEmpty(model.Name))
             {
-                ModelState.AddModelError("", "Invalid Name");
+                ModelState.AddModelError("", @"Invalid Name");
             }
 
             if (!ModelState.IsValid)

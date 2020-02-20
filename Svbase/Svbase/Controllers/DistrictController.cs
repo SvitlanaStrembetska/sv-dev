@@ -1,12 +1,12 @@
-﻿using System.Linq;
-using System.Net;
-using System.Web.Mvc;
-using Svbase.Controllers.Abstract;
+﻿using Svbase.Controllers.Abstract;
 using Svbase.Core.Consts;
 using Svbase.Core.Enums;
 using Svbase.Core.Models;
 using Svbase.Service.Factory;
 using Svbase.Service.Interfaces;
+using System.Linq;
+using System.Net;
+using System.Web.Mvc;
 
 namespace Svbase.Controllers
 {
@@ -42,8 +42,8 @@ namespace Svbase.Controllers
         public ActionResult Create(DistrictListModel model)
         {
             var result = _districtService.CreateDistrictBy(model);
-            return result 
-                ? DistrictsBy(model.DistrictType) 
+            return result
+                ? DistrictsBy(model.DistrictType)
                 : RedirectToAction("Index");
         }
 
@@ -60,7 +60,7 @@ namespace Svbase.Controllers
         {
             return PartialView("_FilterMultiSelectPartial", _districtService.GetDistrictsByType(districtType).ToList());
         }
-        
+
         [Authorize(Roles = RoleConsts.Admin)]
         [HttpGet]
         public ActionResult StreetsBy(int cityId)
@@ -100,7 +100,7 @@ namespace Svbase.Controllers
                 return RedirectToAction("Index");
             }
             Response.StatusCode = (int)HttpStatusCode.BadRequest;
-            return Json(new {});
+            return Json(new { });
 
         }
     }

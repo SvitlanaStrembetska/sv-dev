@@ -1,15 +1,16 @@
-﻿using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using System.Web.Mvc;
-using System.Web.WebPages;
-using OfficeOpenXml;
+﻿using OfficeOpenXml;
 using Svbase.Controllers.Abstract;
 using Svbase.Core.Consts;
 using Svbase.Core.Models;
 using Svbase.Helpers;
 using Svbase.Service.Factory;
 using Svbase.Service.Interfaces;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Web.Mvc;
+using System.Web.WebPages;
 
 namespace Svbase.Controllers
 {
@@ -246,16 +247,16 @@ namespace Svbase.Controllers
         }
 
         [Authorize]
-        public void ExportToExcelBySearch(PersonSearchModel searchFields)
+        public async Task ExportToExcelBySearch(PersonSearchModel searchFields)
         {
             var pck = new ExcelPackage();
             var ws = pck.Workbook.Worksheets.Add("Люди");
-            IQueryable<PersonSelectionModel> personsList;
+            List<PersonSelectionModel> personsList;
 
             if (searchFields.IsFirstNameIncludedInSearch || searchFields.IsLastNameIncludedInSearch || searchFields.IsMiddleNameIncludedInSearch || searchFields.IsMobilePhoneIncludedInSearch)
-                personsList = _personService.SearchPersonsByFields(searchFields);
+                personsList = await _personService.SearchPersonsByFieldsAsync(searchFields);
             else
-                personsList = _personService.GetPersons().Where(x => x.IsDead == false);
+                personsList = await _personService.GetPersonIsNotDead();
 
             //if result is not empty
             if (personsList != null && personsList.Any())
@@ -342,7 +343,8 @@ namespace Svbase.Controllers
                     columnIndexes["Помер(ла)"] = column++;
                 }
 
-                foreach (var beneficary in _beneficiaryService.GetAllBeneficiaries())
+                var allBeneficiaries = await _beneficiaryService.GetAllBeneficiariesAsync();
+                foreach (var beneficary in allBeneficiaries)
                 {
                     ws.Cells[1, column].Value = beneficary.Name;
                     columnIndexes[beneficary.Name] = column++;
@@ -352,7 +354,7 @@ namespace Svbase.Controllers
 
                 foreach (var person in personsList)
                 {
-                    ws = FillRow(ws, columnIndexes, rowNumber++, person, isColumnLastNameExists, isColumnFirstNameExists, isColumnMiddleNameExists,
+                    ws = await FillRow(ws, columnIndexes, rowNumber++, person, isColumnLastNameExists, isColumnFirstNameExists, isColumnMiddleNameExists,
                         isColumnFirstMobilePhoneExists, isColumnSecondMobilePhoneExists, isColumnHomePhoneExists,
                         isColumnDateBirthExists, isColumnEmailExists, isColumnWorkExists, isColumnAdressExists, isColumnIsDeadExists);
                 }
@@ -372,7 +374,7 @@ namespace Svbase.Controllers
             Response.End();
         }
 
-        private ExcelWorksheet FillRow(ExcelWorksheet ws, Dictionary<string, int> columnIndexes, int rowNumber, PersonSelectionModel person, bool isColumnLastNameExists, bool isColumnFirstNameExists,
+        private async Task<ExcelWorksheet> FillRow(ExcelWorksheet ws, Dictionary<string, int> columnIndexes, int rowNumber, PersonSelectionModel person, bool isColumnLastNameExists, bool isColumnFirstNameExists,
     bool isColumnMiddleNameExists, bool isColumnFirstMobilePhoneExists, bool isColumnSecondMobilePhoneExists,
     bool isColumnHomePhoneExists, bool isColumnDateBirthExists, bool isColumnEmailExists, bool isColumnWorkExists,
     bool isColumnAdressExists, bool isColumnIsDeadExists)
@@ -426,7 +428,8 @@ namespace Svbase.Controllers
             if (isColumnIsDeadExists)
                 ws.Cells[rowNumber, columnIndexes["Помер(ла)"]].Value = person.IsDead;
 
-            foreach (var beneficary in _beneficiaryService.GetAllBeneficiaries())
+            var beneficiaries = await _beneficiaryService.GetAllBeneficiariesAsync();
+            foreach (var beneficary in beneficiaries)
             {
                 if (person.Beneficiaries.Any(x => x.Id == beneficary.Id))
                 {

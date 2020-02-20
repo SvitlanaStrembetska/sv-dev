@@ -1,10 +1,9 @@
-﻿using System.Threading.Tasks;
-using System.Web;
-using System.Web.Mvc;
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.Owin;
+﻿using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Svbase.Models;
+using System.Threading.Tasks;
+using System.Web;
+using System.Web.Mvc;
 
 namespace Svbase.Controllers
 {
@@ -83,7 +82,7 @@ namespace Svbase.Controllers
             var result = await SignInManager.PasswordSignInAsync(user.UserName, model.Password, true, false);
             if (result == SignInStatus.Success)
             {
-                return RedirectToAction("Details","Dashboard");
+                return RedirectToAction("Details", "Dashboard");
             }
             return View(model);
         }

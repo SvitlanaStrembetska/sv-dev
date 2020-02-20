@@ -1,17 +1,17 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Svbase.Core.Data;
+﻿using Svbase.Core.Data;
 using Svbase.Core.Data.Entities;
 using Svbase.Core.Models;
 using Svbase.Core.Repositories.Abstract;
 using Svbase.Core.Repositories.Interfaces;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Svbase.Core.Repositories.Implementation
 {
     public class WorkRepository : GenericRepository<Work>, IWorkRepository
     {
         public WorkRepository(ApplicationDbContext context)
-            : base(context) {}
+            : base(context) { }
 
         public IEnumerable<WorkCreateModel> GetAllWorks()
         {
@@ -22,7 +22,7 @@ namespace Svbase.Core.Repositories.Implementation
                 CanDelete = !x.Persons.Any()
             });
         }
-        
+
         public IEnumerable<CheckboxItemModel> GetWorksForSelecting()
         {
             return DbSet.Select(x => new CheckboxItemModel

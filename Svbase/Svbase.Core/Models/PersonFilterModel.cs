@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Svbase.Core.Enums;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
-using Svbase.Core.Enums;
 
 namespace Svbase.Core.Models
 {
@@ -25,7 +25,7 @@ namespace Svbase.Core.Models
         public DateTime? EndDateMonth { get; set; }
     }
 
-    public class PersonFilterViewModel:PersonFilterModel
+    public class PersonFilterViewModel : PersonFilterModel
     {
         [Display(Name = "Категорії")]
         public IEnumerable<SelectListItem> Beneficiaries { get; set; }

@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Svbase.Core.Data;
+﻿using Svbase.Core.Data;
 using Svbase.Core.Data.Entities;
 using Svbase.Core.Enums;
 using Svbase.Core.Models;
 using Svbase.Core.Repositories.Abstract;
 using Svbase.Core.Repositories.Interfaces;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Svbase.Core.Repositories.Implementation
 {
@@ -80,13 +80,13 @@ namespace Svbase.Core.Repositories.Implementation
 
         public IEnumerable<int> GetPersonsIdsByDistrictIds(IEnumerable<int> districtIds)
         {
-            if(districtIds == null) return new List<int>();
+            if (districtIds == null) return new List<int>();
             var districts = DbSet.Where(x => districtIds.ToList().Contains(x.Id)).Select(x => x);
-            if(!districts.Any())
+            if (!districts.Any())
                 return new List<int>();
 
             var districtApartments = districts.Select(x => x.Apartments).ToList();
-            if(!districtApartments.Any())
+            if (!districtApartments.Any())
                 return new List<int>();
 
             var apartments = new List<Apartment>();
@@ -96,7 +96,7 @@ namespace Svbase.Core.Repositories.Implementation
             }
 
             apartments = apartments.Distinct().ToList();
-            if(!apartments.Any())
+            if (!apartments.Any())
                 return new List<int>();
 
             var apartmentFlats = apartments.Select(x => x.Flats).ToList();

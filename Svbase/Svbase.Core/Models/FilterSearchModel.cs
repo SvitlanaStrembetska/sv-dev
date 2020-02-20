@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Svbase.Core.Enums;
+using System;
 using System.Collections.Generic;
-using Svbase.Core.Enums;
 
 namespace Svbase.Core.Models
 {

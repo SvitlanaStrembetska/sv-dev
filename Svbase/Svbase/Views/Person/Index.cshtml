@@ -779,8 +779,8 @@
             paginationByFilter(page);
         else if (paginationWay === '@Consts.PaginationBySearch')
             paginationBySearch(page);
-        else if (paginationWay === '@Consts.PaginationByDublicateSearch')
-            paginationByDublicateSearch(page);
+        else if (paginationWay === '@Consts.PaginationByDuplicateSearch')
+            paginationByDuplicateSearch(page);
 
         $('#loader').fadeOut();
     });
@@ -863,12 +863,12 @@
         });
     }
 
-    function paginationByDublicateSearch(page) {
-        var dublicateSearchType = $("#DublicateSearchType").val();
+    function paginationByDuplicateSearch(page) {
+        var DuplicateSearchType = $("#DuplicateSearchType").val();
         $.ajax({
-            url: "@Url.Action("DublicateSearch", "Dublicate")",
+            url: "@Url.Action("DuplicateSearch", "Dublicate")",
             type: 'Post',
-            data: { searchType:dublicateSearchType, page: page },
+            data: { searchType:DuplicateSearchType, page: page },
             async: false
         }).done((data) => {
             $("#personsTable").html(data);

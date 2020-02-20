@@ -1,12 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using Svbase.Core.Data;
+﻿using Svbase.Core.Data;
 using Svbase.Core.Data.Entities;
 using Svbase.Core.Enums;
 using Svbase.Core.Models;
 using Svbase.Core.Repositories.Abstract;
 using Svbase.Core.Repositories.Interfaces;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Linq;
 
 namespace Svbase.Core.Repositories.Implementation
 {
@@ -48,12 +48,6 @@ namespace Svbase.Core.Repositories.Implementation
 
             return streets;
         }
-
-        //public IEnumerable<Street> GetStreetsByDistrictId(int id)
-        //{
-        //    var streets = DbSet.Where(x => x.Districts.Select(d => d.Id).Contains(id));
-        //    return streets;
-        //}
 
         public IEnumerable<BaseViewModel> GetApartmentsBaseModelByStreetIds(IList<int> streetIds)
         {
@@ -114,11 +108,11 @@ namespace Svbase.Core.Repositories.Implementation
                     ParentId = streets.FirstOrDefault()?.CityId ?? 0,
                     ParentName = streets.FirstOrDefault()?.City?.Name,
                     Items = streets.Select(x => new StreetBaseViewModel
-                        {
-                            Id = x.Id,
-                            Name = x.Name,
-                            Pseudonym = x.Pseudonym
-                        })
+                    {
+                        Id = x.Id,
+                        Name = x.Name,
+                        Pseudonym = x.Pseudonym
+                    })
                         .ToList()
                 };
                 filterItems.Add(item);
@@ -178,11 +172,11 @@ namespace Svbase.Core.Repositories.Implementation
             var streets = DbSet
                 .Where(x => x.CityId == cityId)
                 .Select(x => new DistrictPanelBodyItemModel
-            {
-                Id = x.Id,
-                Name = x.Name,
-                DistrictPanelBodyItemType = DistrictPanelBodyItemType.Street
-            });
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    DistrictPanelBodyItemType = DistrictPanelBodyItemType.Street
+                });
             return streets;
         }
 

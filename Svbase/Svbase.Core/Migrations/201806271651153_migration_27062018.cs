@@ -1,8 +1,7 @@
 namespace Svbase.Core.Migrations
 {
-    using System;
     using System.Data.Entity.Migrations;
-    
+
     public partial class migration_27062018 : DbMigration
     {
         public override void Up()
@@ -10,17 +9,17 @@ namespace Svbase.Core.Migrations
             CreateTable(
                 "dbo.Works",
                 c => new
-                    {
-                        Id = c.Int(nullable: false, identity: true),
-                        Name = c.String(),
-                    })
+                {
+                    Id = c.Int(nullable: false, identity: true),
+                    Name = c.String(),
+                })
                 .PrimaryKey(t => t.Id);
-            
+
             AddColumn("dbo.Person", "WorkId", c => c.Int());
             CreateIndex("dbo.Person", "WorkId");
             AddForeignKey("dbo.Person", "WorkId", "dbo.Works", "Id");
         }
-        
+
         public override void Down()
         {
             DropForeignKey("dbo.Person", "WorkId", "dbo.Works");

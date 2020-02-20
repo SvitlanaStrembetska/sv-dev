@@ -3,7 +3,7 @@
     public enum DistrictPanelBodyItemType
     {
         District = 1,
-        City  = 2,
+        City = 2,
         Street = 3,
         Apartment = 4,
         Flat = 5

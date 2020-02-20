@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Svbase.Core.Data.Entities;
 using Svbase.Core.Models;
 using Svbase.Core.Repositories.Abstract;
@@ -21,6 +22,10 @@ namespace Svbase.Service.Implementation
         public IQueryable<PersonSelectionModel> GetPersons()
         {
             return RepositoryManager.Persons.GetPersons();
+        }
+        public async Task<List<PersonSelectionModel>> GetPersonIsNotDead()
+        {
+            return await RepositoryManager.Persons.GetPersonIsNotDead();
         }
 
         public PersonViewModel GetPersonById(int id)
@@ -97,6 +102,10 @@ namespace Svbase.Service.Implementation
         public IQueryable<PersonSelectionModel> SearchPersonsByFields(PersonSearchModel searchFields)
         {
             return RepositoryManager.Persons.SearchPersonsByFields(searchFields);
+        }
+        public async Task<List<PersonSelectionModel>> SearchPersonsByFieldsAsync(PersonSearchModel searchFields)
+        {
+            return await RepositoryManager.Persons.SearchPersonsByFieldsAsync(searchFields);
         }
 
         public IQueryable<PersonSelectionModel> SearchDublicateByFirstAndLastName()

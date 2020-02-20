@@ -1,11 +1,10 @@
-﻿using System;
+﻿using Svbase.Core.Consts;
+using Svbase.Core.Data.Entities;
+using Svbase.Models;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Text.RegularExpressions;
-using Svbase.Core.Data.Entities;
-using Svbase.Models;
-using Svbase.Core.Consts;
 
 namespace Svbase.Helpers
 {
@@ -107,7 +106,7 @@ namespace Svbase.Helpers
             {
                 errorList.Add("Назва вулиці у " + (rowIndex + 2) + " рядку таблиці '" + fileName + "' містить заборонені символи!");
             }
-            
+
             if (apartmentNumber.Length > 0 && Consts.ApartmentRegex.Matches(apartmentNumber).Count != 0)
             {
                 errorList.Add("Номер будинку у " + (rowIndex + 2) + " рядку таблиці '" + fileName + "' повинен містити лише цифри!");

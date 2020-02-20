@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Svbase.Core.Data.Abstract;
+using System;
 using System.Collections.Generic;
-using Svbase.Core.Data.Abstract;
 
 namespace Svbase.Core.Data.Entities
 {
@@ -20,7 +20,7 @@ namespace Svbase.Core.Data.Entities
         public bool IsDead { get; set; }
 
         public int? CityId { get; set; }
-        public virtual City City{ get; set; }
+        public virtual City City { get; set; }
         public int? StreetId { get; set; }
         public virtual Street Street { get; set; }
         public int? ApartmentId { get; set; }

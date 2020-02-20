@@ -1,8 +1,7 @@
 namespace Svbase.Core.Migrations
 {
-    using System;
     using System.Data.Entity.Migrations;
-    
+
     public partial class addRelationsBetweenPersonAndCityStreetApartment : DbMigration
     {
         public override void Up()
@@ -17,7 +16,7 @@ namespace Svbase.Core.Migrations
             AddForeignKey("dbo.Person", "CityId", "dbo.Cities", "Id");
             AddForeignKey("dbo.Person", "StreetId", "dbo.Street", "Id");
         }
-        
+
         public override void Down()
         {
             DropForeignKey("dbo.Person", "StreetId", "dbo.Street");

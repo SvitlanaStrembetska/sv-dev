@@ -2,7 +2,7 @@
 
 namespace Svbase.Core.Enums
 {
-    public enum DublicateSearchType
+    public enum DuplicateSearchType
     {
         [Display(Name = "Імені та прізвищу")]
         FirstAndLastName = 1,

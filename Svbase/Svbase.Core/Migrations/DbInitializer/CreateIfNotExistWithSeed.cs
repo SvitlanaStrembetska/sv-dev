@@ -1,11 +1,10 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNet.Identity;
+﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using Svbase.Core.Consts;
 using Svbase.Core.Data;
 using Svbase.Core.Data.Entities;
-using Svbase.Core.Consts;
 using System.Data.Entity;
+using System.Linq;
 
 namespace Svbase.Core.Migrations.DbInitializer
 {

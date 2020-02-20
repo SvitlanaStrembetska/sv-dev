@@ -1,5 +1,5 @@
-﻿using System;
-using Svbase.Core.Data;
+﻿using Svbase.Core.Data;
+using System;
 
 namespace Svbase.Core.Repositories.Abstract
 {

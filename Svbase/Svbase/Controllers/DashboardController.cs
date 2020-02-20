@@ -1,10 +1,11 @@
-﻿using System.Linq;
-using System.Web.Mvc;
-using Svbase.Controllers.Abstract;
+﻿using Svbase.Controllers.Abstract;
 using Svbase.Core.Consts;
 using Svbase.Core.Data.Entities;
 using Svbase.Service.Factory;
 using Svbase.Service.Interfaces;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace Svbase.Controllers
 {
@@ -28,10 +29,11 @@ namespace Svbase.Controllers
             _flatService = ServiceManager.FlatService;
         }
 
-        public ActionResult Details()
+        public async Task<ActionResult> Details()
         {
             CreateDefaultAddressIfNotExists();
-            var dashboardViewModel = _dashboardService.GetDashboardViewModel();
+            var dashboardViewModel = await _dashboardService.GetDashboardViewModel();
+            
             return View(dashboardViewModel);
         }
 

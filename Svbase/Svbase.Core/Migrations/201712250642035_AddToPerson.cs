@@ -1,8 +1,7 @@
 namespace Svbase.Core.Migrations
 {
-    using System;
     using System.Data.Entity.Migrations;
-    
+
     public partial class AddToPerson : DbMigration
     {
         public override void Up()
@@ -13,7 +12,7 @@ namespace Svbase.Core.Migrations
             AlterColumn("dbo.Person", "Gender", c => c.Boolean(nullable: false));
             DropColumn("dbo.Person", "Patronymic");
         }
-        
+
         public override void Down()
         {
             AddColumn("dbo.Person", "Patronymic", c => c.String());

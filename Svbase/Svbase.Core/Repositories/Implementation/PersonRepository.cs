@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Svbase.Core.Data;
+﻿using Svbase.Core.Data;
 using Svbase.Core.Data.Entities;
 using Svbase.Core.Models;
 using Svbase.Core.Repositories.Abstract;
 using Svbase.Core.Repositories.Interfaces;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Svbase.Core.Repositories.Implementation
 {
@@ -60,6 +62,55 @@ namespace Svbase.Core.Repositories.Implementation
                     }).FirstOrDefault(),
                     Work = x.Work
                 }).OrderBy(x => x.Id);
+            return persons;
+        }
+
+        public async Task<List<PersonSelectionModel>> GetPersonIsNotDead()
+        {
+            var persons = await DbSet
+                .Select(x => new PersonSelectionModel
+                {
+                    Id = x.Id,
+                    FirstName = x.FirstName,
+                    MiddleName = x.MiddleName,
+                    LastName = x.LastName,
+                    Position = x.Position,
+                    Gender = x.Gender,
+                    IsDead = x.IsDead,
+                    Email = x.Email,
+                    FirstMobilePhone = x.MobileTelephoneFirst,
+                    SecondMobilePhone = x.MobileTelephoneSecond,
+                    HomePhone = x.StationaryPhone,
+                    PartionType = x.PartionType,
+                    DateBirth = x.BirthdayDate,
+                    Beneficiaries = x.Beneficiaries.Select(b => new CheckboxItemModel
+                    {
+                        Id = b.Id,
+                        Name = b.Name
+                    }).ToList(),
+                    City = x.Flats.Select(f => new BaseViewModel
+                    {
+                        Id = f.Apartment.Street.City.Id,
+                        Name = f.Apartment.Street.City.Name,
+                    }).FirstOrDefault(),
+                    Street = x.Flats.Select(f => new BaseViewModel
+                    {
+                        Id = f.Apartment.Street.Id,
+                        Name = f.Apartment.Street.Name,
+                    }).FirstOrDefault(),
+                    Apartment = x.Flats.Select(f => new BaseViewModel
+                    {
+                        Id = f.Apartment.Id,
+                        Name = f.Apartment.Name,
+                    }).FirstOrDefault(),
+                    Flat = x.Flats.Select(f => new BaseViewModel
+                    {
+                        Id = f.Id,
+                        Name = f.Number,
+                    }).FirstOrDefault(),
+                    Work = x.Work
+                }).OrderBy(x => x.Id).Where(x => x.IsDead == false).ToListAsync();
+
             return persons;
         }
 
@@ -225,6 +276,66 @@ namespace Svbase.Core.Repositories.Implementation
             return persons;
         }
 
+        public async Task<List<PersonSelectionModel>> SearchPersonsByFieldsAsync(PersonSearchModel searchFields)
+        {
+           var list = new List<Person>();
+            if (searchFields.IsFirstNameIncludedInSearch)
+                list = await DbSet.Where(x => x.FirstName.Contains(searchFields.FirstName)).ToListAsync();
+            if (searchFields.IsLastNameIncludedInSearch)
+                list = await DbSet.Where(x => x.LastName.ToString().Contains(searchFields.LastName)).ToListAsync();
+            if (searchFields.IsMiddleNameIncludedInSearch)
+                list = await DbSet.Where(x => x.MiddleName.ToString().Contains(searchFields.MiddleName)).ToListAsync();
+            if (searchFields.IsMobilePhoneIncludedInSearch)
+                list = await DbSet.Where(x => x.MobileTelephoneFirst.ToString().Contains(searchFields.MobilePhone)
+                                              || x.MobileTelephoneSecond.ToString().Contains(searchFields.MobilePhone)).ToListAsync();
+
+            var persons = list
+                .Select(x => new PersonSelectionModel
+                {
+                    Id = x.Id,
+                    FirstName = x.FirstName,
+                    MiddleName = x.MiddleName,
+                    LastName = x.LastName,
+                    Position = x.Position,
+                    Gender = x.Gender,
+                    IsDead = x.IsDead,
+                    Email = x.Email,
+                    FirstMobilePhone = x.MobileTelephoneFirst,
+                    SecondMobilePhone = x.MobileTelephoneSecond,
+                    HomePhone = x.StationaryPhone,
+                    PartionType = x.PartionType,
+                    DateBirth = x.BirthdayDate,
+                    Beneficiaries = x.Beneficiaries.Select(b => new CheckboxItemModel
+                    {
+                        Id = b.Id,
+                        Name = b.Name
+                    }).ToList(),
+                    City = x.Flats.Select(f => new BaseViewModel
+                    {
+                        Id = f.Apartment.Street.City.Id,
+                        Name = f.Apartment.Street.City.Name,
+                    }).FirstOrDefault(),
+                    Street = x.Flats.Select(f => new BaseViewModel
+                    {
+                        Id = f.Apartment.Street.Id,
+                        Name = f.Apartment.Street.Name,
+                    }).FirstOrDefault(),
+                    Apartment = x.Flats.Select(f => new BaseViewModel
+                    {
+                        Id = f.Apartment.Id,
+                        Name = f.Apartment.Name,
+                    }).FirstOrDefault(),
+                    Flat = x.Flats.Select(f => new BaseViewModel
+                    {
+                        Id = f.Id,
+                        Name = f.Number,
+                    }).FirstOrDefault(),
+                    Work = x.Work
+                }).OrderBy(x => x.Id).ToList();
+
+            return persons;
+        }
+
         public int GetAllPersonsCount()
         {
             return DbSet.Count();
@@ -251,7 +362,7 @@ namespace Svbase.Core.Repositories.Implementation
 
         public IQueryable<PersonSelectionModel> SearchDublicateByFirstAndLastName()
         {
-            return DbSet.GroupBy(x => new {x.FirstName, x.LastName}).Where(x => x.Count() > 1).SelectMany(x => x)
+            return DbSet.GroupBy(x => new { x.FirstName, x.LastName }).Where(x => x.Count() > 1).SelectMany(x => x)
                 .Where(x => x.FirstName.Trim().Length > 0 && x.LastName.Trim().Length > 0)
                 .Select(x => new PersonSelectionModel
                 {
@@ -300,7 +411,7 @@ namespace Svbase.Core.Repositories.Implementation
 
         public IQueryable<PersonSelectionModel> SearchDublicateByPhoneNumber()
         {
-            return DbSet.GroupBy(x => new {x.MobileTelephoneFirst, x.MobileTelephoneSecond, x.StationaryPhone})
+            return DbSet.GroupBy(x => new { x.MobileTelephoneFirst, x.MobileTelephoneSecond, x.StationaryPhone })
                 .Where(x => x.Count() > 1)
                 .SelectMany(x => x)
                 .Where(
@@ -358,7 +469,7 @@ namespace Svbase.Core.Repositories.Implementation
                 LastName = x.LastName,
                 StreetName = x.Apartment.Street.Name,
                 ApartmentNumber = x.Apartment.Name
-             });
+            });
         }
     }
 }

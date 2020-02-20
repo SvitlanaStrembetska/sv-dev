@@ -1,8 +1,8 @@
-﻿using System.Data.Entity;
-using System.Data.Entity.Infrastructure;
-using Microsoft.AspNet.Identity.EntityFramework;
+﻿using Microsoft.AspNet.Identity.EntityFramework;
 using Svbase.Core.Data.Configuration;
 using Svbase.Core.Data.Entities;
+using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 
 namespace Svbase.Core.Data
 {

@@ -1,4 +1,5 @@
-﻿using Svbase.Core.Models;
+﻿using System.Threading.Tasks;
+using Svbase.Core.Models;
 using Svbase.Core.Repositories.Abstract;
 using Svbase.Core.Repositories.Factory;
 using Svbase.Service.Interfaces;
@@ -31,10 +32,10 @@ namespace Svbase.Service.Implementation
             return dashboardModel;
         }
 
-        public DashboardViewModel GetDashboardViewModel()
+        public async Task<DashboardViewModel> GetDashboardViewModel()
         {
-            var beneficiaries = RepositoryManager.Beneficiaries.GetDashboardBeneficiaries();
-            var districtsModel = RepositoryManager.Districts.GetDashboardDistrictsModel();
+            var beneficiaries = await RepositoryManager.Beneficiaries.GetDashboardBeneficiariesAsync();
+            var districtsModel =  RepositoryManager.Districts.GetDashboardDistrictsModel();
             var allPersonsCount = RepositoryManager.Persons.GetAllPersonsCount();
             var allPersonsMobilePhoneCount = RepositoryManager.Persons.GetAllPersonsWithMobilePhoneCount();
             var personsCount = RepositoryManager.Persons.GetPersonsWithoutBeneficiariesCount();

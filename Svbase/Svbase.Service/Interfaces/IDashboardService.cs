@@ -1,10 +1,11 @@
-﻿using Svbase.Core.Models;
+﻿using System.Threading.Tasks;
+using Svbase.Core.Models;
 
 namespace Svbase.Service.Interfaces
 {
     public interface IDashboardService
     {
         DashboardManagementViewModel GetDashboardModel();
-        DashboardViewModel GetDashboardViewModel();
+        Task<DashboardViewModel> GetDashboardViewModel();
     }
 }

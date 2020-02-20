@@ -1,10 +1,10 @@
-﻿using System.Web.Mvc;
-using Svbase.Controllers.Abstract;
+﻿using Svbase.Controllers.Abstract;
 using Svbase.Core.Consts;
 using Svbase.Core.Data.Entities;
 using Svbase.Core.Models;
 using Svbase.Service.Factory;
 using Svbase.Service.Interfaces;
+using System.Web.Mvc;
 
 namespace Svbase.Controllers
 {
@@ -30,7 +30,7 @@ namespace Svbase.Controllers
         {
             if (string.IsNullOrEmpty(model.Name))
             {
-                ModelState.AddModelError("","Invalid Name");
+                ModelState.AddModelError("", @"Invalid Name");
             }
 
             if (!ModelState.IsValid)
@@ -42,7 +42,7 @@ namespace Svbase.Controllers
             var newStreetItem = new Street { Name = Consts.DefaultAddress, City = newCityItem };
             var newApartmentItem = new Apartment { Name = Consts.DefaultAddress, Street = newStreetItem };
             var newFlatItem = new Flat { Number = Consts.DefaultAddress, Apartment = newApartmentItem };
-            
+
             _cityService.Add(newCityItem);
             _streetService.Add(newStreetItem);
             _apartmentService.Add(newApartmentItem);
@@ -64,15 +64,15 @@ namespace Svbase.Controllers
         {
             if (model == null)
             {
-                return Json(new {status = "error"});
+                return Json(new { status = "error" });
             }
 
             var city = _cityService.FindById(model.Id);
             if (city == null)
             {
-                return Json(new {status = "error"});
+                return Json(new { status = "error" });
             }
-            city =  model.Update(city);
+            city = model.Update(city);
             _cityService.Update(city);
             return Json(new { status = "success" });
         }
