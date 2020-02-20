@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Text.RegularExpressions;
 using Svbase.Core.Data.Entities;
 using Svbase.Models;
 using Svbase.Core.Consts;
@@ -11,7 +10,7 @@ namespace Svbase.Helpers
 {
     public class FilesDataValidationHelper
     {
-        public bool ValidateFileColumns(DataTable dataTable, string fileName, IEnumerable<Beneficiary> beneficaries, ref List<string> errorModel)
+        public bool ValidateFileColumns(DataTable dataTable, string fileName, List<Beneficiary> beneficaries, ref List<string> errorModel)
         {
             var columnsName = dataTable.Columns;
 
@@ -69,7 +68,7 @@ namespace Svbase.Helpers
             return errorModel.Any();
         }
 
-        public FileValidationModel ValidateTableRows(DataRow row, int rowIndex, string fileName, IEnumerable<Beneficiary> beneficaries, ref List<string> errorList)
+        public FileValidationModel ValidateTableRows(DataRow row, int rowIndex, string fileName, List<Beneficiary> beneficaries, ref List<string> errorList)
         {
             var firstName = row["Ім'я"].ToString().Trim();
             var lastName = row["Прізвище"].ToString().Trim();
